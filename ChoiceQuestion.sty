@@ -140,6 +140,38 @@
 % 根据环境应用不同样式和功能
 % ==========================================================
 
+% ==========================================================
+% jdinlineenum 嵌套编号支持（beamer / book 两分支共用）
+% ==========================================================
+\int_new:N \l__jdinline_int                     % 小问序号
+\int_new:N \l__jdinline_depth_int          % 嵌套深度，最外层为 1
+
+% 第 2 层小问标签 ①②③…（多于 20 个时退回
+\cs_new:Npn \__jdinline_circled:N #1
+{
+    \int_case:nnF {#1}
+    {
+        { 1 } { ① } { 2 } { ② } { 3 } { ③ } { 4 } { ④ } { 5 } { ⑤ }
+        { 6 } { ⑥ } { 7 } { ⑦ } { 8 } { ⑧ } { 9 } { ⑨ } { 10 } { ⑩ }
+        { 11 } { ⑪ } { 12 } { ⑫ } { 13 } { ⑬ } { 14 } { ⑭ } { 15 } { ⑮ }
+        { 16 } { ⑯ } { 17 } { ⑰ } { 18 } { ⑱ } { 19 } { ⑲ } { 20 } { ⑳ }
+    }
+    { ( \int_use:N #1 ) }
+}
+
+% 按深度选择标签文本：第 1 层 (1)(2)(3)…；第 2 层 ①②③…；第 3 层起
+% （在 \__jdinline_label:n 中于 \int_incr 之后才排版，取到的是本条序号）
+\cs_new_protected:Npn \__jdinline_autolabel:
+{
+    \int_case:nnF { \l__jdinline_depth_int }
+    {
+        { 1 } { ( \int_use:N \l__jdinline_int ) }%第一层标签
+        %{ 2 } { \__jdinline_circled:N \l__jdinline_int }%第二层标签，这里是①②③④⑤
+        { 2 } { ( \int_to_roman:n { \l__jdinline_int } ) }%第二层标签
+    }
+    { ( \int_to_roman:n { \l__jdinline_int } ) }
+}
+
 
 
 % ==========================================================
@@ -219,7 +251,6 @@
 % =================================================================
 %  1. jdinlineenum：内联小问列表，纯 expl3，不依赖 enumitem，可以在 beamer 中使用
 % =================================================================
-\int_new:N \l__jdinline_int                     % 小问序号
 
 % 相邻两问的间距
 \cs_new_protected:Npn \__jdinline_join: { \quad }
@@ -246,7 +277,7 @@
 {
 	\peek_charcode:NTF [
 	{ \__jdinline_item_opt:w }
-	{ \__jdinline_label:n { {\color{AccentGold}\bfseries( \int_use:N \l__jdinline_int ) }} }
+	{ \__jdinline_label:n { {\color{AccentGold}\bfseries \__jdinline_autolabel: } } }
 }
 
 % ---- 智能空行 ---------------------------------------------------
@@ -605,7 +636,6 @@
 % =================================================================
 %  1. jdinlineenum：内联小问列表，纯 expl3，不依赖 enumitem，可以在 beamer 中使用
 % =================================================================
-\int_new:N \l__jdinline_int                     % 小问序号
 
 % 相邻两问的间距
 \cs_new_protected:Npn \__jdinline_join: { \quad }
@@ -632,7 +662,7 @@
 {
 	\peek_charcode:NTF [
 	{ \__jdinline_item_opt:w }
-	{ \__jdinline_label:n { {\color{blue!40!green}( \int_use:N \l__jdinline_int ) }} }
+	{ \__jdinline_label:n { {\color{blue!40!green} \__jdinline_autolabel: } } }
 }
 
 % ---- 智能空行 ---------------------------------------------------
@@ -654,14 +684,17 @@
 
 \NewDocumentEnvironment { jdinlineenum } { O{} }   % [...] 选项仅吞掉不处理
 {
-	\int_zero:N \l__jdinline_int
-	% 备份 \par 后接管 \par 与 \item（均为局部定义，环境结束自动还原）
-	\cs_set_eq:NN \__jdinline_realpar: \par
-	\cs_set_protected:Npn \item { \ignorespaces \__jdinline_item: }
-	\cs_set_eq:NN \l__jdinline_saved_item_cs \item
-	\cs_set_protected:Npn \par { \__jdinline_par: }
-	\mode_if_vertical:T { \noindent }
-	\ignorespaces
+    \int_incr:N \l__jdinline_depth_int   % ★新增：深度 +1；环境是分组，\end 时自动还原
+    \int_zero:N \l__jdinline_int
+    % ★修改：仅当 \par 尚未被（外层）jdinlineenum 接管时才备份，
+    %         否则嵌套时会把真正的 \par 备份覆盖掉，内层"空行+正文"会死循环
+    \token_if_eq_meaning:NNF \par \__jdinline_par:
+      { \cs_set_eq:NN \__jdinline_realpar: \par }
+    \cs_set_protected:Npn \item { \ignorespaces \__jdinline_item: }
+    \cs_set_eq:NN \l__jdinline_saved_item_cs \item
+    \cs_set_eq:NN \par \__jdinline_par:  % ★修改：原为 \cs_set_protected:Npn \par { \__jdinline_par: }
+    \mode_if_vertical:T { \noindent }    %   改成等价赋值，上面才能用 \token_if_eq_meaning 判断
+    \ignorespaces
 }
 { }
 
