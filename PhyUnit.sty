@@ -3,167 +3,230 @@
 
 \RequirePackage{expl3}
 
-\ProvidesExplPackage{PhyUnit}{2026-04-05}{0.1}{物理单位}
+\ProvidesExplPackage{PhyUnit}{2026-09-16}{0.2}{中学物理单位}
 
 
 
 %
-%物理单位
+%常见中学物理单位，包括一些非国际制单位和一些常见的其它学科单位
 %
 
 
 \cs_new:Npn \__phyunit_space:n #1 { \str_if_eq:nnTF {#1} {a} {} {\,} }
 
-\NewDocumentCommand \UAi {o} {\__phyunit_space:n{#1}\mathrm{\AA}} % Å（长度，埃）
-\NewDocumentCommand \UAm {o} {\__phyunit_space:n{#1}\mathrm{A}\cdot\mathrm{m}} % A·m
-\NewDocumentCommand \UA {o} {\__phyunit_space:n{#1}\mathrm{A}} % A （电流）
-\NewDocumentCommand \UAs {o} {\__phyunit_space:n{#1}\mathrm{A}/\mathrm{s}} % A/s （电流强度变化率）
-\NewDocumentCommand \UAcdots {o} {\__phyunit_space:n{#1}\mathrm{A}\cdot\mathrm{s}} % A·s （同电荷单位库仑）
-\NewDocumentCommand \UatmLmolK {o} {\__phyunit_space:n{#1}\mathrm{atm}\cdot\mathrm{L}/(\mathrm{mol}\cdot\mathrm{K})} % atm·L/(mol·K) （理想气体状态方程 pV=nRT 中 R 的单位）
-\NewDocumentCommand \Uatm {o} {\__phyunit_space:n{#1}\mathrm{atm}} % atm （压强单位，标准大气压）
-\NewDocumentCommand \Ucal {o} {\__phyunit_space:n{#1}\mathrm{cal}} % cal （卡路里，简称卡，符号 cal，热量的旧单位）
-\NewDocumentCommand \UdC {o} {\__phyunit_space:n{#1}{}^\circ\mathrm{C}} % ℃ (温度单位，摄氏度，degree Celsius，简写为dC)
-\NewDocumentCommand \UduC {o} {\__phyunit_space:n{#1}{}^\circ\mathrm{C}} % ℃ (温度单位，摄氏度，简写为duC)
-\NewDocumentCommand \UCkg {o} {\__phyunit_space:n{#1}\mathrm{C}/\mathrm{kg}} % C/kg （电荷与质量之比，荷质比）
-\NewDocumentCommand \Ucmc {o} {\__phyunit_space:n{#1}\mathrm{cm}^3} % cm^3 （体积）
-\NewDocumentCommand \UCmol {o} {\__phyunit_space:n{#1}\mathrm{C}/\mathrm{mol}} % C/mol （法拉第恒量 F）
-\NewDocumentCommand \Ucmq {o} {\__phyunit_space:n{#1}\mathrm{cm}^2} % cm^2 （面积）
-\NewDocumentCommand \Ucm {o} {\__phyunit_space:n{#1}\mathrm{cm}} % cm （长度）
-\NewDocumentCommand \Ucmsq {o} {\__phyunit_space:n{#1}\mathrm{cm}/\mathrm{s}^2} % cm/s^2 （加速度）
-\NewDocumentCommand \Ucms {o} {\__phyunit_space:n{#1}\mathrm{cm}/\mathrm{s}} % cm/s （速度）
-\NewDocumentCommand \UC {o} {\__phyunit_space:n{#1}\mathrm{C}} % C （电荷量）
-\NewDocumentCommand \UCV {o} {\__phyunit_space:n{#1}\mathrm{C}/\mathrm{V}} % C/V （同电容）
-\NewDocumentCommand \UdB {o} {\__phyunit_space:n{#1}\mathrm{dB}} % dB （声音强弱）
-\NewDocumentCommand \Udmc {o} {\__phyunit_space:n{#1}\mathrm{dm}^3} % dm^3 （体积）
-\NewDocumentCommand \Udm {o} {\__phyunit_space:n{#1}\mathrm{dm}} % dm （长度）
-\NewDocumentCommand \Udu {o} {\,{}^\circ} % ° （角度单位）
-\NewDocumentCommand \Udyn {o} {\__phyunit_space:n{#1}\mathrm{dyn}} % dyn （力单位）
-\NewDocumentCommand \Uerg {o} {\__phyunit_space:n{#1}\mathrm{erg}} % erg （能量单位）
-\NewDocumentCommand \Ue {o} {\__phyunit_space:n{#1}\mathrm{e}} % e （元电荷）
-\NewDocumentCommand \UeV {o} {\__phyunit_space:n{#1}\mathrm{eV}} % eV （能量，电子伏特）
-\NewDocumentCommand \UF {o} {\__phyunit_space:n{#1}\mathrm{F}} % F （电容）
-\NewDocumentCommand \Ug {o} {\__phyunit_space:n{#1}\mathrm{g}} % g （质量）
-\NewDocumentCommand \Umg {o} {\__phyunit_space:n{#1}\mathrm{mg}} % mg （质量）
-\NewDocumentCommand \UHP {o} {\__phyunit_space:n{#1}\mathrm{HP}} % HP （功率单位：马力，horsepower）
-\NewDocumentCommand \UH {o} {\__phyunit_space:n{#1}\mathrm{H}} % H （自感系数）
-\NewDocumentCommand \UHs {o} {\__phyunit_space:n{#1}\mathrm{H}/\mathrm{s}} % H/s （同电阻）
-\NewDocumentCommand \UHz {o} {\__phyunit_space:n{#1}\mathrm{Hz}} % Hz （频率）
-\NewDocumentCommand \UJcal {o} {\__phyunit_space:n{#1}\mathrm{J}/\mathrm{cal}} % 热功当量单位
-\NewDocumentCommand \UJcdots {o} {\__phyunit_space:n{#1}\mathrm{J}\cdot\mathrm{s}} % J·s（普朗克常数 h 单位）
-\NewDocumentCommand \UJC {o} {\__phyunit_space:n{#1}\mathrm{J}/\mathrm{C}} % J/C （同电压）
-\NewDocumentCommand \UJkgdC {o} {\__phyunit_space:n{#1}\mathrm{J}/(\mathrm{kg}\cdot{}^\circ\mathrm{C})} % 比热 J/(kg·℃)
-\NewDocumentCommand \UJkgK {o} {\__phyunit_space:n{#1}\mathrm{J}/(\mathrm{kg}\cdot\mathrm{K})} % 比热 J/(kg·K)
-\NewDocumentCommand \UJkg {o} {\__phyunit_space:n{#1}\mathrm{J}/\mathrm{kg}} % J/kg （熔解热、汽化热）
-\NewDocumentCommand \UJmolK {o} {\__phyunit_space:n{#1}\mathrm{J}/(\mathrm{mol}\cdot\mathrm{K})} % J/(mol·K) （摩尔气体恒量 R 单位）
-\NewDocumentCommand \UJ {o} {\__phyunit_space:n{#1}\mathrm{J}} % J （能量，功）
-\NewDocumentCommand \UJs {o} {\__phyunit_space:n{#1}\mathrm{J}/\mathrm{s}} % J/s （功率）
-\NewDocumentCommand \UkgC {o} {\__phyunit_space:n{#1}\mathrm{kg}/\mathrm{C}} % kg/C （电化当量）
-\NewDocumentCommand \Ukgf {o} {\__phyunit_space:n{#1}\mathrm{kgf}} % kgf （千克力）
-\NewDocumentCommand \Ukgmc {o} {\__phyunit_space:n{#1}\mathrm{kg}/\mathrm{m}^3} % kg/m^3 （密度）
-\NewDocumentCommand \Ukgmol {o} {\__phyunit_space:n{#1}\mathrm{kg}/\mathrm{mol}} % kg/mol （摩尔质量单位，化学当量）
-\NewDocumentCommand \Ukgmsq {o} {\__phyunit_space:n{#1}\mathrm{kg}\cdot\mathrm{m}/\mathrm{s}^2} % kg·m/s^2 （力的单位，F=ma）
-\NewDocumentCommand \Ukgmqsq {o} {\__phyunit_space:n{#1}\mathrm{kg}\cdot\mathrm{m}^2\cdot\mathrm{s}^{-2}} % kg·m^2/s^2 （能号的单位，J）
-\NewDocumentCommand \Ukgms {o} {\__phyunit_space:n{#1}\mathrm{kg}\cdot\mathrm{m}/\mathrm{s}} % kg·m/s （冲量动量单位，p=mv）
-\NewDocumentCommand \Ukg {o} {\__phyunit_space:n{#1}\mathrm{kg}} % kg （质量）
-\NewDocumentCommand \Ukgs {o} {\__phyunit_space:n{#1}\mathrm{kg}/\mathrm{s}} % kg/s
-\NewDocumentCommand \UkHz {o} {\__phyunit_space:n{#1}\mathrm{kHz}} % kHz （频率）
-\NewDocumentCommand \UkJkg {o} {\__phyunit_space:n{#1}\mathrm{kJ}/\mathrm{kg}} % kJ/kg （熔解热、汽化热）
-\NewDocumentCommand \Ukmh {o} {\__phyunit_space:n{#1}\mathrm{km}/\mathrm{h}} % km/h （速度）
-\NewDocumentCommand \Ukmsq {o} {\__phyunit_space:n{#1}\mathrm{km}/\mathrm{s}^2} % km/s^2 （加速度）
-\NewDocumentCommand \Ukms {o} {\__phyunit_space:n{#1}\mathrm{km}/\mathrm{s}} % km/s （速度）
-\NewDocumentCommand \UkO {o} {\__phyunit_space:n{#1}\mathrm{k}\Omega} % kΩ （电阻）
-\NewDocumentCommand \UK {o} {\__phyunit_space:n{#1}\mathrm{K}} % K （热力学温度）
-\NewDocumentCommand \UkW {o} {\__phyunit_space:n{#1}\mathrm{kW}} % kW （功率）
-\NewDocumentCommand \UL {o} {\__phyunit_space:n{#1}\mathrm{L}} % L （容积单位，升）
-\NewDocumentCommand \Umcmol {o} {\__phyunit_space:n{#1}\mathrm{m}^3/\mathrm{mol}} % m^3/mol （摩尔体积）
-\NewDocumentCommand \ULmol {o} {\__phyunit_space:n{#1}\mathrm{L}/\mathrm{mol}} % L/mol （摩尔休积，升每摩尔）
-\NewDocumentCommand \Umc {o} {\__phyunit_space:n{#1}\mathrm{m}^3} % m^3 （体积）
-\NewDocumentCommand \Umcs {o} {\__phyunit_space:n{#1}\mathrm{m}^3/\mathrm{s}} % m^3/s （抽水速度）
-\NewDocumentCommand \UMeV {o} {\__phyunit_space:n{#1}\mathrm{MeV}} % MeV （能量，兆电子伏特）
-\NewDocumentCommand \UmH {o} {\__phyunit_space:n{#1}\mathrm{mH}} % mH （自感系数）
-\NewDocumentCommand \UMHz {o} {\__phyunit_space:n{#1}\mathrm{MHz}} % MHz （频率）
-\NewDocumentCommand \Ummc {o} {\__phyunit_space:n{#1}\mathrm{mm}^3} % mm^3 （体积）
-\NewDocumentCommand \UmmHg {o} {\__phyunit_space:n{#1}\mathrm{mmHg}} % mmHg （压强单位，毫米汞柱）
-\NewDocumentCommand \UcmHg {o} {\__phyunit_space:n{#1}\mathrm{cmHg}} % cmHg （压强单位，厘米汞柱）
-\NewDocumentCommand \Ummq {o} {\__phyunit_space:n{#1}\mathrm{mm}^2} % mm^2 （面积）
-\NewDocumentCommand \Umm {o} {\__phyunit_space:n{#1}\mathrm{mm}} % mm （长度）
-\NewDocumentCommand \Umnc {o} {\__phyunit_space:n{#1}\mathrm{m}^{-3}} % m^{-3} （体积倒数）
-\NewDocumentCommand \Umn {o} {\__phyunit_space:n{#1}\mathrm{m}^{-1}} % m^{-1} （长度 m 的倒数）
-\NewDocumentCommand \Umnq {o} {\__phyunit_space:n{#1}\mathrm{m}^{-2}} % m^{-2} （长度 m 的倒数）
-\NewDocumentCommand \Umolnc {o} {\__phyunit_space:n{#1}\mathrm{mol}^{-3}} % mol^{-3}（物理的量倒数）
-\NewDocumentCommand \Umolnq {o} {\__phyunit_space:n{#1}\mathrm{mol}^{-2}} % mol^{-2} （物理的量倒数）
-\NewDocumentCommand \Umoln {o} {\__phyunit_space:n{#1}\mathrm{mol}^{-1}} % mol^{-1} （物理的量倒数）
-\NewDocumentCommand \Umol {o} {\__phyunit_space:n{#1}\mathrm{mol}} % mol （物质的量）
-\NewDocumentCommand \UMO {o} {\__phyunit_space:n{#1}\mathrm{M}\Omega} % MΩ （电阻）
-\NewDocumentCommand \Umq {o} {\__phyunit_space:n{#1}\mathrm{m}^2} % m^2 （面积）
-\NewDocumentCommand \Um {o} {\__phyunit_space:n{#1}\mathrm{m}} % m （长度）
-\NewDocumentCommand \Umsq {o} {\__phyunit_space:n{#1}\mathrm{m}/\mathrm{s}^2} % m/s^2 （加速度）
-\NewDocumentCommand \Ums {o} {\__phyunit_space:n{#1}\mathrm{m}/\mathrm{s}} % m/s （速度）
-\NewDocumentCommand \Umdsn {o} {\__phyunit_space:n{#1}\mathrm{m}\cdot\mathrm{s}^{-1}} % m·s^{-1} （速度）
-\NewDocumentCommand \Uum {o} {\__phyunit_space:n{#1}\mu\mathrm{m}} % μm （长度，微米）
-\NewDocumentCommand \UNAq {o} {\__phyunit_space:n{#1}\mathrm{N}/\mathrm{A}^2} % N/A^2 （直导线电流产生磁场的比例系数 B=kI/r）
-\NewDocumentCommand \UNC {o} {\__phyunit_space:n{#1}\mathrm{N}/\mathrm{C}} % N/C （电场强度）
-\NewDocumentCommand \UnF {o} {\__phyunit_space:n{#1}\mathrm{nF}} % nF （电容）
-\NewDocumentCommand \UNkg {o} {\__phyunit_space:n{#1}\mathrm{N}/\mathrm{kg}} % N/kg
-\NewDocumentCommand \UNmqCq {o} {\__phyunit_space:n{#1}\mathrm{N}\cdot\mathrm{m}^2/\mathrm{C}^2} % N·m^2/C^2 （静电力常量 k）
-\NewDocumentCommand \UNmqkgq {o} {\__phyunit_space:n{#1}\mathrm{N}\cdot\mathrm{m}^2/\mathrm{kg}^2} % N·m^2/kg^2 (万有引力常量 G 单位)
-\NewDocumentCommand \UNmq {o} {\__phyunit_space:n{#1}\mathrm{N}/\mathrm{m}^2} % N/m^2 （压强）
-\NewDocumentCommand \UNcdotm {o} {\__phyunit_space:n{#1}\mathrm{N}\cdot\mathrm{m}} % N·m （力矩）
-\NewDocumentCommand \UN {o} {\__phyunit_space:n{#1}\mathrm{N}} % N （力）
-\NewDocumentCommand \UNm {o} {\__phyunit_space:n{#1}\mathrm{N}/\mathrm{m}} % N/m （弹簧劲度系数）
-\NewDocumentCommand \UNcm {o} {\__phyunit_space:n{#1}\mathrm{N}/\mathrm{cm}} % N/cm （弹簧劲度系数）
-\NewDocumentCommand \UNs {o} {\__phyunit_space:n{#1}\mathrm{N}\cdot\mathrm{s}} % N·s （动量，冲量）
-\NewDocumentCommand \UOm {o} {\__phyunit_space:n{#1}\Omega\cdot\mathrm{m}} % Ω·m （电阻率）
-\NewDocumentCommand \UO {o} {\__phyunit_space:n{#1}\Omega} % Ω （电阻）
-\NewDocumentCommand \UOs {o} {\__phyunit_space:n{#1}\Omega\cdot\mathrm{s}} % Ω·s （同自感系数）
-\NewDocumentCommand \UPa {o} {\__phyunit_space:n{#1}\mathrm{Pa}} % Pa （压强）
-\NewDocumentCommand \UpF {o} {\__phyunit_space:n{#1}\mathrm{pF}} % pF （电容）
-\NewDocumentCommand \UsF {o} {\__phyunit_space:n{#1}\mathrm{s}/\mathrm{F}} % s/F （同电阻）
-\NewDocumentCommand \Uspace {o} {\__phyunit_space:n{#1}} % 物理单位的空格
-\NewDocumentCommand \Usq {o} {\__phyunit_space:n{#1}\mathrm{s}^2} % s^2
-\NewDocumentCommand \Us {o} {\__phyunit_space:n{#1}\mathrm{s}} % s （时间）
-\NewDocumentCommand \Usn {o} {\__phyunit_space:n{#1}\mathrm{s}^{-1}} % s^{-1} （时间倒数）
-\NewDocumentCommand \Usnq {o} {\__phyunit_space:n{#1}\mathrm{s}^{-2}} % s^{-2} （时间负二次方）
-\NewDocumentCommand \Uhn {o} {\__phyunit_space:n{#1}\mathrm{h}^{-1}} % h^{-1} （时间倒数）
-\NewDocumentCommand \UsVC {o} {\__phyunit_space:n{#1}\mathrm{s}\cdot\mathrm{V}/\mathrm{C}} % s·V/C （同电阻）
-\NewDocumentCommand \UTmq {o} {\__phyunit_space:n{#1}\mathrm{T}\cdot\mathrm{m}^2} % T·m^2 （同磁通量）
-\NewDocumentCommand \UT {o} {\__phyunit_space:n{#1}\mathrm{T}} % T （磁感应强度，特斯拉）
-\NewDocumentCommand \UTm {o} {\__phyunit_space:n{#1}\mathrm{T}/\mathrm{m}} % T/m 磁场随距离变化系数
-\NewDocumentCommand \UuA {o} {\__phyunit_space:n{#1}\mu\mathrm{A}} % μA （电流，微安）
-\NewDocumentCommand \UmuA {o} {\__phyunit_space:n{#1}\mu\mathrm{A}} % μA （电流，微安）
-\NewDocumentCommand \UmA {o} {\__phyunit_space:n{#1}\mathrm{mA}} % mA （电流，毫安）
-\NewDocumentCommand \Uu {o} {\__phyunit_space:n{#1}\mathrm{u}} % u （原子质量单位）
-\NewDocumentCommand \UuF {o} {\__phyunit_space:n{#1}\mu\mathrm{F}} % uF （电容）
-\NewDocumentCommand \UmuF {o} {\__phyunit_space:n{#1}\mu\mathrm{F}} % uF （电容）
-\NewDocumentCommand \UuH {o} {\__phyunit_space:n{#1}\mu\mathrm{H}} % μH （自感系数）
-\NewDocumentCommand \UmuH {o} {\__phyunit_space:n{#1}\mu\mathrm{H}} % μH （自感系数）
-\NewDocumentCommand \UVm {o} {\__phyunit_space:n{#1}\mathrm{V}/\mathrm{m}} % V/m （同电场强度）
-\NewDocumentCommand \UVcm {o} {\__phyunit_space:n{#1}\mathrm{V}/\mathrm{cm}} % V/cm （同电场强度）
-\NewDocumentCommand \UV {o} {\__phyunit_space:n{#1}\mathrm{V}} % V （电压）
-\NewDocumentCommand \UmV {o} {\__phyunit_space:n{#1}\mathrm{mV}} % mV （电压）
-\NewDocumentCommand \UVsA {o} {\__phyunit_space:n{#1}\mathrm{V}\cdot\mathrm{s}/\mathrm{A}} % V·s/A （同自感系数）
-\NewDocumentCommand \UVA {o} {\__phyunit_space:n{#1}\mathrm{V}/\mathrm{A}} % V/A （同电阻）
-\NewDocumentCommand \UWbmq {o} {\__phyunit_space:n{#1}\mathrm{Wb}/\mathrm{m}^2} % Wb/m^2 （磁通密度，同磁感应强度）
-\NewDocumentCommand \UWb {o} {\__phyunit_space:n{#1}\mathrm{Wb}} % Wb （磁通量）
-\NewDocumentCommand \UWbs {o} {\__phyunit_space:n{#1}\mathrm{Wb}/\mathrm{s}} % Wb/s （同电压）
-\NewDocumentCommand \UWmq {o} {\__phyunit_space:n{#1}\mathrm{W}/\mathrm{m}^2} % W/m^2
-\NewDocumentCommand \UW {o} {\__phyunit_space:n{#1}\mathrm{W}} % W （功率）
-\NewDocumentCommand \UmL {o} {\__phyunit_space:n{#1}\mathrm{mL}} % mL （体积）
-\NewDocumentCommand \Unm {o} {\__phyunit_space:n{#1}\mathrm{nm}} % nm （长度）
-\NewDocumentCommand \Umin {o} {\__phyunit_space:n{#1}\mathrm{min}} % min （时间）
-\NewDocumentCommand \Ukm {o} {\__phyunit_space:n{#1}\mathrm{km}} % km （长度）
-\NewDocumentCommand \UkV {o} {\__phyunit_space:n{#1}\mathrm{kV}} % kV （电压）
-\NewDocumentCommand \UkPa {o} {\__phyunit_space:n{#1}\mathrm{kPa}} % kPa （压强）
-\NewDocumentCommand \Uimp {o} {\__phyunit_space:n{#1}\mathrm{imp}} % imp （体积，容量）
-\NewDocumentCommand \Urad {o} {\__phyunit_space:n{#1}\mathrm{rad}} % rad （弧度）
-\NewDocumentCommand \Urads {o} {\__phyunit_space:n{#1}\mathrm{rad}/\mathrm{s}} % rad/s （角速度）
-\NewDocumentCommand \Uradmin {o} {\__phyunit_space:n{#1}\mathrm{rad}/\mathrm{min}} % rad/min （角速度）
-\NewDocumentCommand \UkJ {o} {\__phyunit_space:n{#1}\mathrm{kJ}} % kJ （能量，热量）
-\NewDocumentCommand \Uh {o} {\__phyunit_space:n{#1}\mathrm{h}} % h （时间）
-\NewDocumentCommand \UkWh {o} {\__phyunit_space:n{#1}\mathrm{kW}\cdot\mathrm{h}} % kW·h （电能，度）
-\NewDocumentCommand \UmAh {o} {\__phyunit_space:n{#1}\mathrm{mA}\cdot\mathrm{h}} % mA·h （电池容量）
-\NewDocumentCommand \Urmin {o} {\__phyunit_space:n{#1}\mathrm{r}/\mathrm{min}} % r/min （转速）
-\NewDocumentCommand \Urs {o} {\__phyunit_space:n{#1}\mathrm{r}/\mathrm{s}} % r/s （转速）
-\NewDocumentCommand \UAU {o} {\__phyunit_space:n{#1}\mathrm{AU}} % AU （天文单位）
-\NewDocumentCommand \Ucd {o} {\__phyunit_space:n{#1}\mathrm{cd}} % cd 发光强度
-\NewDocumentCommand \Ut {o} {\__phyunit_space:n{#1}\mathrm{t}} % t 质量单位（吨）
+\NewDocumentCommand \UAi {O{}} {\__phyunit_space:n{#1}\mathrm{\mathring{A}}} % Å（长度，埃）
+\NewDocumentCommand \UAm {O{}} {\__phyunit_space:n{#1}\mathrm{A}\cdot\mathrm{m}} % A·m
+\NewDocumentCommand \UA {O{}} {\__phyunit_space:n{#1}\mathrm{A}} % A （电流）
+\NewDocumentCommand \UAs {O{}} {\__phyunit_space:n{#1}\mathrm{A}/\mathrm{s}} % A/s （电流强度变化率）
+\NewDocumentCommand \UAcdots {O{}} {\__phyunit_space:n{#1}\mathrm{A}\cdot\mathrm{s}} % A·s （同电荷单位库仑）
+\NewDocumentCommand \UatmLmolK {O{}} {\__phyunit_space:n{#1}\mathrm{atm}\cdot\mathrm{L}/(\mathrm{mol}\cdot\mathrm{K})} % atm·L/(mol·K) （理想气体状态方程 pV=nRT 中 R 的单位）
+\NewDocumentCommand \Uatm {O{}} {\__phyunit_space:n{#1}\mathrm{atm}} % atm （压强单位，标准大气压）
+\NewDocumentCommand \Ucal {O{}} {\__phyunit_space:n{#1}\mathrm{cal}} % cal （卡路里，简称卡，符号 cal，热量的旧单位）
+\NewDocumentCommand \UdC {O{}} {\__phyunit_space:n{#1}{}^\circ\mathrm{C}} % ℃ (温度单位，摄氏度，degree Celsius，简写为dC)
+\NewDocumentCommand \UduC {O{}} {\__phyunit_space:n{#1}{}^\circ\mathrm{C}} % ℃ (温度单位，摄氏度，简写为duC)
+\NewDocumentCommand \UCkg {O{}} {\__phyunit_space:n{#1}\mathrm{C}/\mathrm{kg}} % C/kg （电荷与质量之比，荷质比）
+\NewDocumentCommand \Ucmc {O{}} {\__phyunit_space:n{#1}\mathrm{cm}^3} % cm^3 （体积）
+\NewDocumentCommand \UCmol {O{}} {\__phyunit_space:n{#1}\mathrm{C}/\mathrm{mol}} % C/mol （法拉第恒量 F）
+\NewDocumentCommand \Ucmq {O{}} {\__phyunit_space:n{#1}\mathrm{cm}^2} % cm^2 （面积）
+\NewDocumentCommand \Ucm {O{}} {\__phyunit_space:n{#1}\mathrm{cm}} % cm （长度）
+\NewDocumentCommand \Ucmsq {O{}} {\__phyunit_space:n{#1}\mathrm{cm}/\mathrm{s}^2} % cm/s^2 （加速度）
+\NewDocumentCommand \Ucms {O{}} {\__phyunit_space:n{#1}\mathrm{cm}/\mathrm{s}} % cm/s （速度）
+\NewDocumentCommand \UC {O{}} {\__phyunit_space:n{#1}\mathrm{C}} % C （电荷量）
+\NewDocumentCommand \UCV {O{}} {\__phyunit_space:n{#1}\mathrm{C}/\mathrm{V}} % C/V （同电容）
+\NewDocumentCommand \UdB {O{}} {\__phyunit_space:n{#1}\mathrm{dB}} % dB （声音强弱）
+\NewDocumentCommand \Udmc {O{}} {\__phyunit_space:n{#1}\mathrm{dm}^3} % dm^3 （体积）
+\NewDocumentCommand \Udm {O{}} {\__phyunit_space:n{#1}\mathrm{dm}} % dm （长度）
+\NewDocumentCommand \Udu {O{a}} {\__phyunit_space:n{#1}{}^\circ} % ° （角度单位）
+\NewDocumentCommand \Udyn {O{}} {\__phyunit_space:n{#1}\mathrm{dyn}} % dyn （力单位）
+\NewDocumentCommand \Uerg {O{}} {\__phyunit_space:n{#1}\mathrm{erg}} % erg （能量单位）
+\NewDocumentCommand \Ue {O{}} {\__phyunit_space:n{#1}\mathrm{e}} % e （元电荷）
+\NewDocumentCommand \UeV {O{}} {\__phyunit_space:n{#1}\mathrm{eV}} % eV （能量，电子伏特）
+\NewDocumentCommand \UF {O{}} {\__phyunit_space:n{#1}\mathrm{F}} % F （电容）
+\NewDocumentCommand \Ug {O{}} {\__phyunit_space:n{#1}\mathrm{g}} % g （质量）
+\NewDocumentCommand \Umg {O{}} {\__phyunit_space:n{#1}\mathrm{mg}} % mg （质量）
+\NewDocumentCommand \UHP {O{}} {\__phyunit_space:n{#1}\mathrm{HP}} % HP （功率单位：马力，horsepower）
+\NewDocumentCommand \UH {O{}} {\__phyunit_space:n{#1}\mathrm{H}} % H （自感系数）
+\NewDocumentCommand \UHs {O{}} {\__phyunit_space:n{#1}\mathrm{H}/\mathrm{s}} % H/s （同电阻）
+\NewDocumentCommand \UHz {O{}} {\__phyunit_space:n{#1}\mathrm{Hz}} % Hz （频率）
+\NewDocumentCommand \UJcal {O{}} {\__phyunit_space:n{#1}\mathrm{J}/\mathrm{cal}} % 热功当量单位
+\NewDocumentCommand \UJcdots {O{}} {\__phyunit_space:n{#1}\mathrm{J}\cdot\mathrm{s}} % J·s（普朗克常数 h 单位）
+\NewDocumentCommand \UJC {O{}} {\__phyunit_space:n{#1}\mathrm{J}/\mathrm{C}} % J/C （同电压）
+\NewDocumentCommand \UJkgdC {O{}} {\__phyunit_space:n{#1}\mathrm{J}/(\mathrm{kg}\cdot{}^\circ\mathrm{C})} % 比热 J/(kg·℃)
+\NewDocumentCommand \UJkgK {O{}} {\__phyunit_space:n{#1}\mathrm{J}/(\mathrm{kg}\cdot\mathrm{K})} % 比热 J/(kg·K)
+\NewDocumentCommand \UJkg {O{}} {\__phyunit_space:n{#1}\mathrm{J}/\mathrm{kg}} % J/kg （熔解热、汽化热）
+\NewDocumentCommand \UJmolK {O{}} {\__phyunit_space:n{#1}\mathrm{J}/(\mathrm{mol}\cdot\mathrm{K})} % J/(mol·K) （摩尔气体恒量 R 单位）
+\NewDocumentCommand \UJ {O{}} {\__phyunit_space:n{#1}\mathrm{J}} % J （能量，功）
+\NewDocumentCommand \UJs {O{}} {\__phyunit_space:n{#1}\mathrm{J}/\mathrm{s}} % J/s （功率）
+\NewDocumentCommand \UkgC {O{}} {\__phyunit_space:n{#1}\mathrm{kg}/\mathrm{C}} % kg/C （电化当量）
+\NewDocumentCommand \Ukgf {O{}} {\__phyunit_space:n{#1}\mathrm{kgf}} % kgf （千克力）
+\NewDocumentCommand \Ukgmc {O{}} {\__phyunit_space:n{#1}\mathrm{kg}/\mathrm{m}^3} % kg/m^3 （密度）
+\NewDocumentCommand \Ukgmol {O{}} {\__phyunit_space:n{#1}\mathrm{kg}/\mathrm{mol}} % kg/mol （摩尔质量单位，化学当量）
+\NewDocumentCommand \Ukgmsq {O{}} {\__phyunit_space:n{#1}\mathrm{kg}\cdot\mathrm{m}/\mathrm{s}^2} % kg·m/s^2 （力的单位，F=ma）
+\NewDocumentCommand \Ukgmqsq {O{}} {\__phyunit_space:n{#1}\mathrm{kg}\cdot\mathrm{m}^2\cdot\mathrm{s}^{-2}} % kg·m^2/s^2 （能量的单位，J）
+\NewDocumentCommand \Ukgms {O{}} {\__phyunit_space:n{#1}\mathrm{kg}\cdot\mathrm{m}/\mathrm{s}} % kg·m/s （冲量动量单位，p=mv）
+\NewDocumentCommand \Ukg {O{}} {\__phyunit_space:n{#1}\mathrm{kg}} % kg （质量）
+\NewDocumentCommand \Ukgs {O{}} {\__phyunit_space:n{#1}\mathrm{kg}/\mathrm{s}} % kg/s
+\NewDocumentCommand \UkHz {O{}} {\__phyunit_space:n{#1}\mathrm{kHz}} % kHz （频率）
+\NewDocumentCommand \UkJkg {O{}} {\__phyunit_space:n{#1}\mathrm{kJ}/\mathrm{kg}} % kJ/kg （熔解热、汽化热）
+\NewDocumentCommand \Ukmh {O{}} {\__phyunit_space:n{#1}\mathrm{km}/\mathrm{h}} % km/h （速度）
+\NewDocumentCommand \Ukmsq {O{}} {\__phyunit_space:n{#1}\mathrm{km}/\mathrm{s}^2} % km/s^2 （加速度）
+\NewDocumentCommand \Ukms {O{}} {\__phyunit_space:n{#1}\mathrm{km}/\mathrm{s}} % km/s （速度）
+\NewDocumentCommand \UkO {O{}} {\__phyunit_space:n{#1}\mathrm{k}\Omega} % kΩ （电阻）
+\NewDocumentCommand \UK {O{}} {\__phyunit_space:n{#1}\mathrm{K}} % K （热力学温度）
+\NewDocumentCommand \UkW {O{}} {\__phyunit_space:n{#1}\mathrm{kW}} % kW （功率）
+\NewDocumentCommand \UL {O{}} {\__phyunit_space:n{#1}\mathrm{L}} % L （容积单位，升）
+\NewDocumentCommand \Umcmol {O{}} {\__phyunit_space:n{#1}\mathrm{m}^3/\mathrm{mol}} % m^3/mol （摩尔体积）
+\NewDocumentCommand \ULmol {O{}} {\__phyunit_space:n{#1}\mathrm{L}/\mathrm{mol}} % L/mol （摩尔体积，升每摩尔）
+\NewDocumentCommand \Umc {O{}} {\__phyunit_space:n{#1}\mathrm{m}^3} % m^3 （体积）
+\NewDocumentCommand \Umcs {O{}} {\__phyunit_space:n{#1}\mathrm{m}^3/\mathrm{s}} % m^3/s （抽水速度）
+\NewDocumentCommand \UMeV {O{}} {\__phyunit_space:n{#1}\mathrm{MeV}} % MeV （能量，兆电子伏特）
+\NewDocumentCommand \UmH {O{}} {\__phyunit_space:n{#1}\mathrm{mH}} % mH （自感系数）
+\NewDocumentCommand \UMHz {O{}} {\__phyunit_space:n{#1}\mathrm{MHz}} % MHz （频率）
+\NewDocumentCommand \Ummc {O{}} {\__phyunit_space:n{#1}\mathrm{mm}^3} % mm^3 （体积）
+\NewDocumentCommand \UmmHg {O{}} {\__phyunit_space:n{#1}\mathrm{mmHg}} % mmHg （压强单位，毫米汞柱）
+\NewDocumentCommand \UcmHg {O{}} {\__phyunit_space:n{#1}\mathrm{cmHg}} % cmHg （压强单位，厘米汞柱）
+\NewDocumentCommand \Ummq {O{}} {\__phyunit_space:n{#1}\mathrm{mm}^2} % mm^2 （面积）
+\NewDocumentCommand \Umm {O{}} {\__phyunit_space:n{#1}\mathrm{mm}} % mm （长度）
+\NewDocumentCommand \Umnc {O{}} {\__phyunit_space:n{#1}\mathrm{m}^{-3}} % m^{-3} （体积倒数）
+\NewDocumentCommand \Umn {O{}} {\__phyunit_space:n{#1}\mathrm{m}^{-1}} % m^{-1} （长度 m 的倒数）
+\NewDocumentCommand \Umnq {O{}} {\__phyunit_space:n{#1}\mathrm{m}^{-2}} % m^{-2} （长度 m 的倒数）
+\NewDocumentCommand \Umolnc {O{}} {\__phyunit_space:n{#1}\mathrm{mol}^{-3}} % mol^{-3}（物质的量倒数）
+\NewDocumentCommand \Umolnq {O{}} {\__phyunit_space:n{#1}\mathrm{mol}^{-2}} % mol^{-2} （物质的量倒数）
+\NewDocumentCommand \Umoln {O{}} {\__phyunit_space:n{#1}\mathrm{mol}^{-1}} % mol^{-1} （物质的量倒数）
+\NewDocumentCommand \Umol {O{}} {\__phyunit_space:n{#1}\mathrm{mol}} % mol （物质的量）
+\NewDocumentCommand \UMO {O{}} {\__phyunit_space:n{#1}\mathrm{M}\Omega} % MΩ （电阻）
+\NewDocumentCommand \Umq {O{}} {\__phyunit_space:n{#1}\mathrm{m}^2} % m^2 （面积）
+\NewDocumentCommand \Um {O{}} {\__phyunit_space:n{#1}\mathrm{m}} % m （长度）
+\NewDocumentCommand \Umsq {O{}} {\__phyunit_space:n{#1}\mathrm{m}/\mathrm{s}^2} % m/s^2 （加速度）
+\NewDocumentCommand \Ums {O{}} {\__phyunit_space:n{#1}\mathrm{m}/\mathrm{s}} % m/s （速度）
+\NewDocumentCommand \Umdsn {O{}} {\__phyunit_space:n{#1}\mathrm{m}\cdot\mathrm{s}^{-1}} % m·s^{-1} （速度）
+\NewDocumentCommand \Uum {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{m}} % μm （长度，微米）
+\NewDocumentCommand \UNAq {O{}} {\__phyunit_space:n{#1}\mathrm{N}/\mathrm{A}^2} % N/A^2 （直导线电流产生磁场的比例系数 B=kI/r）
+\NewDocumentCommand \UNC {O{}} {\__phyunit_space:n{#1}\mathrm{N}/\mathrm{C}} % N/C （电场强度）
+\NewDocumentCommand \UnF {O{}} {\__phyunit_space:n{#1}\mathrm{nF}} % nF （电容）
+\NewDocumentCommand \UNkg {O{}} {\__phyunit_space:n{#1}\mathrm{N}/\mathrm{kg}} % N/kg
+\NewDocumentCommand \UNmqCq {O{}} {\__phyunit_space:n{#1}\mathrm{N}\cdot\mathrm{m}^2/\mathrm{C}^2} % N·m^2/C^2 （静电力常量 k）
+\NewDocumentCommand \UNmqkgq {O{}} {\__phyunit_space:n{#1}\mathrm{N}\cdot\mathrm{m}^2/\mathrm{kg}^2} % N·m^2/kg^2 (万有引力常量 G 单位)
+\NewDocumentCommand \UNmq {O{}} {\__phyunit_space:n{#1}\mathrm{N}/\mathrm{m}^2} % N/m^2 （压强）
+\NewDocumentCommand \UNcdotm {O{}} {\__phyunit_space:n{#1}\mathrm{N}\cdot\mathrm{m}} % N·m （力矩）
+\NewDocumentCommand \UN {O{}} {\__phyunit_space:n{#1}\mathrm{N}} % N （力）
+\NewDocumentCommand \UNm {O{}} {\__phyunit_space:n{#1}\mathrm{N}/\mathrm{m}} % N/m （弹簧劲度系数）
+\NewDocumentCommand \UNcm {O{}} {\__phyunit_space:n{#1}\mathrm{N}/\mathrm{cm}} % N/cm （弹簧劲度系数）
+\NewDocumentCommand \UNs {O{}} {\__phyunit_space:n{#1}\mathrm{N}\cdot\mathrm{s}} % N·s （动量，冲量）
+\NewDocumentCommand \UOm {O{}} {\__phyunit_space:n{#1}\Omega\cdot\mathrm{m}} % Ω·m （电阻率）
+\NewDocumentCommand \UO {O{}} {\__phyunit_space:n{#1}\Omega} % Ω （电阻）
+\NewDocumentCommand \UOs {O{}} {\__phyunit_space:n{#1}\Omega\cdot\mathrm{s}} % Ω·s （同自感系数）
+\NewDocumentCommand \UPa {O{}} {\__phyunit_space:n{#1}\mathrm{Pa}} % Pa （压强）
+\NewDocumentCommand \UpF {O{}} {\__phyunit_space:n{#1}\mathrm{pF}} % pF （电容）
+\NewDocumentCommand \UsF {O{}} {\__phyunit_space:n{#1}\mathrm{s}/\mathrm{F}} % s/F （同电阻）
+\NewDocumentCommand \Uspace {O{a}} {\__phyunit_space:n{#1}} % 物理单位的空格
+\NewDocumentCommand \Usq {O{}} {\__phyunit_space:n{#1}\mathrm{s}^2} % s^2
+\NewDocumentCommand \Us {O{}} {\__phyunit_space:n{#1}\mathrm{s}} % s （时间）
+\NewDocumentCommand \Usn {O{}} {\__phyunit_space:n{#1}\mathrm{s}^{-1}} % s^{-1} （时间倒数）
+\NewDocumentCommand \Usnq {O{}} {\__phyunit_space:n{#1}\mathrm{s}^{-2}} % s^{-2} （时间负二次方）
+\NewDocumentCommand \Uhn {O{}} {\__phyunit_space:n{#1}\mathrm{h}^{-1}} % h^{-1} （时间倒数）
+\NewDocumentCommand \UsVC {O{}} {\__phyunit_space:n{#1}\mathrm{s}\cdot\mathrm{V}/\mathrm{C}} % s·V/C （同电阻）
+\NewDocumentCommand \UTmq {O{}} {\__phyunit_space:n{#1}\mathrm{T}\cdot\mathrm{m}^2} % T·m^2 （同磁通量）
+\NewDocumentCommand \UT {O{}} {\__phyunit_space:n{#1}\mathrm{T}} % T （磁感应强度，特斯拉）
+\NewDocumentCommand \UTm {O{}} {\__phyunit_space:n{#1}\mathrm{T}/\mathrm{m}} % T/m 磁场随距离变化系数
+\NewDocumentCommand \UuA {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{A}} % μA （电流，微安）
+\NewDocumentCommand \UmuA {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{A}} % μA （电流，微安）
+\NewDocumentCommand \UmA {O{}} {\__phyunit_space:n{#1}\mathrm{mA}} % mA （电流，毫安）
+\NewDocumentCommand \Uu {O{}} {\__phyunit_space:n{#1}\mathrm{u}} % u （原子质量单位）
+\NewDocumentCommand \UuF {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{F}} % uF （电容）
+\NewDocumentCommand \UmuF {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{F}} % uF （电容）
+\NewDocumentCommand \UuH {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{H}} % μH （自感系数）
+\NewDocumentCommand \UmuH {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{H}} % μH （自感系数）
+\NewDocumentCommand \UVm {O{}} {\__phyunit_space:n{#1}\mathrm{V}/\mathrm{m}} % V/m （同电场强度）
+\NewDocumentCommand \UVcm {O{}} {\__phyunit_space:n{#1}\mathrm{V}/\mathrm{cm}} % V/cm （同电场强度）
+\NewDocumentCommand \UV {O{}} {\__phyunit_space:n{#1}\mathrm{V}} % V （电压）
+\NewDocumentCommand \UmV {O{}} {\__phyunit_space:n{#1}\mathrm{mV}} % mV （电压）
+\NewDocumentCommand \UVsA {O{}} {\__phyunit_space:n{#1}\mathrm{V}\cdot\mathrm{s}/\mathrm{A}} % V·s/A （同自感系数）
+\NewDocumentCommand \UVA {O{}} {\__phyunit_space:n{#1}\mathrm{V}/\mathrm{A}} % V/A （同电阻）
+\NewDocumentCommand \UWbmq {O{}} {\__phyunit_space:n{#1}\mathrm{Wb}/\mathrm{m}^2} % Wb/m^2 （磁通密度，同磁感应强度）
+\NewDocumentCommand \UWb {O{}} {\__phyunit_space:n{#1}\mathrm{Wb}} % Wb （磁通量）
+\NewDocumentCommand \UWbs {O{}} {\__phyunit_space:n{#1}\mathrm{Wb}/\mathrm{s}} % Wb/s （同电压）
+\NewDocumentCommand \UWmq {O{}} {\__phyunit_space:n{#1}\mathrm{W}/\mathrm{m}^2} % W/m^2
+\NewDocumentCommand \UW {O{}} {\__phyunit_space:n{#1}\mathrm{W}} % W （功率）
+\NewDocumentCommand \UmL {O{}} {\__phyunit_space:n{#1}\mathrm{mL}} % mL （体积）
+\NewDocumentCommand \Unm {O{}} {\__phyunit_space:n{#1}\mathrm{nm}} % nm （长度）
+\NewDocumentCommand \Umin {O{}} {\__phyunit_space:n{#1}\mathrm{min}} % min （时间）
+\NewDocumentCommand \Ukm {O{}} {\__phyunit_space:n{#1}\mathrm{km}} % km （长度）
+\NewDocumentCommand \UkV {O{}} {\__phyunit_space:n{#1}\mathrm{kV}} % kV （电压）
+\NewDocumentCommand \UkPa {O{}} {\__phyunit_space:n{#1}\mathrm{kPa}} % kPa （压强）
+\NewDocumentCommand \Uimp {O{}} {\__phyunit_space:n{#1}\mathrm{imp}} % imp （体积，容量）
+\NewDocumentCommand \Urad {O{}} {\__phyunit_space:n{#1}\mathrm{rad}} % rad （弧度）
+\NewDocumentCommand \Urads {O{}} {\__phyunit_space:n{#1}\mathrm{rad}/\mathrm{s}} % rad/s （角速度）
+\NewDocumentCommand \Uradmin {O{}} {\__phyunit_space:n{#1}\mathrm{rad}/\mathrm{min}} % rad/min （角速度）
+\NewDocumentCommand \UkJ {O{}} {\__phyunit_space:n{#1}\mathrm{kJ}} % kJ （能量，热量）
+\NewDocumentCommand \Uh {O{}} {\__phyunit_space:n{#1}\mathrm{h}} % h （时间）
+\NewDocumentCommand \UkWh {O{}} {\__phyunit_space:n{#1}\mathrm{kW}\cdot\mathrm{h}} % kW·h （电能，度）
+\NewDocumentCommand \UmAh {O{}} {\__phyunit_space:n{#1}\mathrm{mA}\cdot\mathrm{h}} % mA·h （电池容量）
+\NewDocumentCommand \Urmin {O{}} {\__phyunit_space:n{#1}\mathrm{r}/\mathrm{min}} % r/min （转速）
+\NewDocumentCommand \Urs {O{}} {\__phyunit_space:n{#1}\mathrm{r}/\mathrm{s}} % r/s （转速）
+\NewDocumentCommand \UAU {O{}} {\__phyunit_space:n{#1}\mathrm{AU}} % AU （天文单位）
+\NewDocumentCommand \Ucd {O{}} {\__phyunit_space:n{#1}\mathrm{cd}} % cd 发光强度
+\NewDocumentCommand \Ut {O{}} {\__phyunit_space:n{#1}\mathrm{t}} % t 质量单位（吨）
+\NewDocumentCommand \Upm { O{} } { \__phyunit_space:n{#1} \mathrm{pm} } % 长度：fm
+\NewDocumentCommand \Ufm { O{} } { \__phyunit_space:n{#1} \mathrm{fm} } % 长度：fm
+\NewDocumentCommand \UmsT { O{} } { \__phyunit_space:n{#1} \mathrm{ms} } % 时间：ms 毫秒
+\NewDocumentCommand \Uus  { O{} } { \__phyunit_space:n{#1} \mu\mathrm{s} } % 时间：μs
+\NewDocumentCommand \Uns  { O{} } { \__phyunit_space:n{#1} \mathrm{ns} } % 时间：ns
+\NewDocumentCommand \Ud   { O{} } { \__phyunit_space:n{#1} \mathrm{d} } % 时间： d（天）
+\NewDocumentCommand \UkA { O{} } { \__phyunit_space:n{#1} \mathrm{kA} } % 电流：kA
+\NewDocumentCommand \UnA { O{} } { \__phyunit_space:n{#1} \mathrm{nA} } % 电流：nA
+\NewDocumentCommand \UpA { O{} } { \__phyunit_space:n{#1} \mathrm{pA} } % 电流：pA
+\NewDocumentCommand \UuV { O{} } { \__phyunit_space:n{#1} \mu\mathrm{V} } % 电压：μV
+\NewDocumentCommand \UMV { O{} } { \__phyunit_space:n{#1} \mathrm{MV} } % 电压：MV
+\NewDocumentCommand \UmO { O{} } { \__phyunit_space:n{#1} \mathrm{m}\Omega } % 电阻：mΩ
+\NewDocumentCommand \UGO { O{} } { \__phyunit_space:n{#1} \mathrm{G}\Omega } % 电阻：GΩ
+\NewDocumentCommand \UmF { O{} } { \__phyunit_space:n{#1} \mathrm{mF} } % 电容：mF
+\NewDocumentCommand \UnH { O{} } { \__phyunit_space:n{#1} \mathrm{nH} } % 电感：nH
+\NewDocumentCommand \UGHz { O{} } { \__phyunit_space:n{#1} \mathrm{GHz} } % 频率：GHz
+\NewDocumentCommand \Uug { O{} } { \__phyunit_space:n{#1} \mu\mathrm{g} } % 质量：μg
+\NewDocumentCommand \Ung { O{} } { \__phyunit_space:n{#1} \mathrm{ng} } % 质量：ng
+\NewDocumentCommand \Ummol { O{} } { \__phyunit_space:n{#1} \mathrm{mmol} } % 物质的量：mmol
+\NewDocumentCommand \Uumol { O{} } { \__phyunit_space:n{#1} \mu\mathrm{mol} }  % 物质的量： μmol
+\NewDocumentCommand \UMJ { O{} } { \__phyunit_space:n{#1} \mathrm{MJ} } % 能量：MJ
+\NewDocumentCommand \UmJ { O{} } { \__phyunit_space:n{#1} \mathrm{mJ} } % 能量：mJ
+\NewDocumentCommand \UuJ { O{} } { \__phyunit_space:n{#1} \mu\mathrm{J} } % 能量：μJ
+\NewDocumentCommand \UMW { O{} } { \__phyunit_space:n{#1} \mathrm{MW} } % 功率：MW
+\NewDocumentCommand \UmW { O{} } { \__phyunit_space:n{#1} \mathrm{mW} } % 功率：mW
+\NewDocumentCommand \UMPa { O{} } { \__phyunit_space:n{#1} \mathrm{MPa} } % 压强：MPa
+\NewDocumentCommand \UhPa { O{} } { \__phyunit_space:n{#1} \mathrm{hPa} } % 压强：hPa 百帕
+\NewDocumentCommand \UmC { O{} } { \__phyunit_space:n{#1} \mathrm{mC} } % 电荷：mC
+\NewDocumentCommand \UuC { O{} } { \__phyunit_space:n{#1} \mu\mathrm{C} } % 电荷：μC
+\NewDocumentCommand \UnC { O{} } { \__phyunit_space:n{#1} \mathrm{nC} } % 电荷： nC
+\NewDocumentCommand \Ugcmc { O{} } { \__phyunit_space:n{#1} \mathrm{g}/\mathrm{cm}^3 } % 密度：g/cm^3
+\NewDocumentCommand \UmolL { O{} } { \__phyunit_space:n{#1} \mathrm{mol}/\mathrm{L} } % 物质的量浓度：mol/L
+\NewDocumentCommand \Ukcal { O{} } { \__phyunit_space:n{#1} \mathrm{kcal} } % 热量：kcal
+\NewDocumentCommand \UWh { O{} } { \__phyunit_space:n{#1} \mathrm{W}\cdot\mathrm{h} } % 电能：Wh
+\NewDocumentCommand \UAh { O{} } { \__phyunit_space:n{#1} \mathrm{A}\cdot\mathrm{h} } % 电能：A·h
+\NewDocumentCommand \ULs   { O{} } { \__phyunit_space:n{#1} \mathrm{L}/\mathrm{s} } % 流量：L/s,
+\NewDocumentCommand \ULmin { O{} } { \__phyunit_space:n{#1} \mathrm{L}/\mathrm{min} } % 流量： m^3/h
+\NewDocumentCommand \Umch  { O{} } { \__phyunit_space:n{#1} \mathrm{m}^3/\mathrm{h} } % 流量： m^3/h
+\NewDocumentCommand \UkVm  { O{} } { \__phyunit_space:n{#1} \mathrm{kV}/\mathrm{m} } % 电场强度：kV/m,
+\NewDocumentCommand \UkVcm { O{} } { \__phyunit_space:n{#1} \mathrm{kV}/\mathrm{cm} } % 电场强度：kV/cm
+\NewDocumentCommand \UmT { O{} } { \__phyunit_space:n{#1} \mathrm{mT} } % 磁场：mT,
+\NewDocumentCommand \UuT { O{} } { \__phyunit_space:n{#1} \mu\mathrm{T} } % 磁场：μT
+\NewDocumentCommand \UGs { O{} } { \__phyunit_space:n{#1} \mathrm{Gs} } % 磁场： Gs（高斯）
+\NewDocumentCommand \UMx { O{} } { \__phyunit_space:n{#1} \mathrm{Mx} } % 磁场： Mx（麦克斯韦）
+\NewDocumentCommand \Ulx { O{} } { \__phyunit_space:n{#1} \mathrm{lx} } % 光照：lx
+\NewDocumentCommand \Ulm { O{} } { \__phyunit_space:n{#1} \mathrm{lm} } % 光照：lm
+\NewDocumentCommand \UBq { O{} } { \__phyunit_space:n{#1} \mathrm{Bq} } % 放射性：Bq
+\NewDocumentCommand \UGy { O{} } { \__phyunit_space:n{#1} \mathrm{Gy} } % 放射性：Gy
+\NewDocumentCommand \USv { O{} } { \__phyunit_space:n{#1} \mathrm{Sv} } % 放射性：Sv
+\NewDocumentCommand \UduF { O{} } { \__phyunit_space:n{#1} {}^\circ\mathrm{F} } % 温度：℉
+\NewDocumentCommand \UdF { O{} } { \__phyunit_space:n{#1} {}^\circ\mathrm{F} } % 温度：℉
+\NewDocumentCommand \Uprime  { O{} } { \__phyunit_space:n{#1} {}^\prime } % 角度：角分 ′
+\NewDocumentCommand \Upprime { O{} } { \__phyunit_space:n{#1} {}^{\prime\prime} } % 角度：角秒 ″
+\NewDocumentCommand \Usr     { O{} } { \__phyunit_space:n{#1} \mathrm{sr} } % 角度：球面度 sr
+\NewDocumentCommand \Uly { O{} } { \__phyunit_space:n{#1} \mathrm{ly} } % 天文：光年 ly
+\NewDocumentCommand \Upc { O{} } { \__phyunit_space:n{#1} \mathrm{pc} } % 天文：秒差距 pc
+\NewDocumentCommand \Unmi { O{} } { \__phyunit_space:n{#1} \mathrm{nmi} } % 长度：海里 n mile（建议用国际符号 nmi）
+\NewDocumentCommand \Ugmol { O{} } { \__phyunit_space:n{#1} \mathrm{g}/\mathrm{mol} } % g/mol 化学/热学
+\NewDocumentCommand \UJmoldC { O{} } { \__phyunit_space:n{#1} \mathrm{J}/(\mathrm{mol}\cdot{}^\circ\mathrm{C}) } % J/(mol·℃) 化学/热学
+\NewDocumentCommand \UcalgdC { O{} } { \__phyunit_space:n{#1} \mathrm{cal}/(\mathrm{g}\cdot{}^\circ\mathrm{C}) } % cal/(g·℃) 化学/热学
+\NewDocumentCommand \UkcalKgdC { O{} } { \__phyunit_space:n{#1} \mathrm{kcal}/(\mathrm{kg}\cdot{}^\circ\mathrm{C}) } % kcal/(kg·℃) 化学/热学
+
+\endinput
