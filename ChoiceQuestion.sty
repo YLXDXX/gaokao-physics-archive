@@ -1,105 +1,102 @@
-%格式声明
 \NeedsTeXFormat{LaTeX2e}[2021-11-15]
 
 \RequirePackage{expl3}
 
-\ProvidesExplPackage{ChoiceQuestion}{2026-04-05}{0.1}{选择题}
+\ProvidesExplPackage{ChoiceQuestion}{2026-09-16}{0.2}{选择题}
 
-\RequirePackage{package/exam-zh-choices} %选择题依赖
-\RequirePackage{xeCJKfntef} %中文的波浪线、加点、删除线等
+% 若使用 CTAN 正式安装版，可改为 \RequirePackage{exam-zh-choices}
+\RequirePackage{package/exam-zh-choices} % 选择题依赖
+\RequirePackage{xeCJKfntef}             % 中文的下划线、波浪线、加点等
 \RequirePackage{xcolor}
 \RequirePackage{tcolorbox}
 \tcbuselibrary{skins,breakable}
 
-% --- 深色模式适配 ---
+% ==========================================================
+% 颜色（修复：TextDark 原来在深色模式变量存在时未定义，
+%       现改为无条件先定义默认值，深色模式下再覆盖）
+% ==========================================================
 \definecolor{AnswerGreen}{HTML}{1A7A5C}
 \definecolor{BGAnswer}{HTML}{E8F5EF}
-\cs_if_exist:NTF \g__highend_dark_mode_bool
+\definecolor{TextDark}{HTML}{050505}
+\definecolor{AccentGold}{HTML}{C5A065}
+
+\cs_if_exist:NT \g__highend_dark_mode_bool
   {
     \bool_if:NT \g__highend_dark_mode_bool
       {
         \definecolor{AnswerGreen}{HTML}{4ECCA3}
         \definecolor{BGAnswer}{HTML}{2E3338}
         \definecolor{AccentGold}{HTML}{DFC585}
+        \definecolor{TextDark}{HTML}{ECECEC} % 修复：深色模式下也定义
       }
   }
-  {
-    \definecolor{TextDark}{HTML}{050505}
-    \definecolor{AccentGold}{HTML}{C5A065}
-  }
 
-% 定义变量，选定义，后使用
-\tl_new:N   \l_CQ_choices_answer_tl
-\tl_new:N   \l_CQ_choices_color_tl
-\tl_new:N   \l_CQ_choices_label_pos_tl
-\tl_new:N   \l_CQ_choices_A_tl
-\tl_new:N   \l_CQ_choices_B_tl
-\tl_new:N   \l_CQ_choices_C_tl
-\tl_new:N   \l_CQ_choices_D_tl
-\tl_new:N   \l_CQ_choices_E_tl
-\tl_new:N   \l_CQ_choices_F_tl
-
+% ==========================================================
+% 变量（先定义，后使用）
+% ==========================================================
+\tl_new:N  \l_CQ_choices_answer_tl
+\tl_new:N  \l_CQ_choices_color_tl     % 兼容保留（引擎暂未使用）
+\tl_new:N  \l_CQ_choices_label_pos_tl
 \bool_new:N \l_CQ_choices_ispicture_bool
 \bool_new:N \l_CQ_isanswershown_bool
+\seq_new:N  \l_CQ_choices_answer_seq
+\tl_new:N  \l_CQ_answer_color_tl
 
-\seq_new:N \l_CQ_choices_answer_seq
-\tl_new:N \l_CQ_answer_color_tl
+% --- 选择题引擎内部变量 ---
+\int_new:N   \l__CQ_choices_count_int    % 本题选项个数
+\clist_new:N \l_CQ_choices_items_clist   % 各选项内容（索引 = 序号）
+\prop_new:N  \l_CQ_choices_mark_prop     % 需要高亮的选项（键 = 序号）
+\int_new:N   \l__CQ_choices_maxcols_int  % max-columns 值，0 = 不传该键
+\tl_new:N    \l__CQ_choices_maxcols_tl
+\clist_new:N \l__CQ_choices_items_local_clist  % 组装选项体时的局部副本
+\tl_new:N    \l__CQ_choices_body_tl            % 已组装的选项体（含字面 \item）
+\tl_new:N    \l__CQ_choices_keys_tl            % choices 环境键值列表
 
 % 消息
-\msg_new:nnn { CQ_keys_choices } { unknown-key }{Unknown~key~'\l_keys_key_tl'~in~command~options.}
+\msg_new:nnn { CQ_keys_choices } { unknown-key }
+  { Unknown~key~'\l_keys_key_tl'~in~command~options. }
 
-
-%宏包加载时的选项
-\keys_define:nn {CQ_package_load}
-{
-    %可选输入参数
+% ==========================================================
+% 宏包加载时的选项
+% ==========================================================
+\keys_define:nn { CQ_package_load }
+  {
     answer_shown .bool_set:N = \l_CQ_isanswershown_bool,
-    answer_color .tl_set:N = \l_CQ_answer_color_tl,
-    % 初始值
-    answer_shown .initial:n = false,
-    answer_color .initial:n = AnswerGreen,
-    % 默认值
-    answer_shown .default:n = true,
-}
+    answer_color .tl_set:N   = \l_CQ_answer_color_tl,
+    answer_shown .initial:n  = false,
+    answer_color .initial:n  = AnswerGreen,
+    answer_shown .default:n  = true,
+  }
 
-\ProcessKeyOptions[CQ_package_load] %宏包加载时处理传入参数
+\ProcessKeyOptions[CQ_package_load]
 
-%选择题相关命令
+% ==========================================================
+% 选择题逐题键值（answer / color / ispicture）
+% ==========================================================
 \keys_define:nn { CQ_keys_choices }
-{
-    %可选输入参数
-    answer .tl_set:N = \l_CQ_choices_answer_tl,
-    color .tl_set:N = \l_CQ_choices_color_tl,
+  {
+    answer    .tl_set:N   = \l_CQ_choices_answer_tl,
+    color     .tl_set:N   = \l_CQ_choices_color_tl,
     ispicture .bool_set:N = \l_CQ_choices_ispicture_bool,
-
-    %默认值
-    ispicture .initial:n = {false},
-    answer .initial:n = {Z},
-    color .initial:n = {black},
-    unknown .code:n = \msg_error:nn { CQ_keys_choices } { unknown-key } %处理未定义的键
-}
+    ispicture .initial:n  = false,
+    answer    .initial:n  = { Z },   % Z：不与任何选项匹配
+    color     .initial:n  = { black },
+    unknown   .code:n = \msg_error:nn { CQ_keys_choices } { unknown-key },
+  }
 
 % 深色模式下覆盖选择标签默认颜色
 \cs_if_exist:NT \g__highend_dark_mode_bool
   {
     \bool_if:NT \g__highend_dark_mode_bool
-      {
-        \keys_define:nn { CQ_keys_choices }
-          { color .initial:n = { TextDark } }
-      }
+      { \keys_define:nn { CQ_keys_choices } { color .initial:n = { TextDark } } }
   }
 
-
 % ==========================================================
-% 定义内部布尔变量用于记录文档类状态
+% 识别当前文档类
 % ==========================================================
 \bool_new:N \l__mymod_is_beamer_bool
 \bool_new:N \l__mymod_is_book_bool
 
-% ==========================================================
-% 识别当前文档类 (核心逻辑)
-% ==========================================================
-% LaTeX 内核将文档类名存储在 \@ifclassloaded 中
 \@ifclassloaded { beamer }
   { \bool_set_true:N \l__mymod_is_beamer_bool }
   {
@@ -108,842 +105,467 @@
       { \iow_term:n { ==>~ Neither~Beamer~nor~Book~class~detected. } }
   }
 
-% ==========================================================
-% 创建现代的公共条件判断 API
-% ==========================================================
-% 使用 \prg_new_conditional:Nnn 生成完整的条件判断命令族
-% p (用于逻辑表达式), T (True分支), F (False分支), TF (True/False分支)
-% 利用 \prg_new_conditional:Nnn 解释器会自动为你生成 4 个命令。例如：
-%   \mymod_if_beamer:T { ... } : 如果是 Beamer，执行大括号内代码
-%   \mymod_if_beamer:F { ... } : 如果不是 Beamer，执行大括号内代码
-%   \mymod_if_beamer:TF { ... } { ... } : 如果/否则 分支
-%   \mymod_if_beamer_p: : 返回布尔逻辑值（用于逻辑表达式组合，如 && 或 ||）
-
+% 生成 \mymod_if_beamer:T / :F / :TF / _p: 及 \mymod_if_book:... 命令族
 \prg_new_conditional:Nnn \mymod_if_beamer: { p, T, F, TF }
-{
-  \bool_if:NTF \l__mymod_is_beamer_bool
-    { \prg_return_true: }
-    { \prg_return_false: }
-}
-
+  {
+    \bool_if:NTF \l__mymod_is_beamer_bool
+      { \prg_return_true: } { \prg_return_false: }
+  }
 \prg_new_conditional:Nnn \mymod_if_book: { p, T, F, TF }
+  {
+    \bool_if:NTF \l__mymod_is_book_bool
+      { \prg_return_true: } { \prg_return_false: }
+  }
+
+% ==========================================================
+% 填空题：空线绘制（两种文档类共用）
+%   #1 = 可选宽度；为空表示与答案自然宽度一致（不短于 0.8cm）
+%   #2 = 答案内容
+% ==========================================================
+\cs_new_protected:Npn \__CQ_blank_line:nn #1 #2
 {
-  \bool_if:NTF \l__mymod_is_book_bool
-    { \prg_return_true: }
-    { \prg_return_false: }
+  \tl_if_blank:nTF {#1}
+    {
+      \hbox_set:Nn \l_tmpa_box {#2}          % 量出答案自然宽度
+      \dim_compare:nNnTF { \box_wd:N \l_tmpa_box } > { 0.8cm }
+        { \CJKunderline[hidden=true,skip=false,
+            format=\color{AnswerGreen},thickness=1pt]{#2} }
+        { \CJKunderline[hidden=true,skip=false,
+            format=\color{AnswerGreen},thickness=1pt]{ \makebox[0.8cm][c]{#2} } }
+    }
+    {
+      \CJKunderline[hidden=true,skip=false,
+        format=\color{AnswerGreen},thickness=1pt]{ \makebox[#1][c]{} }
+    }
 }
 
+% ==========================================================
+% 填空题答案 \tkanswer[宽度]{答案}
+% （修复：beamer 深色模式下补回 \only 两步揭示）
+% ==========================================================
+\cs_new_protected:Npn \__CQ_tkanswer_dark:n #1
+  { \begingroup \color{AnswerGreen} #1 \endgroup }
 
+\cs_new_protected:Npn \__CQ_tkanswer_wavy:n #1
+  { \CJKunderanyline*{0.5ex}{ \color{BGAnswer}\rule{2pt}{2.5ex} }{#1} }
 
+\cs_new_protected:Npn \__CQ_tkanswer_shown:nn #1 #2
+{
+  \cs_if_exist:NTF \g__highend_dark_mode_bool
+    {
+      \bool_if:NTF \g__highend_dark_mode_bool
+        { % 深色模式：避免装饰色在深底上突兀，直接以文字色显示
+          \mymod_if_beamer:TF
+            { \only<1>{ \__CQ_blank_line:nn {#1} {#2} }
+              \only<2>{ \__CQ_tkanswer_dark:n {#2} } }
+            { \__CQ_tkanswer_dark:n {#2} }
+        }
+        {
+          \mymod_if_beamer:TF
+            { \only<1>{ \__CQ_blank_line:nn {#1} {#2} }
+              \only<2>{ \__CQ_tkanswer_wavy:n {#2} } }
+            { \__CQ_tkanswer_wavy:n {#2} }
+        }
+    }
+    {
+      \mymod_if_beamer:TF
+        { \only<1>{ \__CQ_blank_line:nn {#1} {#2} }
+          \only<2>{ \__CQ_tkanswer_wavy:n {#2} } }
+        { \__CQ_tkanswer_wavy:n {#2} }
+    }
+}
+
+\NewDocumentCommand \tkanswer { O{} m }
+{
+  \bool_if:NTF \l_CQ_isanswershown_bool
+    { \__CQ_tkanswer_shown:nn {#1} {#2} }
+    { \__CQ_blank_line:nn {#1} {#2} }
+}
 
 % ==========================================================
-% 根据环境应用不同样式和功能
+% 选择题答案 \xzanswer{A}（beamer 两步揭示，book 直接显示）
 % ==========================================================
+\NewDocumentCommand \xzanswer { m }
+{
+  \bool_if:NTF \l_CQ_isanswershown_bool
+    {
+      \mymod_if_beamer:TF
+        {
+          \only<1>{ $(\quad)$ }
+          \only<2>{ $(\; \mathrm{ \color{\l_CQ_answer_color_tl} #1 } \;)$ }
+        }
+        { $(\; \mathrm{ \color{\l_CQ_answer_color_tl} #1 } \;)$ }
+    }
+    { $(\quad)$ }
+}
 
 % ==========================================================
-% jdinlineenum 嵌套编号支持（beamer / book 两分支共用）
+% 作图 / 连线题 \drawpicanswer{原图}{答案图}
 % ==========================================================
-\int_new:N \l__jdinline_int                     % 小问序号
-\int_new:N \l__jdinline_depth_int          % 嵌套深度，最外层为 1
+\NewDocumentCommand \drawpicanswer { m m }
+{
+  \bool_if:NTF \l_CQ_isanswershown_bool
+    { \mymod_if_beamer:TF { \only<1>{#1} \only<2>{#2} } {#2} }
+    {#1}
+}
 
-% 第 2 层小问标签 ①②③…（多于 20 个时退回
+% ==========================================================
+% 题目解析 \memoanswer{...}（仅 book，需要 breakable 跨页）
+% ==========================================================
+\mymod_if_book:T
+{
+  \NewDocumentCommand \memoanswer { +m }
+  {
+    \bool_if:NTF \l_CQ_isanswershown_bool
+      {
+        \begin{tcolorbox}[enhanced, breakable, boxrule=0pt, leftrule=2pt,
+            arc=0pt, outer~arc=0pt, left=1mm, right=1mm,
+            top=1.5mm, bottom=1.5mm,
+            colback=black!4, colframe=black!45,
+            before~upper={ \setlength{\parskip}{0.5em} },
+            coltext=TextDark]
+          \setlength{\leftmargini}{2em}
+          #1
+        \end{tcolorbox}
+      }
+      { }
+  }
+}
+
+% =================================================================
+%  jdinlineenum：内联小问列表（纯 expl3，beamer 可用）
+%  两文档类共用同一实现（含嵌套深度与 \par 备份保护）
+% =================================================================
+\int_new:N \l__jdinline_int        % 小问序号
+\int_new:N \l__jdinline_depth_int  % 嵌套深度，最外层为 1
+
+% 第 2 层小问标签 ①②③…（多于 20 个时退回 (n)）——备用
 \cs_new:Npn \__jdinline_circled:N #1
 {
-    \int_case:nnF {#1}
+  \int_case:nnF {#1}
     {
-        { 1 } { ① } { 2 } { ② } { 3 } { ③ } { 4 } { ④ } { 5 } { ⑤ }
-        { 6 } { ⑥ } { 7 } { ⑦ } { 8 } { ⑧ } { 9 } { ⑨ } { 10 } { ⑩ }
-        { 11 } { ⑪ } { 12 } { ⑫ } { 13 } { ⑬ } { 14 } { ⑭ } { 15 } { ⑮ }
-        { 16 } { ⑯ } { 17 } { ⑰ } { 18 } { ⑱ } { 19 } { ⑲ } { 20 } { ⑳ }
+      { 1 } { ① } { 2 } { ② } { 3 } { ③ } { 4 } { ④ } { 5 } { ⑤ }
+      { 6 } { ⑥ } { 7 } { ⑦ } { 8 } { ⑧ } { 9 } { ⑨ } { 10 } { ⑩ }
+      { 11 } { ⑪ } { 12 } { ⑫ } { 13 } { ⑬ } { 14 } { ⑭ } { 15 } { ⑮ }
+      { 16 } { ⑯ } { 17 } { ⑰ } { 18 } { ⑱ } { 19 } { ⑲ } { 20 } { ⑳ }
     }
     { ( \int_use:N #1 ) }
 }
 
-% 按深度选择标签文本：第 1 层 (1)(2)(3)…；第 2 层 ①②③…；第 3 层起
-% （在 \__jdinline_label:n 中于 \int_incr 之后才排版，取到的是本条序号）
-\cs_new_protected:Npn \__jdinline_autolabel:
+% 按深度选择标签文本：第 1 层 (1)(2)(3)…；第 2 层起 (i)(ii)(iii)…
+\cs_new:Npn \__jdinline_autolabel:
 {
-    \int_case:nnF { \l__jdinline_depth_int }
+  \int_case:nnF { \l__jdinline_depth_int }
     {
-        { 1 } { ( \int_use:N \l__jdinline_int ) }%第一层标签
-        %{ 2 } { \__jdinline_circled:N \l__jdinline_int }%第二层标签，这里是①②③④⑤
-        { 2 } { ( \int_to_roman:n { \l__jdinline_int } ) }%第二层标签
+      { 1 } { ( \int_use:N \l__jdinline_int ) }
+      %{ 2 } { \__jdinline_circled:N \l__jdinline_int } % 如需 ①②③ 改用此行
+      { 2 } { ( \int_to_roman:n { \l__jdinline_int } ) }
     }
     { ( \int_to_roman:n { \l__jdinline_int } ) }
 }
 
-
-
-% ==========================================================
-% --- Beamer 专属配置 ---
-% ==========================================================
-\mymod_if_beamer:T
-{
-%填空题答案显示
-\cs_new_protected:Npn \__CQ_blank_line:nn #1 #2
-{
- \tl_if_blank:nTF {#1}
-    {
-        % 未指定宽度时，计算答案对应的长度，如果这个长度小于0.8cm，即将其设定为0.8cm，大于0.8cm就不管
-        % 1) 在当前字体下量出答案的自然宽度
-        \hbox_set:Nn \l_tmpa_box { #2 }
-        % 2) 与 0.8cm 兜底比较，取较大者（0.8cm 即最短空线长度，可改）
-        \dim_compare:nNnTF
-            { \box_wd:N \l_tmpa_box }
-            { > }
-            { 0.8cm }
-            { \CJKunderline[hidden=true,skip=false,format=\color{AnswerGreen},thickness=1pt]{#2} }
-            { \CJKunderline[hidden=true,skip=false,format=\color{AnswerGreen},thickness=1pt]{ \makebox[0.8cm][c]{#2} } }
-    }
-    {
-        \CJKunderline[hidden=true,skip=false,format=\color{AnswerGreen},thickness=1pt]{ \makebox[#1][c]{} }
-    }
-}
-%   #1 = 可选宽度；为空表示与答案自然宽度一致（保持原行为）
-%   #2 = 答案内容
-\NewDocumentCommand \tkanswer { O{} m }
-{
-\bool_if:NTF \l_CQ_isanswershown_bool
-    {
-    \cs_if_exist:NTF \g__highend_dark_mode_bool
-        {
-        \bool_if:NTF \g__highend_dark_mode_bool
-            { \begingroup \color{AnswerGreen} #2 \endgroup }
-            {
-                \only<1>{\__CQ_blank_line:nn {#1} {#2}}
-                \only<2>{\CJKunderanyline*{0.5ex}{\color{BGAnswer}\rule{2pt}{2.5ex}}{#2}}
-            }
-        }
-        {
-            \only<1>{\__CQ_blank_line:nn {#1} {#2}}
-            \only<2>{\CJKunderanyline*{0.5ex}{\color{BGAnswer}\rule{2pt}{2.5ex}}{#2}}
-        }
-    }
-    { \__CQ_blank_line:nn {#1} {#2} }
-}
-
-%选择题答案显示
-\NewDocumentCommand \xzanswer {m}
-{
-    \bool_if:NTF{\l_CQ_isanswershown_bool}
-    {
-      \only<1>{$(\quad)$}
-      \only<2>{$(\;\mathrm{\color{\l_CQ_answer_color_tl}#1}\;)$}
-    }
-    {$(\quad)$}
-}
-
-
-%在高考题中，还有一类作图题，或连线题，如连接电路图
-%第一个参数原图，第二个参数答案
-\NewDocumentCommand \drawpicanswer {mm}
-{
-    \bool_if:NTF{\l_CQ_isanswershown_bool}
-    {
-      \only<1>{#1}
-      \only<2>{#2}
-    }
-    {#1}
-}
-
-%解答题答案显示
-
-% =================================================================
-%  1. jdinlineenum：内联小问列表，纯 expl3，不依赖 enumitem，可以在 beamer 中使用
-% =================================================================
+% 自动编号标签的样式：beamer 用 AccentGold 加粗，book 用 green
+\tl_new:N \l__jdinline_label_style_tl
+\mymod_if_beamer:TF
+  { \tl_set:Nn \l__jdinline_label_style_tl { \color{AccentGold}\bfseries } }
+  { \tl_set:Nn \l__jdinline_label_style_tl { \color{blue!40!green} } }
 
 % 相邻两问的间距
 \cs_new_protected:Npn \__jdinline_join: { \quad }
 
 % 标签排版（#1 = 标签文本）
-%   · 非首问：先删掉上一问末尾的空格，再补间距
-%   · #1 中的序号在 \int_incr 之后才展开，故编号正确
 \cs_new_protected:Npn \__jdinline_label:n #1
 {
-	\int_compare:nTF { \l__jdinline_int > \c_zero_int }
-	{ \mode_if_horizontal:T { \unskip } \__jdinline_join: }
-	{ }
-	\int_incr:N \l__jdinline_int
-	\mode_if_vertical:T { \noindent }    % 嵌套列表结束后可能处于竖直模式
-	#1 ~ \ignorespaces
+  \int_compare:nTF { \l__jdinline_int > \c_zero_int }
+    { \mode_if_horizontal:T { \unskip } \__jdinline_join: }
+    { }
+  \int_incr:N \l__jdinline_int
+  \mode_if_vertical:T { \noindent }   % 嵌套列表结束后可能处于竖直模式
+  #1 ~ \ignorespaces
 }
 
 % \item[自定义标签]
 \cs_new_protected:Npn \__jdinline_item_opt:w [ #1 ]
-{ \__jdinline_label:n {#1} }
+  { \__jdinline_label:n {#1} }
 
-% \item：自动编号 (1)(2)(3)……，先探测有无 [
+% \item：自动编号，先探测有无 [
 \cs_new_protected:Npn \__jdinline_item:
 {
-	\peek_charcode:NTF [
-	{ \__jdinline_item_opt:w }
-	{ \__jdinline_label:n { {\color{AccentGold}\bfseries \__jdinline_autolabel: } } }
+  \peek_charcode:NTF [
+    { \__jdinline_item_opt:w }
+    { \__jdinline_label:n { { \l__jdinline_label_style_tl \__jdinline_autolabel: } } }
 }
 
 % ---- 智能空行 ---------------------------------------------------
 % 空行后紧跟【本列表】的 \item 或 \end 时吞掉之，其余场合照常分段。
-% 与 \item 的比较用“进入列表时保存的含义”，因此嵌套的真实列表
-% （itemize 等）内部的空行不受影响，仍正常竖向断行。
 \cs_new_eq:NN \__jdinline_realpar: \par
 \cs_new_eq:NN \l__jdinline_saved_item_cs \__jdinline_item:
 \cs_new_protected:Npn \__jdinline_par:
 {
-	\peek_meaning_remove_ignore_spaces:NTF \l__jdinline_saved_item_cs
-	{ \__jdinline_item: }             % 吞掉了本列表的 \item：替它执行
-	{
-		\peek_meaning_remove_ignore_spaces:NTF \end
-		{ \end }                       % 吞掉了 \end：替它执行
-		{ \__jdinline_realpar: }       % 其余：真实分段
-	}
-}
-
-\NewDocumentEnvironment { jdinlineenum } { O{} }   % [...] 选项仅吞掉不处理
-{
-	\int_zero:N \l__jdinline_int
-	% 备份 \par 后接管 \par 与 \item（均为局部定义，环境结束自动还原）
-	\cs_set_eq:NN \__jdinline_realpar: \par
-	\cs_set_protected:Npn \item { \ignorespaces \__jdinline_item: }
-	\cs_set_eq:NN \l__jdinline_saved_item_cs \item
-	\cs_set_protected:Npn \par { \__jdinline_par: }
-	\mode_if_vertical:T { \noindent }
-	\ignorespaces
-}
-{ }
-
-% =================================================================
-%  2. \jdanswer：不带星号自动把 enumerate 换成内联，带星号保持竖向排版
-% =================================================================
-
-\tl_new:N \l__CQ_jd_body_tl
-
-% 把 token list 中所有 enumerate 环境改名为 jdinlineenum
-\cs_new_protected:Npn \__CQ_inline_enumerates:
-{
-	\regex_replace_all:nnN
-	{ \c{begin} \cB\{ enumerate \cE\} }
-	{ \c{begin} \cB\{ jdinlineenum \cE\} }
-	\l__CQ_jd_body_tl
-	\regex_replace_all:nnN
-	{ \c{end} \cB\{ enumerate \cE\} }
-	{ \c{end} \cB\{ jdinlineenum \cE\} }
-	\l__CQ_jd_body_tl
-}
-
-\NewDocumentCommand \jdanswer { s +m }
-{
-	\bool_if:NTF \l_CQ_isanswershown_bool
-	{
-		\only<1>{ \vfill }
-		\only<2>{
-            \tl_set:Nn \l__CQ_jd_body_tl {#2}
-            \IfBooleanF {#1} { \__CQ_inline_enumerates: }
-            \begin{tcolorbox}[
-                enhanced, boxrule=0pt, leftrule=2pt, arc=0pt, outer~arc=0pt,
-                left=1mm, right=1mm, top=1.5mm, bottom=1.5mm,
-                colback=BGAnswer, colframe=AnswerGreen,
-                before~upper={ \setlength{\parskip}{0.5em} },
-                coltext=TextDark ]
-                \setlength{\leftmargini}{2em}
-                \tl_use:N \l__CQ_jd_body_tl
-            \end{tcolorbox}
-		}
-	}
-	{ \vfil }
-}
-
-
-%选择题：四选项
-\NewDocumentCommand \fourchoices{ O{}mmmm }
-{
-    \begingroup % to make sure the keys don't act globally
-
-    \keys_set:nn{CQ_keys_choices}{#1}
-
-    \bool_if:NTF{\l_CQ_choices_ispicture_bool}
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {bottom} }
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {top-left} }
-
-    \tl_set:Nn \l_CQ_choices_A_tl {#2}
-    \tl_set:Nn \l_CQ_choices_B_tl {#3}
-    \tl_set:Nn \l_CQ_choices_C_tl {#4}
-    \tl_set:Nn \l_CQ_choices_D_tl {#5}
-
-    \bool_if:NT{\l_CQ_isanswershown_bool}{
-        \seq_set_split:NnV \l_CQ_choices_answer_seq {} { \l_CQ_choices_answer_tl } %参数为空逐字分割
-
-        \seq_map_inline:Nn \l_CQ_choices_answer_seq {
-            \bool_if:NTF{\l_CQ_choices_ispicture_bool}
-            {
-                \str_if_eq:nnT{##1}{A}
-                {
-                    \tl_set:Nn \l_CQ_choices_A_tl {
-                      \only<1>{#2}
-                      \only<2>{\fcolorbox{\l_CQ_answer_color_tl}{\l_CQ_answer_color_tl!10}{#2}}
-                    }
-                }
-                \str_if_eq:nnT{##1}{B}
-                {
-                    \tl_set:Nn \l_CQ_choices_B_tl {
-                      \only<1>{#3}
-                      \only<2>{\fcolorbox{\l_CQ_answer_color_tl}{\l_CQ_answer_color_tl!10}{#3}}
-                    }
-                }
-                \str_if_eq:nnT{##1}{C}
-                {
-                    \tl_set:Nn \l_CQ_choices_C_tl {
-                      \only<1>{#4}
-                      \only<2>{\fcolorbox{\l_CQ_answer_color_tl}{\l_CQ_answer_color_tl!10}{#4}}
-                    }
-                }
-                \str_if_eq:nnT{##1}{D}
-                {
-                    \tl_set:Nn \l_CQ_choices_D_tl {
-                      \only<1>{#5}
-                      \only<2>{\fcolorbox{\l_CQ_answer_color_tl}{\l_CQ_answer_color_tl!10}{#5}}
-                    }
-                }
-            }
-            {
-                \str_if_eq:nnT{##1}{A}
-                {
-                    \tl_put_left:Nn \l_CQ_choices_A_tl {\only<2>{\color{\l_CQ_answer_color_tl}}}
-                }
-                \str_if_eq:nnT{##1}{B}
-                {
-                    \tl_put_left:Nn \l_CQ_choices_B_tl {\only<2>{\color{\l_CQ_answer_color_tl}}}
-                }
-                \str_if_eq:nnT{##1}{C}
-                {
-                    \tl_put_left:Nn \l_CQ_choices_C_tl {\only<2>{\color{\l_CQ_answer_color_tl}}}
-                }
-                \str_if_eq:nnT{##1}{D}
-                {
-                    \tl_put_left:Nn \l_CQ_choices_D_tl {\only<2>{\color{\l_CQ_answer_color_tl}}}
-                }
-            }
-        }
-    }
-    \use:e{\exp_not:N\begin{choices}[label-pos=\l_CQ_choices_label_pos_tl,top-sep=3pt,
-        linesep={0.5ex~plus~0.5ex~minus~0.2ex},label={\exp_not:N\color{TextDark}\exp_not:N\Alph*.}
-    ]}
-        \item \color{TextDark}\l_CQ_choices_A_tl
-        \item \color{TextDark}\l_CQ_choices_B_tl
-        \item \color{TextDark}\l_CQ_choices_C_tl
-        \item \color{TextDark}\l_CQ_choices_D_tl
-    \end{choices}
-    \endgroup
-}
-
-
-%选择题：五选项
-\NewDocumentCommand \fivechoices{ O{}mmmmm }
-{
-    \begingroup % to make sure the keys don't act globally
-
-    \keys_set:nn{CQ_keys_choices}{#1}
-
-    \bool_if:NTF{\l_CQ_choices_ispicture_bool}
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {bottom} }
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {top-left} }
-
-
-    \tl_set:Nn \l_CQ_choices_A_tl {#2}
-    \tl_set:Nn \l_CQ_choices_B_tl {#3}
-    \tl_set:Nn \l_CQ_choices_C_tl {#4}
-    \tl_set:Nn \l_CQ_choices_D_tl {#5}
-    \tl_set:Nn \l_CQ_choices_E_tl {#6}
-
-    \bool_if:NT{\l_CQ_isanswershown_bool}{
-        \seq_set_split:NnV \l_CQ_choices_answer_seq {} { \l_CQ_choices_answer_tl } %参数为空逐字分割
-
-        \seq_map_inline:Nn \l_CQ_choices_answer_seq {
-            \bool_if:NTF{\l_CQ_choices_ispicture_bool}
-            {
-                \str_if_eq:nnT{##1}{A}
-                {
-                    \tl_set:Nn \l_CQ_choices_A_tl {
-                      \only<1>{#2}
-                      \only<2>{\fcolorbox{\l_CQ_answer_color_tl}{\l_CQ_answer_color_tl!10}{#2}}
-                    }
-                }
-                \str_if_eq:nnT{##1}{B}
-                {
-                    \tl_set:Nn \l_CQ_choices_B_tl {
-                      \only<1>{#3}
-                      \only<2>{\fcolorbox{\l_CQ_answer_color_tl}{\l_CQ_answer_color_tl!10}{#3}}
-                    }
-                }
-                \str_if_eq:nnT{##1}{C}
-                {
-                    \tl_set:Nn \l_CQ_choices_C_tl {
-                      \only<1>{#4}
-                      \only<2>{\fcolorbox{\l_CQ_answer_color_tl}{\l_CQ_answer_color_tl!10}{#4}}
-                    }
-                }
-                \str_if_eq:nnT{##1}{D}
-                {
-                    \tl_set:Nn \l_CQ_choices_D_tl {
-                      \only<1>{#5}
-                      \only<2>{\fcolorbox{\l_CQ_answer_color_tl}{\l_CQ_answer_color_tl!10}{#5}}
-                    }
-                }
-                \str_if_eq:nnT{##1}{E}
-                {
-                    \tl_set:Nn \l_CQ_choices_E_tl {
-                      \only<1>{#6}
-                      \only<2>{\fcolorbox{\l_CQ_answer_color_tl}{\l_CQ_answer_color_tl!10}{#5}}
-                    }
-                }
-            }
-            {
-                \str_if_eq:nnT{##1}{A}
-                {
-                    \tl_put_left:Nn \l_CQ_choices_A_tl {\only<2>{\color{\l_CQ_answer_color_tl}}}
-                }
-                \str_if_eq:nnT{##1}{B}
-                {
-                    \tl_put_left:Nn \l_CQ_choices_B_tl {\only<2>{\color{\l_CQ_answer_color_tl}}}
-                }
-                \str_if_eq:nnT{##1}{C}
-                {
-                    \tl_put_left:Nn \l_CQ_choices_C_tl {\only<2>{\color{\l_CQ_answer_color_tl}}}
-                }
-                \str_if_eq:nnT{##1}{D}
-                {
-                    \tl_put_left:Nn \l_CQ_choices_D_tl {\only<2>{\color{\l_CQ_answer_color_tl}}}
-                }
-                \str_if_eq:nnT{##1}{E}
-                {
-                    \tl_put_left:Nn \l_CQ_choices_E_tl {\only<2>{\color{\l_CQ_answer_color_tl}}}
-                }
-            }
-        }
-    }
-    \use:e{\exp_not:N\begin{choices}[label-pos=\l_CQ_choices_label_pos_tl,top-sep=3pt,
-        linesep={0.5ex~plus~0.5ex~minus~0.2ex},label={\exp_not:N\color{TextDark}\exp_not:N\Alph*.}
-    ]}
-        \item \color{TextDark}\l_CQ_choices_A_tl
-        \item \color{TextDark}\l_CQ_choices_B_tl
-        \item \color{TextDark}\l_CQ_choices_C_tl
-        \item \color{TextDark}\l_CQ_choices_D_tl
-        \item \color{TextDark}\l_CQ_choices_E_tl
-    \end{choices}
-    \endgroup
-}
-
-}
-
-
-
-
-
-
-
-
-% ==========================================================
-% --- Book 专属配置 ---
-% ==========================================================
-\mymod_if_book:T
-{
-%内部辅助函数：高亮正确答案 (Book 模式)
-\cs_new_protected:Nn \__CQ_highlight_book_answers:
-{
-  \seq_map_inline:Nn \l_CQ_choices_answer_seq {
-    \str_case:nn {##1} {
-      {A}{ \tl_put_left:Nn \l_CQ_choices_A_tl {\color{\l_CQ_answer_color_tl}} }
-      {B}{ \tl_put_left:Nn \l_CQ_choices_B_tl {\color{\l_CQ_answer_color_tl}} }
-      {C}{ \tl_put_left:Nn \l_CQ_choices_C_tl {\color{\l_CQ_answer_color_tl}} }
-      {D}{ \tl_put_left:Nn \l_CQ_choices_D_tl {\color{\l_CQ_answer_color_tl}} }
-      {E}{ \tl_put_left:Nn \l_CQ_choices_E_tl {\color{\l_CQ_answer_color_tl}} }
-      {F}{ \tl_put_left:Nn \l_CQ_choices_F_tl {\color{\l_CQ_answer_color_tl}} }
-    }
-  }
-}
-
-%选择题答案显示
-\NewDocumentCommand \xzanswer {m}
-{
-    \bool_if:NTF{\l_CQ_isanswershown_bool}
-    {$(\;\mathrm{\color{\l_CQ_answer_color_tl}#1}\;)$}
-    {$(\quad)$}
-}
-
-%题目解析显示
-\NewDocumentCommand{\memoanswer}{+m}
-{
-    \bool_if:NTF{\l_CQ_isanswershown_bool}
+  \peek_meaning_remove_ignore_spaces:NTF \l__jdinline_saved_item_cs
+    { \__jdinline_item: }             % 吞掉了本列表的 \item：替它执行
     {
-        \begin{tcolorbox}[enhanced, breakable, boxrule=0pt, leftrule=2pt, arc=0pt, outer~arc=0pt,
-            left=1mm, right=1mm, top=1.5mm, bottom=1.5mm,
-            colback=black!4, colframe=black!45,
-            before~upper={\setlength{\parskip}{0.5em}},
-            coltext=TextDark]
-            \setlength{\leftmargini}{2em}
-            #1
-        \end{tcolorbox}
-    }
-    {}
-}
-
-%填空题答案显示
-\cs_new_protected:Npn \__CQ_blank_line:nn #1 #2
-{
- \tl_if_blank:nTF {#1}
-    {
-        % 未指定宽度时，计算答案对应的长度，如果这个长度小于0.8cm，即将其设定为0.8cm，大于0.8cm就不管
-        % 1) 在当前字体下量出答案的自然宽度
-        \hbox_set:Nn \l_tmpa_box { #2 }
-        % 2) 与 0.8cm 兜底比较，取较大者（0.8cm 即最短空线长度，可改）
-        \dim_compare:nNnTF
-            { \box_wd:N \l_tmpa_box }
-            { > }
-            { 0.8cm }
-            { \CJKunderline[hidden=true,skip=false,format=\color{AnswerGreen},thickness=1pt]{#2} }
-            { \CJKunderline[hidden=true,skip=false,format=\color{AnswerGreen},thickness=1pt]{ \makebox[0.8cm][c]{#2} } }
-    }
-    {
-        \CJKunderline[hidden=true,skip=false,format=\color{AnswerGreen},thickness=1pt]{ \makebox[#1][c]{} }
+      \peek_meaning_remove_ignore_spaces:NTF \end
+        { \end }                      % 吞掉了 \end：替它执行
+        { \__jdinline_realpar: }      % 其余：真实分段
     }
 }
-%   #1 = 可选宽度；为空表示与答案自然宽度一致（保持原行为）
-%   #2 = 答案内容
-\NewDocumentCommand \tkanswer { O{} m }
-{
-\bool_if:NTF \l_CQ_isanswershown_bool
-    {
-    \cs_if_exist:NTF \g__highend_dark_mode_bool
-        {
-        \bool_if:NTF \g__highend_dark_mode_bool
-            { \begingroup \color{AnswerGreen} #2 \endgroup }
-            { \CJKunderanyline*{0.5ex}{\color{BGAnswer}\rule{2pt}{2.5ex}}{#2} }
-        }
-        { \CJKunderanyline*{0.5ex}{\color{BGAnswer}\rule{2pt}{2.5ex}}{#2} }
-    }
-    { \__CQ_blank_line:nn {#1} {#2} }
-}
 
-%在高考题中，还有一类作图题，或连线题，如连接电路图
-%第一个参数原图，第二个参数答案
-\NewDocumentCommand \drawpicanswer {mm}
-{
-    \bool_if:NTF{\l_CQ_isanswershown_bool}
-    {#2}
-    {#1}
-}
-
-%解答题答案显示
-
-% =================================================================
-%  1. jdinlineenum：内联小问列表，纯 expl3，不依赖 enumitem，可以在 beamer 中使用
-% =================================================================
-
-% 相邻两问的间距
-\cs_new_protected:Npn \__jdinline_join: { \quad }
-
-% 标签排版（#1 = 标签文本）
-%   · 非首问：先删掉上一问末尾的空格，再补间距
-%   · #1 中的序号在 \int_incr 之后才展开，故编号正确
-\cs_new_protected:Npn \__jdinline_label:n #1
-{
-	\int_compare:nTF { \l__jdinline_int > \c_zero_int }
-	{ \mode_if_horizontal:T { \unskip } \__jdinline_join: }
-	{ }
-	\int_incr:N \l__jdinline_int
-	\mode_if_vertical:T { \noindent }    % 嵌套列表结束后可能处于竖直模式
-	#1 ~ \ignorespaces
-}
-
-% \item[自定义标签]
-\cs_new_protected:Npn \__jdinline_item_opt:w [ #1 ]
-{ \__jdinline_label:n {#1} }
-
-% \item：自动编号 (1)(2)(3)……，先探测有无 [
-\cs_new_protected:Npn \__jdinline_item:
-{
-	\peek_charcode:NTF [
-	{ \__jdinline_item_opt:w }
-	{ \__jdinline_label:n { {\color{blue!40!green} \__jdinline_autolabel: } } }
-}
-
-% ---- 智能空行 ---------------------------------------------------
-% 空行后紧跟【本列表】的 \item 或 \end 时吞掉之，其余场合照常分段。
-% 与 \item 的比较用“进入列表时保存的含义”，因此嵌套的真实列表
-% （itemize 等）内部的空行不受影响，仍正常竖向断行。
-\cs_new_eq:NN \__jdinline_realpar: \par
-\cs_new_eq:NN \l__jdinline_saved_item_cs \__jdinline_item:
-\cs_new_protected:Npn \__jdinline_par:
-{
-	\peek_meaning_remove_ignore_spaces:NTF \l__jdinline_saved_item_cs
-	{ \__jdinline_item: }             % 吞掉了本列表的 \item：替它执行
-	{
-		\peek_meaning_remove_ignore_spaces:NTF \end
-		{ \end }                       % 吞掉了 \end：替它执行
-		{ \__jdinline_realpar: }       % 其余：真实分段
-	}
-}
-
-\NewDocumentEnvironment { jdinlineenum } { O{} }   % [...] 选项仅吞掉不处理
-{
-    \int_incr:N \l__jdinline_depth_int   % ★新增：深度 +1；环境是分组，\end 时自动还原
-    \int_zero:N \l__jdinline_int
-    % ★修改：仅当 \par 尚未被（外层）jdinlineenum 接管时才备份，
-    %         否则嵌套时会把真正的 \par 备份覆盖掉，内层"空行+正文"会死循环
+\NewDocumentEnvironment { jdinlineenum } { O{} }  % [...] 选项仅吞掉不处理
+  {
+    \int_incr:N \l__jdinline_depth_int   % 深度 +1；环境是分组，\end 时自动还原
+    \int_zero:N  \l__jdinline_int
+    % 仅当 \par 尚未被（外层）jdinlineenum 接管时才备份，
+    % 否则嵌套时会把真正的 \par 备份覆盖掉
     \token_if_eq_meaning:NNF \par \__jdinline_par:
       { \cs_set_eq:NN \__jdinline_realpar: \par }
     \cs_set_protected:Npn \item { \ignorespaces \__jdinline_item: }
     \cs_set_eq:NN \l__jdinline_saved_item_cs \item
-    \cs_set_eq:NN \par \__jdinline_par:  % ★修改：原为 \cs_set_protected:Npn \par { \__jdinline_par: }
-    \mode_if_vertical:T { \noindent }    %   改成等价赋值，上面才能用 \token_if_eq_meaning 判断
+    \cs_set_eq:NN \par \__jdinline_par:
+    \mode_if_vertical:T { \noindent }
     \ignorespaces
-}
-{ }
+  }
+  { }
 
 % =================================================================
-%  2. \jdanswer：不带星号自动把 enumerate 换成内联，带星号保持竖向排版
+%  \jdanswer：不带星号自动把 enumerate 换成内联，带星号保持竖向排版
 % =================================================================
-
 \tl_new:N \l__CQ_jd_body_tl
 
 % 把 token list 中所有 enumerate 环境改名为 jdinlineenum
 \cs_new_protected:Npn \__CQ_inline_enumerates:
 {
-	\regex_replace_all:nnN
-	{ \c{begin} \cB\{ enumerate \cE\} }
-	{ \c{begin} \cB\{ jdinlineenum \cE\} }
-	\l__CQ_jd_body_tl
-	\regex_replace_all:nnN
-	{ \c{end} \cB\{ enumerate \cE\} }
-	{ \c{end} \cB\{ jdinlineenum \cE\} }
-	\l__CQ_jd_body_tl
+  \regex_replace_all:nnN
+    { \c{begin} \cB\{ enumerate \cE\} }
+    { \c{begin} \cB\{ jdinlineenum \cE\} }
+    \l__CQ_jd_body_tl
+  \regex_replace_all:nnN
+    { \c{end} \cB\{ enumerate \cE\} }
+    { \c{end} \cB\{ jdinlineenum \cE\} }
+    \l__CQ_jd_body_tl
+}
+
+% 解答题答案盒（两种文档类样式一致）
+\cs_new_protected:Npn \__CQ_jdanswer_box:
+{
+  \begin{tcolorbox}[enhanced, boxrule=0pt, leftrule=2pt, arc=0pt,
+      outer~arc=0pt, left=1mm, right=1mm, top=1.5mm, bottom=1.5mm,
+      colback=BGAnswer, colframe=AnswerGreen,
+      before~upper={ \setlength{\parskip}{0.5em} },
+      coltext=TextDark]
+    \setlength{\leftmargini}{2em}
+    \tl_use:N \l__CQ_jd_body_tl
+  \end{tcolorbox}
 }
 
 \NewDocumentCommand \jdanswer { s +m }
 {
-	\bool_if:NTF \l_CQ_isanswershown_bool
-	{
-		\tl_set:Nn \l__CQ_jd_body_tl {#2}
-		\IfBooleanF {#1} { \__CQ_inline_enumerates: }
-		\begin{tcolorbox}[
-			enhanced, boxrule=0pt, leftrule=2pt, arc=0pt, outer~arc=0pt,
-			left=1mm, right=1mm, top=1.5mm, bottom=1.5mm,
-			colback=BGAnswer, colframe=AnswerGreen,
-			before~upper={ \setlength{\parskip}{0.5em} },
-			coltext=TextDark ]
-			\setlength{\leftmargini}{2em}
-			\tl_use:N \l__CQ_jd_body_tl
-		\end{tcolorbox}
-	}
-	{ \vfil }
-}
-
-
-
-%选择题：二选项
-\NewDocumentCommand \twochoices{ O{}mm }
-{
-    \begingroup % to make sure the keys don't act globally
-
-    \keys_set:nn{CQ_keys_choices}{#1}
-
-    \bool_if:NTF{\l_CQ_choices_ispicture_bool}
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {bottom} }
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {top-left} }
-
-
-    \tl_set:Nn \l_CQ_choices_A_tl {#2}
-    \tl_set:Nn \l_CQ_choices_B_tl {#3}
-
-    \bool_if:NT{\l_CQ_isanswershown_bool}{
-        \seq_set_split:NnV \l_CQ_choices_answer_seq {} { \l_CQ_choices_answer_tl }
-        \__CQ_highlight_book_answers:
+  \bool_if:NTF \l_CQ_isanswershown_bool
+    {
+      \tl_set:Nn \l__CQ_jd_body_tl {#2}
+      \IfBooleanF {#1} { \__CQ_inline_enumerates: }
+      \mymod_if_beamer:TF
+        { \only<1>{ \vfill } \only<2>{ \__CQ_jdanswer_box: } }
+        { \__CQ_jdanswer_box: }
     }
-    \use:e{\exp_not:N\begin{choices}[max-columns=2,label-pos=\l_CQ_choices_label_pos_tl,top-sep=3pt,
-        linesep={0.5ex~plus~0.5ex~minus~0.2ex},label={\exp_not:N\color{TextDark}\exp_not:N\Alph*.}
-    ]}
-        \item \color{TextDark}\l_CQ_choices_A_tl
-        \item \color{TextDark}\l_CQ_choices_B_tl
-    \end{choices}
-    \endgroup
+    { \vfil }
 }
 
-%选择题：三选项
-\NewDocumentCommand \threechoices{ O{}mmm }
+% =================================================================
+%  选择题统一引擎（\twochoices ... \ninechoices，A–I 共 9 个选项）
+% =================================================================
+
+% ---------- max-columns 集中管理（调整样式只需改这两张表） ----------
+% 返回值 0 表示不传递 max-columns 键（沿用 exam-zh-choices 默认排版）。
+% book：2→2，3→3，6→6（保持原行为）；4、5 不传（保持原行为）；7/8/9→6
+\cs_new:Npn \__CQ_maxcols_book:n #1
 {
-    \begingroup % to make sure the keys don't act globally
-
-    \keys_set:nn{CQ_keys_choices}{#1}
-
-    \bool_if:NTF{\l_CQ_choices_ispicture_bool}
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {bottom} }
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {top-left} }
-
-
-    \tl_set:Nn \l_CQ_choices_A_tl {#2}
-    \tl_set:Nn \l_CQ_choices_B_tl {#3}
-    \tl_set:Nn \l_CQ_choices_C_tl {#4}
-    \bool_if:NT{\l_CQ_isanswershown_bool}{
-        \seq_set_split:NnV \l_CQ_choices_answer_seq {} { \l_CQ_choices_answer_tl }
-        \__CQ_highlight_book_answers:
+  \int_case:nnF {#1}
+    {
+      { 2 } { 2 } { 3 } { 3 }
+      { 6 } { 6 } { 7 } { 6 } { 8 } { 6 } { 9 } { 6 }
     }
-    \use:e{\exp_not:N\begin{choices}[max-columns=3,label-pos=\l_CQ_choices_label_pos_tl,top-sep=3pt,
-        linesep={0.5ex~plus~0.5ex~minus~0.2ex},label={\exp_not:N\color{TextDark}\exp_not:N\Alph*.}
-    ]}
-        \item \color{TextDark}\l_CQ_choices_A_tl
-        \item \color{TextDark}\l_CQ_choices_B_tl
-        \item \color{TextDark}\l_CQ_choices_C_tl
-    \end{choices}
-    \endgroup
+    { 0 }
+}
+% beamer 特殊处理：幻灯片版面较窄，
+% 6→3（3+3），7→4（4+3），8→4（4+4），9→3（3+3+3）；2、3 同 book；4、5 不传
+\cs_new:Npn \__CQ_maxcols_beamer:n #1
+{
+  \int_case:nnF {#1}
+    {
+      { 2 } { 2 } { 3 } { 3 }
+      { 6 } { 3 } { 7 } { 4 } { 8 } { 4 } { 9 } { 3 }
+    }
+    { 0 }
+}
+\cs_new_eq:NN \__CQ_maxcols:n \__CQ_maxcols_book:n
+\mymod_if_beamer:T { \cs_set_eq:NN \__CQ_maxcols:n \__CQ_maxcols_beamer:n }
+
+% ---------- 四种答案高亮方式（按 beamer/book × 文字/图片） ----------
+% book + 文字：答案选项整体着色
+\cs_new_protected:Npn \__CQ_choices_mark_book_txt:n #1
+{
+  \prop_put:Nnn \l_CQ_choices_mark_prop {#1}
+    { \color { \l_CQ_answer_color_tl }
+      \clist_item:Nn \l_CQ_choices_items_clist {#1} }
+}
+% book + 图片：答案选项加框（修复：原 2/3/5/6 选项图片题只着色，现统一）
+\cs_new_protected:Npn \__CQ_choices_mark_book_pic:n #1
+{
+  \prop_put:Nnn \l_CQ_choices_mark_prop {#1}
+    { \fcolorbox { \l_CQ_answer_color_tl } { \l_CQ_answer_color_tl !10 }
+      { \clist_item:Nn \l_CQ_choices_items_clist {#1} } }
+}
+% beamer + 文字：第 2 张幻灯片起答案选项着色
+\cs_new_protected:Npn \__CQ_choices_mark_beamer_txt:n #1
+{
+  \prop_put:Nnn \l_CQ_choices_mark_prop {#1}
+    { \only<2> { \color { \l_CQ_answer_color_tl } }
+      \clist_item:Nn \l_CQ_choices_items_clist {#1} }
+}
+% beamer + 图片：第 2 张幻灯片起答案选项加框
+\cs_new_protected:Npn \____CQ_choices_mark_beamer_pic:n #1 { }
+\cs_set_protected:Npn \__CQ_choices_mark_beamer_pic:n #1
+{
+  \prop_put:Nnn \l_CQ_choices_mark_prop {#1}
+    {
+      \only<1> { \clist_item:Nn \l_CQ_choices_items_clist {#1} }
+      \only<2> { \fcolorbox { \l_CQ_answer_color_tl } { \l_CQ_answer_color_tl !10 }
+                 { \clist_item:Nn \l_CQ_choices_items_clist {#1} } }
+    }
 }
 
-%选择题：四选项
-\NewDocumentCommand \fourchoices{ O{}mmmm }
+% 分发：#1 = 选项序号（1..9）
+\cs_new_protected:Npn \__CQ_choices_mark:n #1
 {
-    \begingroup % to make sure the keys don't act globally
+  \bool_if:NTF \l_CQ_choices_ispicture_bool
+    {
+      \mymod_if_beamer:TF
+        { \__CQ_choices_mark_beamer_pic:n {#1} }
+        { \__CQ_choices_mark_book_pic:n   {#1} }
+    }
+    {
+      \mymod_if_beamer:TF
+        { \__CQ_choices_mark_beamer_txt:n {#1} }
+        { \__CQ_choices_mark_book_txt:n   {#1} }
+    }
+}
 
-    \keys_set:nn{CQ_keys_choices}{#1}
+% ---------- 引擎主体 ----------
+% #1 = 选项个数（2..9）
+% #2 = 逐题键值列表（answer=... / ispicture / color=...）
+% #3 = 各选项内容组成的逗号列表，每项用花括号保护
+\cs_new_protected:Npn \__CQ_choices:nnn #1 #2 #3
+{
+  \begingroup                            % 键值作用域局部化
+  \int_set:Nn \l__CQ_choices_count_int {#1}
+  \keys_set:nn { CQ_keys_choices } {#2}
 
-    \bool_if:NTF{\l_CQ_choices_ispicture_bool}
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {bottom} }
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {top-left} }
+  \bool_if:NTF \l_CQ_choices_ispicture_bool
+    { \tl_set:Nn \l_CQ_choices_label_pos_tl { bottom } }
+    { \tl_set:Nn \l_CQ_choices_label_pos_tl { top-left } }
 
-    \tl_set:Nn \l_CQ_choices_A_tl {#2}
-    \tl_set:Nn \l_CQ_choices_B_tl {#3}
-    \tl_set:Nn \l_CQ_choices_C_tl {#4}
-    \tl_set:Nn \l_CQ_choices_D_tl {#5}
+  % 记录各选项内容（花括号保证选项内含逗号也不会被误拆分）
+  \clist_set:Nn \l_CQ_choices_items_clist {#3}
+  \prop_clear:N \l_CQ_choices_mark_prop
 
-    \bool_if:NT{\l_CQ_isanswershown_bool}{
-        \seq_set_split:NnV \l_CQ_choices_answer_seq {} { \l_CQ_choices_answer_tl } %参数为空逐字分割
-
-        \seq_map_inline:Nn \l_CQ_choices_answer_seq {
-            \bool_if:NTF{\l_CQ_choices_ispicture_bool}
+  % 标记正确答案（支持多选，如 answer=BE）
+  \bool_if:NT \l_CQ_isanswershown_bool
+    {
+      \seq_set_split:NnV \l_CQ_choices_answer_seq { } \l_CQ_choices_answer_tl
+      \seq_map_inline:Nn \l_CQ_choices_answer_seq
+        {
+          \str_case:nn {##1}
             {
-                \str_if_eq:nnT{##1}{A}
-                {
-                    \tl_set:Nn \l_CQ_choices_A_tl { \fcolorbox{\l_CQ_answer_color_tl}{\l_CQ_answer_color_tl!10}{#2} }
-                }
-                \str_if_eq:nnT{##1}{B}
-                {
-                    \tl_set:Nn \l_CQ_choices_B_tl { \fcolorbox{\l_CQ_answer_color_tl}{\l_CQ_answer_color_tl!10}{#3} }
-                }
-                \str_if_eq:nnT{##1}{C}
-                {
-                    \tl_set:Nn \l_CQ_choices_C_tl { \fcolorbox{\l_CQ_answer_color_tl}{\l_CQ_answer_color_tl!10}{#4} }
-                }
-                \str_if_eq:nnT{##1}{D}
-                {
-                    \tl_set:Nn \l_CQ_choices_D_tl { \fcolorbox{\l_CQ_answer_color_tl}{\l_CQ_answer_color_tl!10}{#5} }
-                }
-            }
-            {
-                \str_if_eq:nnT{##1}{A}
-                {
-                    \tl_put_left:Nn \l_CQ_choices_A_tl {\color{\l_CQ_answer_color_tl}}
-                }
-                \str_if_eq:nnT{##1}{B}
-                {
-                    \tl_put_left:Nn \l_CQ_choices_B_tl {\color{\l_CQ_answer_color_tl}}
-                }
-                \str_if_eq:nnT{##1}{C}
-                {
-                    \tl_put_left:Nn \l_CQ_choices_C_tl {\color{\l_CQ_answer_color_tl}}
-                }
-                \str_if_eq:nnT{##1}{D}
-                {
-                    \tl_put_left:Nn \l_CQ_choices_D_tl {\color{\l_CQ_answer_color_tl}}
-                }
+              { A } { \__CQ_choices_mark:n { 1 } }
+              { B } { \__CQ_choices_mark:n { 2 } }
+              { C } { \__CQ_choices_mark:n { 3 } }
+              { D } { \__CQ_choices_mark:n { 4 } }
+              { E } { \__CQ_choices_mark:n { 5 } }
+              { F } { \__CQ_choices_mark:n { 6 } }
+              { G } { \__CQ_choices_mark:n { 7 } }
+              { H } { \__CQ_choices_mark:n { 8 } }
+              { I } { \__CQ_choices_mark:n { 9 } }
             }
         }
     }
-    \use:e{\exp_not:N\begin{choices}[label-pos=\l_CQ_choices_label_pos_tl,top-sep=3pt,
-        linesep={0.5ex~plus~0.5ex~minus~0.2ex},label={\exp_not:N\color{TextDark}\exp_not:N\Alph*.}
-    ]}
-        \item \color{TextDark}\l_CQ_choices_A_tl
-        \item \color{TextDark}\l_CQ_choices_B_tl
-        \item \color{TextDark}\l_CQ_choices_C_tl
-        \item \color{TextDark}\l_CQ_choices_D_tl
-    \end{choices}
-    \endgroup
-}
 
-%选择题：五选项
-\NewDocumentCommand \fivechoices{ O{}mmmmm }
-{
-    \begingroup % to make sure the keys don't act globally
-
-    \keys_set:nn{CQ_keys_choices}{#1}
-
-    \bool_if:NTF{\l_CQ_choices_ispicture_bool}
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {bottom} }
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {top-left} }
-
-
-    \tl_set:Nn \l_CQ_choices_A_tl {#2}
-    \tl_set:Nn \l_CQ_choices_B_tl {#3}
-    \tl_set:Nn \l_CQ_choices_C_tl {#4}
-    \tl_set:Nn \l_CQ_choices_D_tl {#5}
-    \tl_set:Nn \l_CQ_choices_E_tl {#6}
-
-    \bool_if:NT{\l_CQ_isanswershown_bool}{
-        \seq_set_split:NnV \l_CQ_choices_answer_seq {} { \l_CQ_choices_answer_tl }
-        \__CQ_highlight_book_answers:
+  % 计算 max-columns（0 = 不传该键）
+  \int_set:Nn \l__CQ_choices_maxcols_int { \__CQ_maxcols:n {#1} }
+  \tl_clear:N \l__CQ_choices_maxcols_tl
+  \int_compare:nNnT { \l__CQ_choices_maxcols_int } > { 0 }
+    {
+      \tl_set:Nn \l__CQ_choices_maxcols_tl
+        { max-columns = \int_use:N \l__CQ_choices_maxcols_int , }
     }
-    \use:e{\exp_not:N\begin{choices}[label-pos=\l_CQ_choices_label_pos_tl,top-sep=3pt,
-        linesep={0.5ex~plus~0.5ex~minus~0.2ex},label={\exp_not:N\color{TextDark}\exp_not:N\Alph*.}
-    ]}
-        \item \color{TextDark}\l_CQ_choices_A_tl
-        \item \color{TextDark}\l_CQ_choices_B_tl
-        \item \color{TextDark}\l_CQ_choices_C_tl
-        \item \color{TextDark}\l_CQ_choices_D_tl
-        \item \color{TextDark}\l_CQ_choices_E_tl
-    \end{choices}
-    \endgroup
-}
 
-%选择题：六选项
-\NewDocumentCommand \sixchoices{ O{}mmmmmm }
-{
-    \begingroup % to make sure the keys don't act globally
-
-    \keys_set:nn{CQ_keys_choices}{#1}
-
-    \bool_if:NTF{\l_CQ_choices_ispicture_bool}
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {bottom} }
-    { \tl_set:Nn \l_CQ_choices_label_pos_tl {top-left} }
-
-
-    \tl_set:Nn \l_CQ_choices_A_tl {#2}
-    \tl_set:Nn \l_CQ_choices_B_tl {#3}
-    \tl_set:Nn \l_CQ_choices_C_tl {#4}
-    \tl_set:Nn \l_CQ_choices_D_tl {#5}
-    \tl_set:Nn \l_CQ_choices_E_tl {#6}
-    \tl_set:Nn \l_CQ_choices_F_tl {#7}
-
-    \bool_if:NT{\l_CQ_isanswershown_bool}{
-        \seq_set_split:NnV \l_CQ_choices_answer_seq {} { \l_CQ_choices_answer_tl }
-        \__CQ_highlight_book_answers:
+  % 组装选项体：choices 环境以 +b 抓取正文、按**字面** \item 分割，
+  % 因此必须先生成含字面 \item 的选项体，再一次性交给环境排版；
+  % 选项内容经 \tl_put_right:NV 原样放入、不做展开（图片/公式/图形宏不受影响）。
+  \tl_set:Nx \l__CQ_choices_keys_tl
+    {
+      \l__CQ_choices_maxcols_tl
+      label-pos = \l_CQ_choices_label_pos_tl ,
+      top-sep = 3pt ,
+      linesep = { 0.5ex plus 0.5ex minus 0.2ex } ,
+      label = { \exp_not:N \color { TextDark } \exp_not:N \Alph*. }
     }
-    \use:e{\exp_not:N\begin{choices}[max-columns=6,label-pos=\l_CQ_choices_label_pos_tl,top-sep=3pt,
-        linesep={0.5ex~plus~0.5ex~minus~0.2ex},label={\exp_not:N\color{TextDark}\exp_not:N\Alph*.}
-    ]}
-        \item \color{TextDark}\l_CQ_choices_A_tl
-        \item \color{TextDark}\l_CQ_choices_B_tl
-        \item \color{TextDark}\l_CQ_choices_C_tl
-        \item \color{TextDark}\l_CQ_choices_D_tl
-        \item \color{TextDark}\l_CQ_choices_E_tl
-        \item \color{TextDark}\l_CQ_choices_F_tl
-    \end{choices}
-    \endgroup
+  \clist_set_eq:NN \l__CQ_choices_items_local_clist \l_CQ_choices_items_clist
+  \tl_clear:N \l__CQ_choices_body_tl
+  \int_step_inline:nn {#1}
+    {
+      \clist_pop:NN \l__CQ_choices_items_local_clist \l_tmpa_tl
+      \tl_put_right:Nn \l__CQ_choices_body_tl { \item }
+      \prop_if_in:NnT \l_CQ_choices_mark_prop {##1}
+        { \prop_get:NnN \l_CQ_choices_mark_prop {##1} \l_tmpa_tl }
+      \tl_put_right:NV \l__CQ_choices_body_tl \l_tmpa_tl
+    }
+  \exp_args:NVV \__CQ_choices_typeset:nn
+    \l__CQ_choices_keys_tl \l__CQ_choices_body_tl
+  \endgroup
 }
 
-}
+% 真正排版：把键值列表与（含字面 \item 的）选项体交给 choices 环境
+\cs_new_protected:Npn \__CQ_choices_typeset:nn #1 #2
+  { \begin { choices } [ #1 ] #2 \end { choices } }
 
+% ---------- 用户命令（2..9 个选项，beamer / book 通用） ----------
+\NewDocumentCommand \twochoices { O{} m m }
+  { \__CQ_choices:nnn { 2 } {#1} { {#2} , {#3} } }
 
+\NewDocumentCommand \threechoices { O{} m m m }
+  { \__CQ_choices:nnn { 3 } {#1} { {#2} , {#3} , {#4} } }
 
+\NewDocumentCommand \fourchoices { O{} m m m m }
+  { \__CQ_choices:nnn { 4 } {#1} { {#2} , {#3} , {#4} , {#5} } }
 
+\NewDocumentCommand \fivechoices { O{} m m m m m }
+  { \__CQ_choices:nnn { 5 } {#1} { {#2} , {#3} , {#4} , {#5} , {#6} } }
 
+\NewDocumentCommand \sixchoices { O{} m m m m m m }
+  { \__CQ_choices:nnn { 6 } {#1}
+    { {#2} , {#3} , {#4} , {#5} , {#6} , {#7} } }
 
+\NewDocumentCommand \sevenchoices { O{} m m m m m m m }
+  { \__CQ_choices:nnn { 7 } {#1}
+    { {#2} , {#3} , {#4} , {#5} , {#6} , {#7} , {#8} } }
 
+\NewDocumentCommand \eightchoices { O{} m m m m m m m m }
+  { \__CQ_choices:nnn { 8 } {#1}
+    { {#2} , {#3} , {#4} , {#5} , {#6} , {#7} , {#8} , {#9} } }
 
-
-
-
+% ---------- 九选项命令的辅助变量与引擎变体 ----------
+\tl_new:N \l__CQ_nine_opts_tl
+\cs_generate_variant:Nn \__CQ_choices:nnn { nVn }
+% TeX 宏参数上限为 9，故九选项命令分两步：
+%   先由 O{} 抓取可选参数，再由下面的辅助宏抓取紧随其后的 9 个选项组。
+\NewDocumentCommand \ninechoices { O{} }
+  {
+    \tl_set:Nn \l__CQ_nine_opts_tl {#1}
+    \__CQ_ninechoices_next:w
+  }
+\cs_new_protected:Npn \__CQ_ninechoices_next:w #1#2#3#4#5#6#7#8#9
+  {
+    \__CQ_choices:nVn { 9 } \l__CQ_nine_opts_tl
+      { {#1} , {#2} , {#3} , {#4} , {#5} , {#6} , {#7} , {#8} , {#9} }
+  }
