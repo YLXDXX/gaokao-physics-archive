@@ -93,6 +93,7 @@
 \bool_new:N \l__CQ_pic_firstpic_bool
 \bool_new:N \l__CQ_pic_cfit_bool
 \tl_new:N   \l__CQ_pic_numstyle_tl
+\tl_new:N   \l__CQ_pic_align_tl
 \bool_new:N \l__CQ_pic_showlabel_bool
 \tl_new:N   \l__CQ_pic_rowtxt_tl
 \seq_new:N  \l__CQ_pic_layout_seq
@@ -131,6 +132,8 @@
   { Unknown~key~'\l_keys_key_tl'~in~command~options. }
 \msg_new:nnn { CQ_keys_pictures } { bad-numstyle }
   { Invalid~value~'#1'~for~key~'numstyle':~use~'letter'~or~'chinese'. }
+\msg_new:nnn { CQ_keys_pictures } { bad-align }
+  { Invalid~value~'#1'~for~key~'align':~use~'left',~'center'~or~'right'. }
 
 % ==========================================================
 % 宏包加载时的选项
@@ -794,6 +797,7 @@
 %    capA..capH / captionA..    标题文字（显示为 "图a 标题"）
 %    labelA..labelH             引用标记（\figref / \ref）
 %    numstyle = letter|chinese  编号 a,b,c… 或 甲,乙,丙…
+%    align = center|left|right  每行的对齐方式（默认 center）
 %    showlabel = true|false     是否显示图片下方的编号/标题行
 %    gap, vgap                  同行图片水平间距 / 行间距
 %  自动排布：按每张图实际宽度分行；三图有专用算法
@@ -810,6 +814,18 @@
       { \msg_error:nnn { CQ_keys_pictures } { bad-numstyle } {#1} }
   }
 
+% ---------- align 处理（同样须在键定义之前定义） ----------
+\cs_new_protected:Npn \__CQ_pic_set_align:n #1
+  {
+    \str_case:nnF {#1}
+      {
+        { center } { \tl_set:Nn \l__CQ_pic_align_tl { center } }
+        { left   } { \tl_set:Nn \l__CQ_pic_align_tl { left   } }
+        { right  } { \tl_set:Nn \l__CQ_pic_align_tl { right  } }
+      }
+      { \msg_error:nnn { CQ_keys_pictures } { bad-align } {#1} }
+  }
+
 % ---------- 键 ----------
 \keys_define:nn { CQ_keys_pictures }
   {
@@ -819,6 +835,8 @@
     vgap .initial:n = 0.5em ,
     numstyle .code:n = { \__CQ_pic_set_numstyle:n {#1} } ,
     numstyle .initial:n = letter ,
+    align .code:n = { \__CQ_pic_set_align:n {#1} } ,
+    align .initial:n = center ,
     showlabel .bool_set:N = \l__CQ_pic_showlabel_bool ,
     showlabel .initial:n  = true ,
     showlabel .default:n  = true ,
@@ -1092,6 +1110,18 @@
       }
   }
 
+% 把一行内容按 \l__CQ_pic_align_tl 在整行宽度内左/中/右对齐
+\cs_new_protected:Npn \__CQ_pic_align_row:n #1
+  {
+    \exp_args:NV \str_case:nnF \l__CQ_pic_align_tl
+      {
+        { left   } { \__CQ_pic_typeset_row:n {#1} }
+        { right  } { \hss \__CQ_pic_typeset_row:n {#1} }
+        { center } { \hss \__CQ_pic_typeset_row:n {#1} \hss }
+      }
+      { \hss \__CQ_pic_typeset_row:n {#1} \hss }
+  }
+
 \cs_new_protected:Npn \__CQ_pic_typeset:
   {
     \vbox_set:Nn \l__CQ_pic_all_box
@@ -1104,7 +1134,7 @@
               { \skip_vertical:n { \l__CQ_pic_vgap_dim } }
             \bool_set_false:N \l__CQ_pic_firstrow_bool
             \hbox_to_wd:nn { \l__CQ_pic_avail_dim }
-              { \hss \__CQ_pic_typeset_row:n {##1} \hss }
+              { \__CQ_pic_align_row:n {##1} }
           }
       }
     \par

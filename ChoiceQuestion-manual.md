@@ -126,7 +126,9 @@
 ### 6.1 命令一览
 
 `\onepicture` … `\eightpicture`，第 n 个命令接受 n 个必选参数
-（图片文件名、`\includegraphics` 或任意内容）。
+（图片文件名、`\includegraphics` 或任意内容）。内容处理规则与图片选项相同：
+纯文件名自动包裹 `\includegraphics`，已含 `\includegraphics` 则注入尺寸，
+其它内容用 `\resizebox` 缩放（见 5.3 节）。
 
 ```latex
 \threepicture[w=0.28\linewidth, capA=甲, capB=乙, capC=丙]
@@ -146,6 +148,7 @@
 | `labelA`…`labelH` | 文字 | 单张引用标记，配合 `\ref` / `\figref` |
 | `cap` / `label` | 文字 | `\onepicture` 的简写（等价于 capA / labelA） |
 | `numstyle` | `letter` / `chinese` | 编号样式，默认 `letter` |
+| `align` | `center` / `left` / `right` | 每行的对齐方式，默认 `center` |
 | `showlabel` | `true` / `false` | 是否显示编号 / 标题行，默认 `true` |
 | `gap` | 长度 | 同行图片水平间距，默认 `1em` |
 | `vgap` | 长度 | 行间距，默认 `0.5em` |
@@ -209,8 +212,9 @@ A：确认图片文件名 / 路径正确；示例使用 `mwe` 提供的 `example
 **Q：引用显示“图??”？**
 A：LaTeX 需要编译两遍才能解析 `\ref`，请连续运行两次 XeLaTeX。
 
-**Q：`numstyle` 或未知键报错？**
-A：`numstyle` 只接受 `letter` / `chinese`；其它键名拼写错误会报 *Unknown key*。
+**Q：`numstyle`、`align` 或未知键报错？**
+A：`numstyle` 只接受 `letter` / `chinese`，`align` 只接受 `center` / `left` /
+`right`；其它键名拼写错误会报 *Unknown key*。
 
 **Q：选项里有逗号会出错吗？**
 A：不会。选项在传入前已被花括号包裹，`l3clist` 会保护其中的逗号。
