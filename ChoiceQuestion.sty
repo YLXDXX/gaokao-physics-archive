@@ -95,6 +95,7 @@
 \tl_new:N   \l__CQ_pic_numstyle_tl
 \tl_new:N   \l__CQ_pic_align_tl
 \bool_new:N \l__CQ_pic_showlabel_bool
+\bool_new:N \l__CQ_pic_showprefix_bool
 \tl_new:N   \l__CQ_pic_rowtxt_tl
 \seq_new:N  \l__CQ_pic_layout_seq
 \clist_new:N \l__CQ_pic_rowidx_clist
@@ -799,6 +800,7 @@
 %    numstyle = letter|chinese  编号 a,b,c… 或 甲,乙,丙…
 %    align = center|left|right  每行的对齐方式（默认 center）
 %    showlabel = true|false     是否显示图片下方的编号/标题行
+%    showprefix = true|false    编号行是否带“图a”前缀（默认 true；false 时只显示标题文字）
 %    gap, vgap                  同行图片水平间距 / 行间距
 %  自动排布：按每张图实际宽度分行；三图有专用算法
 % =================================================================
@@ -840,6 +842,9 @@
     showlabel .bool_set:N = \l__CQ_pic_showlabel_bool ,
     showlabel .initial:n  = true ,
     showlabel .default:n  = true ,
+    showprefix .bool_set:N = \l__CQ_pic_showprefix_bool ,
+    showprefix .initial:n  = true ,
+    showprefix .default:n  = true ,
     % 单图（\onepicture）的简写
     cap   .code:n = { \tl_set:cn { l__CQ_pic_cap_A_tl } {#1} } ,
     label .code:n = { \tl_set:cn { l__CQ_pic_lab_A_tl } {#1} } ,
@@ -866,6 +871,7 @@
 % 环境级默认值（保证每次调用的组外初值正确）
 \tl_set:Nn \l__CQ_pic_numstyle_tl { letter }
 \bool_set_true:N \l__CQ_pic_showlabel_bool
+\bool_set_true:N \l__CQ_pic_showprefix_bool
 \dim_set:Nn \l__CQ_pic_gap_dim  { 1em }
 \dim_set:Nn \l__CQ_pic_vgap_dim { 0.5em }
 
@@ -1110,6 +1116,27 @@
       }
   }
 
+% 单张图的编号/标题行（居中于图片宽度内）。
+% showprefix=true：显示“图a [标题]”；false：只显示标题（无标题则整行不画）。
+\cs_new_protected:Npn \__CQ_pic_draw_label:n #1
+  {
+    \skip_vertical:n { 2pt }
+    \hbox_to_wd:nn { \dim_use:c { l__CQ_pic_wd_#1_dim } }
+      {
+        \hss \small
+        \bool_if:NT \l__CQ_pic_showprefix_bool
+          { 图 \__CQ_pic_num:n {#1} }
+        \tl_set_eq:Nc \l_tmpa_tl
+          { l__CQ_pic_cap_ \int_to_Alph:n {#1} _tl }
+        \tl_if_empty:NF \l_tmpa_tl
+          {
+            \bool_if:NT \l__CQ_pic_showprefix_bool { \quad }
+            \tl_use:N \l_tmpa_tl
+          }
+        \hss
+      }
+  }
+
 % 把一行内容按 \l__CQ_pic_align_tl 在整行宽度内左/中/右对齐
 \cs_new_protected:Npn \__CQ_pic_align_row:n #1
   {
@@ -1167,16 +1194,13 @@
             \box_use:c { l__CQ_pic_img_##1_box }
             \bool_if:NT \l__CQ_pic_showlabel_bool
               {
-                \skip_vertical:n { 2pt }
-                \hbox_to_wd:nn { \dim_use:c { l__CQ_pic_wd_##1_dim } }
-                  {
-                    \hss \small
-                    图 \__CQ_pic_num:n {##1}
-                    \tl_if_empty:cF { l__CQ_pic_cap_ \l__CQ_pic_letter_tl _tl }
-                      { \quad
-                        \tl_use:c { l__CQ_pic_cap_ \l__CQ_pic_letter_tl _tl } }
-                    \hss
-                  }
+                % 隐藏前缀时，若该图无标题则整行省略（不占高度）
+                \tl_set_eq:Nc \l_tmpa_tl
+                  { l__CQ_pic_cap_ \int_to_Alph:n {##1} _tl }
+                \bool_if:nT
+                  { \l__CQ_pic_showprefix_bool
+                    || ! \tl_if_empty_p:N \l_tmpa_tl }
+                  { \__CQ_pic_draw_label:n {##1} }
               }
           }
       }

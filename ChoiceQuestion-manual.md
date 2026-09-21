@@ -11,7 +11,8 @@
 - 数量固定、写法简洁的选择题命令 `\twochoices` … `\ninechoices`；
 - 图片选项的统一 / 单项尺寸控制与自动缩放；
 - 多图排版命令 `\onepicture` … `\eightpicture`，按图片实际宽度自动分行
-  （三图还会额外尝试非相邻两图配对），并支持标题、编号与 `\ref` / `\figref` 引用；
+  （三图还会额外尝试非相邻两图配对），并支持标题、编号与 `\ref` / `\figref`
+  引用，以及每行左/中/右对齐、隐藏“图a”前缀；
 - 答案与解析命令：`\tkanswer`、`\xzanswer`、`\drawpicanswer`、`\memoanswer`、`\jdanswer`；
 - 与 `beamer` 的自动配合（答案用 overlay 分步显示）。
 
@@ -150,6 +151,7 @@
 | `numstyle` | `letter` / `chinese` | 编号样式，默认 `letter` |
 | `align` | `center` / `left` / `right` | 每行的对齐方式，默认 `center` |
 | `showlabel` | `true` / `false` | 是否显示编号 / 标题行，默认 `true` |
+| `showprefix` | `true` / `false` | 编号行是否带“图a”前缀，默认 `true`（`false` 时只显示标题文字） |
 | `gap` | 长度 | 同行图片水平间距，默认 `1em` |
 | `vgap` | 长度 | 行间距，默认 `0.5em` |
 
@@ -171,6 +173,8 @@
 - `numstyle=chinese`：图甲、图乙、图丙…
 - `\ref{key}` 只输出编号（a / 甲）；`\figref{key}` 输出“图a / 图甲”。
 - `showlabel=false` 时编号行不显示，但 `\label` 仍在盒子外发出，引用依然有效。
+- `showprefix=false` 时编号行只显示标题文字（如“初始状态”）；若某图没有标题，
+  则整行不显示。
 
 ---
 
