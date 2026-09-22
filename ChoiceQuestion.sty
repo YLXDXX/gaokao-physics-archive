@@ -209,11 +209,16 @@
   }
 
 % 检查 token list 中是否含控制序列（不含 → 视为纯文件名）
+% 注意：不能用 \tl_map_inline + \token_if_cs:NT —— 遇到 { 时
+% \token_if_cs:NT 会把整个组当作参数吞掉，使映射错位并把文件名尾部泄漏成文字。
+% 这里改用正则 \cC. 匹配“任意一个控制序列”。
+\regex_new:N \l__CQ_pic_anycs_regex
+\regex_set:Nn \l__CQ_pic_anycs_regex { \cC. }
 \cs_new_protected:Npn \__CQ_pic_check_cs:N #1
   {
-    \bool_set_false:N \l__CQ_pic_hascs_bool
-    \tl_map_inline:Nn #1
-      { \token_if_cs:NT ##1 { \bool_set_true:N \l__CQ_pic_hascs_bool } }
+    \regex_match:NVTF \l__CQ_pic_anycs_regex #1
+      { \bool_set_true:N \l__CQ_pic_hascs_bool }
+      { \bool_set_false:N \l__CQ_pic_hascs_bool }
   }
 
 % 识别 \includegraphics 的正则
