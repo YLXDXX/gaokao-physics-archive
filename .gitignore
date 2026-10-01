@@ -3,6 +3,29 @@ Docx/
 svg-inkscape/
 main.pdf
 
+# --- 高考真题项目专属 ---
+# 材料处理中间数据（PDF→markdown、OCR、图片提取产物；只保留本地，不入库）
+材料处理/
+# Inkscape / svg 宏包生成物（各处 svg-inkscape/ 均忽略）
+svg-inkscape/
+/试卷/**/svg-inkscape/
+# 各卷编译产物（PDF、TikZ 图片 PDF、编译日志、Inkscape 中间件）
+/试卷/**/*.pdf
+*.make.log
+*.tikz.log
+# 工具/对比/裁剪产物（本地，不入库）
+__pycache__/
+/试卷/**/tikz_compare/
+/试卷/**/crop_compare/
+/试卷/**/crop_preview/
+/试卷/**/figs/.ocr_before/
+# 各卷公共文件软链接由 make links 生成（如需入库可删除以下规则）
+/试卷/*/*/gaokaozhenti.cls
+/试卷/*/*/PhyUnit.sty
+/试卷/*/*/ChoiceQuestion.sty
+/试卷/*/*/package
+/试卷/*/*/TikZ/PhyUnit.sty
+
 # ---> TeX
 ## Core latex/pdflatex auxiliary files:
 *.aux
