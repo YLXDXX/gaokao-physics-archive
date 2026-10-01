@@ -1,8 +1,9 @@
-\NeedsTeXFormat{LaTeX2e}[2021-11-15]
+% \ProcessKeyOptions 需要 LaTeX2e 2022-06-01 内核；\ProvidesExplPackage / expl3 更早
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
 
 \RequirePackage{expl3}
 
-\ProvidesExplPackage{ChoiceQuestion}{2026-09-21}{0.3b}{选择题}
+\ProvidesExplPackage{ChoiceQuestion}{2026-10-01}{0.10}{选择题}
 
 % 若使用 CTAN 正式安装版，可改为 \RequirePackage{exam-zh-choices}
 % （本地 package/ 目录形式会产生名称不匹配的 warning，无害）
@@ -70,6 +71,8 @@
 \dim_new:N  \l__CQ_pic_w_all_dim
 \dim_new:N  \l__CQ_pic_eff_h_dim
 \dim_new:N  \l__CQ_pic_eff_w_dim
+\tl_new:N   \l__CQ_pic_scale_tl
+\tl_new:N   \l__CQ_pic_scale_all_tl
 \tl_new:N   \l__CQ_pic_opts_tl
 \tl_new:N   \l__CQ_pic_item_tl
 \tl_new:N   \l__CQ_pic_letter_tl
@@ -79,6 +82,8 @@
 \bool_new:N \l__CQ_pic_hascs_bool
 \dim_new:N  \l__CQ_pic_gap_dim
 \dim_new:N  \l__CQ_pic_vgap_dim
+\dim_new:N  \l__CQ_pic_topsep_dim
+\dim_new:N  \l__CQ_pic_bottomsep_dim
 \dim_new:N  \l__CQ_pic_avail_dim
 \dim_new:N  \l__CQ_pic_rowwd_dim
 \dim_new:N  \l__CQ_pic_best_dim
@@ -93,8 +98,13 @@
 \bool_new:N \l__CQ_pic_firstpic_bool
 \bool_new:N \l__CQ_pic_cfit_bool
 \tl_new:N   \l__CQ_pic_numstyle_tl
+\tl_new:N   \l__CQ_pic_labelprefix_tl
+\tl_new:N   \l__CQ_pic_numstyle_default_tl
+\tl_new:N   \l__CQ_pic_labelprefix_default_tl
+\tl_new:N   \l__CQ_pic_reflabelprefix_tl
 \tl_new:N   \l__CQ_pic_align_tl
 \bool_new:N \l__CQ_pic_showlabel_bool
+\bool_new:N \l__CQ_pic_showlabel_set_bool
 \bool_new:N \l__CQ_pic_showprefix_bool
 \tl_new:N   \l__CQ_pic_rowtxt_tl
 \seq_new:N  \l__CQ_pic_layout_seq
@@ -103,24 +113,28 @@
 \clist_new:N \l__CQ_pic_files_local_clist
 \box_new:N  \l__CQ_pic_all_box
 
-% 每张图（1..8）：图片盒、整图盒（含编号行）、宽度
-\int_step_inline:nn { 8 }
+% 每张图（1..9）：图片盒、整图盒（含编号行）、宽度
+\int_step_inline:nn { 9 }
   {
     \box_new:c { l__CQ_pic_img_#1_box }
     \box_new:c { l__CQ_pic_box_#1_box }
     \dim_new:c { l__CQ_pic_wd_#1_dim }
   }
-% 每张图的标题 / 引用标记（按字母命名）
-\int_step_inline:nn { 8 }
+% 每张图的标题 / 引用标记 / 编号覆盖（按字母命名 A..I）
+% autoref：该图是否由 fig/fignum 给出编号（==> 未写 label 时自动生成引用标签）
+\int_step_inline:nn { 9 }
   {
-    \tl_new:c { l__CQ_pic_cap_ \int_to_Alph:n {#1} _tl }
-    \tl_new:c { l__CQ_pic_lab_ \int_to_Alph:n {#1} _tl }
+    \tl_new:c   { l__CQ_pic_cap_ \int_to_Alph:n {#1} _tl }
+    \tl_new:c   { l__CQ_pic_lab_ \int_to_Alph:n {#1} _tl }
+    \tl_new:c   { l__CQ_pic_num_ \int_to_Alph:n {#1} _tl }
+    \bool_new:c { l__CQ_pic_autoref_ \int_to_Alph:n {#1} _bool }
   }
-% 每个字母的单项高度 / 宽度（选择题与多图命令共用）
+% 每个字母的单项高度 / 宽度 / 缩放（选择题与多图命令共用）
 \int_step_inline:nn { 9 }
   {
     \dim_new:c { l__CQ_pic_h_ \int_to_Alph:n {#1} _dim }
     \dim_new:c { l__CQ_pic_w_ \int_to_Alph:n {#1} _dim }
+    \tl_new:c  { l__CQ_pic_scale_ \int_to_Alph:n {#1} _tl }
   }
 % 选择题：按序号存放（已调好尺寸的）选项内容
 \int_step_inline:nn { 9 }
@@ -132,9 +146,12 @@
 \msg_new:nnn { CQ_keys_pictures } { unknown-key }
   { Unknown~key~'\l_keys_key_tl'~in~command~options. }
 \msg_new:nnn { CQ_keys_pictures } { bad-numstyle }
-  { Invalid~value~'#1'~for~key~'numstyle':~use~'letter'~or~'chinese'. }
+  {
+    Invalid~value~'#1'~for~key~'numstyle':~use~'letter',~'chinese',~'arabic',~
+    or~a~style~registered~via~\c{ CQDeclarePicNumStyle }.
+  }
 \msg_new:nnn { CQ_keys_pictures } { bad-align }
-  { Invalid~value~'#1'~for~key~'align':~use~'left',~'center'~or~'right'. }
+  { Invalid~value~'#1'~for~key~'align':~use~'left'/'l',~'center'/'c'~or~'right'/'r'. }
 
 % ==========================================================
 % 宏包加载时的选项
@@ -146,6 +163,17 @@
     answer_shown .initial:n  = false,
     answer_color .initial:n  = AnswerGreen,
     answer_shown .default:n  = true,
+    % 多图命令的全局默认（可被命令级键覆盖）：
+    %   pic_numstyle    letter|chinese|arabic，或经 \CQDeclarePicNumStyle 注册的自定义样式
+    %   pic_labelprefix 编号前缀，默认“图”；置空可得裸编号（甲/乙/丙…）
+    %   pic_reflabelprefix  用 fig/fignum 给出编号而未给 label 时，自动生成引用标签的前缀，
+    %                       默认“fig:”（如 fig=1.1.7 自动得 label=fig:1.1.7）
+    pic_numstyle .tl_set:N  = \l__CQ_pic_numstyle_default_tl,
+    pic_numstyle .initial:n = letter,
+    pic_labelprefix .tl_set:N  = \l__CQ_pic_labelprefix_default_tl,
+    pic_labelprefix .initial:n = { 图 },
+    pic_reflabelprefix .tl_set:N  = \l__CQ_pic_reflabelprefix_tl,
+    pic_reflabelprefix .initial:n = { fig: },
   }
 
 \ProcessKeyOptions[CQ_package_load]
@@ -154,13 +182,16 @@
 % 图片尺寸公共基础设施（选择题 / 多图命令共用）
 % ==========================================================
 
-% 为模块 #1 定义尺寸键：height/h、width/w、keepaspectratio、hA..hI、wA..wI
+% 为模块 #1 定义尺寸键：height/h、width/w、scale/s、keepaspectratio、
+% 以及单图键 hA..hI、wA..wI、scaleA..scaleI / sA..sI
 \cs_new_protected:Npn \__CQ_pic_define_size_keys_aux:nn #1 #2
   {
     \keys_define:nn { #1 }
       {
-        h#2 .code:n = { \dim_set:cn { l__CQ_pic_h_#2_dim } { ##1 } } ,
-        w#2 .code:n = { \dim_set:cn { l__CQ_pic_w_#2_dim } { ##1 } } ,
+        h#2     .code:n = { \dim_set:cn { l__CQ_pic_h_#2_dim } { ##1 } } ,
+        w#2     .code:n = { \dim_set:cn { l__CQ_pic_w_#2_dim } { ##1 } } ,
+        scale#2 .code:n = { \tl_set:cn  { l__CQ_pic_scale_#2_tl } { ##1 } } ,
+        s#2     .code:n = { \tl_set:cn  { l__CQ_pic_scale_#2_tl } { ##1 } } ,
       }
   }
 
@@ -172,6 +203,8 @@
         h      .dim_set:N = \l__CQ_pic_h_all_dim ,
         width  .dim_set:N = \l__CQ_pic_w_all_dim ,
         w      .dim_set:N = \l__CQ_pic_w_all_dim ,
+        scale  .tl_set:N  = \l__CQ_pic_scale_all_tl ,
+        s      .tl_set:N  = \l__CQ_pic_scale_all_tl ,
         keepaspectratio .bool_set:N = \l__CQ_pic_keepar_bool ,
         keepaspectratio .default:n  = true ,
         keepaspectratio .initial:n  = true ,
@@ -181,7 +214,8 @@
   }
 
 % 计算 #1（字母）对应图片的 includegraphics 选项串 → \l__CQ_pic_opts_tl
-% 规则：单项设置（hA/wA…）优先；否则用全局（h/w）；均为 0pt 表示未设置
+% 规则：单项设置（hA/wA/sA…）优先；否则用全局（h/w/scale）；
+%       高度/宽度均为 0pt 表示未设置，缩放为空表示未设置
 \cs_new_protected:Npn \__CQ_pic_build_opts:n #1
   {
     \dim_set:Nn \l__CQ_pic_eff_h_dim { \dim_use:c { l__CQ_pic_h_#1_dim } }
@@ -190,7 +224,14 @@
     \dim_set:Nn \l__CQ_pic_eff_w_dim { \dim_use:c { l__CQ_pic_w_#1_dim } }
     \dim_compare:nNnF { \l__CQ_pic_eff_w_dim } > { 0pt }
       { \dim_set:Nn \l__CQ_pic_eff_w_dim { \l__CQ_pic_w_all_dim } }
+    \tl_set:Nx \l__CQ_pic_scale_tl { \tl_use:c { l__CQ_pic_scale_#1_tl } }
+    \tl_if_empty:NT \l__CQ_pic_scale_tl
+      { \tl_set_eq:NN \l__CQ_pic_scale_tl \l__CQ_pic_scale_all_tl }
     \tl_clear:N \l__CQ_pic_opts_tl
+    % 缩放放在最前；用户显式选项（若有）在其后，可覆盖
+    \tl_if_empty:NF \l__CQ_pic_scale_tl
+      { \tl_put_right:Nx \l__CQ_pic_opts_tl
+          { scale = \l__CQ_pic_scale_tl , } }
     \dim_compare:nNnT { \l__CQ_pic_eff_h_dim } > { 0pt }
       { \tl_put_right:Nx \l__CQ_pic_opts_tl
           { height = \dim_use:N \l__CQ_pic_eff_h_dim , } }
@@ -221,28 +262,33 @@
       { \bool_set_false:N \l__CQ_pic_hascs_bool }
   }
 
-% 识别 \includegraphics 的正则
+% 识别 \includegraphics 以及 svg 宏包的 \includesvg 的正则。
+% \includesvg 同样接受 width/height/scale/keepaspectratio，故与 \includegraphics 同样注入。
+% 用捕获组 \1 保留原控制序列，从而两条命令共用同一段注入代码。
 \regex_new:N \l__CQ_pic_ig_regex
-\regex_set:Nn \l__CQ_pic_ig_regex { \c{includegraphics} }
+\regex_set:Nn \l__CQ_pic_ig_regex
+  { ( \c{includegraphics} | \c{includesvg} ) }
 \regex_new:N \l__CQ_pic_igb_regex
-\regex_set:Nn \l__CQ_pic_igb_regex { \c{includegraphics} \[ }
+\regex_set:Nn \l__CQ_pic_igb_regex
+  { ( \c{includegraphics} | \c{includesvg} ) \[ }
 
-% 把选项串注入已有的 \includegraphics（自动处理有/无 [ ] 两种情况）
+% 把选项串注入已有的 \includegraphics / \includesvg（自动处理有/无 [ ] 两种情况）
 \cs_new_protected:Npn \__CQ_pic_inject_opts:N #1
   {
     \tl_if_empty:NF \l__CQ_pic_opts_tl
       {
         \regex_match:NVTF \l__CQ_pic_igb_regex #1
-          { % 已有可选参数：注入到 [ 之后
+          { % 已有可选参数：注入到 [ 之后（\1 = 命中的控制序列）
+            % 选项串本身以逗号结尾，故不再追加逗号
             \regex_replace_once:nnN
-              { \c{includegraphics} \[ }
-              { \c{includegraphics} [ \u { l__CQ_pic_opts_tl } , }
+              { ( \c{includegraphics} | \c{includesvg} ) \[ }
+              { \1 [ \u { l__CQ_pic_opts_tl } }
               #1
           }
           { % 无可选参数：补上 [选项]
             \regex_replace_once:nnN
-              { \c{includegraphics} }
-              { \c{includegraphics} [ \u { l__CQ_pic_opts_tl } ] }
+              { ( \c{includegraphics} | \c{includesvg} ) }
+              { \1 [ \u { l__CQ_pic_opts_tl } ] }
               #1
           }
       }
@@ -275,7 +321,7 @@
 
 % 统一的图片项预处理：#1 = 项 tl 变量，#2 = 字母
 %   纯文件名 → 包裹 \includegraphics[opts]{文件}
-%   含 \includegraphics → 注入选项
+%   含 \includegraphics / \includesvg → 注入选项
 %   其它内容（有控制序列）→ 有尺寸键时 \resizebox 缩放，否则原样
 \cs_new_protected:Npn \__CQ_pic_prepare_item:Nn #1 #2
   {
@@ -286,7 +332,13 @@
         \regex_match:NVTF \l__CQ_pic_ig_regex #1
           { \__CQ_pic_inject_opts:N #1 }
           {
-            \tl_if_empty:NF \l__CQ_pic_opts_tl
+            % 非 \includegraphics/\includesvg 内容：仅在给了 h/w 时用 \resizebox 缩放
+            % （scale 只对 \includegraphics/\includesvg 生效，不能触发 resizebox）
+            \bool_if:nT
+              {
+                \dim_compare_p:nNn { \l__CQ_pic_eff_w_dim } > { 0pt }
+                || \dim_compare_p:nNn { \l__CQ_pic_eff_h_dim } > { 0pt }
+              }
               { \__CQ_pic_resizebox:N #1 }
           }
       }
@@ -436,9 +488,19 @@
 }
 
 % ==========================================================
-% 题目详解 \memoanswer{...}
+% 题目详解 \memoanswer[解析人]{...}
 % ==========================================================
-\cs_new_protected:Npn \__CQ_memoanswer_box:n #1
+\cs_new_protected:Npn \__CQ_memoanswer_author:n #1
+{
+  \tl_if_blank:nF {#1}
+    {
+      \par\noindent
+      \textcolor{AnswerGreen}{\bfseries 【#1】}
+      \par\nobreak
+    }
+}
+
+\cs_new_protected:Npn \__CQ_memoanswer_box:nn #1 #2
 {
   \begin{tcolorbox}[enhanced, breakable, boxrule=0pt, leftrule=2pt,
       arc=0pt, outer~arc=0pt, left=1mm, right=1mm,
@@ -447,17 +509,18 @@
       before~upper={ \setlength{\parskip}{0.5em} },
       coltext=TextDark]
     \setlength{\leftmargini}{2em}
-    #1
+    \__CQ_memoanswer_author:n {#1}
+    #2
   \end{tcolorbox}
 }
 
-\NewDocumentCommand \memoanswer { +m }
+\NewDocumentCommand \memoanswer { O{} +m }
 {
   \bool_if:NTF \l_CQ_isanswershown_bool
     {
       \mymod_if_beamer:TF
-        { \only<2>{ \__CQ_memoanswer_box:n {#1} } }
-        { \__CQ_memoanswer_box:n {#1} }
+        { \only<2>{ \__CQ_memoanswer_box:nn {#1} {#2} } }
+        { \__CQ_memoanswer_box:nn {#1} {#2} }
     }
     { }
 }
@@ -794,34 +857,59 @@
   }
 
 % =================================================================
-%  多图命令 \onepicture .. \eightpicture
+%  多图命令 \onepicture .. \ninepicture
 %
 %  可选键：
 %    h/height, w/width          全体图片统一高/宽
-%    hA..hH, wA..wH             单张图片高/宽（优先于全体）
-%    keepaspectratio            默认 true（仅对 \includegraphics 生效）
-%    capA..capH / captionA..    标题文字（显示为 "图a 标题"）
-%    labelA..labelH             引用标记（\figref / \ref）
-%    numstyle = letter|chinese  编号 a,b,c… 或 甲,乙,丙…
+%    scale/s                    全体图片统一缩放倍数（无单位；对 \includegraphics / \includesvg 生效）
+%    hA..hI, wA..wI             单张图片高/宽（优先于全体）
+%    scaleA..scaleI / sA..sI    单张图片缩放倍数（优先于全体）
+%    keepaspectratio            默认 true（仅对 \includegraphics / \includesvg 生效）
+%    capA..capI / captionA..    标题文字（显示为 "图a 标题"）
+%    labelA..labelI             引用标记（配合 \ref 使用）
+%    numA..numI / num           单图编号覆盖（任意文字：丙 / c / 3 / {图3} 均可；默认自动编号）
+%                              适用“图甲乙丙不在同一内嵌图、须分别标注”的实验题；
+%                              只要给了 num/numA..numI 就隐含开启编号行（除非显式 showlabel=false）；
+%                              只覆盖显示，不自动生成引用标签
+%    figA..figI / fig（fignum…） 等价 numA../num，但未写 label 时自动生成引用标签
+%                              <pic_reflabelprefix><编号>（默认 fig:），便于 \ref
+%    numstyle = letter|chinese|arabic，或 \CQDeclarePicNumStyle 注册的自定义样式
 %    align = center|left|right  每行的对齐方式（默认 center）
-%    showlabel = true|false     是否显示图片下方的编号/标题行
+%    showlabel = true|false     是否显示图片下方的编号/标题行（单图默认 false，多图默认 true）
 %    showprefix = true|false    编号行是否带“图a”前缀（默认 true；false 时只显示标题文字）
 %    gap, vgap                  同行图片水平间距 / 行间距
+%    topsep, bottomsep          图片整体与上/下方内容的距离
 %  自动排布：按每张图实际宽度分行；三图有专用算法
+%  单图命令 \onepicture 默认 showlabel=false（不需编号/标题时可直接写）；
+%  一旦给出 num/numA..numI 会自动开启 showlabel，故 \onepicture[num=丙]{图} 即可显示“图丙”
 % =================================================================
 
-% ---------- numstyle 处理（须在键定义之前定义：.initial:n 会立即执行代码） ----------
+% ---------- numstyle 处理（须在键定义之前定义） ----------
+% 内置 letter/chinese/arabic；亦接受经 \CQDeclarePicNumStyle 注册的自定义样式名。
 \cs_new_protected:Npn \__CQ_pic_set_numstyle:n #1
   {
     \str_case:nnF {#1}
       {
         { letter  } { \tl_set:Nn \l__CQ_pic_numstyle_tl { letter } }
         { chinese } { \tl_set:Nn \l__CQ_pic_numstyle_tl { chinese } }
+        { arabic  } { \tl_set:Nn \l__CQ_pic_numstyle_tl { arabic } }
       }
-      { \msg_error:nnn { CQ_keys_pictures } { bad-numstyle } {#1} }
+      {
+        \cs_if_exist:cTF { __CQ_pic_numstyle_ #1 :n }
+          { \tl_set:Nn \l__CQ_pic_numstyle_tl {#1} }
+          { \msg_error:nnn { CQ_keys_pictures } { bad-numstyle } {#1} }
+      }
   }
 
+% ---------- 自定义图片编号样式 ----------
+% \CQDeclarePicNumStyle{<样式名>}{<编号代码：#1 = 本次调用内的图片序号(1..9)>}
+% 例：\CQDeclarePicNumStyle{book}{\thesection.#1}   得 1.1.7 这类“章.节.序”编号
+% 用 \cs_set:cpn（而非 \cs_new:cpn），同名重复声明时覆盖旧定义而不报错。
+\NewDocumentCommand \CQDeclarePicNumStyle { m m }
+  { \cs_set:cpn { __CQ_pic_numstyle_ #1 :n } ##1 {#2} }
+
 % ---------- align 处理（同样须在键定义之前定义） ----------
+% 取值 center/left/right，简写 c/l/r
 \cs_new_protected:Npn \__CQ_pic_set_align:n #1
   {
     \str_case:nnF {#1}
@@ -829,6 +917,9 @@
         { center } { \tl_set:Nn \l__CQ_pic_align_tl { center } }
         { left   } { \tl_set:Nn \l__CQ_pic_align_tl { left   } }
         { right  } { \tl_set:Nn \l__CQ_pic_align_tl { right  } }
+        { c      } { \tl_set:Nn \l__CQ_pic_align_tl { center } }
+        { l      } { \tl_set:Nn \l__CQ_pic_align_tl { left   } }
+        { r      } { \tl_set:Nn \l__CQ_pic_align_tl { right  } }
       }
       { \msg_error:nnn { CQ_keys_pictures } { bad-align } {#1} }
   }
@@ -837,22 +928,58 @@
 \keys_define:nn { CQ_keys_pictures }
   {
     gap  .dim_set:N = \l__CQ_pic_gap_dim ,
-    gap  .initial:n = 1em ,
+    gap  .initial:n = 8pt ,
     vgap .dim_set:N = \l__CQ_pic_vgap_dim ,
     vgap .initial:n = 0.5em ,
+    topsep    .dim_set:N = \l__CQ_pic_topsep_dim ,
+    topsep    .initial:n = 2pt ,
+    bottomsep .dim_set:N = \l__CQ_pic_bottomsep_dim ,
+    bottomsep .initial:n = 2pt ,
     numstyle .code:n = { \__CQ_pic_set_numstyle:n {#1} } ,
     numstyle .initial:n = letter ,
+    labelprefix .tl_set:N  = \l__CQ_pic_labelprefix_tl ,
+    labelprefix .initial:n = { 图 } ,
     align .code:n = { \__CQ_pic_set_align:n {#1} } ,
     align .initial:n = center ,
-    showlabel .bool_set:N = \l__CQ_pic_showlabel_bool ,
-    showlabel .initial:n  = true ,
-    showlabel .default:n  = true ,
+    al    .code:n = { \__CQ_pic_set_align:n {#1} } ,
+    al    .initial:n = center ,
+    % showlabel：内容行开关。用 .choice 以便记录“用户是否显式设置过”，
+    % 从而让 num/numA..numI 隐含开启、又不覆盖用户显式的 showlabel=false。
+    showlabel .choice: ,
+    showlabel / true .code:n =
+      {
+        \bool_set_true:N \l__CQ_pic_showlabel_set_bool
+        \bool_set_true:N \l__CQ_pic_showlabel_bool
+      } ,
+    showlabel / false .code:n =
+      {
+        \bool_set_true:N \l__CQ_pic_showlabel_set_bool
+        \bool_set_false:N \l__CQ_pic_showlabel_bool
+      } ,
+    showlabel .default:n = true ,
     showprefix .bool_set:N = \l__CQ_pic_showprefix_bool ,
     showprefix .initial:n  = true ,
     showprefix .default:n  = true ,
     % 单图（\onepicture）的简写
     cap   .code:n = { \tl_set:cn { l__CQ_pic_cap_A_tl } {#1} } ,
     label .code:n = { \tl_set:cn { l__CQ_pic_lab_A_tl } {#1} } ,
+    % num：仅覆盖显示，不自动生成引用标签（向后兼容 v0.8）
+    num   .code:n =
+      {
+        \tl_set:cn { l__CQ_pic_num_A_tl } {#1}
+        \bool_set_false:c { l__CQ_pic_autoref_A_bool }
+      } ,
+    % fig / fignum：语义别名，等价 num，但未写 label 时自动生成引用标签
+    fig   .code:n =
+      {
+        \tl_set:cn { l__CQ_pic_num_A_tl } {#1}
+        \bool_set_true:c { l__CQ_pic_autoref_A_bool }
+      } ,
+    fignum .code:n =
+      {
+        \tl_set:cn { l__CQ_pic_num_A_tl } {#1}
+        \bool_set_true:c { l__CQ_pic_autoref_A_bool }
+      } ,
     unknown .code:n = \msg_error:nn { CQ_keys_pictures } { unknown-key },
   }
 \__CQ_pic_define_size_keys:n { CQ_keys_pictures }
@@ -868,34 +995,83 @@
           { \tl_set:cn { l__CQ_pic_cap_#1_tl } { ##1 } } ,
         label#1   .code:n =
           { \tl_set:cn { l__CQ_pic_lab_#1_tl } { ##1 } } ,
+        % num：仅覆盖显示，不自动生成引用标签（向后兼容 v0.8）
+        num#1     .code:n =
+          {
+            \tl_set:cn { l__CQ_pic_num_#1_tl } { ##1 }
+            \bool_set_false:c { l__CQ_pic_autoref_#1_bool }
+          } ,
+        % fig / fignum：语义别名，等价 num，但未写 label 时自动生成引用标签
+        fig#1     .code:n =
+          {
+            \tl_set:cn { l__CQ_pic_num_#1_tl } { ##1 }
+            \bool_set_true:c { l__CQ_pic_autoref_#1_bool }
+          } ,
+        fignum#1  .code:n =
+          {
+            \tl_set:cn { l__CQ_pic_num_#1_tl } { ##1 }
+            \bool_set_true:c { l__CQ_pic_autoref_#1_bool }
+          } ,
       }
   }
-\clist_map_inline:nn { A , B , C , D , E , F , G , H }
+\clist_map_inline:nn { A , B , C , D , E , F , G , H , I }
   { \__CQ_pic_define_cap_keys:n { #1 } }
 
-% 环境级默认值（保证每次调用的组外初值正确）
-\tl_set:Nn \l__CQ_pic_numstyle_tl { letter }
+% 环境级默认值（保证每次调用的组外初值正确；可由宏包选项 pic_numstyle / pic_labelprefix 设定）
+\tl_set_eq:NN \l__CQ_pic_numstyle_tl \l__CQ_pic_numstyle_default_tl
+\tl_set_eq:NN \l__CQ_pic_labelprefix_tl \l__CQ_pic_labelprefix_default_tl
 \bool_set_true:N \l__CQ_pic_showlabel_bool
 \bool_set_true:N \l__CQ_pic_showprefix_bool
-\dim_set:Nn \l__CQ_pic_gap_dim  { 1em }
+\tl_set:Nn \l__CQ_pic_align_tl { center }
+\dim_set:Nn \l__CQ_pic_gap_dim  { 8pt }
 \dim_set:Nn \l__CQ_pic_vgap_dim { 0.5em }
+\dim_set:Nn \l__CQ_pic_topsep_dim    { 2pt }
+\dim_set:Nn \l__CQ_pic_bottomsep_dim { 2pt }
 
 % ---------- 编号 ----------
 \cs_new:Npn \__CQ_pic_letter:n #1
   {
     \int_case:nn {#1}
-      { {1}{a} {2}{b} {3}{c} {4}{d} {5}{e} {6}{f} {7}{g} {8}{h} }
+      { {1}{a} {2}{b} {3}{c} {4}{d} {5}{e} {6}{f} {7}{g} {8}{h} {9}{i} }
   }
 \cs_new:Npn \__CQ_pic_chinese:n #1
   {
     \int_case:nn {#1}
-      { {1}{甲} {2}{乙} {3}{丙} {4}{丁} {5}{戊} {6}{己} {7}{庚} {8}{辛} }
+      { {1}{甲} {2}{乙} {3}{丙} {4}{丁} {5}{戊} {6}{己} {7}{庚} {8}{辛} {9}{壬} }
   }
 \cs_new:Npn \__CQ_pic_num:n #1
   {
     \exp_args:NV \str_case:nnF \l__CQ_pic_numstyle_tl
-      { { chinese } { \__CQ_pic_chinese:n {#1} } }
-      { \__CQ_pic_letter:n {#1} }
+      {
+        { chinese } { \__CQ_pic_chinese:n {#1} }
+        { arabic  } { \int_eval:n {#1} }
+        { letter  } { \__CQ_pic_letter:n {#1} }
+      }
+      {
+        \cs_if_exist:cTF { __CQ_pic_numstyle_ \l__CQ_pic_numstyle_tl :n }
+          { \use:c { __CQ_pic_numstyle_ \l__CQ_pic_numstyle_tl :n } {#1} }
+          { \__CQ_pic_letter:n {#1} }
+      }
+  }
+
+% 单张图实际显示的编号：优先用 numA..numI 覆盖，否则自动编号
+\cs_new:Npn \__CQ_pic_show_num:n #1
+  {
+    \tl_if_empty:cTF { l__CQ_pic_num_ \int_to_Alph:n {#1} _tl }
+      { \__CQ_pic_num:n {#1} }
+      { \tl_use:c { l__CQ_pic_num_ \int_to_Alph:n {#1} _tl } }
+  }
+
+% 本次调用是否给过任意编号覆盖（num / numA..numI）？
+\prg_new_conditional:Nnn \__CQ_pic_if_any_num: { T }
+  {
+    \bool_set_false:N \l_tmpa_bool
+    \clist_map_inline:nn { A , B , C , D , E , F , G , H , I }
+      {
+        \tl_if_empty:cF { l__CQ_pic_num_##1_tl }
+          { \bool_set_true:N \l_tmpa_bool }
+      }
+    \bool_if:NTF \l_tmpa_bool { \prg_return_true: } { \prg_return_false: }
   }
 
 % ---------- 布局的行记录 ----------
@@ -1130,7 +1306,7 @@
       {
         \hss \small
         \bool_if:NT \l__CQ_pic_showprefix_bool
-          { 图 \__CQ_pic_num:n {#1} }
+          { \tl_use:N \l__CQ_pic_labelprefix_tl \__CQ_pic_show_num:n {#1} }
         \tl_set_eq:Nc \l_tmpa_tl
           { l__CQ_pic_cap_ \int_to_Alph:n {#1} _tl }
         \tl_if_empty:NF \l_tmpa_tl
@@ -1170,8 +1346,10 @@
           }
       }
     \par
+    \skip_vertical:n { \l__CQ_pic_topsep_dim }
     \noindent \box_use:N \l__CQ_pic_all_box
     \par
+    \skip_vertical:n { \l__CQ_pic_bottomsep_dim }
   }
 
 % ---------- 引擎 ----------
@@ -1179,7 +1357,30 @@
 \cs_new_protected:Npn \__CQ_pictures:nnn #1 #2 #3
   {
     \begingroup
+    % showlabel 的每次调用默认：单图 false，多图 true；可被命令级键覆盖
+    \bool_set:Nn \l__CQ_pic_showlabel_bool { \int_compare_p:nNn {#1} > {1} }
+    \bool_set_false:N \l__CQ_pic_showlabel_set_bool
     \keys_set:nn { CQ_keys_pictures } {#2}
+    % 给了编号覆盖时隐含开启编号行（除非用户显式设置了 showlabel）
+    \bool_if:NF \l__CQ_pic_showlabel_set_bool
+      { \__CQ_pic_if_any_num:T { \bool_set_true:N \l__CQ_pic_showlabel_bool } }
+    % 用 fig/fignum（或 figA..figI/fignumA..）给出编号、且未写 label 时，自动生成引用标签：
+    %   label = <pic_reflabelprefix><编号>，如 fig=1.1.7 → label=fig:1.1.7
+    % 注意：仅 num/numA.. 只覆盖显示，不自动生成标签（向后兼容 v0.8）。
+    \clist_map_inline:nn { A , B , C , D , E , F , G , H , I }
+      {
+        \bool_if:cT { l__CQ_pic_autoref_##1_bool }
+          {
+            \tl_if_empty:cT { l__CQ_pic_lab_##1_tl }
+              {
+                \tl_if_empty:cF { l__CQ_pic_num_##1_tl }
+                  {
+                    \tl_set:cx { l__CQ_pic_lab_##1_tl }
+                      { \l__CQ_pic_reflabelprefix_tl \tl_use:c { l__CQ_pic_num_##1_tl } }
+                  }
+              }
+          }
+      }
     \dim_set:Nn \l__CQ_pic_avail_dim { \linewidth }
     \clist_set:Nn \l__CQ_pic_files_clist {#3}
     \clist_set_eq:NN \l__CQ_pic_files_local_clist \l__CQ_pic_files_clist
@@ -1218,7 +1419,7 @@
           {
             \tl_set:Nx \l__CQ_pic_labelname_tl
               { \tl_use:c { l__CQ_pic_lab_ \l__CQ_pic_letter_tl _tl } }
-            \tl_set:Nx \@currentlabel { \__CQ_pic_num:n {##1} }
+            \tl_set:Nx \@currentlabel { \__CQ_pic_show_num:n {##1} }
             \exp_args:NV \label \l__CQ_pic_labelname_tl
           }
       }
@@ -1229,7 +1430,9 @@
     \endgroup
   }
 
-% ---------- 用户命令 \onepicture .. \eightpicture ----------
+% ---------- 用户命令 \onepicture .. \ninepicture ----------
+% \onepicture 默认 showlabel=false（单图一般无需编号/标题）；
+% 但给出 num/numA..numI 时会自动开启（见 \__CQ_pictures:nnn）
 \NewDocumentCommand \onepicture { O{} m }
   { \__CQ_pictures:nnn { 1 } {#1} { {#2} } }
 
@@ -1258,5 +1461,18 @@
   { \__CQ_pictures:nnn { 8 } {#1}
     { {#2} , {#3} , {#4} , {#5} , {#6} , {#7} , {#8} , {#9} } }
 
-% ---------- 图片引用：\figref{key} 得 "图a"，\ref{key} 得 "a" ----------
-\NewDocumentCommand \figref { m } { 图\ref{#1} }
+% \NewDocumentCommand 最多 9 个参数，故 \ninepicture 用“先存可选键，再抓 9 项”的方式
+% （与 \ninechoices 同一手法）
+\tl_new:N \l__CQ_ninepicture_opts_tl
+\cs_generate_variant:Nn \__CQ_pictures:nnn { nVn }
+
+\NewDocumentCommand \ninepicture { O{} }
+  {
+    \tl_set:Nn \l__CQ_ninepicture_opts_tl {#1}
+    \__CQ_ninepicture_next:w
+  }
+\cs_new_protected:Npn \__CQ_ninepicture_next:w #1#2#3#4#5#6#7#8#9
+  {
+    \__CQ_pictures:nVn { 9 } \l__CQ_ninepicture_opts_tl
+      { {#1} , {#2} , {#3} , {#4} , {#5} , {#6} , {#7} , {#8} , {#9} }
+  }
