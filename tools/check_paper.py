@@ -58,9 +58,14 @@ def check_one(path: Path) -> list[str]:
     text = path.read_text(encoding="utf-8")
     lines = text.splitlines()
 
-    # 1. 文档骨架
-    if "\\documentclass{gaokaozhenti}" not in text:
-        errs.append("缺少 \\documentclass{gaokaozhenti}")
+    # 1. 文档骨架（两版写法：\documentclass[\gkver]{gaokaozhenti}）
+    if not re.search(r"\\documentclass(?:\[[^\]]*\])?\{gaokaozhenti\}", text):
+        errs.append("缺少 \\documentclass[\\gkver]{gaokaozhenti}")
+    if "\\gkver" not in text:
+        errs.append(
+            "缺少版本开关 \\gkver（源文件顶部应为 "
+            "\\ifdefined\\gkver\\else\\def\\gkver{student}\\fi）"
+        )
     if "\\begin{document}" not in text:
         errs.append("缺少 \\begin{document}")
     if "\\end{document}" not in text:

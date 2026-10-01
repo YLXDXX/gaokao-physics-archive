@@ -8,7 +8,10 @@
 | 脚本 | 用途 | 典型用法 |
 | :--- | :--- | :--- |
 | `json_to_tex.py` | 由平台 JSON 生成某卷 LaTeX **初稿** + 图片素材（复制到 `试卷/…/figs/`），并把 JSON 基础材料 markdown 写到 `材料处理/<年>/<地区>/` | `python3 tools/json_to_tex.py JSON/2026/2026_湖北.json` |
-| `check_paper.py` | 试卷**规范自查**：文档骨架、13 项元数据顺序、图片命令、引用标签、图片存在、每题基本详解 | `python3 tools/check_paper.py 试卷/2025/湖北/湖北.tex` |
+| `check_paper.py` | 试卷**规范自查**：文档骨架（含两版开关 `\gkver`）、13 项元数据顺序、图片命令、引用标签、图片存在、每题基本详解 | `python3 tools/check_paper.py 试卷/2025/湖北/湖北.tex` |
+| `check_content.py` | 试卷**内容书写检查**：裸单位（应用 PhyUnit）、图片充当公式；并提示段落未分行 / 中英文间距（见 `LaTeX_format_ReadMe.md`） | `python3 tools/check_content.py 试卷/` |
+| `check_layout_cmds.py` | **版面微调命令检查**：禁止原生 `\newpage`/`\clearpage`/`\vfill`/`\vfil`/`\hfil`，应改用仅学生版生效的 `\gknewpage` 等（见 `LaTeX_format_ReadMe.md` 第 34 条） | `python3 tools/check_layout_cmds.py 试卷/` |
+| `textfix/` | **共性问题正则修正模块**（数字间全角冒号、行内公式连字符、`\dfrac`→`\frac`），默认只检查、`--write` 写回 | `python3 tools/textfix/textfix.py --check 试卷/` |
 | `tex_links.py` | 为各卷目录创建指向根公共文件（`gaokaozhenti.cls`/`PhyUnit.sty`/`ChoiceQuestion.sty`/`package`）的相对软链接 | `python3 tools/tex_links.py` |
 
 ## 二、材料处理（PDF → Markdown / 图片）
@@ -71,9 +74,27 @@
 
 ## 五、检查项汇总
 
-`make check` 会依次执行：
+每卷目录 `make check` 依次执行：
 
-1. 各卷 `check_paper.py`；
-2. `check_tikz.py`（TikZ 原图登记）；
-3. `check_recrop.py`（裁剪 recipe）；
-4. `check_material.py`（材料完整性）。
+1. `check_paper.py`（结构 / 13 项元数据 / 图片命令 / 标签 / 答案）；
+2. `check_content.py`（内容：裸单位 / 图片公式，并提示段落分行、中英文间距）；
+3. `textfix/textfix.py --check`（共性问题：全角冒号、公式连字符、`\dfrac`）；
+4. `check_layout_cmds.py`（版面微调命令：禁止原生断页 / 撑开命令）。
+
+根目录 `make check` 在各卷之上再执行：
+
+5. `check_tikz.py`（TikZ 原图登记）；
+6. `check_recrop.py`（裁剪 recipe）；
+7. `check_material.py`（材料完整性）。
+
+## 六、tools 单元测试
+
+```bash
+make tools-test
+# 等价于：
+python3 -m unittest tools.textfix.test_textfix tools.test_check_recrop \
+    tools.test_check_tikz tools.test_match_figures \
+    tools.test_pdf_extract_images tools.test_recrop_figures
+```
+
+覆盖正则规则 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 / 裁剪回填等纯函数与端到端逻辑。

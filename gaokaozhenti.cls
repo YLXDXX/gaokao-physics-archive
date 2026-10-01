@@ -5,10 +5,56 @@
 
 \ProvidesExplClass{gaokaozhenti} % Class name
 {2026-10-01} % Release date
-{0.2} % Release version
+{0.5} % Release version
 {高考物理真题·LaTeX档案库 } % Description
 
-\LoadClass[UTF8, a4paper, openany, fontset=windows, zihao=-4,]{ctexbook}
+% ---------------------------------------------------------------------------
+% 选项：学生版 / 教师版（同一源文件，由命令行切换，无需改源文件）
+%   student  学生版（默认）：答案留空（\xzanswer 空括号、\tkanswer 空线）、
+%            \memoanswer 详解不显示；
+%   teacher  教师版：显示答案与详解（\memoanswer）。
+%   源文件顶部写：
+%     \ifdefined\gkver\else\def\gkver{student}\fi
+%     \documentclass[\gkver]{gaokaozhenti}
+%   编译时用 latexmk -usepretex='\def\gkver{teacher}' 即得教师版
+%   （各卷 Makefile 的 make student / make teacher 已封装）。
+% ---------------------------------------------------------------------------
+\newif\ifgkaoteacher
+\gkaoteacherfalse
+\DeclareOption{teacher}{\gkaoteachertrue}
+\DeclareOption{student}{\gkaoteacherfalse}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{ctexbook}}
+\ProcessOptions\relax
+
+\LoadClass[UTF8, a4paper, openany, zihao=-4, fontset=none,]{ctexbook}
+
+% ---------------------------------------------------------------------------
+% 中文字体（自动回退）
+%   优先使用 Windows 中文字体（SimSun / SimHei / KaiTi / Microsoft YaHei /
+%   FangSong）；若当前系统未安装，则回退到 TeX Live 自带的 Fandol 系列，
+%   以保证在 Linux、CI 等无 Windows 字体的环境也能正常编译。
+%   说明：不使用 ctex 的 fontset=windows——它在缺字体时会直接报错（fontspec
+%   “cannot be found”），无法回退；故改为在此用 \IfFontExistsTF 显式探测。
+% ---------------------------------------------------------------------------
+\ExplSyntaxOff
+\IfFontExistsTF{SimSun}
+  {
+    \setCJKmainfont{SimSun}[BoldFont=SimHei, ItalicFont=KaiTi]
+    \IfFontExistsTF{Microsoft YaHei}
+      {\setCJKsansfont{Microsoft YaHei}[BoldFont=*~Bold]}
+      {\setCJKsansfont{SimHei}}
+    \IfFontExistsTF{FangSong}
+      {\setCJKmonofont{FangSong}}
+      {\setCJKmonofont{FandolFang-Regular}[Extension=.otf]}
+  }
+  {
+    \setCJKmainfont{FandolSong-Regular}
+      [Extension=.otf, BoldFont=FandolSong-Bold, ItalicFont=FandolKai-Regular]
+    \setCJKsansfont{FandolHei-Regular}[Extension=.otf, BoldFont=FandolHei-Bold]
+    \setCJKmonofont{FandolFang-Regular}[Extension=.otf]
+  }
+\ExplSyntaxOn
+
 \RequirePackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm]{geometry} %页边距
 
 \RequirePackage{amssymb} %公式
@@ -37,7 +83,33 @@
 
 %公共宏包：物理单位与选择题/填空/图片/答案解析命令（各卷统一加载）
 \RequirePackage{PhyUnit}
-\RequirePackage[answer_shown=true]{ChoiceQuestion}
+\ifgkaoteacher
+  \RequirePackage[answer_shown=true]{ChoiceQuestion}
+\else
+  \RequirePackage[answer_shown=false]{ChoiceQuestion}
+\fi
+
+% ---------------------------------------------------------------------------
+% 版面微调命令（仅学生版生效；教师版自动隐藏）
+%   排学生版需要“断页 / 撑开 / 留白”时，使用下列公用命令，不要直接用原生
+%   \newpage / \vfill / \vfil / \hfill / \hfil——教师版含答案与详解、版面本就不同，
+%   原生命令会在教师版留下大段空白或错位。
+%
+%     公用命令      等价于      作用
+%     \gknewpage    \newpage    仅学生版断页
+%     \gkvfill      \vfill      仅学生版纵向撑满
+%     \gkvfil       \vfil       仅学生版纵向撑开（可收缩）
+%     \gkhfill      \hfill      仅学生版横向撑满
+%     \gkhfil       \hfil       仅学生版横向撑开（可收缩）
+%
+%   例外：作为版面结构必需的命令（如并排两个 minipage 之间的 \hfill）仍用原生
+%   \hfill，否则教师版会错位；只有“纯微调”才用本组命令。
+% ---------------------------------------------------------------------------
+\newcommand{\gknewpage}{\ifgkaoteacher\else\newpage\fi}
+\newcommand{\gkvfill}{\ifgkaoteacher\else\vfill\fi}
+\newcommand{\gkvfil}{\ifgkaoteacher\else\vfil\fi}
+\newcommand{\gkhfill}{\ifgkaoteacher\else\hfill\fi}
+\newcommand{\gkhfil}{\ifgkaoteacher\else\hfil\fi}
 
 %图片标题格式
 \captionsetup{subrefformat=parens}

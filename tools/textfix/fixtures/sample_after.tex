@@ -1,0 +1,19 @@
+% tools/textfix/fixtures/sample.tex
+% 测试样例：数字之间的全角冒号应被改为半角；中文冒号与 LaTeX 命令保持不变。
+\section{时刻与时间间隔}
+
+如图为某列火车的订单。订单详情中的时间 19:26、12:21 和“历时 16 时 55 分”含义是否相同？
+\hxansblock{不相同。19:26、12:21 表示时刻；“历时 16 时 55 分”表示时间间隔。}
+
+\begin{enumerate}
+  \item 上课时间 8:00 为时刻。\hxparen{√}
+  \item 8:30 上课，其中“8:30”指的是时间间隔。\hxparen{×}
+  \item 某次列车运行 8:00:00 后到站。\hxparen{√}
+  \item 两数之比为 1:2。\hxparen{×}
+  \item 注意：这里的冒号应保持全角。
+  \item 时间是：8 点，而 8:00 是时刻。
+  \item 数学模式中的 $t=8:00$ 也应修正。
+  \item 位移—时间图像记作 $x-t$ 图像。
+  \item 位移大小为 $\frac{3}{2}\pi R$。
+  \item \tkanswer{√}\hxparen{×} 等命令不受影响。
+\end{enumerate}
