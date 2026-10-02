@@ -4,6 +4,14 @@
 `高考物理真题制作规范.md`（核心）、`LaTeX_format_ReadMe.md`（排版）、
 `材料处理与OCR规范.md`（材料/OCR）、`docs/新增年份SOP.md`（操作清单）。
 
+> **工具使用与权限（所有会话，含子代理，均须遵守）**：
+> ① 一律在**仓库根**执行命令，用 `make -C 试卷/…`，**不要 `cd`、不要用 `..`**；
+> ② 临时文件与 **PDF 渲染页只写 `/tmp/opencode/`**；
+> ③ 文件读写优先用 Read/Glob/Grep/Edit/Write，不要用 Bash 的 `cat/find/grep/sed` 代替；
+> ④ 派发子任务时须在 prompt 中写明以上各点。
+> 详细说明见 [`docs/AGENTS.md`](docs/AGENTS.md)（由**本地、不入库**的 `opencode.json`
+> 经 `instructions` 加载；无该文件时以本段为准）。
+
 ## 仓库是什么
 
 高考物理真题 LaTeX 档案库：每年/地区一份**可独立编译**的文档，
@@ -24,9 +32,13 @@
 ```bash
 python3 tools/json_to_tex.py JSON/<年>/<年_地区>.json        # 1 初稿 + 图片
 # 2 对照 材料处理/<年>/<地区>/merged.md、（如有）docx 解析、原 PDF 逐题校对重写
-cd 试卷/<年>/<地区> && make student && make teacher            # 3 两版编译
-make check                                                     # 4 自查（须 0 错误）
+make -C 试卷/<年>/<地区> student && make -C 试卷/<年>/<地区> teacher   # 3 两版编译
+make -C 试卷/<年>/<地区> check                                # 4 自查（须 0 错误）
 ```
+
+> 统一在**仓库根**执行命令，用 `make -C 试卷/…` 进入卷目录；**不要** `cd`。
+> 新建卷目录时还需复制一份 `Makefile`（模板见任一已有卷）并执行
+> `python3 tools/tex_links.py 试卷/<年>/<地区>` 建立公共文件软链接。
 
 ## 硬性规则（会被 `make check` 检查）
 

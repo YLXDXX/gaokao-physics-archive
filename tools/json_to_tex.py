@@ -17,15 +17,18 @@
     # 显式指定输出目录；--force 覆盖已存在的 .tex
     python3 tools/json_to_tex.py JSON/2026/2026_云南.json --out 试卷/2026/云南 --force
 
-    # 理综节选：题号重编 1..N（原题号记入卷级 %% sourceNumbers）
-    python3 tools/json_to_tex.py JSON/2000/2000_天津.json --renumber --paper-type 理综物理部分
+    # 理综节选：加卷级标记（保留平台原题号，显示序号由 enumerate 自动生成）
+    # 注意：--renumber 会改写 %% number，使 check_meta.py（要求与 JSON 原题号一致）
+    #       失败，制卷时通常不用。
+    python3 tools/json_to_tex.py JSON/2000/2000_天津.json --paper-type 理综物理部分
 
     # 只导出基础材料（图 + markdown），不生成 tex
     python3 tools/json_to_tex.py JSON/2026/2026_湖北.json --material-only
 
 初稿已尽量贴近规范：缺 `memo` 自动写占位 `\\memoanswer`；非选择题按小问生成
 `\\jdanswer`（多小问 → `enumerate`）；同题多图 → `\\twopicture…`；图片选项 →
-`\\fourchoices[ispicture=true]`；`（A）`/`A．` 选项均可解析；理综节选用 `--renumber`。
+`\\fourchoices[ispicture=true]`；`（A）`/`A．` 选项均可解析；理综节选加 `--paper-type`
+（不用 `--renumber`，以免与 `check_meta.py` 冲突）。
 但仍须对照 `merged.md` 与原 PDF 逐题校对重写。
 """
 from __future__ import annotations
@@ -442,7 +445,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--force", action="store_true", help="覆盖已存在的 .tex 与图片")
     ap.add_argument("--material-only", action="store_true", help="只导出图片与材料 markdown")
     ap.add_argument("--renumber", action="store_true",
-                    help="题号按顺序重编 1..N（理综节选），原题号记入卷级 %% sourceNumbers")
+                    help="题号按顺序重编 1..N（原题号记入卷级 %% sourceNumbers）；慎用："
+                         "会改写 %% number，与 check_meta.py（要求与 JSON 一致）冲突")
     ap.add_argument("--paper-type", default="", help="卷级 %% paperType 注释（如“理综物理部分”）")
     args = ap.parse_args(argv)
 

@@ -4,6 +4,9 @@ svg-inkscape/
 main.pdf
 
 # --- 高考真题项目专属 ---
+# 本地 opencode 配置（权限/instructions，含个人路径，不入库；docs/AGENTS.md 入库）
+opencode.json
+opencode.jsonc
 # 材料处理中间数据（PDF→markdown、OCR、图片提取产物；只保留本地，不入库）
 材料处理/
 # Inkscape / svg 宏包生成物（各处 svg-inkscape/ 均忽略）

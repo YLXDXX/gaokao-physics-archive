@@ -1,0 +1,27 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2008/2008_重庆理综/tiku_images/1801-2000/1848.png",
+      "crops": [
+        {"rect": [0, 0, 345, 218], "target": "试卷/2008/重庆理综/figs/21a.png"},
+        {"rect": [345, 0, 312, 218], "target": "试卷/2008/重庆理综/figs/21b.png"},
+        {"rect": [0, 218, 345, 204], "target": "试卷/2008/重庆理综/figs/21c.png"},
+        {"rect": [345, 218, 312, 204], "target": "试卷/2008/重庆理综/figs/21d.png"}
+      ]
+    },
+    {
+      "source": "JSON/2008/2008_重庆理综/tiku_images/1801-2000/1849.png",
+      "crops": [
+        {"rect": [0, 0, 345, 287], "target": "试卷/2008/重庆理综/figs/22a1.png"},
+        {"rect": [345, 0, 394, 287], "target": "试卷/2008/重庆理综/figs/22a2.png"}
+      ]
+    },
+    {
+      "source": "JSON/2008/2008_重庆理综/tiku_images/1801-2000/1850.png",
+      "crops": [
+        {"rect": [0, 0, 283, 344], "target": "试卷/2008/重庆理综/figs/22b1.png"},
+        {"rect": [283, 0, 415, 344], "target": "试卷/2008/重庆理综/figs/22b2.png"}
+      ]
+    }
+  ]
+}

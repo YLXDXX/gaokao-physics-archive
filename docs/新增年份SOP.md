@@ -7,15 +7,19 @@
 
 1. **取数**：`python3 tools/json_to_tex.py JSON/<年>/<年_地区>.json`
    （生成 `试卷/<年>/<地区>/<地区>.tex` 初稿与 `figs/`；初稿已自动补缺详解占位、
-   非选择题 `\jdanswer`、多图/图片选项；**理综节选**加 `--renumber --paper-type 理综物理部分`）。
+   非选择题 `\jdanswer`、多图/图片选项；**理综 / 理基节选**加 `--paper-type 理综物理部分`）。
+   新建卷目录还需复制一份 `Makefile`（模板见任一已有卷）并
+   `python3 tools/tex_links.py 试卷/<年>/<地区>` 建立公共文件软链接。
+   > 元数据 `%% number` **保留平台原题号**（`check_meta.py` 要求与 JSON 一致），显示序号由
+   > `enumerate` 自动生成；**不要**用 `--renumber`（它会改写 `%% number`，使 `check_meta` 失败）。
 2. **材料处理**（有 PDF 时）：`make material PDF=Docx/<年>/<年_地区>.pdf OUT=材料处理/<年>/<地区>`；
    无 PDF 时登记到 `异常记录.md` 的“源文档缺失清单”，仅依 JSON 制作。
 3. **逐题校对**：以 `merged.md` / JSON / 原 PDF 为准，核对题干、数据、单位、上下标、公式、选项与答案、
    图片（子图拆分与摆放）、详解；公式编号①②③与评分标准若原卷有则**忠实保留**。
 4. **规范化排版**：单顶层 `enumerate`；13 项元数据；图片一律 ChoiceQuestion 命令；单位一律 PhyUnit；
    非选择题必须有 `\jdanswer`（多小问）或 `\tkanswer`（填空）；每题一条基本 `\memoanswer{}`。
-5. **编译**：`cd 试卷/<年>/<地区> && make student && make teacher`（两版均须成功）。
-6. **自查**：`make check`（结构/元数据、元数据↔JSON、答案对应、单位宏、内容、共性问题、版面、缺字、跨项复查）。
+5. **编译**：在仓库根执行 `make -C 试卷/<年>/<地区> student && make -C 试卷/<年>/<地区> teacher`（两版均须成功）。
+6. **自查**：`make -C 试卷/<年>/<地区> check`（结构/元数据、元数据↔JSON、答案对应、单位宏、内容、共性问题、版面、缺字、跨项复查）。
 7. **登记**：更新 `进度记录.md` 对应行；在 `异常记录/<年>.md` 登记缺题/缺图/缺详解/公式疑误等；
    `make index`；`make check-docs`。
 

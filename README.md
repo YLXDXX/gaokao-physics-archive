@@ -32,10 +32,19 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 │   ├── json_to_tex.py           # JSON → LaTeX 初稿 + 图片素材（制作第一步）
 │   ├── check_paper.py           # 试卷规范自查（元数据/图片命令/标签/引用/答案）
 │   ├── check_content.py         # 内容书写检查（裸单位/图片公式/段落分行提示）
+│   ├── check_meta.py            # 元数据 ↔ 平台 JSON 逐字段一致
+│   ├── check_answers.py         # 非选择题答案与小问对应
+│   ├── check_units.py           # PhyUnit 单位宏检查
+│   ├── check_review.py          # 成品跨项复查（答案三处一致/解析引图/引用标签）
+│   ├── check_glyphs.py          # 编译日志缺字检查
+│   ├── check_layout_cmds.py     # 版面微调命令（禁用原生命令）检查
+│   ├── tex_to_json.py           # 成品 .tex → 档案 JSON（反向抽取）
 │   ├── textfix/                 # 共性问题正则修正模块（含规则、命令行与测试）
 │   ├── test_*.py                # 工具单元测试（make tools-test）
 │   ├── tex_links.py             # 为各卷目录建立公共文件相对软链接
-│   ├── ocr_pipeline.sh          # PDF → Markdown 双引擎 + pdftotext 管线
+│   ├── ocr_pipeline.sh          # PDF → Markdown 双引擎 + pdftotext 管线（单份）
+│   ├── ocr_batch.py             # 批量材料处理驱动（分阶段、断点续跑）
+│   ├── ocr_pipeline_all.sh      # 全库一键编排（自动启停服务、失败即停）
 │   ├── pdf_to_md.py             # 引擎甲 OvisOCR2（底本）
 │   ├── PaddleOCR_PDF_to_md.py   # 引擎乙 PaddleOCR-VL（验证）
 │   ├── material_merge.py        # 三路交叉验证生成 merged.md
@@ -55,7 +64,8 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 ├── docs/                        # 从 README 移出的细则
 │   ├── 新增年份SOP.md            # 新增年份 / 制作一份卷的操作清单
 │   ├── 编译方法.md               # 批量/单卷编译命令、两版开关、版面微调
-│   └── 运行环境.md               # TeX / 字体 / poppler / splitpicture / OCR / Python
+│   ├── 运行环境.md               # TeX / 字体 / poppler / splitpicture / OCR / Python
+│   └── AGENTS.md                # 工具使用与权限约定（经本地 opencode.json 加载）
 ├── gaokaozhenti.cls             # 公共文档类（ctexbook + 公共宏包 + 列表样式）
 ├── ChoiceQuestion.sty           # 选择题 / 多图 / 答案与解析命令（项目共用）
 ├── PhyUnit.sty                  # 物理单位宏包
@@ -97,8 +107,9 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
    `\chapter{…}` + 一个 `enumerate`、题目用 `\item`、小问嵌套 `enumerate`；
    图片一律用 `ChoiceQuestion` 的 `\onepicture/\twopicture/…`；
    答案用 `\xzanswer/\tkanswer/\jdanswer`；详解用 `\memoanswer`（可多人多条）。
-6. **编译与自查**：在试卷目录执行 `make`（先编译 `TikZ/`，再生成**学生版 + 教师版**两份 PDF），
-   再执行 `make check`。学生版 `answer_shown=false`（答案留空、详解不显示），
+6. **编译与自查**：在仓库根执行 `make -C 试卷/<年>/<地区> all`（先编译 `TikZ/`，再生成
+   **学生版 + 教师版**两份 PDF），再执行 `make -C 试卷/<年>/<地区> check`。
+   学生版 `answer_shown=false`（答案留空、详解不显示），
    教师版 `answer_shown=true`（含答案与详解）。
 
 > **严禁在转换过程中引入 TikZ 重绘**：一律直接使用 JSON 中的图片数据；JSON 缺图时，
@@ -134,6 +145,7 @@ make progress     # 打印各年份进度概要
 | `docs/新增年份SOP.md` | 新增年份 / 制作一份卷的可勾选清单 |
 | `docs/编译方法.md` | 批量/单卷编译命令、两版开关、版面微调 |
 | `docs/运行环境.md` | TeX / 字体 / poppler / splitpicture / OCR / Python |
+| `docs/AGENTS.md` | 工具使用与权限约定（工作目录固定在仓库根、临时/渲染文件只放 `/tmp/opencode/`、子代理约定；由本地 `opencode.json` 加载） |
 | `进度记录.md` | 各年份/地区制作进度明细（题数、状态、说明、异常链接） |
 | `异常记录.md` | 异常记录总索引 + 跨年份通用说明（材料处理结论、通用风险、更新方式） |
 | `异常记录/<年份>.md` | 每一年各卷当前异常（缺详解、缺图、复合图待拆、回忆版等）与人工核验记录 |
@@ -148,7 +160,7 @@ make progress     # 打印各年份进度概要
 > **明细见 [`进度记录.md`](进度记录.md)**；此处只保留总体概要（由 `make index` 自动刷新）。
 
 <!-- PROGRESS:START -->
-- **已完成**：4 个年份、共 **14 套**卷、**202 题**（2000 年 7 套、2024 年 1 套、2025 年 1 套、2026 年 5 套）。
+- **已完成**：5 个年份、共 **28 套**卷、**411 题**（2000 年 7 套、2008 年 14 套、2024 年 1 套、2025 年 1 套、2026 年 5 套）。
 - **材料就位**：`材料处理/` 已完成 402 份 PDF 的三路转换与提图（本地，不入库）。
 - **待制作**：其余年份/地区，按批次推进。
 <!-- PROGRESS:END -->
@@ -157,6 +169,8 @@ make progress     # 打印各年份进度概要
 
 ```text
 2026: 云南 湖北 湖南 广东 四川        2025: 湖北        2024: 湖北
+2008: 上海 江苏 海南 全国理综Ⅰ 全国理综Ⅱ 北京理综 上海理综 四川理综
+      天津理综 宁夏理综 山东理综 广东理综 广东理科基础 重庆理综
 2000: 上海 全国旧课程 全国新课程 北京 天津 广东 苏浙吉
 ```
 

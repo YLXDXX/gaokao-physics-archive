@@ -7,7 +7,7 @@
 
 | 脚本 | 用途 | 典型用法 |
 | :--- | :--- | :--- |
-| `json_to_tex.py` | 由平台 JSON 生成某卷 LaTeX **初稿** + 图片素材（复制到 `试卷/…/figs/`），并把 JSON 基础材料 markdown 写到 `材料处理/<年>/<地区>/`。已支持：缺 memo 占位、非选择题自动 `\jdanswer`、同题多图 `\twopicture`、图片选项 `\fourchoices[ispicture=true]`、`--renumber` 理综重编号 | `python3 tools/json_to_tex.py JSON/2026/2026_湖北.json` |
+| `json_to_tex.py` | 由平台 JSON 生成某卷 LaTeX **初稿** + 图片素材（复制到 `试卷/…/figs/`），并把 JSON 基础材料 markdown 写到 `材料处理/<年>/<地区>/`。已支持：缺 memo 占位、非选择题自动 `\jdanswer`、同题多图 `\twopicture`、图片选项 `\fourchoices[ispicture=true]`、`--paper-type` 卷级标记（理综/理基节选）；`--renumber` 重编号（慎用，会改写 `%% number` 而与 `check_meta.py` 冲突） | `python3 tools/json_to_tex.py JSON/2026/2026_湖北.json` |
 | `check_paper.py` | 试卷**规范自查**：文档骨架（含两版开关 `\gkver`）、13 项元数据顺序、图片命令、引用标签、图片存在、每题基本详解 | `python3 tools/check_paper.py 试卷/2025/湖北/湖北.tex` |
 | `check_meta.py` | **元数据 ↔ 平台 JSON 逐字段一致**（防转换漂移，含选择题 `%% answer`） | `python3 tools/check_meta.py 试卷/2000/上海/上海.tex` |
 | `check_answers.py` | **非选择题答案对应**：必须有 `\jdanswer`/`\tkanswer`，小问数与 `\jdanswer` 项数比对 | `python3 tools/check_answers.py 试卷/` |
