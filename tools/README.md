@@ -21,7 +21,8 @@
 
 | 脚本 | 用途 | 典型用法 |
 | :--- | :--- | :--- |
-| `ocr_pipeline.sh` | 一键三路转换 + 生成 `merged.md` + 无损提图 | `tools/ocr_pipeline.sh Docx/2026/2026_湖北.pdf 材料处理/2026/湖北` |
+| `ocr_pipeline.sh` | 一键三路转换 + 生成 `merged.md` + 无损提图（**单份**） | `tools/ocr_pipeline.sh Docx/2026/2026_湖北.pdf 材料处理/2026/湖北` |
+| `ocr_batch.py` | **批量**材料处理驱动（`list`/`status`/`pdftotext`/`paddle`/`ovis`/`merge`/`extract`，可断点续跑；Ovis 单进程只加载一次模型） | `python3 tools/ocr_batch.py status` |
 | `pdf_to_md.py` | 引擎甲 **OvisOCR2**（底本） | 见 `ocr_pipeline.sh` |
 | `PaddleOCR_PDF_to_md.py` | 引擎乙 **PaddleOCR-VL**（验证，服务化） | 见 `ocr_pipeline.sh` |
 | `paddlex_serve_start.sh` / `paddlex_serve_stop.sh` | 启动 / 关闭 PaddleOCR-VL 服务（默认端口 8203） | `./tools/paddlex_serve_start.sh` |
