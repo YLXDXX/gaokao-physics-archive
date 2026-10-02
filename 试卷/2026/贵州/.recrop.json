@@ -1,0 +1,36 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2026/贵州/pdfimages/p5_7.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 108], "target": "试卷/2026/贵州/figs/09a.png"},
+        {"rect": [0, 150, 600, 168], "target": "试卷/2026/贵州/figs/09b.png"}
+      ],
+      "trim": {"padding": 4}
+    },
+    {
+      "source": "材料处理/2026/贵州/pdfimages/p8_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 372, 190], "target": "试卷/2026/贵州/figs/12a.png"}
+      ],
+      "trim": {"padding": 4}
+    },
+    {
+      "source": "材料处理/2026/贵州/pdfimages/p9_12.jpg",
+      "crops": [
+        {"rect": [0, 55, 260, 350], "target": "试卷/2026/贵州/figs/12b.png"},
+        {"rect": [285, 0, 437, 412], "target": "试卷/2026/贵州/figs/12c.png"}
+      ],
+      "trim": {"padding": 4}
+    },
+    {
+      "source": "材料处理/2026/贵州/pdfimages/p10_14.jpg",
+      "crops": [
+        {"rect": [0, 250, 340, 140], "target": "试卷/2026/贵州/figs/13a.png"},
+        {"rect": [340, 0, 720, 392], "target": "试卷/2026/贵州/figs/13b.png"},
+        {"rect": [1125, 0, 593, 395], "target": "试卷/2026/贵州/figs/13c.png"}
+      ],
+      "trim": {"padding": 4}
+    }
+  ]
+}

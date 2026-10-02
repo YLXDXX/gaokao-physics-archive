@@ -1,0 +1,21 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2026/2026_海南/tiku_images/43001-44000/43369_1.png",
+      "crops": [
+        {"rect": [0, 30, 360, 295], "target": "试卷/2026/海南/figs/15a.png"},
+        {"rect": [405, 0, 425, 372], "target": "试卷/2026/海南/figs/15b.png"},
+        {"rect": [835, 182, 261, 162], "target": "试卷/2026/海南/figs/15c.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2026/2026_海南/tiku_images/43001-44000/43369_2.png",
+      "crops": [
+        {"rect": [0, 0, 564, 400], "target": "试卷/2026/海南/figs/15d.png"},
+        {"rect": [660, 118, 358, 292], "target": "试卷/2026/海南/figs/15e.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2026/全国理综/pdfimages/p5_24.jpg",
+      "crops": [
+        {"rect": [0, 118, 305, 288], "target": "试卷/2026/全国理综/figs/10a.png"},
+        {"rect": [355, 0, 480, 409], "target": "试卷/2026/全国理综/figs/10b.png"},
+        {"rect": [845, 200, 355, 200], "target": "试卷/2026/全国理综/figs/10c.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2026/全国理综/pdfimages/p7_33.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 555], "target": "试卷/2026/全国理综/figs/12a.png"},
+        {"rect": [700, 0, 600, 555], "target": "试卷/2026/全国理综/figs/12b.png"}
+      ]
+    }
+  ]
+}

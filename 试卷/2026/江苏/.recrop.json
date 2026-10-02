@@ -1,0 +1,26 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2026/江苏/pdfimages/p3_4.jpg",
+      "crops": [
+        {"rect": [10, 8, 296, 184], "target": "试卷/2026/江苏/figs/09a.png"},
+        {"rect": [307, 7, 304, 184], "target": "试卷/2026/江苏/figs/09b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2026/江苏/pdfimages/p5_6.jpg",
+      "crops": [
+        {"rect": [0, 0, 415, 258], "target": "试卷/2026/江苏/figs/12a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2026/江苏/pdfimages/p5_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 494, 300], "target": "试卷/2026/江苏/figs/12b.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

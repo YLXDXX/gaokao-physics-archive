@@ -1,0 +1,28 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2026/2026_重庆/tiku_images/43001-44000/43332.png",
+      "crops": [
+        {"rect": [0, 0, 380, 313], "target": "试卷/2026/重庆/figs/09a.png"},
+        {"rect": [389, 104, 411, 221], "target": "试卷/2026/重庆/figs/09b.png"}
+      ],
+      "trim": {"padding": 4}
+    },
+    {
+      "source": "JSON/2026/2026_重庆/tiku_images/43001-44000/43334.png",
+      "crops": [
+        {"rect": [0, 43, 267, 361], "target": "试卷/2026/重庆/figs/11a.png"},
+        {"rect": [298, 0, 702, 399], "target": "试卷/2026/重庆/figs/11b.png"}
+      ],
+      "trim": {"padding": 4}
+    },
+    {
+      "source": "JSON/2026/2026_重庆/tiku_images/43001-44000/43335_1.png",
+      "crops": [
+        {"rect": [0, 6, 451, 370], "target": "试卷/2026/重庆/figs/12a.png"},
+        {"rect": [472, 44, 285, 329], "target": "试卷/2026/重庆/figs/12b.png"}
+      ],
+      "trim": {"padding": 4}
+    }
+  ]
+}

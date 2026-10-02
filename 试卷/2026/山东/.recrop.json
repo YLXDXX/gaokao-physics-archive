@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2026/山东/pdfimages/p1_0.jpg",
+      "crops": [
+        {"rect": [0, 0, 388, 248], "target": "试卷/2026/山东/figs/02a.png"},
+        {"rect": [388, 0, 312, 248], "target": "试卷/2026/山东/figs/02b.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

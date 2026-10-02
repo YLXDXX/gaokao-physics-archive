@@ -1,0 +1,250 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2026/2026_1月浙江/tiku_images/42001-43000/42889.png",
+      "crops": [
+        {
+          "rect": [
+            0,
+            180,
+            370,
+            340
+          ],
+          "target": "试卷/2026/1月浙江/figs/07a.png"
+        },
+        {
+          "rect": [
+            440,
+            0,
+            360,
+            515
+          ],
+          "target": "试卷/2026/1月浙江/figs/07b.png"
+        },
+        {
+          "rect": [
+            845,
+            115,
+            350,
+            395
+          ],
+          "target": "试卷/2026/1月浙江/figs/07c.png"
+        },
+        {
+          "rect": [
+            1260,
+            0,
+            240,
+            510
+          ],
+          "target": "试卷/2026/1月浙江/figs/07d.png"
+        }
+      ],
+      "erase_labels": "panels",
+      "trim": {
+        "padding": 6
+      }
+    },
+    {
+      "source": "JSON/2026/2026_1月浙江/tiku_images/42001-43000/42892.png",
+      "crops": [
+        {
+          "rect": [
+            0,
+            20,
+            600,
+            415
+          ],
+          "target": "试卷/2026/1月浙江/figs/10a.png"
+        },
+        {
+          "rect": [
+            665,
+            0,
+            535,
+            432
+          ],
+          "target": "试卷/2026/1月浙江/figs/10b.png"
+        }
+      ],
+      "erase_labels": "panels",
+      "trim": {
+        "padding": 6
+      }
+    },
+    {
+      "source": "JSON/2026/2026_1月浙江/tiku_images/42001-43000/42894.png",
+      "crops": [
+        {
+          "rect": [
+            0,
+            60,
+            467,
+            216
+          ],
+          "target": "试卷/2026/1月浙江/figs/12a.png"
+        },
+        {
+          "rect": [
+            500,
+            0,
+            400,
+            272
+          ],
+          "target": "试卷/2026/1月浙江/figs/12b.png"
+        }
+      ],
+      "erase_labels": "panels",
+      "trim": {
+        "padding": 6
+      }
+    },
+    {
+      "source": "JSON/2026/2026_1月浙江/tiku_images/42001-43000/42896_1.png",
+      "crops": [
+        {
+          "rect": [
+            0,
+            0,
+            760,
+            440
+          ],
+          "target": "试卷/2026/1月浙江/figs/14a.png"
+        },
+        {
+          "rect": [
+            848,
+            45,
+            350,
+            372
+          ],
+          "target": "试卷/2026/1月浙江/figs/14b.png"
+        }
+      ],
+      "erase": [
+        [
+          318,
+          410,
+          62,
+          45
+        ]
+      ],
+      "trim": {
+        "padding": 6
+      }
+    },
+    {
+      "source": "JSON/2026/2026_1月浙江/tiku_images/42001-43000/42897_1.png",
+      "crops": [
+        {
+          "rect": [
+            0,
+            125,
+            290,
+            288
+          ],
+          "target": "试卷/2026/1月浙江/figs/14d.png"
+        },
+        {
+          "rect": [
+            303,
+            195,
+            322,
+            212
+          ],
+          "target": "试卷/2026/1月浙江/figs/14e.png"
+        },
+        {
+          "rect": [
+            645,
+            0,
+            555,
+            412
+          ],
+          "target": "试卷/2026/1月浙江/figs/14f.png"
+        }
+      ],
+      "trim": {
+        "padding": 6
+      }
+    },
+    {
+      "source": "JSON/2026/2026_1月浙江/tiku_images/42001-43000/42897_2.png",
+      "crops": [
+        {
+          "rect": [
+            0,
+            0,
+            450,
+            222
+          ],
+          "target": "试卷/2026/1月浙江/figs/14g.png"
+        },
+        {
+          "rect": [
+            455,
+            60,
+            245,
+            155
+          ],
+          "target": "试卷/2026/1月浙江/figs/14h.png"
+        }
+      ],
+      "trim": {
+        "padding": 6
+      }
+    },
+    {
+      "source": "JSON/2026/2026_1月浙江/tiku_images/42001-43000/42900.png",
+      "crops": [
+        {
+          "rect": [
+            0,
+            90,
+            570,
+            208
+          ],
+          "target": "试卷/2026/1月浙江/figs/16a.png"
+        },
+        {
+          "rect": [
+            610,
+            0,
+            365,
+            285
+          ],
+          "target": "试卷/2026/1月浙江/figs/16b.png"
+        }
+      ],
+      "trim": {
+        "padding": 6
+      }
+    },
+    {
+      "source": "JSON/2026/2026_1月浙江/tiku_images/42001-43000/42902.png",
+      "crops": [
+        {
+          "rect": [
+            50,
+            0,
+            410,
+            325
+          ],
+          "target": "试卷/2026/1月浙江/figs/18a.png"
+        },
+        {
+          "rect": [
+            510,
+            0,
+            288,
+            255
+          ],
+          "target": "试卷/2026/1月浙江/figs/18b.png"
+        }
+      ],
+      "trim": {
+        "padding": 6
+      }
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2026/6月浙江/pdfimages/vec_43273_2.png",
+      "crops": [
+        {"rect": [0, 40, 565, 850], "target": "试卷/2026/6月浙江/figs/04a.png"},
+        {"rect": [788, 40, 558, 850], "target": "试卷/2026/6月浙江/figs/04b.png"},
+        {"rect": [1574, 40, 558, 850], "target": "试卷/2026/6月浙江/figs/04c.png"},
+        {"rect": [2393, 40, 760, 850], "target": "试卷/2026/6月浙江/figs/04d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2026/6月浙江/pdfimages/vec_43277_2.png",
+      "crops": [
+        {"rect": [40, 40, 1520, 650], "target": "试卷/2026/6月浙江/figs/08a.png"},
+        {"rect": [1835, 40, 1520, 650], "target": "试卷/2026/6月浙江/figs/08b.png"},
+        {"rect": [40, 945, 1520, 650], "target": "试卷/2026/6月浙江/figs/08c.png"},
+        {"rect": [1835, 945, 1520, 650], "target": "试卷/2026/6月浙江/figs/08d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2026/6月浙江/pdfimages/vec_43279.png",
+      "crops": [
+        {"rect": [0, 0, 1060, 665], "target": "试卷/2026/6月浙江/figs/10a.png"},
+        {"rect": [1100, 0, 1460, 665], "target": "试卷/2026/6月浙江/figs/10b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2026/6月浙江/pdfimages/vec_43280.png",
+      "crops": [
+        {"rect": [20, 25, 975, 1195], "target": "试卷/2026/6月浙江/figs/11a.png"},
+        {"rect": [1015, 25, 900, 1195], "target": "试卷/2026/6月浙江/figs/11b.png"},
+        {"rect": [1985, 25, 900, 1195], "target": "试卷/2026/6月浙江/figs/11c.png"},
+        {"rect": [2965, 25, 900, 1195], "target": "试卷/2026/6月浙江/figs/11d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2026/6月浙江/pdfimages/vec_43282.png",
+      "crops": [
+        {"rect": [0, 850, 1700, 970], "target": "试卷/2026/6月浙江/figs/13a.png"},
+        {"rect": [1800, 0, 1190, 1800], "target": "试卷/2026/6月浙江/figs/13b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2026/6月浙江/pdfimages/vec_docx14.png",
+      "crops": [
+        {"rect": [0, 0, 840, 213], "target": "试卷/2026/6月浙江/figs/14a.png"},
+        {"rect": [850, 25, 170, 185], "target": "试卷/2026/6月浙江/figs/14b.png"},
+        {"rect": [1045, 25, 155, 185], "target": "试卷/2026/6月浙江/figs/14c.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2026/6月浙江/pdfimages/vec_43284_3.png",
+      "crops": [
+        {"rect": [0, 0, 320, 160], "target": "试卷/2026/6月浙江/figs/14f.png"},
+        {"rect": [400, 0, 400, 160], "target": "试卷/2026/6月浙江/figs/14g.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2026/2026_6月浙江/tiku_images/43001-44000/43284_1.png",
+      "crops": [
+        {"rect": [0, 0, 600, 498], "target": "试卷/2026/6月浙江/figs/14d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2026/2026_6月浙江/tiku_images/43001-44000/43284_2.png",
+      "crops": [
+        {"rect": [0, 0, 600, 340], "target": "试卷/2026/6月浙江/figs/14e.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

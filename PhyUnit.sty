@@ -249,5 +249,22 @@
 \NewDocumentCommand \UkeV { O{} } { \__phyunit_space:n{#1} \mathrm{keV} } % 能量：keV 千电子伏特
 \NewDocumentCommand \UGeV { O{} } { \__phyunit_space:n{#1} \mathrm{GeV} } % 能量：GeV 吉电子伏特
 \NewDocumentCommand \UTHZ { O{} } { \__phyunit_space:n{#1} \mathrm{THz} } % 频率：THz 太赫兹
+\NewDocumentCommand \Umms { O{} } { \__phyunit_space:n{#1} \mathrm{mm}/\mathrm{s} } % 速度：mm/s 毫米每秒
+\NewDocumentCommand \UNmm { O{} } { \__phyunit_space:n{#1} \mathrm{N}/\mathrm{mm} } % 劲度系数：N/mm 牛每毫米
+\NewDocumentCommand \Ukgm { O{} } { \__phyunit_space:n{#1} \mathrm{kg}/\mathrm{m} } % 质量线密度：kg/m 千克每米
+
+\NewDocumentCommand \UNsqmq { O{} } { \__phyunit_space:n{#1} \mathrm{N}\cdot\mathrm{s}^2/\mathrm{m}^2 } % 复合：N·s²/m² 牛秒平方每平方米
+
+\NewDocumentCommand \Umqs { O{} } { \__phyunit_space:n{#1} \mathrm{m}^2/\mathrm{s} } % 速度面积积：m²/s 平方米每秒
+
+% ── 新增单位（2026-10-02）：按「类别：符号 中文全称」注释 ─────────────────
+\NewDocumentCommand \UuWb { O{} } { \__phyunit_space:n{#1} \upmu\mathrm{Wb} } % 磁通量：μWb 微韦伯
+\NewDocumentCommand \UmuWb { O{} } { \__phyunit_space:n{#1} \upmu\mathrm{Wb} } % 磁通量：μWb 微韦伯
+
+\NewDocumentCommand \UGeVcSq { O{} } { \__phyunit_space:n{#1} \mathrm{GeV}/\mathrm{c}^{2} } % 质量：GeV/c² 吉电子伏特每光速平方
+
+\NewDocumentCommand \UTs { O{} } { \__phyunit_space:n{#1} \mathrm{T}/\mathrm{s} } % 磁场变化率：T/s 特斯拉每秒
+
+\NewDocumentCommand \UMeVcSq { O{} } { \__phyunit_space:n{#1} \mathrm{MeV}/\mathrm{c}^{2} } % 质量：MeV/c² 兆电子伏特每光速平方
 
 \endinput

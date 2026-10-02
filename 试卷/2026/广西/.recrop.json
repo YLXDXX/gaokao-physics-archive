@@ -1,0 +1,28 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2026/广西/pdfimages/p3_16.jpg",
+      "crops": [
+        {"rect": [0, 0, 781, 400], "target": "试卷/2026/广西/figs/07a.png"},
+        {"rect": [781, 0, 747, 400], "target": "试卷/2026/广西/figs/07b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2026/广西/pdfimages/p5_25.jpg",
+      "crops": [
+        {"rect": [0, 0, 438, 360], "target": "试卷/2026/广西/figs/09a.png"},
+        {"rect": [438, 0, 650, 360], "target": "试卷/2026/广西/figs/09b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2026/广西/pdfimages/p7_50.jpg",
+      "crops": [
+        {"rect": [0, 0, 1046, 350], "target": "试卷/2026/广西/figs/12a.png"},
+        {"rect": [1046, 0, 672, 350], "target": "试卷/2026/广西/figs/12b.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}
