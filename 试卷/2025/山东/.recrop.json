@@ -1,0 +1,76 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2025/山东/pdfimages/p8_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 570, 470],   "target": "试卷/2025/山东/figs/12a.png"},
+        {"rect": [570, 0, 630, 470], "target": "试卷/2025/山东/figs/12b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2025/山东/pdfimages/p11_18.jpg",
+      "crops": [
+        {"rect": [0, 0, 470, 152],   "target": "试卷/2025/山东/figs/14b.png"},
+        {"rect": [470, 0, 530, 152], "target": "试卷/2025/山东/figs/14c.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2025/山东/pdfimages/p7_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 700, 363], "target": "试卷/2025/山东/figs/11_an.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2025/山东/pdfimages/p8_12.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 516], "target": "试卷/2025/山东/figs/12_an1.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2025/山东/pdfimages/p9_13.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 603], "target": "试卷/2025/山东/figs/12_an2.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2025/山东/pdfimages/p12_20.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 678], "target": "试卷/2025/山东/figs/15_an1.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2025/山东/pdfimages/p12_21.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 562], "target": "试卷/2025/山东/figs/15_an2.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2025/山东/docx_media/media/image33.png",
+      "crops": [
+        {"rect": [0, 0, 800, 450], "target": "试卷/2025/山东/figs/13a.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2025/山东/docx_media/media/image34.png",
+      "crops": [
+        {"rect": [0, 0, 600, 466], "target": "试卷/2025/山东/figs/13b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2025/山东/docx_media/media/image35.png",
+      "crops": [
+        {"rect": [0, 0, 600, 300], "target": "试卷/2025/山东/figs/14a.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    }
+  ]
+}

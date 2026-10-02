@@ -1,0 +1,29 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2025/江苏/pdfimages/p5_9.jpg",
+      "crops": [
+        {"rect": [4, 2, 465, 276], "target": "试卷/2025/江苏/figs/11b.png"},
+        {"rect": [534, 6, 465, 276], "target": "试卷/2025/江苏/figs/11c.png"}
+      ],
+      "erase_labels": "panels",
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2025/江苏/pdfimages/p5_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 462, 165], "target": "试卷/2025/江苏/figs/11d.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2025/江苏/pdfimages/p8_13.jpg",
+      "crops": [
+        {"rect": [0, 84, 470, 210], "target": "试卷/2025/江苏/figs/15a.png"},
+        {"rect": [492, 15, 291, 269], "target": "试卷/2025/江苏/figs/15b.png"}
+      ],
+      "erase_labels": "panels",
+      "trim": {"padding": 8, "threshold": 200}
+    }
+  ]
+}
