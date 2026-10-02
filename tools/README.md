@@ -7,12 +7,19 @@
 
 | 脚本 | 用途 | 典型用法 |
 | :--- | :--- | :--- |
-| `json_to_tex.py` | 由平台 JSON 生成某卷 LaTeX **初稿** + 图片素材（复制到 `试卷/…/figs/`），并把 JSON 基础材料 markdown 写到 `材料处理/<年>/<地区>/` | `python3 tools/json_to_tex.py JSON/2026/2026_湖北.json` |
+| `json_to_tex.py` | 由平台 JSON 生成某卷 LaTeX **初稿** + 图片素材（复制到 `试卷/…/figs/`），并把 JSON 基础材料 markdown 写到 `材料处理/<年>/<地区>/`。已支持：缺 memo 占位、非选择题自动 `\jdanswer`、同题多图 `\twopicture`、图片选项 `\fourchoices[ispicture=true]`、`--renumber` 理综重编号 | `python3 tools/json_to_tex.py JSON/2026/2026_湖北.json` |
 | `check_paper.py` | 试卷**规范自查**：文档骨架（含两版开关 `\gkver`）、13 项元数据顺序、图片命令、引用标签、图片存在、每题基本详解 | `python3 tools/check_paper.py 试卷/2025/湖北/湖北.tex` |
+| `check_meta.py` | **元数据 ↔ 平台 JSON 逐字段一致**（防转换漂移，含选择题 `%% answer`） | `python3 tools/check_meta.py 试卷/2000/上海/上海.tex` |
+| `check_answers.py` | **非选择题答案对应**：必须有 `\jdanswer`/`\tkanswer`，小问数与 `\jdanswer` 项数比对 | `python3 tools/check_answers.py 试卷/` |
+| `check_units.py` | **PhyUnit 宏检查**：`\Uxxx` 是否均已定义；`--suggest` 给出裸单位建议宏 | `python3 tools/check_units.py 试卷/` |
+| `tex_to_json.py` | 由成品 `.tex` **反向抽取档案 JSON**（元数据/题干/答案/详解），`--compare` 与平台 JSON 核对 | `python3 tools/tex_to_json.py 试卷/2000/上海/上海.tex --compare JSON/2000/2000_上海.json` |
 | `check_content.py` | 试卷**内容书写检查**：裸单位（应用 PhyUnit）、图片充当公式；并提示段落未分行 / 中英文间距（见 `LaTeX_format_ReadMe.md`） | `python3 tools/check_content.py 试卷/` |
 | `check_layout_cmds.py` | **版面微调命令检查**：禁止原生 `\newpage`/`\clearpage`/`\vfill`/`\vfil`/`\hfil`，应改用仅学生版生效的 `\gknewpage` 等（见 `LaTeX_format_ReadMe.md` 第 34 条） | `python3 tools/check_layout_cmds.py 试卷/` |
 | `textfix/` | **共性问题正则修正模块**（数字间全角冒号、行内公式连字符、`\dfrac`→`\frac`），默认只检查、`--write` 写回 | `python3 tools/textfix/textfix.py --check 试卷/` |
 | `tex_links.py` | 为各卷目录创建指向根公共文件（`gaokaozhenti.cls`/`PhyUnit.sty`/`ChoiceQuestion.sty`/`package`）的相对软链接 | `python3 tools/tex_links.py` |
+| `gen_index.py` | **索引/进度生成与共享库**：扫描 `试卷/`，生成 `试卷/<年>/README.md`、刷新 README 进度概要、回填 `进度记录.md` 题数（`--check` 校验） | `python3 tools/gen_index.py --write`（`make index`） |
+| `check_docs.py` | **文档一致性校验**：`进度记录.md` ↔ `试卷/` 双向一致、状态取值、题数相符、年份索引与 `异常记录/<年>.md` 表头规范 | `python3 tools/check_docs.py`（`make check-docs`，已接入 `make check`） |
+| `status.py` | **各年份进度概要**：套数、题数、进度表“已完成”计数 | `python3 tools/status.py`（`make progress`） |
 
 ## 二、材料处理（PDF → Markdown / 图片）
 
@@ -79,21 +86,28 @@
 
 ## 五、检查项汇总
 
-每卷目录 `make check` 依次执行：
+**每卷目录** `make check` 按下列顺序执行（与各卷 `Makefile` 的 `check` 目标一致）：
 
 1. `check_paper.py`（结构 / 13 项元数据 / 图片命令 / 标签 / 答案；并提示 `\onepicture` 有 label 无 num、同题重复引用同一图）；
 2. `check_content.py`（内容：裸单位 / 图片公式 / 数学模式内 CJK / `\mathrm{汉字}`，并提示段落分行、中英文间距）；
 3. `textfix/textfix.py --check`（共性问题：全角冒号、公式连字符、en/em 破折号、`\dfrac`）；
 4. `check_layout_cmds.py`（版面微调命令：禁止原生断页 / 撑开命令）；
 5. `check_glyphs.py`（编译日志缺字 `Missing character`，如 `\mathrm` 内汉字丢字）；
-6. `check_review.py`（成品跨项复查：解析引图必在、选择题三处答案一致、与 JSON 答案一致、`\ref` 已定义）。
+6. `check_review.py`（成品跨项复查：解析引图必在、选择题三处答案一致、与 JSON 答案一致、`\ref` 已定义、重复标签、公式编号悬空、占位详解计数）；
+7. `check_meta.py`（元数据逐字段与平台 JSON 一致）；
+8. `check_answers.py`（非选择题答案命令与小问对应）；
+9. `check_units.py`（`\Uxxx` 是否已在 `PhyUnit.sty` 定义）。
 
-根目录 `make check` 在各卷之上再执行：
+**根目录** `make check` 在各卷之上再执行：
 
-7. `check_tikz.py`（TikZ 原图登记）；
-8. `check_recrop.py`（裁剪 recipe；并提示孤儿 figs）；
-9. `check_material.py`（材料完整性：四要素 / 图片引用 / manifest 文件齐全 / 纯矢量页清单）；
-   并在全库范围再跑一遍 `check_glyphs.py` / `check_review.py` 作为兜底。
+10. `check_tikz.py`（TikZ 原图登记）；
+11. `check_recrop.py`（裁剪 recipe；并提示孤儿 figs）；
+12. `check_material.py`（材料完整性：四要素 / 图片引用 / manifest 文件齐全 / 纯矢量页清单）；
+13. `check_glyphs.py`（全库编译日志缺字兜底）；
+14. `check_review.py`（全库成品跨项复查兜底）；
+15. `check_docs.py`（进度 / 年份索引 / 异常记录 文档一致性，`make check-docs`）。
+
+> `make check YEAR=2000` 只查该年；`make check-changed` 只查 git 改动；`make ci` 抽样构建 + 全量自查。
 
 ## 六、tools 单元测试
 
@@ -102,7 +116,12 @@ make tools-test
 # 等价于：
 python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch \
     tools.test_check_content tools.test_check_recrop tools.test_check_tikz \
-    tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures
+    tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures \
+    tools.test_gen_index tools.test_json_to_tex \
+    tools.test_check_meta tools.test_check_answers tools.test_check_units \
+    tools.test_tex_to_json
 ```
 
-覆盖正则规则（含裸单位）/ 批量映射 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 / 裁剪回填等纯函数与端到端逻辑。
+覆盖正则规则（含裸单位）/ 批量映射 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 /
+裁剪回填 / 元数据·JSON 一致性 / 非选择题答案对应 / 单位宏 / 反向抽取 / 索引生成等
+纯函数与端到端逻辑。

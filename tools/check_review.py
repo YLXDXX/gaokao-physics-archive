@@ -78,7 +78,8 @@ def json_answers(tex: Path) -> Dict[int, str]:
             continue
         t = it.get("type") or ""
         if any(k in t for k in CHOICE_TYPES):
-            out[n] = re.sub(r"[^A-I]", "", it.get("answer") or "")
+            txt = re.sub(r"<[^>]+>", "", it.get("answer") or "")
+            out[n] = re.sub(r"[^A-I]", "", txt)
     return out
 
 
@@ -125,6 +126,25 @@ def check_file(tex: Path) -> Tuple[List[str], List[str]]:
         for ref in set(re.findall(r"\\ref\{([^}]+)\}", block)):
             if ref not in defined:
                 errs.append(f"{tex.name}: 第 {n} 题 \\ref{{{ref}}} 未定义")
+
+        # 5) 解析中公式编号（①②…）引用是否悬空
+        memo = block[block.find("%% memo"):] if "%% memo" in block else ""
+        for d in set(re.findall(r"[①-⑩]", memo)):
+            if memo.count(d) == 1 and re.search(
+                    r"[由、和及联]" + re.escape(d) + r"|" + re.escape(d) + r"式", memo):
+                warns.append(f"{tex.name}: 第 {n} 题解析引用“{d}”式，但未见对应编号")
+
+    # 6) 重复引用标签（LaTeX 仅警告，这里升级为错误）
+    all_labels = re.findall(r"(?<![A-Za-z])label[A-I]?=([^\s,}\]]+)", text) + \
+        re.findall(r"\\label\{([^}]+)\}", text)
+    dup = sorted({x for x in all_labels if all_labels.count(x) > 1})
+    if dup:
+        errs.append(f"{tex.name}: 重复的引用标签：{', '.join(dup)}")
+
+    # 7) 占位详解计数（缺详解，待补充）
+    ph = text.count("本题原卷及材料中未提供详解")
+    if ph:
+        warns.append(f"{tex.name}: 有 {ph} 道题使用占位详解（缺详解，待补充）")
 
     return errs, warns
 

@@ -27,6 +27,10 @@
 #        每个单元内部仍由各自的 Makefile 控制（此处以 JOBS=1 串行，避免超配）。
 # ===========================================================================
 PAPERS := 试卷/*/*
+# 指定年份只处理该年（如 make check YEAR=2000），成千套时便于增量自查
+ifdef YEAR
+PAPERS := 试卷/$(YEAR)/*
+endif
 
 ifeq ($(origin JOBS),undefined)
 JOBS := 1
@@ -45,7 +49,8 @@ define RUN_DIRS
 endef
 
 .PHONY: all student teacher tikz tikz-compare check check-tikz check-recrop links \
-        clean distclean material material-batch material-merge extract-images check-material tools-test
+        clean distclean material material-batch material-merge extract-images check-material tools-test \
+        index progress check-docs check-changed ci
 
 all:
 	$(call RUN_DIRS,$(PAPERS),all)
@@ -75,6 +80,40 @@ check:
 	@python3 tools/check_glyphs.py
 	@echo "===== 成品跨项复查 ====="
 	@python3 tools/check_review.py
+	@echo "===== 文档索引一致性检查 ====="
+	@python3 tools/check_docs.py
+
+# 进度/索引文档（见 docs/编译方法.md）
+index:
+	@python3 tools/gen_index.py --write
+
+progress:
+	@python3 tools/status.py
+
+check-docs:
+	@python3 tools/check_docs.py
+
+# 仅自查 git 有改动的试卷目录（规模大时使用）
+check-changed:
+	@DIRS=$$( { git -c core.quotepath=false diff --name-only; \
+		git -c core.quotepath=false ls-files --others --exclude-standard; } \
+		| awk -F/ '$$1=="试卷" && NF>=3 {print $$1"/"$$2"/"$$3}' | sort -u ); \
+	if [ -z "$$DIRS" ]; then echo "无试卷改动，跳过。"; exit 0; fi; \
+	for d in $$DIRS; do [ -f "$$d/Makefile" ] || continue; \
+		echo "===== $$d : check ====="; \
+		$(MAKE) -s -C "$$d" JOBS=1 check || exit 1; done
+
+# 抽样构建 + 全量自查（CI 入口；大规模时用 YEAR=… 限定）
+ci:
+	@echo "===== 工具单元测试 + 文档校验 ====="
+	@python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex \
+    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json
+	@python3 tools/check_docs.py
+	@echo "===== 抽样编译（首份试卷） ====="
+	@d=$$(ls -d 试卷/*/* 2>/dev/null | head -1); \
+	if [ -n "$$d" ] && [ -f "$$d/Makefile" ]; then $(MAKE) -s -C "$$d" JOBS=1 all; fi
+	@echo "===== 全量自查（含文档索引） ====="
+	@$(MAKE) --no-print-directory check
 
 check-tikz:
 	@python3 tools/check_tikz.py
@@ -85,7 +124,8 @@ check-recrop:
 # 工具单元测试（共性问题修正 / 批量映射 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 / 裁剪回填）
 tools-test:
 	@echo "===== tools 单元测试 ====="
-	@python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures
+	@python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex \
+    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json
 
 # 材料处理管线（需 Conda 环境 / PaddleOCR-VL 服务；详见 材料处理与OCR规范.md）
 material:

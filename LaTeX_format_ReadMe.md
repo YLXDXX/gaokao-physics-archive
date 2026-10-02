@@ -318,11 +318,15 @@ LaTeX 文档的**基本格式要求**，是后续大量真题转换与人工校�
 >   `python3 tools/check_content.py 试卷/`；
 > - 第 1～4、15、28、33 条（骨架/两版/元数据/图片命令/标签）可用
 >   `python3 tools/check_paper.py 试卷/`；
+> - **元数据取值**须与平台 JSON 一致：`python3 tools/check_meta.py 试卷/`；
+> - **非选择题答案**（`\jdanswer`/`\tkanswer` 与小问对应）：`python3 tools/check_answers.py 试卷/`；
+> - **单位宏**（`\Uxxx` 是否已在 `PhyUnit.sty` 定义）：`python3 tools/check_units.py 试卷/`；
 > - 第 34 条（原生版面命令）可用 `python3 tools/check_layout_cmds.py 试卷/`；
 > - 编译日志**缺字**（`\mathrm{汉字}` 丢字）可用 `python3 tools/check_glyphs.py 试卷/`；
-> - **成品跨项复查**（解析引图必在、选择题三处答案一致、与 JSON 一致）可用
->   `python3 tools/check_review.py 试卷/`。
-> 以上均已接入各卷 `make check`。
+> - **成品跨项复查**（解析引图必在、选择题三处答案一致、与 JSON 一致、重复标签、公式编号悬空）可用
+>   `python3 tools/check_review.py 试卷/`；
+> - **文档索引一致性**（进度 / 年份索引 / 异常记录）可用 `python3 tools/check_docs.py`。
+> 以上均已接入各卷 `make check`（`check_docs` 接入根目录 `make check`）。
 >
 > **图片处理细则**（来源优先级、复合图拆分、去标签 / 去白边、底稿漂移）见
 > `材料处理与OCR规范.md` 第五节与 `高考物理真题制作规范.md` 第五节。

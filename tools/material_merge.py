@@ -30,7 +30,7 @@ import re
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 ROOT = Path(__file__).resolve().parent.parent
 NUMBER_RE = re.compile(r"\d+(?:\.\d+)?")

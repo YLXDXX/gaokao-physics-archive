@@ -25,6 +25,10 @@
 
 \cs_new:Npn \__phyunit_space:n #1 { \str_if_eq:nnTF {#1} {a} {} {\,} }
 
+% \upmu 回退定义：本包微前缀单位（\Uum/\UuA/\UmuA…）用到 \upmu，
+% 它通常由 upgreek 提供；本包不强制依赖 upgreek，未定义时给出等价定义。
+\cs_if_exist:NF \upmu { \cs_new_protected:Npn \upmu { \ensuremath { \mathrm { \mu } } } }
+
 \NewDocumentCommand \UAi {O{}} {\__phyunit_space:n{#1}\mathrm{\mathring{A}}} % Å（长度，埃）
 \NewDocumentCommand \UAm {O{}} {\__phyunit_space:n{#1}\mathrm{A}\cdot\mathrm{m}} % A·m
 \NewDocumentCommand \UA {O{}} {\__phyunit_space:n{#1}\mathrm{A}} % A （电流）
