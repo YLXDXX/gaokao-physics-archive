@@ -51,6 +51,23 @@ ENTITY_MAP = {
     "&rarr;": "$\\to$", "&harr;": "$\\leftrightarrow$",
 }
 
+# 常见复合单位的保守预映射（→ PhyUnit 宏），减少初稿中的裸单位。
+# 仅匹配“不可能被当作变量运算”的复合单位，单字母单位（m/s/kg…）不在此处理。
+UNIT_PRE_MAP = [
+    # m/s² 的多种形态：m/$s^{2}$、m/s$^{2}$、m/s^2、m/s²、m/s2
+    (re.compile(r"m\s*/\s*\$?s\s*\^\s*\{?2\}?\$|m\s*/\s*s(?:\^2|²|2)"), r"\\Umsq"),
+    (re.compile(r"(?<![A-Za-z])km\s*/\s*h(?![A-Za-z])"), r"\\Ukmh"),
+    (re.compile(r"(?<![A-Za-z\\])m\s*/\s*s(?![A-Za-z0-9$])"), r"\\Ums"),
+    (re.compile(r"Ω\s*·\s*m|\\Omega\s*\\cdot\s*m"), r"\\UOm"),
+]
+
+
+def units_to_phyunit(s: str) -> str:
+    """把常见复合单位（m/s、m/s²、km/h、Ω·m）预映射为 PhyUnit 宏。"""
+    for pat, rep in UNIT_PRE_MAP:
+        s = pat.sub(rep, s)
+    return s
+
 
 def unescape_entities(s: str) -> str:
     for k, v in ENTITY_MAP.items():
@@ -95,6 +112,7 @@ def html_to_tex(s: str) -> str:
     s = s.replace("$$", "$")  # 合并相邻行内公式产生的空 $
     s = re.sub(r"[ \t]+", " ", s)
     s = re.sub(r"\n{3,}", "\n\n", s)
+    s = units_to_phyunit(s)
     return s.strip()
 
 
@@ -156,7 +174,8 @@ def process_paper(json_path: Path, out_dir: Path, *, force: bool,
 
     json_dir = json_path.parent
     lines: list[str] = [
-        "\\documentclass{gaokaozhenti}",
+        "\\ifdefined\\gkver\\else\\def\\gkver{student}\\fi",
+        "\\documentclass[\\gkver]{gaokaozhenti}",
         "\\begin{document}",
         "",
         f"\\chapter{{{title}}}",

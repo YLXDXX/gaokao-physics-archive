@@ -201,7 +201,59 @@ def _rename_extracted(outdir: Path, prefix: Path, meta_by_num: Dict[int, Dict[st
     return result
 
 
-def extract_pdf(pdf: Path, outdir: Path, force: bool = False, quiet: bool = False) -> Dict[str, object]:
+def _png_size(path: Path) -> Optional[Tuple[int, int]]:
+    """从 PNG 文件头读取 (w, h)；非 PNG 或失败返回 None。"""
+    try:
+        with path.open("rb") as f:
+            head = f.read(24)
+    except OSError:
+        return None
+    if head[:8] == b"\x89PNG\r\n\x1a\n" and len(head) >= 24:
+        return (int.from_bytes(head[16:20], "big"), int.from_bytes(head[20:24], "big"))
+    return None
+
+
+def _render_pages(pdf: Path, outdir: Path, dpi: int, quiet: bool) -> Dict[str, object]:
+    """纯矢量页兜底：用 ``pdftoppm -r <dpi> -png`` 整页渲染，供后续裁剪。"""
+    outdir.mkdir(parents=True, exist_ok=True)
+    for old in outdir.glob("page-*.png"):
+        old.unlink()
+    prefix = outdir / "page"
+    proc = subprocess.run(
+        ["pdftoppm", "-r", str(dpi), "-png", str(pdf), str(prefix)],
+        capture_output=True, text=True,
+    )
+    if proc.returncode != 0:
+        return {"status": "error", "error": f"pdftoppm 失败：{proc.stderr.strip()}"}
+
+    images = []
+    for f in sorted(outdir.glob("page-*.png")):
+        m = re.search(r"page-(\d+)", f.stem)
+        page = int(m.group(1)) if m else 0
+        size = _png_size(f) or (0, 0)
+        images.append({
+            "page": page, "num": page, "type": "render", "width": size[0],
+            "height": size[1], "color": "rgb", "comp": 3, "bpc": 8, "enc": "png",
+            "xppi": dpi, "yppi": dpi, "file": f.name, "sha256": sha256_file(f),
+        })
+    manifest = {
+        "source_pdf": str(pdf.relative_to(ROOT)) if str(pdf).startswith(str(ROOT)) else str(pdf),
+        "source_pdf_sha256": sha256_file(pdf),
+        "engine": "pdftoppm (纯矢量页整页渲染)",
+        "dpi": dpi,
+        "extracted_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "count": len(images),
+        "images": images,
+    }
+    (outdir / MANIFEST_NAME).write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if not quiet:
+        print(f"[渲染] {outdir}  ←  {manifest['source_pdf']}  共 {len(images)} 页（{dpi} dpi）")
+    return {"status": "rendered", "count": len(images), "manifest": str(outdir / MANIFEST_NAME)}
+
+
+def extract_pdf(pdf: Path, outdir: Path, force: bool = False, quiet: bool = False,
+                render: bool = False, dpi: int = 600) -> Dict[str, object]:
     """对单个 PDF 执行无损提取并写出 manifest。返回结果字典。"""
     outdir = Path(outdir)
     manifest_path = outdir / MANIFEST_NAME
@@ -230,7 +282,9 @@ def extract_pdf(pdf: Path, outdir: Path, force: bool = False, quiet: bool = Fals
     meta_by_num = {int(m["num"]): m for m in metas}
 
     if not metas:
-        return {"status": "empty", "reason": "PDF 无内嵌位图（可能为纯矢量图，需 pdftoppm 渲染）", "manifest": None}
+        if render:
+            return _render_pages(pdf, outdir, dpi, quiet)
+        return {"status": "empty", "reason": "PDF 无内嵌位图（可加 --render 用 pdftoppm 整页渲染）", "manifest": None}
 
     # 清理旧的 p*_* / p-* 残件后重新提取
     for old in list(outdir.glob("p-*")) + list(outdir.glob("p*_*.*")):
@@ -270,7 +324,8 @@ def extract_pdf(pdf: Path, outdir: Path, force: bool = False, quiet: bool = Fals
     return {"status": "extracted", "count": len(images), "manifest": str(manifest_path)}
 
 
-def process_dir(proc_dir: Path, base_roots: List[Path], force: bool, quiet: bool) -> Dict[str, object]:
+def process_dir(proc_dir: Path, base_roots: List[Path], force: bool, quiet: bool,
+                render: bool = False, dpi: int = 600) -> Dict[str, object]:
     ovis_md = proc_dir / "ovis" / "output.md"
     fm = read_front_matter(ovis_md)
     source_name = fm.get("source") or fm.get("title")
@@ -283,7 +338,8 @@ def process_dir(proc_dir: Path, base_roots: List[Path], force: bool, quiet: bool
     pdf = locate_source_pdf(proc_dir, proc_root or proc_dir, source_name, base_roots)
     if pdf is None:
         return {"status": "error", "error": f"未找到源 PDF「{source_name}」：{proc_dir}"}
-    result = extract_pdf(pdf, proc_dir / OUTDIR_NAME, force=force, quiet=quiet)
+    result = extract_pdf(pdf, proc_dir / OUTDIR_NAME, force=force, quiet=quiet,
+                         render=render, dpi=dpi)
     result["processing_dir"] = str(proc_dir)
     return result
 
@@ -295,6 +351,9 @@ def main(argv=None) -> int:
     parser.add_argument("--pdf", help="单文件模式：源 PDF 路径")
     parser.add_argument("--out", help="单文件模式：输出目录")
     parser.add_argument("--force", action="store_true", help="覆盖已有提取结果")
+    parser.add_argument("--render", action="store_true",
+                        help="纯矢量页（无内嵌位图）用 pdftoppm 整页渲染兜底")
+    parser.add_argument("--render-dpi", type=int, default=600, help="整页渲染 DPI（默认 600）")
     parser.add_argument("--quiet", action="store_true", help="仅输出问题")
     parser.add_argument("--json", action="store_true", help="以 JSON 输出结果")
     args = parser.parse_args(argv)
@@ -307,10 +366,11 @@ def main(argv=None) -> int:
             print("[错误] 单文件模式需要 --out 指定输出目录", file=sys.stderr)
             return 2
         result = extract_pdf(Path(args.pdf).resolve(), Path(args.out).resolve(),
-                             force=args.force, quiet=args.quiet)
+                             force=args.force, quiet=args.quiet,
+                             render=args.render, dpi=args.render_dpi)
         if args.json:
             print(json.dumps(result, ensure_ascii=False))
-        return 0 if result["status"] in ("extracted", "skipped", "empty") else 1
+        return 0 if result["status"] in ("extracted", "skipped", "empty", "rendered") else 1
 
     roots = [Path(p) for p in args.paths] or [ROOT / r for r in (args.root or DEFAULT_ROOTS)]
     dirs = find_processing_dirs(roots)
@@ -322,7 +382,8 @@ def main(argv=None) -> int:
     problems = 0
     skipped = 0
     for d in dirs:
-        r = process_dir(d, base_roots, args.force, args.quiet)
+        r = process_dir(d, base_roots, args.force, args.quiet,
+                        render=args.render, dpi=args.render_dpi)
         results.append(r)
         if r["status"] == "error":
             problems += 1

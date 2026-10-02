@@ -37,6 +37,11 @@ tools/ocr_pipeline.sh Docx/2026/2026_湖北.pdf 材料处理/2026/湖北
 make material PDF=Docx/2026/2026_湖北.pdf OUT=材料处理/2026/湖北
 ```
 
+> **批量 / 全库**：`tools/ocr_pipeline.sh` 只处理**单份**。多卷或全库用
+> `tools/ocr_batch.py`（分阶段、断点续跑、Ovis 模型单进程只加载一次），
+> 或用**一键编排** `tools/ocr_pipeline_all.sh`（等价 `make material-batch`）——
+> 后者自动启停 PaddleOCR-VL 服务并做端口健康检查，任一阶段失败即停。
+
 脚本依次执行（与 `Teach_Assess` 项目一致）。**运行前须先启动 PaddleOCR-VL 服务**：
 
 ```bash
@@ -103,7 +108,8 @@ pandoc -f docx -t markdown --extract-media=材料处理/2026/湖北/docx_media \
 
 1. **JSON 中的图片数据**（`JSON/.../tiku_images/…`）——首选，直接复制到 `figs/`；
 2. **JSON 缺图** → 从对应 `.pdf` 用 `pdf_extract_images.py`（`pdfimages -all`）无损提取；
-3. 纯矢量页（`pdfimages -list` 为 0 张）→ `pdftoppm -r 600 -png <PDF> <前缀>` 整页渲染后再裁；
+3. 纯矢量页（`pdfimages -list` 为 0 张）→ `pdftoppm -r 600 -png <PDF> <前缀>` 整页渲染后再裁
+   （可直接用 `python3 tools/pdf_extract_images.py --root 材料处理 --render` 自动渲染落盘）；
 4. 无 PDF 时，可用 Docx 内嵌媒体（`unzip` 解出 `word/media/`）。
 
 ### 2. 复合图拆分（`tools/recrop_figures.py`，依赖 splitpicture）
@@ -127,6 +133,9 @@ python3 tools/recrop_figures.py apply   试卷/2026/云南/.recrop.json      # �
 - **SVG 复合图**：在 Inkscape 中人工拆分导出子图（本项目暂不做自动矢量拆分）。
 - 拆分后按 `figs/<题号><子图字母>.<ext>` 命名回填；子图**不得含**自带编号标签
   （`甲/乙/丙`、`A/B/C/D`），编号由 `ChoiceQuestion` 自动生成。
+
+> `splitpicture` 自身的完整用法（三种检测模式 `--panels/--options/--detect`、标签检测
+> 与 `--erase-labels`、CLI 与 GUI、难例调参）见 [`tools/splitpicture使用说明.md`](tools/splitpicture使用说明.md)。
 
 ### 3. 去标签与去白边
 

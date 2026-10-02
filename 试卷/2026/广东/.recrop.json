@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2026/广东/pdfimages/p3_3.jpg",
+      "crops": [
+        {"rect": [0, 0, 530, 284], "target": "试卷/2026/广东/figs/07a.png"},
+        {"rect": [530, 0, 430, 284], "target": "试卷/2026/广东/figs/07b.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

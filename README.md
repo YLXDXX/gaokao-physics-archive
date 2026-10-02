@@ -107,7 +107,7 @@ make student        # 仅编译各卷学生版（答案留空、不含详解）
 make teacher        # 仅编译各卷教师版（含答案与详解）
 make tikz           # 仅编译各卷 TikZ/ 下的独立图片
 make tikz-compare   # 生成各卷「重绘 TikZ 与原图」对比图（tikz_compare/）
-make check          # 全部试卷规范自查（结构/元数据 + 内容 + 共性问题）+ TikZ 登记 + 裁剪 recipe + 材料完整性
+make check          # 全部试卷规范自查（结构/元数据 + 内容 + 共性问题 + 缺字 + 成品复查）+ TikZ 登记 + 裁剪 recipe + 材料完整性
 make check-tikz     # 仅 TikZ 原图登记一致性检查
 make check-recrop   # 仅多子图裁剪 recipe 一致性检查
 make tools-test     # 运行 tools 单元测试（textfix / 裁剪 / TikZ / 匹配 / 提图等）
@@ -116,10 +116,12 @@ make clean          # 清理各卷辅助文件
 make distclean      # 清理各卷辅助文件与 PDF 成品
 
 # 材料处理（PDF→markdown / OCR / 提图；需 Conda 环境与 PaddleOCR-VL 服务）
-make material PDF=<源PDF> OUT=材料处理/<年>/<地区>   # 跑某卷的 OCR 材料管线
+make material PDF=<源PDF> OUT=材料处理/<年>/<地区>   # 跑某卷的 OCR 材料管线（单份）
+make material-batch [ARGS="--year 2026"]   # 全库/多卷五阶段一键编排（自动启停服务、失败即停、断点续跑）
 make material-merge   # 为 材料处理/ 下各卷生成/校验 merged.md
 make extract-images   # 从源 PDF 无损提取内嵌图到 材料处理/…/pdfimages/
-make check-material   # 材料四要素 / 图片引用 / 底稿漂移检查
+                     #   纯矢量页渲染：python3 tools/pdf_extract_images.py --root 材料处理 --render
+make check-material   # 材料四要素 / 图片引用 / manifest 文件 / 纯矢量页清单检查
 ```
 
 也可进入单卷目录 `试卷/<年>/<地区>/` 单独编译：
@@ -160,6 +162,7 @@ make clean / distclean
 | `材料处理与OCR规范.md` | PDF→Markdown 双引擎交叉验证、无损提取图片、底稿漂移检查 |
 | `异常记录.md` | 各卷当前异常（缺详解、缺图、复合图待拆、回忆版等）与人工核验记录 |
 | `ChoiceQuestion-manual.md` | `ChoiceQuestion.sty` 使用说明（选项 / 多图 / 答案解析） |
+| `tools/splitpicture使用说明.md` | 外部 `splitpicture` 在本项目的用法（检测模式 / 标签擦除 / CLI 与 GUI / 难例调参） |
 | `tools/textfix/README.md` | 共性问题正则修正模块说明（规则 / 用法 / 测试） |
 
 ---
@@ -170,10 +173,13 @@ make clean / distclean
 | :--- | :--- | :--- |
 | 2026 | 云南 | 已完成：结构迁移、ChoiceQuestion 图片命令、OCR 校对、**全 15 题详解补全**、解析图回填、学生版+教师版编译通过 |
 | 2026 | 湖北 | 已完成：结构迁移、含人工重绘 TikZ 图 1 张、**全 15 题详解补全**、受力分析解析图回填、学生版+教师版编译通过 |
+| 2026 | 湖南 | 已完成：结构迁移、**全 15 题详解补全**、数据表/复合图处理、解析图回填、学生版+教师版编译通过、`make check` 通过 |
+| 2026 | 广东 | 已完成：结构迁移、**全 15 题详解补全**、图选项补全与复合图拆分、解析图回填、学生版+教师版编译通过、`make check` 通过 |
+| 2026 | 四川 | 已完成：结构迁移、**全 15 题详解补全**、复合图 `recrop` 拆分、解析图回填、学生版+教师版编译通过、`make check` 通过 |
 | 2025 | 湖北 | 已完成：结构迁移、**全 15 题详解补全**、解析图回填、学生版+教师版编译通过 |
 | 2024 | 湖北 | 已完成：结构迁移、**全 15 题详解补全**、轨迹解析图回填、学生版+教师版编译通过 |
 
-> 4 套卷的材料位于 `材料处理/<年>/<地区>/`（`merged.md`、`pdftotext.txt`、`pdfimages/` 等），
+> 7 套卷的材料位于 `材料处理/<年>/<地区>/`（`merged.md`、`pdftotext.txt`、`pdfimages/` 等），
 > 已由 OvisOCR2 + PaddleOCR-VL + pdftotext 交叉验证产出（本地，不入库）。
 > 详细的异常与人工核验记录见 `异常记录.md`。
 

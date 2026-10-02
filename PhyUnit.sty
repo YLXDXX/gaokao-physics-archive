@@ -10,6 +10,17 @@
 %
 %常见中学物理单位，包括一些非国际制单位和一些常见的其它学科单位
 %
+% ── 新增单位规范（如遇到本文件没有的单位，可在此新增）────────────────────
+%  1. 命令名：\U + 单位符号（去空格），前缀并入，如 keV→\UkeV、GeV→\UGeV、
+%     THz→\UTHZ、kPa→\UkPa；同一单位有 μ/u 两种写法时可并存别名（见 \UuA/\UmuA）。
+%  2. 统一形式：\NewDocumentCommand \Uxxx { O{} } { \__phyunit_space:n{#1} <正文> }
+%     可选参数 O{} 用于传入 "a" 以抑制前导细空格（\__phyunit_space:n 已处理）；
+%     正文一律 \mathrm{...}，乘号用 \cdot，斜杠用 /，上/下标用 ^/_（如 \mathrm{m}/\mathrm{s}^2）。
+%  3. 每行末尾必须写清注释，格式为「类别：符号 中文全称」，
+%     例如 % 能量：keV 千电子伏特。
+%  4. 新增请**追加到文件末尾**（或同类单位之后），避免与既有命名冲突；
+%     新增后应能被各卷直接 \Uxxx 调用，禁止在正文里裸写单位。
+%
 
 
 \cs_new:Npn \__phyunit_space:n #1 { \str_if_eq:nnTF {#1} {a} {} {\,} }
@@ -229,5 +240,10 @@
 \NewDocumentCommand \UJmoldC { O{} } { \__phyunit_space:n{#1} \mathrm{J}/(\mathrm{mol}\cdot{}^\circ\mathrm{C}) } % J/(mol·℃) 化学/热学
 \NewDocumentCommand \UcalgdC { O{} } { \__phyunit_space:n{#1} \mathrm{cal}/(\mathrm{g}\cdot{}^\circ\mathrm{C}) } % cal/(g·℃) 化学/热学
 \NewDocumentCommand \UkcalKgdC { O{} } { \__phyunit_space:n{#1} \mathrm{kcal}/(\mathrm{kg}\cdot{}^\circ\mathrm{C}) } % kcal/(kg·℃) 化学/热学
+
+% ── 新增单位（2026-10-02）：按「类别：符号 中文全称」注释 ─────────────────
+\NewDocumentCommand \UkeV { O{} } { \__phyunit_space:n{#1} \mathrm{keV} } % 能量：keV 千电子伏特
+\NewDocumentCommand \UGeV { O{} } { \__phyunit_space:n{#1} \mathrm{GeV} } % 能量：GeV 吉电子伏特
+\NewDocumentCommand \UTHZ { O{} } { \__phyunit_space:n{#1} \mathrm{THz} } % 频率：THz 太赫兹
 
 \endinput

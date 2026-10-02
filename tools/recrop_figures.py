@@ -334,7 +334,7 @@ def cmd_split(source: Path, min_gap: int, min_size: int, out: Optional[Path],
 # scan：批量预览候选框（splitpicture --panels），用于分诊“单图 / 多子图”
 # --------------------------------------------------------------------------
 def cmd_scan(target: Path, out: Optional[Path], jobs: int, min_side: int, splitpicture: str,
-             tight: bool = False) -> int:
+             tight: bool = False, recipe_out: Optional[Path] = None) -> int:
     if (target / "manifest.json").is_file():
         pdfdir = target
     elif (target / "pdfimages" / "manifest.json").is_file():
@@ -394,7 +394,54 @@ def cmd_scan(target: Path, out: Optional[Path], jobs: int, min_side: int, splitp
         if n >= 2 or nl > 0:
             print(f"{n:>6}{nl:>8}  {f}")
     print("说明：仅列出子图≥2 或检出标签的候选；请逐个打开 preview.png 核对后写入 recipe；单图不裁。")
+
+    # 可选：为多子图候选生成 .recrop.json 草稿（rect 取自 scan 结果，target 为占位名，
+    # 需人工按题号把 target 改成 figs/<题号><子图字母>.<ext> 后核对/apply）。
+    if recipe_out is not None:
+        base = _propose_figs_base(pdfdir)
+        if base is None:
+            print("[提示] 无法从路径推断 试卷/<年>/<地区>/figs，跳过 recipe 草稿。")
+        else:
+            entries = []
+            for n, _nl, f in rows:
+                if n < 2:
+                    continue
+                rects_path = out / Path(f).stem / "rects.json"
+                try:
+                    arr = json.loads(rects_path.read_text(encoding="utf-8"))
+                except (OSError, json.JSONDecodeError):
+                    continue
+                crops = []
+                for j, r in enumerate(arr):
+                    crops.append({
+                        "rect": [int(r["x"]), int(r["y"]), int(r["w"]), int(r["h"])],
+                        "target": f"{base}/{Path(f).stem}{chr(ord('a') + j)}.png",
+                    })
+                if crops:
+                    entries.append({
+                        "source": str((pdfdir / f).resolve().relative_to(ROOT)),
+                        "crops": crops,
+                        "trim": {"padding": 8},
+                    })
+            recipe_out.parent.mkdir(parents=True, exist_ok=True)
+            recipe_out.write_text(
+                json.dumps({"entries": entries}, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8")
+            print(f"recipe 草稿已写入：{rel(recipe_out)}（{len(entries)} 条；"
+                  "请把各 target 改名到 figs/<题号><子图字母>.png 并逐张核对后 apply）")
     return 0
+
+
+def _propose_figs_base(pdfdir: Path) -> Optional[str]:
+    """由 <...>/材料处理/<年>/<地区>/pdfimages 推断 试卷/<年>/<地区>/figs 前缀。"""
+    parts = pdfdir.resolve().parts
+    if "材料处理" not in parts:
+        return None
+    i = parts.index("材料处理")
+    if len(parts) < i + 3:
+        return None
+    year, region = parts[i + 1], parts[i + 2]
+    return f"试卷/{year}/{region}/figs"
 
 
 # --------------------------------------------------------------------------
@@ -781,6 +828,7 @@ def main(argv=None) -> int:
     p_scan.add_argument("--tight", action="store_true",
                         help="透传 splitpicture --tight（≥0.4）：收敛相互侵入的候选框；"
                              "仅分诊/预览用，会收缩框、可能切内容，勿作最终实裁框")
+    p_scan.add_argument("--recipe-out", help="为多子图候选生成 .recrop.json 草稿（占位 target，需人工改名）")
 
     args = parser.parse_args(argv)
     if args.cmd == "split":
@@ -794,7 +842,8 @@ def main(argv=None) -> int:
     if args.cmd == "scan":
         return cmd_scan(Path(args.target).resolve(),
                         Path(args.out).resolve() if args.out else None,
-                        args.jobs, args.min_side, args.splitpicture, args.tight)
+                        args.jobs, args.min_side, args.splitpicture, args.tight,
+                        Path(args.recipe_out).resolve() if args.recipe_out else None)
     if args.cmd == "apply":
         return cmd_apply(Path(args.recipe).resolve(), args.splitpicture)
     if args.cmd == "preview":

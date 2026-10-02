@@ -23,12 +23,13 @@
 | :--- | :--- | :--- |
 | `ocr_pipeline.sh` | 一键三路转换 + 生成 `merged.md` + 无损提图（**单份**） | `tools/ocr_pipeline.sh Docx/2026/2026_湖北.pdf 材料处理/2026/湖北` |
 | `ocr_batch.py` | **批量**材料处理驱动（`list`/`status`/`pdftotext`/`paddle`/`ovis`/`merge`/`extract`，可断点续跑；Ovis 单进程只加载一次模型） | `python3 tools/ocr_batch.py status` |
+| `ocr_pipeline_all.sh` | **全库一键编排**：pdftotext → Paddle（自动启停+健康检查）→ Ovis → merged → 提图；失败即停、断点续跑 | `bash tools/ocr_pipeline_all.sh`（或 `make material-batch`） |
 | `pdf_to_md.py` | 引擎甲 **OvisOCR2**（底本） | 见 `ocr_pipeline.sh` |
 | `PaddleOCR_PDF_to_md.py` | 引擎乙 **PaddleOCR-VL**（验证，服务化） | 见 `ocr_pipeline.sh` |
 | `paddlex_serve_start.sh` / `paddlex_serve_stop.sh` | 启动 / 关闭 PaddleOCR-VL 服务（默认端口 8203） | `./tools/paddlex_serve_start.sh` |
 | `material_merge.py` | 以 Ovis 为底本合并三路，生成/校验 `merged.md`（含底稿缺失/漂移守卫） | `python3 tools/material_merge.py --root 材料处理` |
-| `pdf_extract_images.py` | `pdfimages -all` **无损提取**原 PDF 内嵌图到 `pdfimages/` + `manifest.json` | `python3 tools/pdf_extract_images.py --root 材料处理` |
-| `check_material.py` | 材料**四要素**（ovis/paddle/pdftotext/merged）完整性、图片引用有效、底稿漂移 | `python3 tools/check_material.py` |
+| `pdf_extract_images.py` | `pdfimages -all` **无损提取**原 PDF 内嵌图到 `pdfimages/` + `manifest.json`；纯矢量页可加 `--render` 用 `pdftoppm` 整页渲染 | `python3 tools/pdf_extract_images.py --root 材料处理 --render` |
+| `check_material.py` | 材料**四要素**（ovis/paddle/pdftotext/merged）完整性、图片引用有效、底稿漂移、manifest 文件齐全、纯矢量页清单 | `python3 tools/check_material.py` |
 
 环境（可用环境变量覆盖，见脚本头）：
 
@@ -48,6 +49,9 @@
 常用：`scan`（分诊）→ `split`/`labels`（预览框）→ 写 recipe → `preview`（叠加核对）
 → `apply`（裁剪回填）→ 打开 `crop_compare/` 逐张核对。
 `splitpicture` 需在 `PATH`，或用 `SPLITPICTURE=/path/to/splitpicture` 指定。
+
+> **splitpicture 的完整用法（三种检测模式、标签擦除、CLI/GUI、调参与难例）见
+> [`splitpicture使用说明.md`](splitpicture使用说明.md)。**
 
 ## 四、TikZ 重绘核对
 
@@ -77,25 +81,28 @@
 
 每卷目录 `make check` 依次执行：
 
-1. `check_paper.py`（结构 / 13 项元数据 / 图片命令 / 标签 / 答案）；
-2. `check_content.py`（内容：裸单位 / 图片公式，并提示段落分行、中英文间距）；
-3. `textfix/textfix.py --check`（共性问题：全角冒号、公式连字符、`\dfrac`）；
-4. `check_layout_cmds.py`（版面微调命令：禁止原生断页 / 撑开命令）。
+1. `check_paper.py`（结构 / 13 项元数据 / 图片命令 / 标签 / 答案；并提示 `\onepicture` 有 label 无 num、同题重复引用同一图）；
+2. `check_content.py`（内容：裸单位 / 图片公式 / 数学模式内 CJK / `\mathrm{汉字}`，并提示段落分行、中英文间距）；
+3. `textfix/textfix.py --check`（共性问题：全角冒号、公式连字符、en/em 破折号、`\dfrac`）；
+4. `check_layout_cmds.py`（版面微调命令：禁止原生断页 / 撑开命令）；
+5. `check_glyphs.py`（编译日志缺字 `Missing character`，如 `\mathrm` 内汉字丢字）；
+6. `check_review.py`（成品跨项复查：解析引图必在、选择题三处答案一致、与 JSON 答案一致、`\ref` 已定义）。
 
 根目录 `make check` 在各卷之上再执行：
 
-5. `check_tikz.py`（TikZ 原图登记）；
-6. `check_recrop.py`（裁剪 recipe）；
-7. `check_material.py`（材料完整性）。
+7. `check_tikz.py`（TikZ 原图登记）；
+8. `check_recrop.py`（裁剪 recipe；并提示孤儿 figs）；
+9. `check_material.py`（材料完整性：四要素 / 图片引用 / manifest 文件齐全 / 纯矢量页清单）；
+   并在全库范围再跑一遍 `check_glyphs.py` / `check_review.py` 作为兜底。
 
 ## 六、tools 单元测试
 
 ```bash
 make tools-test
 # 等价于：
-python3 -m unittest tools.textfix.test_textfix tools.test_check_recrop \
-    tools.test_check_tikz tools.test_match_figures \
-    tools.test_pdf_extract_images tools.test_recrop_figures
+python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch \
+    tools.test_check_content tools.test_check_recrop tools.test_check_tikz \
+    tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures
 ```
 
-覆盖正则规则 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 / 裁剪回填等纯函数与端到端逻辑。
+覆盖正则规则（含裸单位）/ 批量映射 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 / 裁剪回填等纯函数与端到端逻辑。

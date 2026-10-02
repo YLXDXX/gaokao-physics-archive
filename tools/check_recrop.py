@@ -59,7 +59,7 @@ IMG_SUFFIXES = {".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff"}
 # 扩展名 → 期望的文件头类型（用于发现“字节与扩展名不符”，如把 PNG 存成 .jpg）
 SUFFIX_KIND = {".jpg": "jpeg", ".jpeg": "jpeg", ".png": "png",
                ".bmp": "bmp", ".tif": "tiff", ".tiff": "tiff"}
-FIGS_REF_RE = re.compile(r"figs/([^}\s]+?)\.(?:jpg|jpeg|png)", re.I)
+FIGS_REF_RE = re.compile(r"figs/([A-Za-z0-9_\-]+)", re.I)
 
 
 def _resolve(path_str: str) -> Path:
@@ -272,6 +272,17 @@ def check_recipe(path: Path) -> Tuple[List[str], List[str]]:
         if not compare_dir.is_dir() or not list(compare_dir.glob("*_裁剪前后.png")):
             warnings.append(f"{rel}: 未发现 crop_compare/*_裁剪前后.png（可能尚未 apply；"
                             "该目录 Git 忽略）")
+
+    # 孤儿 figs：既非本 recipe 的 target、也未被本目录 .tex 引用（疑似残留子图/错误产物）
+    figs_dir = directory / "figs"
+    if figs_dir.is_dir():
+        exts = IMG_SUFFIXES | {".svg"}
+        all_figs = {p.stem for p in figs_dir.iterdir()
+                    if p.suffix.lower() in exts and p.is_file()}
+        covered = {_resolve(t).stem for t in seen_targets}
+        orphans = sorted(all_figs - covered - referenced)
+        for o in orphans:
+            warnings.append(f"figs/{o} 既非本 recipe 的 target 也未被 .tex 引用（疑似残留）")
 
     return errors, warnings
 

@@ -44,6 +44,18 @@ def _merge_math_hyphen(match: "re.Match[str]") -> str:
     return "$" + text[1:-1].replace("$", "") + "$"
 
 
+def _merge_math_dash(match: "re.Match[str]") -> str:
+    """把 ``$A$–$B$`` / ``$A$—$B$`` / ``$A$~$B$`` 规范为 ``$A-B$``。
+
+    连接用的 en-dash（U+2013）、em-dash（U+2014）与波浪号统一并入公式并归一为 ASCII 连字符。
+    """
+    text = match.group(0)
+    inner = text[1:-1].replace("$", "")
+    for dash in ("\u2013", "\u2014", "~", "\uff5e"):
+        inner = inner.replace(dash, "-")
+    return "$" + inner + "$"
+
+
 RULES: List[Rule] = [
     Rule(
         name="digit-colon-digit",
@@ -60,6 +72,14 @@ RULES: List[Rule] = [
         # 仅匹配“公式-公式”形式：$x$ 与 $t$、$-5$、$a$-b 等不受影响。
         pattern=re.compile(r"\$[^$\n]+\$(?:-\$[^$\n]+\$)+"),
         replacement=_merge_math_hyphen,
+    ),
+    Rule(
+        name="math-dash-merge",
+        description="相邻行内公式之间的 en/em 破折号或波浪号应并入公式（如 $v$–$t$ → $v-t$）",
+        # 匹配 $A$–$B$、$A$—$B$、$A$~$B$（可链式），把中间的 $ 去掉、破折号归一为 '-'。
+        # 仅匹配“公式-公式”形式，正文中的中文破折号不受影响。
+        pattern=re.compile(r"\$[^$\n]+\$(?:[\u2013\u2014~\uff5e]\$[^$\n]+\$)+"),
+        replacement=_merge_math_dash,
     ),
     Rule(
         name="dfrac-to-frac",

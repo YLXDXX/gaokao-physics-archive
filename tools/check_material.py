@@ -31,6 +31,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from pathlib import Path
@@ -87,7 +88,8 @@ def check_images(doc: str, base: Path, problems: List[str], warnings: List[str])
         problems.append(f"{doc} 引用图片缺失：{r}")
 
 
-def check_dir(d: Path, problems: List[str], warnings: List[str]):
+def check_dir(d: Path, problems: List[str], warnings: List[str],
+              vector_dirs: List[Path] | None = None):
     # 1) 四要素存在且非空
     for rel, label in ELEMENTS:
         p = d / rel
@@ -112,9 +114,24 @@ def check_dir(d: Path, problems: List[str], warnings: List[str]):
             if cur.lower() != m.group(1).lower():
                 problems.append(f"底稿漂移（底稿已变、merged.md 未重建）：{d}")
 
-    # 4) 原 PDF 内嵌图是否已提取（供配图/裁剪；纯矢量页目录会存在但清单为空）
-    if ovis_p.is_file() and not (d / "pdfimages").is_dir():
+    # 4) 原 PDF 内嵌图是否已提取（供配图/裁剪），并核对 manifest 所列文件齐全
+    pdfimg = d / "pdfimages"
+    manifest = pdfimg / "manifest.json"
+    if ovis_p.is_file() and not pdfimg.is_dir():
         warnings.append(f"尚未提取原 PDF 内嵌图（可运行 make extract-images）：{d}")
+    elif manifest.is_file():
+        try:
+            data = json.loads(manifest.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            problems.append(f"pdfimages/manifest.json 无法解析：{d}")
+        else:
+            imgs = data.get("images", [])
+            for e in imgs:
+                f = e.get("file", "")
+                if not f or not (pdfimg / f).is_file():
+                    problems.append(f"pdfimages 缺清单所列文件 {f!r}：{d}")
+    elif pdfimg.is_dir() and vector_dirs is not None:
+        vector_dirs.append(d)
 
 
 def main(argv=None) -> int:
@@ -139,8 +156,9 @@ def main(argv=None) -> int:
 
     problems: List[str] = []
     warnings: List[str] = []
+    vector_dirs: List[Path] = []
     for d in dirs:
-        check_dir(d, problems, warnings)
+        check_dir(d, problems, warnings, vector_dirs)
 
     if not args.quiet:
         print(f"共检查处理目录 {len(dirs)} 个。")
@@ -148,6 +166,11 @@ def main(argv=None) -> int:
         print(f"[提示] {w}")
     for p in problems:
         print(f"[错误] {p}")
+    if vector_dirs and not args.quiet:
+        print(f"[信息] 纯矢量/无内嵌位图目录 {len(vector_dirs)} 个"
+              "（配图需 pdftoppm 整页渲染，可用 make extract-images 加 --render）：")
+        for d in vector_dirs:
+            print(f"    - {d.relative_to(ROOT) if str(d).startswith(str(ROOT)) else d}")
 
     if problems:
         print(f"\n结果：{len(problems)} 处问题 ❌")

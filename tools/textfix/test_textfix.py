@@ -130,6 +130,46 @@ class TestMathHyphenRule(unittest.TestCase):
         self.assertEqual(changes, [])
 
 
+class TestMathDashRule(unittest.TestCase):
+    """规则 math-dash-merge：$A$–$B$ → $A-B$。"""
+
+    def assert_fixed(self, src, expected):
+        out, _ = fix_text(src)
+        self.assertEqual(out, expected)
+
+    # -- 应当命中 ---------------------------------------------------------
+    def test_en_dash(self):
+        self.assert_fixed("$v$\u2013$t$ 图像", "$v-t$ 图像")
+
+    def test_em_dash(self):
+        self.assert_fixed("$x$\u2014$y$", "$x-y$")
+
+    def test_tilde(self):
+        self.assert_fixed("$a$~$b$", "$a-b$")
+
+    def test_chain(self):
+        self.assert_fixed("$a$\u2013$b$\u2013$c$", "$a-b-c$")
+
+    # -- 不应命中 ---------------------------------------------------------
+    def test_chinese_dash_kept(self):
+        self.assert_fixed("他说—这是重点。", "他说—这是重点。")
+
+    def test_plain_formula_kept(self):
+        self.assert_fixed("$x$ 与 $t$", "$x$ 与 $t$")
+
+    # -- 统计与幂等 -------------------------------------------------------
+    def test_change_count(self):
+        _, changes = fix_text("$v$\u2013$t$ 与 $x$\u2013$y$")
+        self.assertEqual(changes, [("math-dash-merge", 2)])
+
+    def test_idempotent(self):
+        once, _ = fix_text("$v$\u2013$t$")
+        twice, changes = fix_text(once)
+        self.assertEqual(once, "$v-t$")
+        self.assertEqual(once, twice)
+        self.assertEqual(changes, [])
+
+
 class TestDfracRule(unittest.TestCase):
     """规则 dfrac-to-frac：\\dfrac → \\frac。"""
 

@@ -1,0 +1,21 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2026/四川/pdfimages/p7_6.jpg",
+      "crops": [
+        {"rect": [0, 0, 900, 608], "target": "试卷/2026/四川/figs/11a.png"},
+        {"rect": [900, 0, 744, 608], "target": "试卷/2026/四川/figs/11b.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2026/四川/pdfimages/p8_7.jpg",
+      "crops": [
+        {"rect": [0, 0, 410, 395], "target": "试卷/2026/四川/figs/12a.png"},
+        {"rect": [410, 0, 540, 395], "target": "试卷/2026/四川/figs/12b.png"},
+        {"rect": [950, 0, 250, 395], "target": "试卷/2026/四川/figs/12c.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

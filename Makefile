@@ -45,7 +45,7 @@ define RUN_DIRS
 endef
 
 .PHONY: all student teacher tikz tikz-compare check check-tikz check-recrop links \
-        clean distclean material material-merge extract-images check-material tools-test
+        clean distclean material material-batch material-merge extract-images check-material tools-test
 
 all:
 	$(call RUN_DIRS,$(PAPERS),all)
@@ -71,6 +71,10 @@ check:
 	@python3 tools/check_recrop.py
 	@echo "===== 材料处理产物完整性检查 ====="
 	@python3 tools/check_material.py
+	@echo "===== 编译日志缺字检查 ====="
+	@python3 tools/check_glyphs.py
+	@echo "===== 成品跨项复查 ====="
+	@python3 tools/check_review.py
 
 check-tikz:
 	@python3 tools/check_tikz.py
@@ -78,16 +82,22 @@ check-tikz:
 check-recrop:
 	@python3 tools/check_recrop.py
 
-# 工具单元测试（共性问题修正 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 / 裁剪回填）
+# 工具单元测试（共性问题修正 / 批量映射 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 / 裁剪回填）
 tools-test:
 	@echo "===== tools 单元测试 ====="
-	@python3 -m unittest tools.textfix.test_textfix tools.test_check_recrop tools.test_check_tikz tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures
+	@python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures
 
 # 材料处理管线（需 Conda 环境 / PaddleOCR-VL 服务；详见 材料处理与OCR规范.md）
 material:
 	@[ -n "$(PDF)" ] && [ -n "$(OUT)" ] || { \
 		echo "用法: make material PDF=<源PDF> OUT=材料处理/<年>/<地区>"; exit 1; }
 	bash tools/ocr_pipeline.sh "$(PDF)" "$(OUT)"
+
+# 全库/多卷一键编排（五阶段，失败即停、断点续跑；参数经 ARGS 透传）
+#   例：make material-batch ARGS="--year 2026"
+#       make material-batch ARGS="--force"
+material-batch:
+	@bash tools/ocr_pipeline_all.sh $(ARGS)
 
 material-merge:
 	@python3 tools/material_merge.py --root 材料处理

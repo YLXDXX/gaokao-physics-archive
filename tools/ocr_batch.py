@@ -45,6 +45,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import subprocess
@@ -122,6 +123,32 @@ def nonempty(p: Path) -> bool:
     return p.is_file() and p.stat().st_size > 0
 
 
+def pdfimages_ok(d: Path) -> bool:
+    """pdfimages 阶段是否完成：有 manifest 时校验所列图片文件齐全；无 manifest 的
+    纯矢量/无内嵌图目录，只要 pdfimages/ 目录存在即视为完成。"""
+    p = d / "pdfimages"
+    if not p.is_dir():
+        return False
+    man = p / "manifest.json"
+    if not man.is_file():
+        return True
+    try:
+        data = json.loads(man.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    return all((p / e.get("file", "")).is_file() for e in data.get("images", []))
+
+
+def run_retry(cmd, tries: int = 2):
+    """执行命令，非零退出码时重试（瞬态故障，如服务抖动）。返回最后一次 CompletedProcess。"""
+    last = None
+    for _ in range(max(1, tries)):
+        last = subprocess.run(cmd, capture_output=True, text=True)
+        if last.returncode == 0:
+            return last
+    return last
+
+
 # --------------------------------------------------------------------------
 # 各阶段
 # --------------------------------------------------------------------------
@@ -138,8 +165,7 @@ def cmd_status(items, args) -> int:
         "paddle": lambda d: nonempty(d / "paddle" / "output.md"),
         "ovis": lambda d: nonempty(d / "ovis" / "output.md"),
         "merged": lambda d: nonempty(d / "merged.md"),
-        "pdfimages": lambda d: (d / "pdfimages" / "manifest.json").is_file()
-                              or (d / "pdfimages").is_dir(),
+        "pdfimages": pdfimages_ok,
     }
     counts = {k: 0 for k in stages}
     done_all = 0
@@ -194,9 +220,9 @@ def cmd_paddle(items, args) -> int:
             continue
         (out / "paddle").mkdir(parents=True, exist_ok=True)
         print(f"[{i}/{len(todo)}] Paddle ← {pdf.relative_to(ROOT)}", flush=True)
-        r = subprocess.run(
+        r = run_retry(
             [PADDLE_PYTHON, str(script), "-i", str(pdf), "-o", str(out / "paddle"), "-q"],
-            capture_output=True, text=True,
+            tries=2,
         )
         if r.returncode != 0 or not nonempty(out / "paddle" / "output.md"):
             print(f"   [失败] rc={r.returncode} {(r.stderr or '')[-400:]}")
@@ -252,11 +278,17 @@ def cmd_ovis(items, args) -> int:
         print(f"[{i}/{len(todo)}] Ovis ← {pdf.relative_to(ROOT)}", flush=True)
         ns.input = str(pdf)
         ns.output = str(out / "ovis")
-        try:
-            ok = proc.process_pdf(pdf)
-        except Exception as e:  # pragma: no cover
-            print(f"   [异常] {e}")
-            ok = False
+        ok = False
+        for attempt in (1, 2):
+            try:
+                ok = proc.process_pdf(pdf)
+            except Exception as e:  # pragma: no cover
+                print(f"   [异常 {attempt}] {e}")
+                ok = False
+            if ok and nonempty(out / "ovis" / "output.md"):
+                break
+            if attempt == 1:
+                print(f"   [重试] {pdf.relative_to(ROOT)}")
         if ok and nonempty(out / "ovis" / "output.md"):
             n_ok += 1
         else:

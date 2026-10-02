@@ -89,6 +89,10 @@ check:
 		python3 "$(ROOT)/tools/textfix/textfix.py" --check "$$d.tex" || exit 1; \
 		echo ">> 版面微调命令：$$d"; \
 		python3 "$(ROOT)/tools/check_layout_cmds.py" "$$d.tex" || exit 1; \
+		echo ">> 缺字检查：$$d"; \
+		python3 "$(ROOT)/tools/check_glyphs.py" . || exit 1; \
+		echo ">> 成品跨项复查：$$d"; \
+		python3 "$(ROOT)/tools/check_review.py" "$$d.tex" || exit 1; \
 	done
 
 # 生成「重绘 TikZ 与原图」对比图（tikz_compare/，供人工核对；见 tools/tikz_compare.py）

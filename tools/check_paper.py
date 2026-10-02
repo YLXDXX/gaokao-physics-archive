@@ -13,7 +13,7 @@
    且含 ``\\chapter{...}``；
 2. 图片命令：必须使用 ChoiceQuestion 的图片命令，禁止旧式 ``figure`` / ``subfigure`` /
    ``\\subref`` / ``pic/`` / ``tikz/``；
-3. 元数据块：每个顶层 ``\\item`` 之后紧跟 12 项固定顺序的 ``%% 字段:`` 注释；
+3. 元数据块：每个顶层 ``\\item`` 之后紧跟 13 项固定顺序的 ``%% 字段:`` 注释；
 4. 引用标签：``label=YYYY地区QQx`` / ``\\label{...}`` 形如 ``2025湖北10b``，且 ``\\ref``
    都能在本文档找到对应标签；
 5. 图片可寻：引用的 ``figs/…``、``TikZ/…`` 文件确实存在；
@@ -35,7 +35,7 @@ FIELDS = [
     "number", "paperName", "typeId", "type", "chapter", "point",
     "method", "score", "degree", "duplicateId", "body", "answer", "memo",
 ]
-LABEL_RE = re.compile(r"^20\d{2}.+\d{2}[a-z]?$")
+LABEL_RE = re.compile(r"^(?:19|20)\d{2}.+\d{2}[a-z]?$")
 IMG_REF_RE = re.compile(r"(figs/[A-Za-z0-9_\-]+|TikZ/[A-Za-z0-9_\-]+)")
 
 
@@ -52,8 +52,9 @@ def collect_tex(paths: list[Path]) -> list[Path]:
     return files
 
 
-def check_one(path: Path) -> list[str]:
+def check_one(path: Path) -> tuple[list[str], list[str]]:
     errs: list[str] = []
+    warns: list[str] = []
     base = path.parent
     text = path.read_text(encoding="utf-8")
     lines = text.splitlines()
@@ -111,6 +112,11 @@ def check_one(path: Path) -> list[str]:
                 )
             else:
                 errs.append(f"第 {qnum} 题缺少详解 \\memoanswer{{}}")
+        # 警告：同一题内重复引用同一图片（如解析图与答案图重复插入）
+        imgs = re.findall(r"(figs/[A-Za-z0-9_\-]+|TikZ/[A-Za-z0-9_\-]+)", block_text)
+        dup = sorted({x for x in imgs if imgs.count(x) > 1})
+        if dup:
+            warns.append(f"第 {qnum} 题重复引用同一图片：{', '.join(dup)}")
 
     # 4. 标签（仅取图片命令选项里的 label/labelA..labelI 与 \label{}）
     PIC_CMD_RE = re.compile(
@@ -127,6 +133,17 @@ def check_one(path: Path) -> list[str]:
     for ref in set(re.findall(r"\\ref\{([^}]+)\}", text)):
         if ref not in defined:
             errs.append(f"\\ref{{{ref}}} 在本文档中找不到对应 label")
+
+    # 警告：\onepicture 给了 label 却未给 num/fig —— 单图自动编号恒为“a”，
+    # 易与其它单图（或 \twopicture 的首图）冲突，导致 \ref 显示错误的“图a”。
+    for m in re.finditer(r"\\onepicture\s*\[([^\]]*)\]", text):
+        opts = m.group(1)
+        has_label = re.search(r"(?<![A-Za-z])label[A-I]?=", opts)
+        has_num = re.search(r"(?<![A-Za-z])(?:num|fig|fignum)[A-I]?=", opts)
+        if has_label and not has_num:
+            warns.append(
+                "\\onepicture 给了 label 但未给 num/fig：\\ref 将显示自动编号“a”，"
+                "易与其它图冲突（建议显式 num=…）")
 
     # 5. 图片文件存在
     def resolve(rel: str) -> bool:
@@ -146,7 +163,7 @@ def check_one(path: Path) -> list[str]:
     if qstarts and not re.search(r"\\xzanswer|\\tkanswer|\\jdanswer", text):
         errs.append("题目中缺少答案命令（\\xzanswer/\\tkanswer/\\jdanswer）")
 
-    return errs
+    return errs, warns
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -160,9 +177,12 @@ def main(argv: list[str] | None = None) -> int:
     else:
         files = collect_tex([ROOT / "试卷"])
 
-    total_err = 0
+    total_err = total_warn = 0
     for f in files:
-        errs = check_one(f)
+        errs, warns = check_one(f)
+        for w in warns:
+            print(f"[提示] {f}: {w}")
+            total_warn += 1
         if errs:
             total_err += len(errs)
             print(f"[错误] {f}")
@@ -171,9 +191,9 @@ def main(argv: list[str] | None = None) -> int:
         else:
             print(f"[通过] {f}")
     if total_err:
-        print(f"\n共发现 {total_err} 处问题。")
+        print(f"\n共发现 {total_err} 处问题（{total_warn} 处提示）。")
         return 1
-    print(f"\n共检查 {len(files)} 个文件，全部通过。")
+    print(f"\n共检查 {len(files)} 个文件，全部通过（{total_warn} 处提示）。")
     return 0
 
 
