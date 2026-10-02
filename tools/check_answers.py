@@ -23,7 +23,7 @@ import argparse
 import re
 import sys
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 ROOT = Path(__file__).resolve().parent.parent
 CHOICE_IDS = {1, 2}
@@ -42,10 +42,27 @@ def collect_tex(paths: List[Path]) -> List[Path]:
 
 
 def _count_items(text: str) -> int:
-    """统计文本中的 `\\item` 数（排除 steps / itemize / description 等非小问列表）。"""
+    """统计**最外层 enumerate** 的 `\\item` 数（即小问数）。
+
+    排除 steps / itemize / description 等非小问列表；并按 `enumerate` 嵌套
+    深度只取最浅一层的 `\\item`，避免把子-子列表的项也算成小问（旧实现用
+    `re.findall(r"\\item")` 会重复计数）。
+    """
     text = re.sub(
         r"\\begin\{(steps|itemize|description)\}.*?\\end\{\1\}", "", text, flags=re.S)
-    return len(re.findall(r"\\item\b", text))
+    depth = 0
+    counts: Dict[int, int] = {}
+    for tok in re.finditer(r"\\begin\{enumerate\}|\\end\{enumerate\}|\\item\b", text):
+        t = tok.group(0)
+        if t.startswith("\\begin"):
+            depth += 1
+        elif t.startswith("\\end"):
+            depth = max(0, depth - 1)
+        elif depth >= 1:  # 只统计 enumerate 内的 \item
+            counts[depth] = counts.get(depth, 0) + 1
+    if not counts:
+        return 0
+    return counts[min(counts)]
 
 
 def check_file(tex: Path) -> Tuple[List[str], List[str]]:

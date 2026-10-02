@@ -17,29 +17,30 @@
     # 显式指定输出目录；--force 覆盖已存在的 .tex
     python3 tools/json_to_tex.py JSON/2026/2026_云南.json --out 试卷/2026/云南 --force
 
-    # 理综节选：加卷级标记（保留平台原题号，显示序号由 enumerate 自动生成）
-    # 注意：--renumber 会改写 %% number，使 check_meta.py（要求与 JSON 原题号一致）
-    #       失败，制卷时通常不用。
+    # 理综节选：加卷级标记（默认保留平台原题号，显示序号由 enumerate 自动生成）
     python3 tools/json_to_tex.py JSON/2000/2000_天津.json --paper-type 理综物理部分
 
-    # 只导出基础材料（图 + markdown），不生成 tex
-    python3 tools/json_to_tex.py JSON/2026/2026_湖北.json --material-only
+    # --renumber：把 %% number 重编为 1..N，并在卷级写 %% sourceNumbers 记录原题号；
+    #             check_meta / check_review 会按 sourceNumbers 映射回平台原题号。
+    python3 tools/json_to_tex.py JSON/2000/2000_天津.json --renumber --paper-type 理综物理部分
 
-初稿已尽量贴近规范：缺 `memo` 自动写占位 `\\memoanswer`；非选择题按小问生成
+初稿已尽量贴近规范：HTML/公式转换用 `tools/html2latex.py`（DOM 解析，正确处理
+上下标、表格与公式片段合并）；缺 `memo` 自动写占位 `\\memoanswer`；非选择题按小问生成
 `\\jdanswer`（多小问 → `enumerate`）；同题多图 → `\\twopicture…`；图片选项 →
-`\\fourchoices[ispicture=true]`；`（A）`/`A．` 选项均可解析；理综节选加 `--paper-type`
-（不用 `--renumber`，以免与 `check_meta.py` 冲突）。
+`\\fourchoices[ispicture=true]`；`（A）`/`A．` 选项均可解析。
 但仍须对照 `merged.md` 与原 PDF 逐题校对重写。
 """
 from __future__ import annotations
 
 import argparse
-import html as _html
 import json
 import re
 import shutil
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from html2latex import HtmlToLatex  # noqa: E402  (同目录移植模块)
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -47,20 +48,6 @@ FIELDS_ORDER = [
     "number", "paperName", "typeId", "type", "chapter", "point", "method",
     "score", "degree", "duplicateId", "body", "answer", "memo",
 ]
-
-GREEK = {
-    "alpha": "\\alpha", "beta": "\\beta", "gamma": "\\gamma", "delta": "\\delta",
-    "epsilon": "\\epsilon", "theta": "\\theta", "lambda": "\\lambda", "mu": "\\mu",
-    "nu": "\\nu", "pi": "\\pi", "rho": "\\rho", "sigma": "\\sigma", "tau": "\\tau",
-    "phi": "\\varphi", "omega": "\\omega", "Delta": "\\Delta", "Omega": "\\Omega",
-}
-
-ENTITY_MAP = {
-    "&times;": "$\\times$", "&minus;": "-", "&ge;": "$\\ge$", "&le;": "$\\le$",
-    "&ne;": "$\\ne$", "&deg;": "$^\\circ$", "&infin;": "$\\infty$",
-    "&sum;": "$\\sum$", "&radic;": "$\\sqrt{}$", "&asymp;": "$\\approx$",
-    "&rarr;": "$\\to$", "&harr;": "$\\leftrightarrow$",
-}
 
 # 常见复合单位的保守预映射（→ PhyUnit 宏），减少初稿中的裸单位。
 # 仅匹配“不可能被当作变量运算”的复合单位，单字母单位（m/s/kg…）不在此处理。
@@ -80,66 +67,20 @@ def units_to_phyunit(s: str) -> str:
     return s
 
 
-def unescape_entities(s: str) -> str:
-    for k, v in ENTITY_MAP.items():
-        s = s.replace(k, v)
-    for name, tex in GREEK.items():
-        s = s.replace(f"&{name};", f"${tex}$")
-    s = s.replace("&nbsp;", " ").replace("&ensp;", " ").replace("&emsp;", " ")
-    s = s.replace("&ldquo;", "“").replace("&rdquo;", "”")
-    s = s.replace("&lsquo;", "‘").replace("&rsquo;", "’")
-    s = _html.unescape(s)
-    return s
-
-
-# 早期（如 2000 年）试卷常用的全角数学/标点符号 → 半角
-FULLWIDTH_MAP = {
-    "＞": ">", "＜": "<", "＝": "=", "＋": "+", "－": "-", "ー": "-",
-    "−": "-", "–": "-", "×": "$\\times$", "÷": "$\\div$",
-    "∶": ":", "∽": "$\\sim$", "≈": "$\\approx$", "≠": "$\\ne$",
-    "≤": "$\\le$", "≥": "$\\ge$", "∞": "$\\infty$", "°": "$^\\circ$",
-    "Ω": "$\\Omega$", "μ": "$\\mu$", "ρ": "$\\rho$", "π": "$\\pi$",
-    "θ": "$\\theta$", "α": "$\\alpha$", "β": "$\\beta$", "γ": "$\\gamma$",
-    "λ": "$\\lambda$", "Δ": "$\\Delta$", "φ": "$\\varphi$",
-    "√": "$\\sqrt{}$", "⊥": "$\\perp$", "∥": "$\\parallel$",
-}
-
-
 def html_to_tex(s: str) -> str:
+    """HTML（含 MathJax 公式）→ LaTeX 文本。
+
+    改用移植自 `grabgaokao/texgen` 的 DOM 转换器 `HtmlToLatex`：正确处理
+    `<em>`/`<sub>`/`<sup>`/表格/公式片段合并，避免旧正则产生的
+    `1$0^{23}$`、`m$_{1}$` 之类破损。图片由调用方单独处理（此处剥离）。
+    """
     if not s:
         return ""
     s = s.replace("\r\n", "\n").replace("\r", "\n")
-    # 平台用 \(...\) 表示行内公式
-    s = re.sub(r"\\\((.*?)\\\)", r"$\1$", s, flags=re.S)
-    s = unescape_entities(s)
-    for k, v in FULLWIDTH_MAP.items():
-        s = s.replace(k, v)
-    # 去掉直接包裹上/下标的 <em>（平台常把上标整体包在 em 里）
-    s = re.sub(r"<em>\s*((?:<su[bp]>.*?</su[bp]>)+)\s*</em>", r"\1", s, flags=re.S)
-    # 变量 + 上下标：<em>R</em><sub>0</sub> -> $R_{0}$
-    s = re.sub(r"<em>\s*(.*?)\s*</em>\s*<sub>\s*(.*?)\s*</sub>", r"$\1_{\2}$", s, flags=re.S)
-    s = re.sub(r"<em>\s*(.*?)\s*</em>\s*<sup>\s*(.*?)\s*</sup>", r"$\1^{\2}$", s, flags=re.S)
-    # 核素等前/后置上下标：<sup>90</sup><sub>39</sub> -> $^{90}_{39}$
-    s = re.sub(r"<sup>\s*(.*?)\s*</sup>\s*<sub>\s*(.*?)\s*</sub>", r"$^{\1}_{\2}$", s, flags=re.S)
-    s = re.sub(r"<sub>\s*(.*?)\s*</sub>\s*<sup>\s*(.*?)\s*</sup>", r"$_{\1}^{\2}$", s, flags=re.S)
-    # 普通上下标（带底数）
-    s = re.sub(r"([A-Za-z0-9])\s*<sub>\s*(.*?)\s*</sub>", r"$\1_{\2}$", s, flags=re.S)
-    s = re.sub(r"([A-Za-z0-9])\s*<sup>\s*(.*?)\s*</sup>", r"$\1^{\2}$", s, flags=re.S)
-    # 变量
-    s = re.sub(r"<em>\s*(.*?)\s*</em>", r"$\1$", s, flags=re.S)
-    # 孤立上下标
-    s = re.sub(r"<sub>\s*(.*?)\s*</sub>", r"$_{\1}$", s, flags=re.S)
-    s = re.sub(r"<sup>\s*(.*?)\s*</sup>", r"$^{\1}$", s, flags=re.S)
-    s = re.sub(r"<strong>\s*(.*?)\s*</strong>", r"\\textbf{\1}", s, flags=re.S)
-    s = re.sub(r"<u>\s*(.*?)\s*</u>", r"\\underline{\1}", s, flags=re.S)
-    s = re.sub(r"<br\s*/?>", "\n", s)
-    s = re.sub(r"</?(?:span|div|p|tbody|tr|td|table)[^>]*>", " ", s)
-    s = re.sub(r"<[^>]+>", "", s)
-    s = s.replace("$$", "$")  # 合并相邻行内公式产生的空 $
-    s = re.sub(r"[ \t]+", " ", s)
-    s = re.sub(r"\n{3,}", "\n\n", s)
-    s = units_to_phyunit(s)
-    return s.strip()
+    out = HtmlToLatex(images=None).convert(s)
+    out = out.replace("\\dfrac", "\\frac")  # 规范禁用 \dfrac
+    out = units_to_phyunit(out)
+    return out.strip()
 
 
 def split_paragraphs(body: str) -> list[str]:
@@ -226,8 +167,7 @@ def _emit_images(names: list[str], *, align: str | None = None,
 
 
 def process_paper(json_path: Path, out_dir: Path, *, force: bool,
-                  material_only: bool, renumber: bool = False,
-                  paper_type: str = "", material_root: Path | None = None) -> int:
+                  renumber: bool = False, paper_type: str = "") -> int:
     data = json.loads(json_path.read_text(encoding="utf-8"))
     m = re.match(r"(\d{4})_(.+)\.json$", json_path.name)
     if not m:
@@ -239,7 +179,7 @@ def process_paper(json_path: Path, out_dir: Path, *, force: bool,
     figs_dir = out_dir / "figs"
     figs_dir.mkdir(parents=True, exist_ok=True)
     tex_path = out_dir / f"{region}.tex"
-    if tex_path.exists() and not force and not material_only:
+    if tex_path.exists() and not force:
         print(f"[跳过] {tex_path} 已存在（--force 覆盖）")
         return 0
 
@@ -258,7 +198,6 @@ def process_paper(json_path: Path, out_dir: Path, *, force: bool,
         src_nums = ", ".join(str(it.get("number")) for it in items)
         lines.append(f"%% sourceNumbers: {src_nums}")
     lines.extend(["", "\\begin{enumerate}"])
-    material: list[str] = [f"# {title} 基础材料（由 JSON 生成，仅供校对）", ""]
     warnings: list[str] = []
 
     for idx, it in enumerate(items, start=1):
@@ -403,7 +342,8 @@ def process_paper(json_path: Path, out_dir: Path, *, force: bool,
         # ---- 详解：缺则占位 ----
         lines.append("%% memo:")
         memo = convert_memo(memo_html)
-        if not memo:
+        # 平台常把“无解析”写成 “无”/“没有”/“-” 等，也应视为缺详解
+        if not memo or re.fullmatch(r"[无沒有没有\-—–.。、\s]+", memo):
             memo = MEMO_PLACEHOLDER
             warnings.append(f"第 {num} 题 JSON 无详解，已写占位")
         lines.append("\\memoanswer{")
@@ -411,26 +351,13 @@ def process_paper(json_path: Path, out_dir: Path, *, force: bool,
         lines.append("}")
         lines.append("")
 
-        material.append(f"## 第 {num} 题（{type_name}）")
-        material.append("- 图片：" + (", ".join(img_names) if img_names else "无"))
-        material.append(f"- 答案：{convert_answer(answer_html, is_choice)}")
-        material.append(f"- 题干：\n\n{stem or '(空)'}")
-        if memo and memo != MEMO_PLACEHOLDER:
-            material.append(f"- 解析：\n\n{memo}")
-        material.append("")
-
     lines.append("\\end{enumerate}")
     lines.append("")
     lines.append("\\end{document}")
     lines.append("")
 
-    if not material_only:
-        tex_path.write_text("\n".join(lines), encoding="utf-8")
-        print(f"[完成] 初稿 {tex_path}")
-    mat_dir = (material_root or ROOT) / "材料处理" / year / region
-    mat_dir.mkdir(parents=True, exist_ok=True)
-    (mat_dir / "json_material.md").write_text("\n".join(material), encoding="utf-8")
-    print(f"[完成] 材料 {mat_dir / 'json_material.md'}；图片 {len(list(figs_dir.glob('*')))} 张")
+    tex_path.write_text("\n".join(lines), encoding="utf-8")
+    print(f"[完成] 初稿 {tex_path}；图片 {len(list(figs_dir.glob('*')))} 张")
     if warnings:
         print("[需人工核验]")
         for w in dict.fromkeys(warnings):
@@ -443,7 +370,6 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("json", type=Path, help="JSON 文件路径（JSON/<年>/<...>.json）")
     ap.add_argument("--out", type=Path, default=None, help="输出试卷目录（缺省按年份/地区推断）")
     ap.add_argument("--force", action="store_true", help="覆盖已存在的 .tex 与图片")
-    ap.add_argument("--material-only", action="store_true", help="只导出图片与材料 markdown")
     ap.add_argument("--renumber", action="store_true",
                     help="题号按顺序重编 1..N（原题号记入卷级 %% sourceNumbers）；慎用："
                          "会改写 %% number，与 check_meta.py（要求与 JSON 一致）冲突")
@@ -463,7 +389,6 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         out_dir = ROOT / "试卷" / m.group(1) / m.group(2)
     return process_paper(json_path, out_dir, force=args.force,
-                         material_only=args.material_only,
                          renumber=args.renumber, paper_type=args.paper_type)
 
 

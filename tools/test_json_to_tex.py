@@ -25,8 +25,7 @@ def _build(tmp: Path, items: list[dict], imgs: dict[str, bytes] | None = None) -
 
 def _gen(tmp: Path, items, imgs=None, **kw) -> str:
     jp, out = _build(tmp, items, imgs)
-    json_to_tex.process_paper(jp, out, force=True, material_only=False,
-                              material_root=tmp, **kw)
+    json_to_tex.process_paper(jp, out, force=True, **kw)
     return (out / "测试.tex").read_text(encoding="utf-8")
 
 

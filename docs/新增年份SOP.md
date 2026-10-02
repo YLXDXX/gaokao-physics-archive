@@ -10,8 +10,9 @@
    非选择题 `\jdanswer`、多图/图片选项；**理综 / 理基节选**加 `--paper-type 理综物理部分`）。
    新建卷目录还需复制一份 `Makefile`（模板见任一已有卷）并
    `python3 tools/tex_links.py 试卷/<年>/<地区>` 建立公共文件软链接。
-   > 元数据 `%% number` **保留平台原题号**（`check_meta.py` 要求与 JSON 一致），显示序号由
-   > `enumerate` 自动生成；**不要**用 `--renumber`（它会改写 `%% number`，使 `check_meta` 失败）。
+   > 默认元数据 `%% number` **保留平台原题号**（显示序号由 `enumerate` 自动生成）。
+   > 若确需重编号，用 `--renumber`：会写卷级 `%% sourceNumbers`，`check_meta.py` /
+   > `check_review.py` 会按该映射回平台原题号比对。
 2. **材料处理**（有 PDF 时）：`make material PDF=Docx/<年>/<年_地区>.pdf OUT=材料处理/<年>/<地区>`；
    无 PDF 时登记到 `异常记录.md` 的“源文档缺失清单”，仅依 JSON 制作。
 3. **逐题校对**：以 `merged.md` / JSON / 原 PDF 为准，核对题干、数据、单位、上下标、公式、选项与答案、

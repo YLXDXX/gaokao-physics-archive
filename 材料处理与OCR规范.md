@@ -133,6 +133,8 @@ python3 tools/recrop_figures.py apply   试卷/2026/云南/.recrop.json      # �
 - **SVG 复合图**：在 Inkscape 中人工拆分导出子图（本项目暂不做自动矢量拆分）。
 - 拆分后按 `figs/<题号><子图字母>.<ext>` 命名回填；子图**不得含**自带编号标签
   （`甲/乙/丙`、`A/B/C/D`），编号由 `ChoiceQuestion` 自动生成。
+- **无法无损拆分**的复合图（子图相互连接、无空白带、元素交织）：允许以**原图整体呈现**，
+  但须在 `异常记录/<年份>.md` 登记（见 `高考物理真题制作规范.md` 第五节）；不得 TikZ 重绘。
 
 > `splitpicture` 自身的完整用法（三种检测模式 `--panels/--options/--detect`、标签检测
 > 与 `--erase-labels`、CLI 与 GUI、难例调参）见 [`tools/splitpicture使用说明.md`](tools/splitpicture使用说明.md)。

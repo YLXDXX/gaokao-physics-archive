@@ -63,6 +63,12 @@ def infer_json(tex: Path) -> Optional[Path]:
     return ROOT / "JSON" / year / f"{year}_{region}.json"
 
 
+def parse_source_numbers(text: str) -> List[int]:
+    """解析卷级 `%% sourceNumbers: 17, 19, ...`（--renumber 写入）；无则返回 []。"""
+    m = re.search(r"^%%\s*sourceNumbers\s*[:：]\s*(.+)$", text, re.M)
+    return [int(x) for x in re.findall(r"\d+", m.group(1))] if m else []
+
+
 def json_answers(tex: Path) -> Dict[int, str]:
     jp = infer_json(tex)
     if not jp or not jp.is_file():
@@ -89,6 +95,11 @@ def check_file(tex: Path) -> Tuple[List[str], List[str]]:
     text = tex.read_text(encoding="utf-8")
     defined = set(re.findall(r"(?<![A-Za-z])label[A-I]?=([^\s,}\]]+)", text)) | \
         set(re.findall(r"\\label\{([^}]+)\}", text))
+    srcs = parse_source_numbers(text)  # --renumber：tex 序号 → 平台原题号
+
+    def _akey(n: int) -> int:
+        return srcs[n - 1] if srcs and 1 <= n <= len(srcs) else n
+
     jans = json_answers(tex)
     if infer_json(tex) and not jans:
         warns.append(f"{tex.name}: 未找到对应 JSON 或其中无选择题答案，跳过 JSON 比对")
@@ -104,6 +115,12 @@ def check_file(tex: Path) -> Tuple[List[str], List[str]]:
         # 1) 解析引图而图不在
         if "\\memoanswer" in block and REF_FIG_RE.search(block) and not PIC_RE.search(block):
             errs.append(f"{tex.name}: 第 {n} 题解析提到图，但该题未见任何图片命令")
+        # 1b) 解析内单独“引图而图不在”（题干图不算）：提示，供人工核对解析图
+        memo_txt = block[block.find("%% memo"):] if "%% memo" in block else block
+        if ("\\memoanswer" in block and REF_FIG_RE.search(memo_txt)
+                and not PIC_RE.search(memo_txt)):
+            warns.append(f"{tex.name}: 第 {n} 题解析提到图，但解析内无图片命令"
+                         "（若即题干图可忽略）")
 
         # 2) 选择题三处答案一致 + 3) 与 JSON 一致
         if is_choice:
@@ -118,9 +135,10 @@ def check_file(tex: Path) -> Tuple[List[str], List[str]]:
             present = {k: v for k, v in vals.items() if v}
             if len(set(present.values())) > 1:
                 errs.append(f"{tex.name}: 第 {n} 题选择题答案三处不一致：{present}")
-            if n in jans and present and jans[n] not in present.values():
+            key = _akey(n)
+            if key in jans and present and jans[key] not in present.values():
                 errs.append(f"{tex.name}: 第 {n} 题答案与 JSON 不符："
-                            f"JSON={jans[n]}，tex={present}")
+                            f"JSON={jans[key]}，tex={present}")
 
         # 4) \ref 目标须定义
         for ref in set(re.findall(r"\\ref\{([^}]+)\}", block)):

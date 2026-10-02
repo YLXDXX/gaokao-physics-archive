@@ -70,8 +70,10 @@ class TestCheckRecrop(unittest.TestCase):
                 "source": str(d / "missing.png"),
                 "crops": [{"rect": [0, 0, 50, 40], "target": str(tgt)}],
             }])
-            errors, _ = check_recipe(rec)
-            self.assertTrue(any("source" in e for e in errors), errors)
+            errors, warnings = check_recipe(rec)
+            # 源图常位于 Git 忽略目录（JSON/、材料处理/），缺失时降级为提示
+            self.assertEqual(errors, [])
+            self.assertTrue(any("source" in w for w in warnings), warnings)
 
     def test_rect_out_of_bounds(self):
         with tempfile.TemporaryDirectory() as tmp:

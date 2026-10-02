@@ -7,7 +7,8 @@
 检查项（[错误] 使退出码为 1）：
 
 1. recipe 为合法 JSON，``entries`` 为数组，逐条含 ``source`` / ``crops``；
-2. ``source`` 内嵌图存在；
+2. ``source`` 内嵌图存在（源图缺失时降级为 [提示]，仅跳过尺寸比对；源图多位于
+   Git 忽略的 `JSON/`、`材料处理/` 下，新克隆环境可无源图自查）；
 3. 每块 ``rect = [x, y, w, h]``：w/h 为正、x/y 非负，且**不超出源图范围**；
 4. 每个 ``target``：路径非空、扩展名为图片、**文件存在**，且**像素尺寸与 rect 一致**
    （不一致通常意味着修改 recipe 后未重新 ``apply``，或 figs 被手工替换）；
@@ -159,7 +160,9 @@ def check_recipe(path: Path) -> Tuple[List[str], List[str]]:
         src = _resolve(src_str)
         src_size = _image_size(src)
         if src_size is None:
-            errors.append(f"{tag} source 不存在或非图片: {src_str}")
+            # 源图常位于 Git 忽略的 JSON/、材料处理/ 下；新克隆环境没有源图，
+            # 此时降级为提示：仍校验 target 存在性与文件头，仅跳过尺寸比对。
+            warnings.append(f"{tag} source 不存在或非图片（跳过尺寸校验）: {src_str}")
 
         # 该 entry 是否开启去白边（recipe 级或 entry 级）
         ent_trim = trim_on or bool(ent.get("trim"))
@@ -235,20 +238,21 @@ def check_recipe(path: Path) -> Tuple[List[str], List[str]]:
                     if tgt_size is None:
                         errors.append(f"{ctag} target 不存在或非图片（尚未 apply？）: {target}")
                     else:
-                        expected = (min(w, src_size[0] - x) if src_size else w,
-                                    min(h, src_size[1] - y) if src_size else h)
-                        if ent_trim:
-                            # 去白边只会缩小，故只要求 target 不大于 rect
-                            if tgt_size[0] > expected[0] or tgt_size[1] > expected[1]:
+                        if src_size is not None:
+                            expected = (min(w, src_size[0] - x),
+                                        min(h, src_size[1] - y))
+                            if ent_trim:
+                                # 去白边只会缩小，故只要求 target 不大于 rect
+                                if tgt_size[0] > expected[0] or tgt_size[1] > expected[1]:
+                                    errors.append(
+                                        f"{ctag} target 尺寸 {tgt_size[0]}x{tgt_size[1]} "
+                                        f"大于 rect 期望 {expected[0]}x{expected[1]}"
+                                        "（trim 后不应变大；修改 recipe 后请重新 apply？）")
+                            elif tgt_size != expected:
                                 errors.append(
                                     f"{ctag} target 尺寸 {tgt_size[0]}x{tgt_size[1]} "
-                                    f"大于 rect 期望 {expected[0]}x{expected[1]}"
-                                    "（trim 后不应变大；修改 recipe 后请重新 apply？）")
-                        elif tgt_size != expected:
-                            errors.append(
-                                f"{ctag} target 尺寸 {tgt_size[0]}x{tgt_size[1]} "
-                                f"与 rect 期望 {expected[0]}x{expected[1]} 不一致"
-                                "（修改 recipe 后未重新 apply？）")
+                                    f"与 rect 期望 {expected[0]}x{expected[1]} 不一致"
+                                    "（修改 recipe 后未重新 apply？）")
                         want_kind = SUFFIX_KIND.get(tgt.suffix.lower())
                         got_kind = _signature_kind(tgt)
                         if want_kind and got_kind and got_kind != want_kind:

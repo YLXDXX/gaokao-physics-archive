@@ -69,6 +69,50 @@ def parse_meta(text: str) -> Dict[int, Dict[str, str]]:
     return out
 
 
+def parse_source_numbers(text: str) -> Optional[List[int]]:
+    """解析卷级 `%% sourceNumbers: 17, 19, ...`；无则返回 None。
+
+    由 `json_to_tex.py --renumber` 写入：tex 的 `%% number` 被重编为 1..N，
+    本列表记录第 i 题对应的**平台原题号**，供本脚本映射回 JSON 比对。
+    """
+    m = re.search(r"^%%\s*sourceNumbers\s*[:：]\s*(.+)$", text, re.M)
+    if not m:
+        return None
+    return [int(x) for x in re.findall(r"\d+", m.group(1))]
+
+
+def _last_by_number(items_list: List[dict]) -> Tuple[Dict[int, dict], Dict[int, int]]:
+    """返回 {题号: 最后一条} 与 {题号: 出现次数}。
+
+    平台常把一道大题拆成多条同号项（实验Ⅰ/Ⅱ、选修 (1)(2)、A/B 变体），
+    合并题以**最后一条**的元数据为准（与制卷约定一致）。
+    """
+    last: Dict[int, dict] = {}
+    count: Dict[int, int] = {}
+    for it in items_list:
+        n = it.get("number")
+        if isinstance(n, int):
+            last[n] = it
+            count[n] = count.get(n, 0) + 1
+    return last, count
+
+
+def _compare(tex_name: str, label: str, meta: Dict[str, str], it: dict,
+             errs: List[str], ignore: Tuple[str, ...] = ()) -> None:
+    """逐字段比对一道题的元数据（含选择题 %% answer）；`ignore` 中的字段跳过。"""
+    for f in META_FIELDS:
+        if f in ignore:
+            continue
+        a, b = _norm(meta.get(f)), _norm(it.get(f))
+        if a != b:
+            errs.append(f"{tex_name}: {label}元数据 {f} 不符：tex={a!r} JSON={b!r}")
+    if any(k in (it.get("type") or "") for k in CHOICE_TYPES):
+        letters = _letters(it.get("answer"))
+        if _norm(meta.get("answer")) != letters:
+            errs.append(f"{tex_name}: {label}%% answer 不符："
+                        f"tex={meta.get('answer')!r} JSON={letters!r}")
+
+
 def check_file(tex: Path) -> Tuple[List[str], List[str]]:
     errs: List[str] = []
     warns: List[str] = []
@@ -79,27 +123,44 @@ def check_file(tex: Path) -> Tuple[List[str], List[str]]:
         data = json.loads(jp.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as e:
         return errs, [f"{tex.name}: 读取 JSON 失败：{e}"]
-    items = {int(it["number"]): it for it in data.get("items", [])
-             if isinstance(it.get("number"), int)}
-    metas = parse_meta(tex.read_text(encoding="utf-8"))
-    for n, meta in metas.items():
-        it = items.get(n)
-        if it is None:
-            errs.append(f"{tex.name}: 第 {n} 题在 JSON 中无对应项")
-            continue
-        for f in META_FIELDS:
-            a, b = _norm(meta.get(f)), _norm(it.get(f))
-            if a != b:
-                errs.append(f"{tex.name}: 第 {n} 题元数据 {f} 不符：tex={a!r} JSON={b!r}")
-        # 选择题：%% answer 与 JSON 答案字母一致
-        if any(k in (it.get("type") or "") for k in CHOICE_TYPES):
-            letters = _letters(it.get("answer"))
-            if _norm(meta.get("answer")) != letters:
-                errs.append(f"{tex.name}: 第 {n} 题 %% answer 不符："
-                            f"tex={meta.get('answer')!r} JSON={letters!r}")
-    for n in items:
-        if n not in metas:
-            errs.append(f"{tex.name}: JSON 第 {n} 题在 tex 中缺失")
+    items, counts = _last_by_number(data.get("items", []))
+    text = tex.read_text(encoding="utf-8")
+    metas = parse_meta(text)
+    srcs = parse_source_numbers(text)
+
+    if srcs is not None:
+        # 经 --renumber：tex 的 %% number = 1..N，映射回平台原题号比对
+        for n, meta in metas.items():
+            if not (1 <= n <= len(srcs)):
+                errs.append(f"{tex.name}: 第 {n} 题超出 %% sourceNumbers 范围"
+                            f"（共 {len(srcs)} 个）")
+                continue
+            src = srcs[n - 1]
+            it = items.get(src)
+            if it is None:
+                errs.append(f"{tex.name}: 第 {n} 题（原题号 {src}）在 JSON 中无对应项")
+                continue
+            # tex 的 %% number 是重编后的序号，与 JSON 原题号必然不同，跳过该字段
+            _compare(tex.name, f"第 {n} 题（原 {src}）", meta, it, errs,
+                     ignore=("number",))
+        if len(metas) != len(srcs):
+            warns.append(f"{tex.name}: tex 有 {len(metas)} 题，"
+                         f"%% sourceNumbers 有 {len(srcs)} 个")
+    else:
+        for n, meta in metas.items():
+            it = items.get(n)
+            if it is None:
+                errs.append(f"{tex.name}: 第 {n} 题在 JSON 中无对应项")
+                continue
+            _compare(tex.name, f"第 {n} 题", meta, it, errs)
+        for n in items:
+            if n not in metas:
+                errs.append(f"{tex.name}: JSON 第 {n} 题在 tex 中缺失")
+
+    for n, c in counts.items():
+        if c > 1:
+            warns.append(f"{tex.name}: 第 {n} 题 JSON 有 {c} 条同号项"
+                         f"（合并题按最后一条比对元数据）")
     return errs, warns
 
 

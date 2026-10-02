@@ -30,6 +30,45 @@ TEX = """\\chapter{{2000年测试}}
 """
 
 
+RENUM_TEX = """\\chapter{2000年测试}
+%% sourceNumbers: 17, 19
+\\begin{enumerate}
+\\item
+%% number: 1
+%% paperName: 2000年测试第 17 题 4 分
+%% typeId: 2
+%% type: 多选题
+%% chapter: 力学
+%% point: 速度
+%% method: 无
+%% score: 4
+%% degree: 600
+%% duplicateId: 0
+%% body:
+题干（  ）
+%% answer: AD
+%% memo:
+\\memoanswer{解}
+\\item
+%% number: 2
+%% paperName: 2000年测试第 19 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 电学
+%% point: 电流
+%% method: 无
+%% score: 6
+%% degree: 500
+%% duplicateId: 0
+%% body:
+题干（  ）
+%% answer: C
+%% memo:
+\\memoanswer{解}
+\\end{enumerate}
+"""
+
+
 class TestCheckMeta(unittest.TestCase):
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
@@ -78,6 +117,33 @@ class TestCheckMeta(unittest.TestCase):
         errs, warns = check_meta.check_file(self.tex)
         self.assertEqual(errs, [])
         self.assertTrue(warns)
+
+    def test_source_numbers_mapping(self):
+        """--renumber：tex %% number=1..N，按 %% sourceNumbers 映射回 JSON 原题号。"""
+        self.tex.write_text(RENUM_TEX, encoding="utf-8")
+        its = [
+            dict(number=17, paperName="2000年测试第 17 题 4 分", typeId=2, type="多选题",
+                 chapter="力学", point="速度", method="无", score=4, degree=600,
+                 duplicateId=0, answer="<p>AD</p>", body="", memo=""),
+            dict(number=19, paperName="2000年测试第 19 题 6 分", typeId=1, type="单选题",
+                 chapter="电学", point="电流", method="无", score=6, degree=500,
+                 duplicateId=0, answer="<p>C</p>", body="", memo=""),
+        ]
+        (self.tmp / "JSON/2000/2000_测试.json").write_text(
+            json.dumps({"items": its}, ensure_ascii=False), encoding="utf-8")
+        errs, _ = check_meta.check_file(self.tex)
+        self.assertEqual(errs, [])
+
+    def test_source_numbers_missing_item(self):
+        self.tex.write_text(RENUM_TEX, encoding="utf-8")
+        (self.tmp / "JSON/2000/2000_测试.json").write_text(
+            json.dumps({"items": [dict(number=17, paperName="x", typeId=1, type="单选题",
+                                       chapter="", point="", method="", score=4,
+                                       degree=600, duplicateId=0, answer="<p>AD</p>",
+                                       body="", memo="")]}, ensure_ascii=False),
+            encoding="utf-8")
+        errs, _ = check_meta.check_file(self.tex)
+        self.assertTrue(any("19" in e for e in errs))
 
 
 if __name__ == "__main__":

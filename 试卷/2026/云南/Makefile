@@ -8,7 +8,7 @@
 #    make teacher    仅教师版（含答案与详解）
 #    make tikz       仅编译 TikZ/ 下的独立图片（生成 PDF）
 #    make tikz-compare 生成「重绘 TikZ 与原图」对比图（tikz_compare/，需先登记 TikZ/tikz_sources.json）
-#    make check      规范自查（结构/元数据 + 内容 lint + 共性问题 + 版面命令）
+#    make check      规范自查（结构/元数据、内容、答案、公式编号、单位、版面、缺字、跨项复查）
 #    make links      创建/更新指向项目根公共文件（文档类/宏包）的软链接
 #    make clean      清理辅助文件
 #    make distclean  清理辅助文件与 PDF 成品
@@ -97,6 +97,8 @@ check:
 		python3 "$(ROOT)/tools/check_meta.py" "$$d.tex" || exit 1; \
 		echo ">> 非选择题答案对应：$$d"; \
 		python3 "$(ROOT)/tools/check_answers.py" "$$d.tex" || exit 1; \
+		echo ">> 公式编号检查：$$d"; \
+		python3 "$(ROOT)/tools/check_formula_numbers.py" "$$d.tex" || exit 1; \
 		echo ">> 单位宏检查：$$d"; \
 		python3 "$(ROOT)/tools/check_units.py" "$$d.tex" || exit 1; \
 	done

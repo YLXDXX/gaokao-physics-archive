@@ -30,10 +30,12 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 │                                #   与 试卷/ 分离，含 ovis/ paddle/ pdftotext.txt merged.md pdfimages/ 等）
 ├── tools/                       # 脚本
 │   ├── json_to_tex.py           # JSON → LaTeX 初稿 + 图片素材（制作第一步）
+│   ├── html2latex.py            # HTML/公式 → LaTeX 的 DOM 转换器（json_to_tex 调用）
 │   ├── check_paper.py           # 试卷规范自查（元数据/图片命令/标签/引用/答案）
 │   ├── check_content.py         # 内容书写检查（裸单位/图片公式/段落分行提示）
 │   ├── check_meta.py            # 元数据 ↔ 平台 JSON 逐字段一致
 │   ├── check_answers.py         # 非选择题答案与小问对应
+│   ├── check_formula_numbers.py # 解析公式编号 ①②③… 连续/悬空检查
 │   ├── check_units.py           # PhyUnit 单位宏检查
 │   ├── check_review.py          # 成品跨项复查（答案三处一致/解析引图/引用标签）
 │   ├── check_glyphs.py          # 编译日志缺字检查
@@ -59,6 +61,8 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 │   ├── paddlex_serve_stop.sh    # 关闭 PaddleOCR-VL 服务
 │   ├── gen_index.py             # 索引/进度生成与共享库（make index）
 │   ├── check_docs.py            # 进度/年份索引/异常记录一致性校验（make check-docs）
+│   ├── check_docs_text.py       # 文档体检（过时 cd 用法 / 失效相对链接）
+│   ├── review_to_ledger.py      # 复核结果 JSON → 异常记录台账
 │   ├── status.py                # 各年份进度概要（make progress）
 │   └── README.md                # 脚本索引与用法
 ├── docs/                        # 从 README 移出的细则
@@ -91,8 +95,8 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 
 1. **取数据**：从 `JSON/<年>/<年_地区>.json` 得到基本材料（元信息、题干、选项、答案、图片）。
 2. **转初稿**：`python3 tools/json_to_tex.py JSON/<年>/<年_地区>.json`
-   —— 自动把图片按“题号+子图字母”复制到 `试卷/<年>/<地区>/figs/`，生成 `<地区>.tex` 初稿，
-   并把 JSON 基础材料 markdown 写到 `材料处理/<年>/<地区>/json_material.md`。
+   —— HTML/公式经 `tools/html2latex.py` 转为 LaTeX，图片按“题号+子图字母”复制到
+   `试卷/<年>/<地区>/figs/`，生成 `<地区>.tex` 初稿。
 3. **转 Markdown 交叉验证**（公式/表格/图片质量把关）：
    `tools/ocr_pipeline.sh Docx/<年>/<年_地区>.pdf 材料处理/<年>/<地区>`
    —— 用 **OvisOCR2（底本）+ PaddleOCR-VL（验证）+ pdftotext（旁证）** 生成 `merged.md`，
