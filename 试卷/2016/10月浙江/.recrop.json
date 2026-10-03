@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2016/2016_10月浙江/tiku_images/23001-24000/23344.png",
+      "crops": [
+        {"rect": [9, 38, 393, 390], "target": "试卷/2016/10月浙江/figs/18a.png"},
+        {"rect": [430, 1, 570, 428], "target": "试卷/2016/10月浙江/figs/18b.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

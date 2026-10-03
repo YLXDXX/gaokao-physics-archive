@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2016/浙江理综/pdfimages/p3_9.jpg",
+      "crops": [
+        {"rect": [29, 22, 514, 484], "target": "试卷/2016/浙江理综/figs/21a.png"},
+        {"rect": [602, 91, 218, 302], "target": "试卷/2016/浙江理综/figs/21b.png"}
+      ],
+      "erase_labels": "panels",
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2016/浙江理综/pdfimages/p3_10.jpg",
+      "crops": [
+        {"rect": [19, 25, 436, 503], "target": "试卷/2016/浙江理综/figs/22a.png"},
+        {"rect": [569, 114, 280, 333], "target": "试卷/2016/浙江理综/figs/22b.png"}
+      ],
+      "erase_labels": "panels",
+      "trim": {"padding": 6}
+    }
+  ]
+}

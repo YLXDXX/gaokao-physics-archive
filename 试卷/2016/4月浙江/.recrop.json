@@ -1,0 +1,43 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2016/4月浙江/pdfimages/p5_8.jpg",
+      "crops": [
+        {"rect": [0, 0, 548, 536], "target": "试卷/2016/4月浙江/figs/18a.png"},
+        {"rect": [552, 0, 550, 536], "target": "试卷/2016/4月浙江/figs/18b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "试卷/2016/4月浙江/crop_preview/18c_full.png",
+      "crops": [
+        {"rect": [0, 0, 430, 350], "target": "试卷/2016/4月浙江/figs/18c1.png"},
+        {"rect": [430, 0, 430, 350], "target": "试卷/2016/4月浙江/figs/18c2.png"},
+        {"rect": [860, 0, 430, 350], "target": "试卷/2016/4月浙江/figs/18c3.png"},
+        {"rect": [1290, 0, 431, 350], "target": "试卷/2016/4月浙江/figs/18c4.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2016/2016_4月浙江/tiku_images/23001-24000/23371_1.png",
+      "crops": [
+        {"rect": [0, 0, 243, 240], "target": "试卷/2016/4月浙江/figs/21a.png"}
+      ],
+      "trim": {"padding": 4}
+    },
+    {
+      "source": "JSON/2016/2016_4月浙江/tiku_images/23001-24000/23371_2.png",
+      "crops": [
+        {"rect": [0, 0, 984, 340], "target": "试卷/2016/4月浙江/figs/21b.png"}
+      ],
+      "trim": {"padding": 4}
+    },
+    {
+      "source": "JSON/2016/2016_4月浙江/tiku_images/23001-24000/23371_3.png",
+      "crops": [
+        {"rect": [0, 0, 496, 192], "target": "试卷/2016/4月浙江/figs/21c.png"}
+      ],
+      "trim": {"padding": 4}
+    }
+  ]
+}

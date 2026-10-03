@@ -1,0 +1,697 @@
+\ifdefined\gkver\else\def\gkver{student}\fi
+\documentclass[\gkver]{gaokaozhenti}
+\newcommand{\ccnum}[1]{{\fontspec{Noto Sans CJK JP}#1}}
+\begin{document}
+
+\chapter{2016年全国理综Ⅰ}
+%% paperType: 理综物理部分
+
+\begin{enumerate}
+\item
+%% number: 14
+%% paperName: 2016年全国理综Ⅰ第 14 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 电路
+%% point: 电容
+%% method: 无
+%% score: 6
+%% degree: 650
+%% duplicateId: 0
+%% body:
+一平行板电容器两极板之间充满云母介质，接在恒压直流电源上，若将云母介质移出，则电容器\xzanswer{D}
+
+\fourchoices[answer=D]
+{极板上的电荷量变大，极板间的电场强度变大}
+{极板上的电荷量变小，极板间的电场强度变大}
+{极板上的电荷量变大，极板间的电场强度不变}
+{极板上的电荷量变小，极板间的电场强度不变}
+
+%% answer: D
+%% memo:
+\memoanswer{
+	由平行板电容器电容的决定式 $C=\frac{\varepsilon_{\mathrm{r}}S}{4\pi kd}$ 可知，将云母介质移出，$\varepsilon_{\mathrm{r}}$ 变小，故 $C$ 变小；而 $U$ 不变，由 $C=\frac{Q}{U}$ 知 $Q$ 变小；匀强电场中 $E=\frac{U}{d}$，因为 $U$ 不变、板间距离 $d$ 也不变，所以 $E$ 不变，故 D 正确。
+}
+
+\item
+%% number: 15
+%% paperName: 2016年全国理综Ⅰ第 15 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 磁场
+%% point: 带电粒子在磁场中的运动
+%% method: 无
+%% score: 6
+%% degree: 450
+%% duplicateId: 0
+%% body:
+现代质谱仪可用来分析比质子重很多的离子，其示意图如图所示，其中加速电压恒定。质子在入口处从静止开始被加速电场加速，经匀强磁场偏转后从出口离开磁场。若某种一价正离子在入口处从静止开始被同一加速电场加速，为使它经匀强磁场偏转后仍从同一出口离开磁场，需将磁感应强度增加到原来的 12 倍。此离子和质子的质量比约为\xzanswer{D}
+
+\onepicture[h=3.6cm]{\includesvg{figs/15}}
+
+\fourchoices[answer=D]
+{11}
+{12}
+{121}
+{144}
+
+%% answer: D
+%% memo:
+\memoanswer{
+	由动能定理得 $qU=\frac{1}{2}mv^{2}$，可得带电粒子进入磁场时的速度 $v=\sqrt{\frac{2qU}{m}}$；又带电粒子在磁场中运动的轨迹半径 $R=\frac{mv}{qB}$，联立可得 $R=\frac{1}{B}\sqrt{\frac{2mU}{q}}$。由题意可知，该离子与质子在磁场中具有相同的轨迹半径和电荷量，故 $\frac{R_{1}}{R_{2}}=\frac{B_{2}}{B_{1}}\cdot\sqrt{\frac{m_{1}}{m_{2}}\cdot\frac{q_{2}}{q_{1}}}=1$，其中 $B_{2}=12B_{1}$，$q_{1}=q_{2}$，可得 $\frac{m_{2}}{m_{1}}=144$，故 D 正确。
+}
+
+\item
+%% number: 16
+%% paperName: 2016年全国理综Ⅰ第 16 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 交流电
+%% point: 变压器
+%% method: 无
+%% score: 6
+%% degree: 450
+%% duplicateId: 0
+%% body:
+一含有理想变压器的电路如图所示，图中电阻 $R_{1}$，$R_{2}$ 和 $R_{3}$ 的阻值分别为 $3\UO$，$1\UO$，$4\UO$，A 为理想交流电流表，$U$ 为正弦交流电压源，输出电压的有效值恒定。当开关 S 断开时，电流表的示数为 $I$；当 S 闭合时，电流表的示数为 $4I$。该变压器原、副线圈匝数比为\xzanswer{B}
+
+\onepicture[h=3.4cm]{\includesvg{figs/16}}
+
+\fourchoices[answer=B]
+{2}
+{3}
+{4}
+{5}
+
+%% answer: B
+%% memo:
+\memoanswer{
+	理想变压器的原、副线圈两端的电压比 $\frac{U_{1}}{U_{2}}=\frac{n_{1}}{n_{2}}$，原、副线圈中的电流比 $\frac{I_{1}}{I_{2}}=\frac{n_{2}}{n_{1}}$。当开关 S 断开时，原线圈两端电压 $U_{1}=U-IR_{1}=U-3I$，副线圈两端电压 $U_{2}=U_{1}\frac{n_{2}}{n_{1}}$，副线圈中的电流 $I_{2}=\frac{U_{2}}{R_{2}+R_{3}}=\frac{U_{2}}{5}$。当 S 闭合时，原线圈两端电压 $U_{1}'=U-4I\cdot R_{1}=U-12I$，副线圈中的电流 $I_{2}'=\frac{U_{2}'}{R_{2}}=U_{2}'$。由变压器电流关系可得 $I_{2}=nI$、$I_{2}'=4nI$（其中 $n=\frac{n_{2}}{n_{1}}$），联立解得 $U=48I$，$n=3$，故 B 正确。
+}
+
+\item
+%% number: 17
+%% paperName: 2016年全国理综Ⅰ第 17 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 曲线运动
+%% point: 开普勒定律
+%% method: 无
+%% score: 6
+%% degree: 450
+%% duplicateId: 0
+%% body:
+利用三颗位置适当的地球同步卫星，可使地球赤道上任意两点之间保持无线电通讯，目前地球同步卫星的轨道半径为地球半径的 6.6 倍，假设地球的自转周期变小，若仍仅用三颗同步卫星来实现上述目的，则地球自转周期的最小值约为\xzanswer{B}
+
+\fourchoices[answer=B]
+{$1\Uh$}
+{$4\Uh$}
+{$8\Uh$}
+{$16\Uh$}
+
+%% answer: B
+%% memo:
+\memoanswer{
+	同步卫星的环绕周期与地球自转周期相等。由万有引力定律和牛顿第二定律，对同步卫星有 $G\frac{Mm}{r^{2}}=m\frac{4\pi^{2}}{T^{2}}r$，可得 $T=\sqrt{\frac{4\pi^{2}r^{3}}{GM}}$。地球自转周期减小，则同步卫星需要降低高度。三颗卫星实现全球覆盖时，卫星的周期最小，此时卫星的连线正好与地球表面相切，三颗卫星全覆盖赤道的最小高度如图所示，图中 MP、MQ 与地球表面相切，由几何关系得同步卫星的最小轨道半径为 $r_{\min}=\frac{R}{\sin30^{\circ}}=2R$。由开普勒第三定律有 $\frac{(6.6R)^{3}}{(24\Uh)^{2}}=\frac{(2R)^{3}}{T^{2}}$，解得 $T\approx4\Uh$，故 B 正确。
+
+	\onepicture[h=4.2cm]{figs/17_an.png}
+}
+
+\item
+%% number: 18
+%% paperName: 2016年全国理综Ⅰ第 18 题 6 分
+%% typeId: 2
+%% type: 多选题
+%% chapter: 运动和力
+%% point: 牛顿第二定律
+%% method: 无
+%% score: 6
+%% degree: 450
+%% duplicateId: 0
+%% body:
+一质点做匀速直线运动，现对其施加一恒力，且原来作用在质点上的力不发生改变，则\xzanswer{BC}
+
+\fourchoices[answer=BC]
+{质点速度的方向总是与该恒力的方向相同}
+{质点速度的方向不可能总是与该恒力的方向垂直}
+{质点加速度的方向总是与该恒力的方向相同}
+{质点单位时间内速率的变化量总是不变}
+
+%% answer: BC
+%% memo:
+\memoanswer{
+	本题考虑到速度方向与所施加的恒力方向的不确定性，质点有多种运动情况：匀加速、匀减速、类平抛……但一定是匀变速运动。若质点的速度方向与恒力方向不在一条直线上，质点做匀变速曲线运动，速度方向时刻变化，故 A 错误；合力的方向始终垂直速度方向的运动是匀速圆周运动，而匀速圆周运动的合力方向时刻在变，此处合力为恒力、方向恒定，故质点不可能做匀速圆周运动，故 B 正确；由牛顿第二定律知，加速度的方向即为合外力方向，故 C 正确；速率的变化量是速率作差、为标量，如在类平抛运动中，速率的变化量为 $\sqrt{a^{2}(t+1)^{2}+v_{0}^{2}}-\sqrt{(at)^{2}+v_{0}^{2}}$，单位时间内的变化量不恒定，故 D 错误。
+}
+
+\item
+%% number: 19
+%% paperName: 2016年全国理综Ⅰ第 19 题 6 分
+%% typeId: 2
+%% type: 多选题
+%% chapter: 力物体的平衡
+%% point: 物体系平衡
+%% method: 无
+%% score: 6
+%% degree: 350
+%% duplicateId: 0
+%% body:
+如图，一光滑的轻滑轮用细绳 OO' 悬挂于 O 点；另一细绳跨过滑轮，其一端悬挂物块 a，另一端系一位于水平粗糙桌面上的物块 b。外力 $F$ 向右上方拉 b，整个系统处于静止状态。若 $F$ 方向不变，大小在一定范围内变化，物块 b 仍始终保持静止，则\xzanswer{BD}
+
+\onepicture[h=4.0cm]{\includesvg{figs/19}}
+
+\fourchoices[answer=BD]
+{绳 OO' 的张力也在一定范围内变化}
+{物块 b 所受到的支持力也在一定范围内变化}
+{连接 a 和 b 的绳的张力也在一定范围内变化}
+{物块 b 与桌面间的摩擦力也在一定范围内变化}
+
+%% answer: BD
+%% memo:
+\memoanswer{
+	连接 a、b 的是同一根绳，此绳上的张力大小始终等于 a 物块的重力。由于物块 b 始终保持静止，故整个装置的位置不变，绳 $OO'$ 上的张力恒定不变，故 AC 错误；对 b 进行受力分析，设拉力 $F$ 的方向与水平方向的夹角为 $\theta$，绳与水平方向的夹角为 $\alpha$，由平衡条件得，水平方向 $F\cos\theta=T\cos\alpha+f$，竖直方向 $m_{b}g=F_{N}+T\sin\alpha+F\sin\theta$，可知 b 所受支持力 $F_{N}$ 与静摩擦力 $f$ 会在一定范围内变化，故 BD 正确。
+}
+
+\item
+%% number: 20
+%% paperName: 2016年全国理综Ⅰ第 20 题 6 分
+%% typeId: 2
+%% type: 多选题
+%% chapter: 电场
+%% point: 带电粒子的轨迹类问题
+%% method: 无
+%% score: 6
+%% degree: 450
+%% duplicateId: 0
+%% body:
+如图，一带负电荷的油滴在匀强电场中运动，其轨迹在竖直平面（纸面）内，且相对于过轨迹最低点 P 的竖直线对称。忽略空气阻力。由此可知\xzanswer{AB}
+
+\onepicture[h=2.6cm]{\includesvg{figs/20}}
+
+\fourchoices[answer=AB]
+{Q 点的电势比 P 点高}
+{油滴在 Q 点的动能比它在 P 点的大}
+{油滴在 Q 点的电势能比它在 P 点的大}
+{油滴在 Q 点的加速度大小比它在 P 点的小}
+
+%% answer: AB
+%% memo:
+\memoanswer{
+	由于油滴轨迹相对于过 P 的竖直线对称且合外力总是指向轨迹弯曲内侧，可知该油滴在 P 点的受力分析如图所示，且电场力大于重力；油滴带负电，电场方向竖直向下，则 $\varphi_{Q}>\varphi_{P}$，故 A 正确；油滴从 P 到 Q 电场力做正功，电势能减小，故在 Q 点的电势能比在 P 点的小，C 错误；电场为匀强电场，油滴受力恒定做匀变速曲线运动，加速度恒定，故 D 错误；油滴的轨迹为抛物线，故 P 为等效最高点，动能最小，故 B 正确。
+
+	\onepicture[h=3.4cm]{figs/20_an.png}
+}
+
+\item
+%% number: 21
+%% paperName: 2016年全国理综Ⅰ第 21 题 6 分
+%% typeId: 2
+%% type: 多选题
+%% chapter: 直线运动
+%% point: 运动图象
+%% method: 无
+%% score: 6
+%% degree: 450
+%% duplicateId: 0
+%% body:
+甲、乙两车在平直公路上同向行驶，其 $v-t$ 图像如图所示。已知两车在 $t=3\Us$ 时并排行驶，则\xzanswer{BD}
+
+\onepicture[h=4.2cm]{\includesvg{figs/21}}
+
+\fourchoices[answer=BD]
+{在 $t=1\Us$ 时，甲车在乙车后}
+{在 $t=0$ 时，甲车在乙车前 $7.5\Um$}
+{两车另一次并排行驶的时刻是 $t=2\Us$}
+{甲、乙两车两次并排行驶的位置之间沿公路方向的距离为 $40\Um$}
+
+%% answer: BD
+%% memo:
+\memoanswer{
+	由图像可知甲的加速度 $a_{\text{甲}}=\frac{\Delta v}{\Delta t}=10\Umsq$，同理可得乙的加速度 $a_{\text{乙}}=5\Umsq$，可知 $3\Us$ 内甲的位移为 $45\Um$、乙的位移为 $52.5\Um$，$3\Us$ 时两车并排，则 $3\Us$ 内有 $s_{\text{甲}}+s_{0}=s_{\text{乙}}$，故 $s_{0}=7.5\Um$，甲车在前、乙车在后，故 B 正确；设从开始运动到并排行驶的时间为 $t$，则据运动学公式有 $s_{\text{甲}}=\frac{1}{2}a_{\text{甲}}t^{2}$，$s_{\text{乙}}=v_{0}t+\frac{1}{2}a_{\text{乙}}t^{2}$，代入 $s_{\text{甲}}+s_{0}=s_{\text{乙}}$ 得 $t_{1}=1\Us$、$t_{2}=3\Us$，故 AC 错误；$t_{1}$、$t_{2}$ 间甲或乙行驶的位移即为两次并排行驶的位置之间沿公路方向的距离 $s$，可得 $s=45\Um-\frac{1}{2}\times10\times1\Um=40\Um$，故 D 正确。
+}
+
+\item
+%% number: 22
+%% paperName: 2016年全国理综Ⅰ第 22 题 5 分
+%% typeId: 4
+%% type: 实验题
+%% chapter: 功和能
+%% point: DIS研究机械能守恒定律
+%% method: 无
+%% score: 5
+%% degree: 450
+%% duplicateId: 0
+%% body:
+某同学用图\ref{2016全国理综Ⅰ22a}所示的实验装置验证机械能守恒定律，其中打点计时器的电源为交流电源，可以使用的频率有 $20\UHz$、$30\UHz$ 和 $40\UHz$，打出纸带的一部分如图\ref{2016全国理综Ⅰ22b}所示。
+
+该同学在实验中没有记录交流电的频率 $f$，需要用实验数据和其他条件进行推算。
+\begin{enumerate}
+	\item
+	若从打出的纸带可判定重物匀加速下落，利用 $f$ 和图\ref{2016全国理综Ⅰ22b}中给出的物理量可以写出：在打点计时器打出 B 点时，重物下落的速度大小为\tkanswer[2.6cm]{$\frac{f}{2}(s_{1}+s_{2})$}，打出 C 点时重物下落的速度大小为\tkanswer[2.6cm]{$\frac{f}{2}(s_{2}+s_{3})$}，重物下落的加速度的大小为\tkanswer[2.6cm]{$\frac{f^{2}}{2}(s_{3}-s_{1})$}。
+	\item
+	已测得 $s_{1}=8.89\Ucm$，$s_{2}=9.50\Ucm$，$s_{3}=10.10\Ucm$；当重力加速度大小为 $9.80\Umsq$，实验中重物受到的平均阻力大小约为其重力的 1 \%。由此推算出 $f$ 为\tkanswer[1.4cm]{$40$}$\UHz$。
+\end{enumerate}
+
+\twopicture[numA={（a）}, numB={（b）}, labelA=2016全国理综Ⅰ22a, labelB=2016全国理综Ⅰ22b, hA=4.2cm, hB=2.2cm]
+{\includesvg{figs/22a}}
+{\includesvg{figs/22b}}
+
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	$\frac{f}{2}(s_{1}+s_{2})$，$\frac{f}{2}(s_{2}+s_{3})$，$\frac{f^{2}}{2}(s_{3}-s_{1})$
+	\item
+	$40\UHz$
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+	（1）由于重物匀加速下落，A、B、C、D 各相邻点之间时间间隔相同，因此 B 点应是从 A 运动到 C 过程的中间时刻，由匀变速直线运动的推论可得，B 点的速度 $v_{B}$ 等于 AC 段的平均速度，即 $v_{B}=\frac{s_{1}+s_{2}}{2t}$；由于 $t=\frac{1}{f}$，故 $v_{B}=\frac{f}{2}(s_{1}+s_{2})$。同理可得 $v_{C}=\frac{f}{2}(s_{2}+s_{3})$。匀加速直线运动的加速度 $a=\frac{\Delta v}{\Delta t}$，故 $a=\frac{v_{C}-v_{B}}{t}=\frac{f^{2}}{2}(s_{3}-s_{1})$。
+
+	（2）重物下落的过程中，由牛顿第二定律可得 $mg-F_{\text{阻}}=ma$，由已知条件 $F_{\text{阻}}=0.01mg$，得 $a=0.99g$，代入 $a=\frac{f^{2}}{2}(s_{3}-s_{1})$ 并由题给数据得 $f\approx40\UHz$。
+}
+
+\item
+%% number: 23
+%% paperName: 2016年全国理综Ⅰ第 23 题 10 分
+%% typeId: 4
+%% type: 实验题
+%% chapter: 电路
+%% point: 电路实验
+%% method: 无
+%% score: 10
+%% degree: 350
+%% duplicateId: 0
+%% body:
+现要组装一个由热敏电阻控制的报警系统，当要求热敏电阻的温度达到或超过 $60\UdC$ 时，系统报警。提供的器材有：热敏电阻，报警器（内阻很小，流过的电流超过 $I_{\mathrm{c}}$ 时就会报警），电阻箱（最大阻值为 $999.9\UO$），直流电源（输出电压为 $U$，内阻不计），滑动变阻器 $R_{1}$（最大阻值为 $1000\UO$），滑动变阻器 $R_{2}$（最大阻值为 $2000\UO$），单刀双掷开关一个，导线若干。
+
+在室温下对系统进行调节，已知 $U$ 约为 $18\UV$，$I_{\mathrm{c}}$ 约为 $10\UmA$；流过报警器的电流超过 $20\UmA$ 时，报警器可能损坏；该热敏电阻的阻值随温度的升高而减小，在 $60\UdC$ 时阻值为 $650.0\UO$。
+\begin{enumerate}
+	\item
+	在答题卡上完成待调节的报警系统原理电路图的连线。
+	\item
+	在电路中应选用滑动变阻器\tkanswer[1.4cm]{$R_{2}$}（填“$R_{1}$”或“$R_{2}$”）。
+	\item
+	按照下列步骤调节此报警系统：
+	\begin{steps}
+		\item
+		电路接通前，需将电阻箱调到一定的阻值，根据实验要求，这一阻值为\tkanswer[1.6cm]{$650.0$}$\UO$；滑动变阻器的滑片应置于\tkanswer[0.8cm]{b}（填“a”或“b”）端附近，不能置于另一端的原因是\tkanswer[5.0cm]{接通电源后，流过报警器的电流会超过 $20\UmA$，报警器可能损坏}。
+		\item
+		将开关向\tkanswer[0.8cm]{c}（填“c”或“d”）端闭合，缓慢移动滑动变阻器的滑片，直至\tkanswer[2.6cm]{报警器开始报警}。
+	\end{steps}
+	\item
+	保持滑动变阻器滑片的位置不变，将开关向另一端闭合，报警系统即可正常使用。
+\end{enumerate}
+
+\onepicture[h=3.8cm, align=right]{\includesvg{figs/23}}
+
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	如图
+	\item
+	$R_{2}$
+	\item
+	$650.0\UO$，b，接通电源后，流过报警器的电流会超过 $20\UmA$，报警器可能损坏；c，报警器开始报警
+	\item
+	保持滑动变阻器滑片的位置不变，将开关向另一端闭合，报警系统即可正常使用。
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+	由实验目的可知，在常温下调好装置，进而进行温控报警，故开关 c 路的电阻箱与开关 d 路的热敏电阻应在不同状态串联接入电路，如图所示。由报警电流 $10\sim20\UmA$，由欧姆定律可得电路总电阻范围为 $900\sim1800\UO$，故滑动变阻器选 $R_{2}$。电路接通前调节电阻箱使其阻值等于报警器报警状态时的电阻值 $650.0\UO$。为了保护电路中的报警器，开关闭合前电路中电流必须较小，滑片应置于 b 端。
+
+	\onepicture[h=3.6cm]{figs/23_an.png}
+}
+
+\item
+%% number: 24
+%% paperName: 2016年全国理综Ⅰ第 24 题 14 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 电磁感应
+%% point: 电磁感应受力分析
+%% method: 无
+%% score: 14
+%% degree: 550
+%% duplicateId: 0
+%% body:
+如图，两固定的绝缘斜面倾角均为 $\theta$，上沿相连。两细金属棒 ab（仅标出 a 端）和 cd（仅标出 c 端）长度均为 $L$，质量分别为 $2m$ 和 $m$；用两根不可伸长的柔软导线将它们连成闭合回路 abdca，并通过固定在斜面上沿的两光滑绝缘小定滑轮跨放在斜面上，使两金属棒水平。右斜面上存在匀强磁场，磁感应强度大小为 $B$，方向垂直于斜面向上，已知两根导线刚好不在磁场中，回路电阻为 $R$，两金属棒与斜面间的动摩擦因数均为 $\mu$，重力加速度大小为 $g$，已知金属棒 ab 匀速下滑。求：
+\begin{enumerate}
+	\item
+	作用在金属棒 ab 上的安培力的大小；
+	\item
+	金属棒运动速度的大小。
+\end{enumerate}
+
+\onepicture[h=3.0cm, align=right]{\includesvg{figs/24}}
+
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	$F_{\text{安}}=mg\sin\theta-3\mu mg\cos\theta$
+	\item
+	$v=(\sin\theta-3\mu\cos\theta)\frac{mgR}{B^{2}L^{2}}$
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+	（1）设导线的张力的大小为 $T$，右斜面对 ab 棒的支持力的大小为 $N_{1}$，作用在 ab 棒上的安培力的大小为 $F$，左斜面对 cd 棒的支持力大小为 $N_{2}$。对于 ab 棒，由力的平衡条件得
+
+	$2mg\sin\theta=\mu N_{1}+T+F$\ccnum{①}，
+
+	$N_{1}=2mg\cos\theta$\ccnum{②}，
+
+	对于 cd 棒，同理有
+
+	$mg\sin\theta+\mu N_{2}=T$\ccnum{③}，
+
+	$N_{2}=mg\cos\theta$\ccnum{④}，
+
+	联立\ccnum{①}\ccnum{②}\ccnum{③}\ccnum{④}式得 $F=mg(\sin\theta-3\mu\cos\theta)$\ccnum{⑤}。
+
+	（2）由安培力公式得
+
+	$F=BIL$\ccnum{⑥}，
+
+	这里 $I$ 是回路 abdca 中的感应电流，ab 棒上的感应电动势为
+
+	$E=BLv$\ccnum{⑦}，
+
+	式中 $v$ 是 ab 棒下滑速度的大小。由欧姆定律得
+
+	$I=\frac{E}{R}$\ccnum{⑧}，
+
+	联立\ccnum{⑤}\ccnum{⑥}\ccnum{⑦}\ccnum{⑧}式得 $v=(\sin\theta-3\mu\cos\theta)\frac{mgR}{B^{2}L^{2}}$\ccnum{⑨}。
+}
+
+\item
+%% number: 25
+%% paperName: 2016年全国理综Ⅰ第 25 题 18 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 功和能
+%% point: 动能定理
+%% method: 无
+%% score: 18
+%% degree: 350
+%% duplicateId: 0
+%% body:
+如图，一轻弹簧原长为 $2R$，其一端固定在倾角为 $37^{\circ}$ 的固定直轨道 AC 的底端 A 处，另一端位于直轨道上 B 处，弹簧处于自然状态，直轨道与一半径为 $\frac{5}{6}R$ 的光滑圆弧轨道相切于 C 点，AC$=7R$，A、B、C、D 均在同一竖直面内。质量为 $m$ 的小物块 P 自 C 点由静止开始下滑，最低到达 E 点（未画出），随后 P 沿轨道被弹回，最高点到达 F 点，AF$=4R$，已知 P 与直轨道间的动摩擦因数 $\mu=\frac{1}{4}$，重力加速度大小为 $g$。（取 $\sin37^{\circ}=0.6$，$\cos37^{\circ}=0.8$）
+\begin{enumerate}
+	\item
+	求 P 第一次运动到 B 点时速度的大小。
+	\item
+	求 P 运动到 E 点时弹簧的弹性势能。
+	\item
+	改变物块 P 的质量，将 P 推至 E 点，从静止开始释放。已知 P 自圆弧轨道的最高点 D 处水平飞出后，恰好通过 G 点。G 点在 C 点左下方，与 C 点水平相距 $\frac{7}{2}R$、竖直相距 $R$，求 P 运动到 D 点时速度的大小和改变后 P 的质量。
+\end{enumerate}
+
+\onepicture[h=6.0cm, align=right]{\includesvg{figs/25}}
+
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	$2\sqrt{gR}$
+	\item
+	$\frac{12}{5}mgR$
+	\item
+	$v_{D}=\frac{3}{5}\sqrt{5gR}$，$m'=\frac{1}{3}m$
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+	（1）由题意知，B、C 之间的距离为 $l=7R-2R=5R$\ccnum{①}，设 P 到达 B 点时的速度为 $v_{B}$，由动能定理得
+
+	$mgl\sin\theta-\mu mgl\cos\theta=\frac{1}{2}mv_{B}^{2}$\ccnum{②}，
+
+	式中 $\theta=37^{\circ}$，联立\ccnum{①}\ccnum{②}式并由题给条件得
+
+	$v_{B}=2\sqrt{gR}$\ccnum{③}。
+
+	（2）设 $BE=x$，P 到达 E 点时速度为零，设此时弹簧的弹性势能为 $E_{p}$。P 由 B 点运动到 E 点的过程中，由动能定理得
+
+	$mgx\sin\theta-\mu mgx\cos\theta-E_{p}=0-\frac{1}{2}mv_{B}^{2}$\ccnum{④}，
+
+	E、F 之间的距离为
+
+	$l_{1}=4R-2R+x$\ccnum{⑤}，
+
+	P 到达 E 点后反弹，从 E 点运动到 F 点的过程中，由动能定理得
+
+	$E_{p}-mgl_{1}\sin\theta-\mu mgl_{1}\cos\theta=0$\ccnum{⑥}，
+
+	联立\ccnum{③}\ccnum{④}\ccnum{⑤}\ccnum{⑥}式并由题给条件得
+
+	$x=R$\ccnum{⑦}，
+
+	$E_{p}=\frac{12}{5}mgR$\ccnum{⑧}。
+
+	（3）设改变后 P 的质量为 $m_{1}$。D 点与 G 点的水平距离 $x_{1}$ 和竖直距离 $y_{1}$ 分别为
+
+	$x_{1}=\frac{7}{2}R-\frac{5}{6}R\sin\theta$\ccnum{⑨}，
+
+	$y_{1}=R+\frac{5}{6}R+\frac{5}{6}R\cos\theta$\ccnum{⑩}，
+
+	式中，已应用了过 C 点的圆轨道半径与竖直方向夹角仍为 $\theta$ 的事实。
+
+	设 P 在 D 点的速度为 $v_{D}$，由 D 点运动到 G 点的时间为 $t$。由平抛运动公式得
+
+	$y_{1}=\frac{1}{2}gt^{2}$\ccnum{⑪}，
+
+	$x_{1}=v_{D}t$\ccnum{⑫}，
+
+	联立\ccnum{⑨}\ccnum{⑩}\ccnum{⑪}\ccnum{⑫}式得 $v_{D}=\frac{3}{5}\sqrt{5gR}$\ccnum{⑬}。
+
+	设 P 在 C 点速度的大小为 $v_{C}$，在 P 由 C 运动到 D 的过程中，由机械能守恒得
+
+	$\frac{1}{2}m_{1}v_{C}^{2}=\frac{1}{2}m_{1}v_{D}^{2}+m_{1}g\left(\frac{5}{6}R+\frac{5}{6}R\cos\theta\right)$\ccnum{⑭}，
+
+	P 由 E 点运动到 C 点的过程中，同理，由动能定理得
+
+	$E_{p}-m_{1}g(x+5R)\sin\theta-\mu m_{1}g(x+5R)\cos\theta=\frac{1}{2}m_{1}v_{C}^{2}$\ccnum{⑮}，
+
+	联立\ccnum{⑦}\ccnum{⑧}\ccnum{⑬}\ccnum{⑭}\ccnum{⑮}式得 $m_{1}=\frac{1}{3}m$\ccnum{⑯}。
+}
+
+\item
+%% number: 33
+%% paperName: 2016年全国理综Ⅰ第 33 题 10 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 气体性质
+%% point: 玻意耳定律
+%% method: 无
+%% score: 10
+%% degree: 550
+%% duplicateId: 0
+%% body:
+【物理——选修 3-3】（15 分）
+
+（1）（5 分）关于热力学定律，下列说法正确的是\xzanswer{BDE}。（填正确答案标号。选对 1 个得 2 分，选对 2 个得 4 分，选对 3 个得 5 分。每选错 1 个扣 3 分，最低得分为 0 分）
+
+\fivechoices[answer=BDE]
+{气体吸热后温度一定升高}
+{对气体做功可以改变其内能}
+{理想气体等压膨胀过程一定放热}
+{热量不可能自发地从低温物体传到高温物体}
+{如果两个系统分别与状态确定的第三个系统达到热平衡，那么这两个系统彼此之间也必定达到热平衡}
+
+（2）（10 分）在水下气泡内空气的压强大于气泡表面外侧水的压强，两压强差 $\Delta p$ 与气泡半径 $r$ 之间的关系为 $\Delta p=\frac{2\sigma}{r}$，其中 $\sigma=0.070\UNm$。现让水下 $10\Um$ 处一半径为 $0.50\Ucm$ 的气泡缓慢上升，已知大气压强 $p_{0}=1.0\times10^{5}\UPa$，水的密度 $\rho=1.0\times10^{3}\Ukgmc$，重力加速度大小 $g=10\Umsq$。
+\begin{enumerate}
+	\item
+	求在水下 $10\Um$ 处气泡内外的压强差；
+	\item
+	忽略水温随水深的变化，在气泡上升到十分接近水面时，求气泡的半径与其原来半径之比的近似值。
+\end{enumerate}
+
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	$28\UPa$
+	\item
+	$\sqrt[3]{2}:1$
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+	（1）由热力学第一定律 $\Delta U=W+Q$ 可知，气体内能的改变与做功、热传递两个因素有关，所以气体吸热后温度不一定升高，故 A 错误；对气体做功可以改变其内能，故 B 正确；由理想气体状态方程 $\frac{pV}{T}=C$ 可知，等压膨胀时气体的温度一定升高，内能增大，又对外做功，结合 $\Delta U=W+Q$ 可知气体一定吸收热量，故 C 错误；由热力学第二定律可知，热量不可能自发地从低温物体传到高温物体，故 D 正确；根据热平衡的性质，如果两个系统分别与状态确定的第三个系统达到热平衡，那么这两个系统彼此之间也必定达到热平衡，故 E 正确。
+
+	（i）当气泡在水下 $h=10\Um$ 处时，设其半径为 $r_{1}$，气泡内外压强差为 $\Delta p_{1}$，则 $\Delta p_{1}=\frac{2\sigma}{r_{1}}$\ccnum{①}，代入题给数据得 $\Delta p_{1}=28\UPa$\ccnum{②}。
+
+	（ii）设气泡在水下 $10\Um$ 处时，气泡内空气的压强为 $p_{1}$，气泡体积为 $V_{1}$；气泡到达水面附近时，气泡内空气的压强为 $p_{2}$，内外压强差为 $\Delta p_{2}$，其体积为 $V_{2}$，半径为 $r_{2}$。气泡上升过程中温度不变，由玻意耳定律得
+
+	$p_{1}V_{1}=p_{2}V_{2}$\ccnum{③}，
+
+	由热力学平衡条件得
+
+	$p_{1}=p_{0}+\rho gh+\Delta p_{1}$\ccnum{④}，
+
+	$p_{2}=p_{0}+\Delta p_{2}$\ccnum{⑤}，
+
+	气泡体积 $V_{1}$ 和 $V_{2}$ 分别为
+
+	$V_{1}=\frac{4}{3}\pi r_{1}^{3}$\ccnum{⑥}，
+
+	$V_{2}=\frac{4}{3}\pi r_{2}^{3}$\ccnum{⑦}，
+
+	联立\ccnum{③}\ccnum{④}\ccnum{⑤}\ccnum{⑥}\ccnum{⑦}式得 $\left(\frac{r_{1}}{r_{2}}\right)^{3}=\frac{p_{0}+\Delta p_{2}}{\rho gh+p_{0}+\Delta p_{1}}$\ccnum{⑧}，
+
+	由\ccnum{②}式知，$\Delta p_{i}\ll p_{0}$（$i=1,2$），故可略去\ccnum{⑧}式中的 $\Delta p_{1}$、$\Delta p_{2}$ 项。代入题给数据得
+
+	$\frac{r_{2}}{r_{1}}=\sqrt[3]{2}\approx1.3$\ccnum{⑨}。
+}
+
+\item
+%% number: 34
+%% paperName: 2016年全国理综Ⅰ第 34 题 10 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 光学
+%% point: 光的折射
+%% method: 无
+%% score: 10
+%% degree: 450
+%% duplicateId: 0
+%% body:
+【物理——选修 3-4】（15 分）
+
+（1）（5 分）某同学漂浮在海面上，虽然水面波正平稳地以 $1.8\Ums$ 的速率向着海滩传播，但他并不向海滩靠近。该同学发现从第 1 个波峰到第 10 个波峰通过身下的时间间隔为 $15\Us$。下列说法正确的是\xzanswer{ACE}。（填正确答案标号。选对 1 个得 2 分，选对 2 个得 4 分，选对 3 个得 5 分。每选错 1 个扣 3 分，最低得分为 0 分）
+
+\fivechoices[answer=ACE]
+{水面波是一种机械波}
+{该水面波的频率为 $6\UHz$}
+{该水面波的波长为 $3\Um$}
+{水面波没有将该同学推向岸边，是因为波传播时能量不会传递出去}
+{水面波没有将该同学推向岸边，是因为波传播时振动的质点并不随波迁移}
+
+（2）（10 分）如图，在注满水的游泳池的池底有一点光源 A，它到池边的水平距离为 $3.0\Um$。从点光源 A 射向池边的光线 AB 与竖直方向的夹角恰好等于全反射的临界角，水的折射率为 $\frac{4}{3}$。
+\begin{enumerate}
+	\item
+	求池内的水深；
+	\item
+	一救生员坐在离池边不远处的高凳上，他的眼睛到地面的高度为 $2.0\Um$。当他看到正前下方的点光源 A 时，他的眼睛所接受的光线与竖直方向的夹角恰好为 $45^{\circ}$。求救生员的眼睛到池边的水平距离（结果保留 1 位有效数字）。
+\end{enumerate}
+
+\onepicture[h=4.6cm, align=right]{\includesvg{figs/34}}
+
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	$\sqrt{7}\Um$
+	\item
+	$0.7\Um$
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+	（1）水面波属于机械波，故 A 正确；由 $v=\frac{\lambda}{T}$ 和 $T=\frac{15}{9}\Us$ 得水面波的频率为 $0.6\UHz$、波长为 $3\Um$，故 B 错误、C 正确；由机械波的传播规律可知，介质传播的是振源的振动形式和能量，介质中的质点本身只重复振源的振动，并不随波运动，故 D 错误、E 正确。
+
+	（i）设到达池边的光线的入射角为 $i$。依题意，水的折射率 $n=\frac{4}{3}$，光线的折射角 $\theta=90^{\circ}$。由折射定律得
+
+	$n\sin i=\sin\theta$\ccnum{①}，
+
+	$\sin i=\frac{l}{\sqrt{l^{2}+h^{2}}}$\ccnum{②}，
+
+	式中 $l=3\Um$，$h$ 是池内水的深度。联立\ccnum{①}\ccnum{②}式并代入题给数据得
+
+	$h=\sqrt{7}\Um\approx2.6\Um$\ccnum{③}。
+
+	（ii）设此时救生员的眼睛到池边的距离为 $x$。依题意，救生员的视线与竖直方向的夹角为 $\theta'=45^{\circ}$。由折射定律得
+
+	$n\sin i'=\sin\theta'$\ccnum{④}，
+
+	式中 $i'$ 是光线在水中的入射角。设池底点光源 A 到水面入射点的水平距离为 $a$，由几何关系得
+
+	$\sin i'=\frac{a}{\sqrt{a^{2}+h^{2}}}$\ccnum{⑤}，
+
+	$x+l=a+h'$\ccnum{⑥}，
+
+	式中 $h'=2\Um$。联立\ccnum{③}\ccnum{④}\ccnum{⑤}\ccnum{⑥}式得
+
+	$x=\left(3\sqrt{\frac{7}{23}}-1\right)\Um\approx0.7\Um$\ccnum{⑦}。
+}
+
+\item
+%% number: 35
+%% paperName: 2016年全国理综Ⅰ第 35 题 10 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 运动和力
+%% point: 动量定理
+%% method: 微元
+%% score: 10
+%% degree: 450
+%% duplicateId: 0
+%% body:
+【物理——选修 3-5】（15 分）
+
+（1）（5 分）现用一光电管进行光电效应的实验，当用某一频率的光入射时，有光电流产生。下列说法正确的是\xzanswer{ACE}。（填正确答案标号。选对 1 个得 2 分，选对 2 个得 4 分，选对 3 个得 5 分。每选错 1 个扣 3 分，最低得分为 0 分）
+
+\fivechoices[answer=ACE]
+{保持入射光的频率不变，入射光的光强变大，饱和光电流变大}
+{入射光的频率变高，饱和光电流变大}
+{入射光的频率变高，光电子的最大初动能变大}
+{保持入射光的光强不变，不断减小入射光的频率，始终有光电流产生}
+{遏止电压的大小与入射光的频率有关，与入射光的光强无关}
+
+（2）（10 分）某游乐园入口旁有一喷泉，喷出的水柱将一质量为 $M$ 的卡通玩具稳定地悬停在空中。为计算方便起见，假设水柱从横截面积为 $S$ 的喷口持续以速度 $v_{0}$ 竖直向上喷出；玩具底部为平板（面积略大于 $S$）；水柱冲击到玩具底板后，在竖直方向水的速度变为零，在水平方向朝四周均匀散开。忽略空气阻力。已知水的密度为 $\rho$，重力加速度大小为 $g$。求：
+\begin{enumerate}
+	\item
+	喷泉单位时间内喷出的水的质量；
+	\item
+	玩具在空中悬停时，其底面相对于喷口的高度。
+\end{enumerate}
+
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	$\rho v_{0}S$
+	\item
+	$\frac{v_{0}^{2}}{2g}-\frac{M^{2}g}{2\rho^{2}v_{0}^{2}S^{2}}$
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+	（1）入射光频率不变时，光强越大，单位时间内发射的光电子数目就越多，故饱和光电流越大，故 A 正确；饱和光电流与光强有关，与频率无关，故 B 错误；由爱因斯坦光电效应方程 $h\nu=W+E_{k}$ 知，对于同一光电管，逸出功 $W$ 不变，当频率变高时，最大初动能 $E_{k}$ 变大，故 C 正确；不断减小入射光的频率，当频率小于材料的截止频率时，就没有光电流产生，故 D 错误；由 $E_{k}=eU_{c}$ 和 $E_{k}=h\nu-W$ 得 $h\nu-W=eU_{c}$，遏止电压只与入射光频率有关，与入射光强无关，故 E 正确。
+
+	（i）设 $\Delta t$ 时间内，从喷口喷出的水的体积为 $\Delta V$、质量为 $\Delta m$，则
+
+	$\Delta m=\rho\Delta V$\ccnum{①}，
+
+	$\Delta V=v_{0}S\Delta t$\ccnum{②}，
+
+	由\ccnum{①}\ccnum{②}式得，单位时间内从喷口喷出的水的质量为
+
+	$\frac{\Delta m}{\Delta t}=\rho v_{0}S$\ccnum{③}。
+
+	（ii）设玩具悬停时其底面相对于喷口的高度为 $h$，水从喷口喷出后到达玩具底面时的速度大小为 $v$。对于 $\Delta t$ 时间内喷出的水，由能量守恒得
+
+	$\frac{1}{2}(\Delta m)v^{2}+(\Delta m)gh=\frac{1}{2}(\Delta m)v_{0}^{2}$\ccnum{④}，
+
+	在 $h$ 高度处，$\Delta t$ 时间内喷射到玩具底面的水沿竖直方向的动量变化量的大小为
+
+	$\Delta p=(\Delta m)v$\ccnum{⑤}，
+
+	设水对玩具的作用力的大小为 $F$，由动量定理得
+
+	$F\Delta t=\Delta p$\ccnum{⑥}，
+
+	由于玩具在空中悬停，由力的平衡条件得
+
+	$F=Mg$\ccnum{⑦}，
+
+	联立\ccnum{③}\ccnum{④}\ccnum{⑤}\ccnum{⑥}\ccnum{⑦}式得
+
+	$h=\frac{v_{0}^{2}}{2g}-\frac{M^{2}g}{2\rho^{2}v_{0}^{2}S^{2}}$。
+}
+
+\end{enumerate}
+
+\end{document}
