@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2010/2010_重庆理综/tiku_images/4601-5200/4943_2.png",
+      "crops": [
+        {"rect": [9, 3, 368, 308], "target": "试卷/2010/重庆理综/figs/22b.png"},
+        {"rect": [463, 57, 240, 196], "target": "试卷/2010/重庆理综/figs/22c.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}
