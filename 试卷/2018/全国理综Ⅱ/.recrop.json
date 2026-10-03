@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2018/全国理综Ⅱ/pdfimages/p1_0.jpg",
+      "crops": [
+        {"rect": [0, 0, 285, 225], "target": "试卷/2018/全国理综Ⅱ/figs/18a.png"},
+        {"rect": [295, 0, 280, 225], "target": "试卷/2018/全国理综Ⅱ/figs/18b.png"},
+        {"rect": [600, 0, 280, 225], "target": "试卷/2018/全国理综Ⅱ/figs/18c.png"},
+        {"rect": [915, 0, 285, 225], "target": "试卷/2018/全国理综Ⅱ/figs/18d.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2018/全国理综Ⅱ/pdfimages/p3_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 515, 488], "target": "试卷/2018/全国理综Ⅱ/figs/23a.png"},
+        {"rect": [515, 0, 285, 488], "target": "试卷/2018/全国理综Ⅱ/figs/23b.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

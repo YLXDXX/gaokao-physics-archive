@@ -1,0 +1,20 @@
+{
+  "splitpicture": "splitpicture",
+  "trim": {"padding": 8},
+  "entries": [
+    {
+      "source": "材料处理/2018/全国理综Ⅲ/pdfimages/p2_3.jpg",
+      "crops": [
+        {"rect": [0, 0, 165, 280], "target": "试卷/2018/全国理综Ⅲ/figs/20a.png"},
+        {"rect": [205, 0, 625, 280], "target": "试卷/2018/全国理综Ⅲ/figs/20b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2018/全国理综Ⅲ/pdfimages/p3_4.jpg",
+      "crops": [
+        {"rect": [0, 0, 350, 420], "target": "试卷/2018/全国理综Ⅲ/figs/23a.png"},
+        {"rect": [360, 0, 440, 420], "target": "试卷/2018/全国理综Ⅲ/figs/23b.png"}
+      ]
+    }
+  ]
+}

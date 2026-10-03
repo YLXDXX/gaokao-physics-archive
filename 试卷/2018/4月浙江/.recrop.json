@@ -1,0 +1,24 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2018/2018_4月浙江/tiku_images/24001-25000/24373_2.png",
+      "crops": [
+        {"rect": [0, 0, 400, 215], "target": "试卷/2018/4月浙江/figs/07a.png"},
+        {"rect": [400, 0, 400, 215], "target": "试卷/2018/4月浙江/figs/07b.png"},
+        {"rect": [0, 260, 400, 230], "target": "试卷/2018/4月浙江/figs/07c.png"},
+        {"rect": [400, 260, 400, 230], "target": "试卷/2018/4月浙江/figs/07d.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2018/4月浙江/pdfimages/24374_render.png",
+      "crops": [
+        {"rect": [0, 0, 790, 665], "target": "试卷/2018/4月浙江/figs/08a.png"},
+        {"rect": [790, 0, 790, 665], "target": "试卷/2018/4月浙江/figs/08b.png"},
+        {"rect": [1580, 0, 790, 665], "target": "试卷/2018/4月浙江/figs/08c.png"},
+        {"rect": [2370, 0, 854, 665], "target": "试卷/2018/4月浙江/figs/08d.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

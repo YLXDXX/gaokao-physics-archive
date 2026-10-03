@@ -1,0 +1,27 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2018/海南理综/pdfimages/p3_1.jpg",
+      "crops": [
+        {"rect": [10, 0, 495, 318], "target": "试卷/2018/海南理综/figs/08a.png"},
+        {"rect": [510, 0, 511, 335], "target": "试卷/2018/海南理综/figs/08b.png"}
+      ],
+      "trim": {"padding": 5}
+    },
+    {
+      "source": "材料处理/2018/海南理综/pdfimages/p5_7.jpg",
+      "crops": [
+        {"rect": [5, 5, 370, 307], "target": "试卷/2018/海南理综/figs/12a.png"},
+        {"rect": [378, 5, 317, 325], "target": "试卷/2018/海南理综/figs/12b.png"}
+      ],
+      "trim": {"padding": 5}
+    },
+    {
+      "source": "材料处理/2018/海南理综/pdfimages/p6_9.jpg",
+      "crops": [
+        {"rect": [0, 0, 500, 500], "target": "试卷/2018/海南理综/figs/12c.png"}
+      ],
+      "trim": {"padding": 5}
+    }
+  ]
+}
