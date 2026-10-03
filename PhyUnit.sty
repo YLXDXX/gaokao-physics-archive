@@ -299,4 +299,11 @@
 % ── 新增单位（2016 江苏理综）：按「类别：符号 中文全称」注释 ─────────────────
 \NewDocumentCommand \UNmn { O{} } { \__phyunit_space:n{#1} \mathrm{m}/\mathrm{N} } % 劲度系数倒数：m/N 米每牛（与毫牛 \UmN 区分）
 
+% ── 新增单位（2011 北京理综）：按「类别：符号 中文全称」注释 ─────────────────
+\NewDocumentCommand \UCF { O{} } { \__phyunit_space:n{#1} \mathrm{C}/\mathrm{F} } % 电压等效单位：C/F 库仑每法拉
+\NewDocumentCommand \UWA { O{} } { \__phyunit_space:n{#1} \mathrm{W}/\mathrm{A} } % 电压等效单位：W/A 瓦每安培
+\NewDocumentCommand \UTmqs { O{} } { \__phyunit_space:n{#1} \mathrm{T}\cdot\mathrm{m}^{2}/\mathrm{s} } % 电压等效单位：T·m²/s 特斯拉二次方米每秒
+\NewDocumentCommand \UCTms { O{} } { \__phyunit_space:n{#1} \mathrm{C}\cdot\mathrm{T}\cdot\mathrm{m}/\mathrm{s} } % 复合单位：C·T·m/s 库仑特斯拉米每秒
+\NewDocumentCommand \UTAm { O{} } { \__phyunit_space:n{#1} \mathrm{T}\cdot\mathrm{A}\cdot\mathrm{m} } % 复合单位：T·A·m 特斯拉安培米
+
 \endinput
