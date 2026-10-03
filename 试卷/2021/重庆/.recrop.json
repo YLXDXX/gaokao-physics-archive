@@ -1,0 +1,41 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2021/重庆/pdfimages/p5_17.jpg",
+      "crops": [
+        {"rect": [0, 0, 410, 395], "target": "试卷/2021/重庆/figs/12a.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/重庆/pdfimages/p5_18.jpg",
+      "crops": [
+        {"rect": [0, 0, 816, 272], "target": "试卷/2021/重庆/figs/12b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/重庆/pdfimages/p6_21.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 390], "target": "试卷/2021/重庆/figs/12c.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/重庆/pdfimages/p7_25.jpg",
+      "crops": [
+        {"rect": [0, 0, 375, 330], "target": "试卷/2021/重庆/figs/14a.png"},
+        {"rect": [410, 0, 443, 330], "target": "试卷/2021/重庆/figs/14b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/重庆/pdfimages/p8_30.jpg",
+      "crops": [
+        {"rect": [0, 0, 285, 259], "target": "试卷/2021/重庆/figs/15a.png"},
+        {"rect": [350, 0, 331, 259], "target": "试卷/2021/重庆/figs/15b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    }
+  ]
+}

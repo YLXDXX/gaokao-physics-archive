@@ -1,0 +1,14 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2021/2021_天津/tiku_images/34001-35000/34830.png",
+      "crops": [
+        {"rect": [2, 2, 205, 114], "target": "试卷/2021/天津/figs/04a.png"},
+        {"rect": [213, 2, 213, 114], "target": "试卷/2021/天津/figs/04b.png"},
+        {"rect": [433, 2, 202, 114], "target": "试卷/2021/天津/figs/04c.png"},
+        {"rect": [642, 2, 191, 114], "target": "试卷/2021/天津/figs/04d.png"}
+      ],
+      "compare": true
+    }
+  ]
+}

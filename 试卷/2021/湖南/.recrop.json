@@ -1,0 +1,41 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2021/湖南/pdfimages/p6_8.jpg",
+      "crops": [
+        {"rect": [0, 250, 622, 160], "target": "试卷/2021/湖南/figs/08a.png"},
+        {"rect": [655, 0, 616, 445], "target": "试卷/2021/湖南/figs/08b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2021/湖南/pdfimages/p9_12.jpg",
+      "crops": [
+        {"rect": [20, 98, 382, 198], "target": "试卷/2021/湖南/figs/11a.png"},
+        {"rect": [470, 8, 689, 310], "target": "试卷/2021/湖南/figs/11b.png"}
+      ],
+      "erase": [[158, 272, 120, 38], [720, 278, 130, 45]]
+    },
+    {
+      "source": "材料处理/2021/湖南/pdfimages/p10_15.jpg",
+      "crops": [
+        {"rect": [10, 20, 488, 345], "target": "试卷/2021/湖南/figs/12a.png"},
+        {"rect": [685, 20, 300, 308], "target": "试卷/2021/湖南/figs/12b.png"},
+        {"rect": [1088, 15, 380, 300], "target": "试卷/2021/湖南/figs/12c.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2021/湖南/pdfimages/p12_17.jpg",
+      "crops": [
+        {"rect": [0, 0, 420, 449], "target": "试卷/2021/湖南/figs/13a.png"},
+        {"rect": [560, 0, 559, 449], "target": "试卷/2021/湖南/figs/13b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2021/湖南/pdfimages/p17_24.jpg",
+      "crops": [
+        {"rect": [0, 0, 305, 385], "target": "试卷/2021/湖南/figs/17a.png"},
+        {"rect": [460, 0, 472, 382], "target": "试卷/2021/湖南/figs/17b.png"}
+      ]
+    }
+  ]
+}

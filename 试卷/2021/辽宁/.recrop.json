@@ -1,0 +1,38 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2021/辽宁/pdfimages/p2_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 427, 199], "target": "试卷/2021/辽宁/figs/07a.png"},
+        {"rect": [476, 0, 394, 199], "target": "试卷/2021/辽宁/figs/07b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/辽宁/pdfimages/p3_9.jpg",
+      "crops": [
+        {"rect": [3, 2, 225, 313], "target": "试卷/2021/辽宁/figs/09a.png"},
+        {"rect": [316, 45, 371, 278], "target": "试卷/2021/辽宁/figs/09b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/辽宁/pdfimages/p5_11.jpg",
+      "crops": [
+        {"rect": [2, 2, 149, 573], "target": "试卷/2021/辽宁/figs/11a.png"},
+        {"rect": [222, 50, 707, 525], "target": "试卷/2021/辽宁/figs/11b.png"}
+      ],
+      "erase": [[50, 546, 72, 36], [504, 536, 74, 38]],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/辽宁/pdfimages/p7_14.jpg",
+      "crops": [
+        {"rect": [8, 5, 254, 263], "target": "试卷/2021/辽宁/figs/14a.png"},
+        {"rect": [300, 54, 431, 234], "target": "试卷/2021/辽宁/figs/14b.png"}
+      ],
+      "erase": [[121, 256, 60, 34], [448, 253, 60, 34]],
+      "trim": {"padding": 8, "threshold": 200}
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2021/北京/pdfimages/p9_70.jpg",
+      "crops": [
+        {"rect": [0, 0, 506, 217], "target": "试卷/2021/北京/figs/15a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/北京/pdfimages/p9_71.jpg",
+      "crops": [
+        {"rect": [0, 0, 1078, 168], "target": "试卷/2021/北京/figs/15b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/北京/pdfimages/p9_72.jpg",
+      "crops": [
+        {"rect": [0, 0, 525, 303], "target": "试卷/2021/北京/figs/15c.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/北京/pdfimages/p10_77.jpg",
+      "crops": [
+        {"rect": [0, 0, 777, 395], "target": "试卷/2021/北京/figs/16a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/北京/pdfimages/p10_78.jpg",
+      "crops": [
+        {"rect": [0, 0, 481, 450], "target": "试卷/2021/北京/figs/16b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/北京/pdfimages/p11_81.jpg",
+      "crops": [
+        {"rect": [0, 0, 440, 274], "target": "试卷/2021/北京/figs/16c.png"},
+        {"rect": [440, 0, 424, 274], "target": "试卷/2021/北京/figs/16d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/北京/pdfimages/p11_86.jpg",
+      "crops": [
+        {"rect": [0, 0, 504, 467], "target": "试卷/2021/北京/figs/16_an.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/北京/pdfimages/p13_97.jpg",
+      "crops": [
+        {"rect": [0, 0, 370, 233], "target": "试卷/2021/北京/figs/19a.png"},
+        {"rect": [370, 0, 308, 233], "target": "试卷/2021/北京/figs/19b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/北京/pdfimages/p13_100.jpg",
+      "crops": [
+        {"rect": [0, 0, 343, 295], "target": "试卷/2021/北京/figs/19_an.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/北京/pdfimages/p5_30.jpg",
+      "crops": [
+        {"rect": [0, 0, 546, 371], "target": "试卷/2021/北京/figs/09_an.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/北京/pdfimages/p6_44.jpg",
+      "crops": [
+        {"rect": [0, 0, 326, 249], "target": "试卷/2021/北京/figs/12_an.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

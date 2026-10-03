@@ -1,0 +1,72 @@
+{
+  "splitpicture": "splitpicture",
+  "trim": {"padding": 8},
+  "entries": [
+    {
+      "source": "材料处理/2021/全国乙卷/pdfimages/p1_1.jpg",
+      "crops": [
+        {"rect": [5, 7, 251, 265], "target": "试卷/2021/全国乙卷/figs/02a.png"},
+        {"rect": [314, 7, 371, 265], "target": "试卷/2021/全国乙卷/figs/02b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2021/全国乙卷/pdfimages/p5_10.jpg",
+      "crops": [
+        {"rect": [5, 17, 491, 279], "target": "试卷/2021/全国乙卷/figs/08a.png"},
+        {"rect": [574, 17, 355, 279], "target": "试卷/2021/全国乙卷/figs/08b.png"},
+        {"rect": [1075, 17, 361, 279], "target": "试卷/2021/全国乙卷/figs/08c.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2021/全国乙卷/pdfimages/p12_19.jpg",
+      "crops": [
+        {"rect": [11, 8, 315, 350], "target": "试卷/2021/全国乙卷/figs/16a.png"},
+        {"rect": [450, 8, 510, 350], "target": "试卷/2021/全国乙卷/figs/16b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2021/全国乙卷/pdfimages/p6_11.jpg",
+      "crops": [
+        {"rect": [13, 17, 689, 558], "target": "试卷/2021/全国乙卷/figs/09a.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2021/全国乙卷/pdfimages/p6_12.jpg",
+      "crops": [
+        {"rect": [26, 23, 568, 643], "target": "试卷/2021/全国乙卷/figs/09b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2021/全国乙卷/pdfimages/p4_6.jpg",
+      "crops": [{"rect": [0, 0, 232, 234], "target": "试卷/2021/全国乙卷/figs/07a.png"}]
+    },
+    {
+      "source": "材料处理/2021/全国乙卷/pdfimages/p4_7.jpg",
+      "crops": [{"rect": [0, 0, 231, 229], "target": "试卷/2021/全国乙卷/figs/07b.png"}]
+    },
+    {
+      "source": "材料处理/2021/全国乙卷/pdfimages/p4_8.jpg",
+      "crops": [{"rect": [0, 0, 238, 241], "target": "试卷/2021/全国乙卷/figs/07c.png"}]
+    },
+    {
+      "source": "材料处理/2021/全国乙卷/pdfimages/p4_9.jpg",
+      "crops": [{"rect": [0, 0, 227, 227], "target": "试卷/2021/全国乙卷/figs/07d.png"}]
+    },
+    {
+      "source": "材料处理/2021/全国乙卷/pdfimages/p6_13.jpg",
+      "crops": [{"rect": [0, 0, 424, 289], "target": "试卷/2021/全国乙卷/figs/10a.png"}]
+    },
+    {
+      "source": "材料处理/2021/全国乙卷/pdfimages/p7_14.jpg",
+      "crops": [{"rect": [0, 0, 589, 492], "target": "试卷/2021/全国乙卷/figs/10b.png"}]
+    },
+    {
+      "source": "材料处理/2021/全国乙卷/pdfimages/p2_4.jpg",
+      "crops": [{"rect": [0, 0, 385, 417], "target": "试卷/2021/全国乙卷/figs/03_an.png"}]
+    },
+    {
+      "source": "材料处理/2021/全国乙卷/pdfimages/p13_20.jpg",
+      "crops": [{"rect": [0, 0, 526, 313], "target": "试卷/2021/全国乙卷/figs/16_an.png"}]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2021/湖北/pdfimages/p2_0.jpg",
+      "crops": [
+        {"rect": [0, 0, 335, 341], "target": "试卷/2021/湖北/figs/04a.png"},
+        {"rect": [335, 0, 399, 341], "target": "试卷/2021/湖北/figs/04b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/湖北/pdfimages/p7_flat.png",
+      "crops": [
+        {"rect": [0, 0, 420, 410], "target": "试卷/2021/湖北/figs/12a.png"},
+        {"rect": [420, 0, 930, 410], "target": "试卷/2021/湖北/figs/12b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/湖北/pdfimages/p9_9.jpg",
+      "crops": [
+        {"rect": [0, 0, 390, 490], "target": "试卷/2021/湖北/figs/13a.png"},
+        {"rect": [400, 0, 499, 490], "target": "试卷/2021/湖北/figs/13b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/湖北/pdfimages/p10_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 325, 281], "target": "试卷/2021/湖北/figs/14a.png"},
+        {"rect": [325, 0, 335, 281], "target": "试卷/2021/湖北/figs/14b.png"},
+        {"rect": [660, 0, 332, 281], "target": "试卷/2021/湖北/figs/14c.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/湖北/pdfimages/p13_13.jpg",
+      "crops": [
+        {"rect": [0, 0, 400, 386], "target": "试卷/2021/湖北/figs/16a.png"},
+        {"rect": [420, 0, 335, 386], "target": "试卷/2021/湖北/figs/16b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2021/湖北/pdfimages/p11_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 180, 319], "target": "试卷/2021/湖北/figs/14_an1.png"},
+        {"rect": [290, 0, 157, 319], "target": "试卷/2021/湖北/figs/14_an2.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

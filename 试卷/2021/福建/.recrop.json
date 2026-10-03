@@ -1,0 +1,65 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2021/福建/pdfimages/p8_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 250, 245], "target": "试卷/2021/福建/figs/11a.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/福建/pdfimages/p8_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 825, 365], "target": "试卷/2021/福建/figs/11b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/福建/pdfimages/p8_12.jpg",
+      "crops": [
+        {"rect": [0, 0, 622, 275], "target": "试卷/2021/福建/figs/12a.png"},
+        {"rect": [625, 0, 374, 275], "target": "试卷/2021/福建/figs/12b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/福建/pdfimages/p9_13.jpg",
+      "crops": [
+        {"rect": [0, 0, 720, 340], "target": "试卷/2021/福建/figs/12c.png"},
+        {"rect": [735, 0, 425, 360], "target": "试卷/2021/福建/figs/12d.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/福建/pdfimages/p10_14.jpg",
+      "crops": [
+        {"rect": [0, 0, 275, 258], "target": "试卷/2021/福建/figs/14a.png"},
+        {"rect": [320, 0, 298, 258], "target": "试卷/2021/福建/figs/14b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/福建/pdfimages/p11_15.jpg",
+      "crops": [
+        {"rect": [0, 0, 290, 350], "target": "试卷/2021/福建/figs/15a.png"},
+        {"rect": [325, 0, 465, 350], "target": "试卷/2021/福建/figs/15b.png"},
+        {"rect": [840, 0, 389, 350], "target": "试卷/2021/福建/figs/15c.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/福建/pdfimages/p4_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 364, 327], "target": "试卷/2021/福建/figs/06_an1.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2021/福建/pdfimages/p4_6.jpg",
+      "crops": [
+        {"rect": [0, 0, 410, 454], "target": "试卷/2021/福建/figs/06_an2.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    }
+  ]
+}

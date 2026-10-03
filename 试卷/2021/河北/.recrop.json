@@ -1,0 +1,98 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2021/河北/pdfimages/p1_0.jpg",
+      "crops": [
+        {"rect": [0, 0, 278, 272], "target": "试卷/2021/河北/figs/02a.png"},
+        {"rect": [398, 0, 304, 272], "target": "试卷/2021/河北/figs/02b.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/河北/pdfimages/p8_10.jpg",
+      "crops": [
+        {"rect": [0, 110, 264, 300], "target": "试卷/2021/河北/figs/11a.png"},
+        {"rect": [288, 0, 582, 440], "target": "试卷/2021/河北/figs/11b.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/河北/pdfimages/p9_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 558, 528], "target": "试卷/2021/河北/figs/11c.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/河北/pdfimages/p9_12.jpg",
+      "crops": [
+        {"rect": [0, 0, 792, 613], "target": "试卷/2021/河北/figs/11_an.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/河北/pdfimages/p10_13.jpg",
+      "crops": [
+        {"rect": [0, 0, 1005, 352], "target": "试卷/2021/河北/figs/12a.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/河北/pdfimages/p10_14.jpg",
+      "crops": [
+        {"rect": [0, 0, 541, 405], "target": "试卷/2021/河北/figs/12b.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/河北/pdfimages/p11_15.jpg",
+      "crops": [
+        {"rect": [0, 0, 747, 526], "target": "试卷/2021/河北/figs/12_an.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/河北/pdfimages/p15_20.jpg",
+      "crops": [
+        {"rect": [0, 0, 335, 480], "target": "试卷/2021/河北/figs/15a.png"},
+        {"rect": [430, 0, 629, 480], "target": "试卷/2021/河北/figs/15b.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/河北/ovis/images/page_7_bbox_91_447_334_731.jpg",
+      "crops": [
+        {"rect": [0, 0, 343, 568], "target": "试卷/2021/河北/figs/10_an1.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/河北/pdfimages/p7_8.jpg",
+      "crops": [
+        {"rect": [0, 0, 470, 419], "target": "试卷/2021/河北/figs/10_an2.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/河北/pdfimages/p14_18.jpg",
+      "crops": [
+        {"rect": [0, 0, 885, 601], "target": "试卷/2021/河北/figs/14_an1.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/河北/pdfimages/p15_19.jpg",
+      "crops": [
+        {"rect": [0, 0, 911, 702], "target": "试卷/2021/河北/figs/14_an2.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/河北/pdfimages/p17_22.jpg",
+      "crops": [
+        {"rect": [0, 0, 307, 289], "target": "试卷/2021/河北/figs/18_an.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

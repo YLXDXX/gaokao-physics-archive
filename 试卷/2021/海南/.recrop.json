@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2021/海南/pdfimages/p11_20.jpg",
+      "crops": [
+        {"rect": [0, 6, 341, 216], "target": "试卷/2021/海南/figs/16a.png"},
+        {"rect": [373, 0, 396, 217], "target": "试卷/2021/海南/figs/16b.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

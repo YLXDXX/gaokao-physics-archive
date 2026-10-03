@@ -1,0 +1,55 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2021/6月浙江/pdfimages/p1_0.jpg",
+      "crops": [
+        {"rect": [0, 0, 306, 193], "target": "试卷/2021/6月浙江/figs/02a.png"},
+        {"rect": [315, 0, 307, 193], "target": "试卷/2021/6月浙江/figs/02b.png"},
+        {"rect": [624, 0, 301, 193], "target": "试卷/2021/6月浙江/figs/02c.png"},
+        {"rect": [927, 0, 480, 193], "target": "试卷/2021/6月浙江/figs/02d.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/6月浙江/pdfimages/p3_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 465, 190], "target": "试卷/2021/6月浙江/figs/09a.png"},
+        {"rect": [0, 241, 465, 152], "target": "试卷/2021/6月浙江/figs/09b.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/6月浙江/pdfimages/p7_13.jpg",
+      "crops": [
+        {"rect": [0, 0, 218, 287], "target": "试卷/2021/6月浙江/figs/17a.png"},
+        {"rect": [0, 328, 868, 93], "target": "试卷/2021/6月浙江/figs/17b.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/6月浙江/pdfimages/p9_16.jpg",
+      "crops": [
+        {"rect": [0, 0, 278, 247], "target": "试卷/2021/6月浙江/figs/19a.png"},
+        {"rect": [338, 12, 242, 188], "target": "试卷/2021/6月浙江/figs/19b.png"},
+        {"rect": [0, 298, 592, 228], "target": "试卷/2021/6月浙江/figs/19c.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/6月浙江/pdfimages/p12_20.jpg",
+      "crops": [
+        {"rect": [0, 0, 338, 268], "target": "试卷/2021/6月浙江/figs/22a.png"},
+        {"rect": [347, 0, 335, 268], "target": "试卷/2021/6月浙江/figs/22b.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2021/6月浙江/pdfimages/p14_23.jpg",
+      "crops": [
+        {"rect": [0, 0, 622, 420], "target": "试卷/2021/6月浙江/figs/23a.png"},
+        {"rect": [676, 0, 378, 420], "target": "试卷/2021/6月浙江/figs/23b.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}
