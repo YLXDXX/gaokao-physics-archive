@@ -135,12 +135,14 @@ make index        # 刷新 试卷/<年>/README.md 与 README 进度概要
 make progress     # 打印各年份进度概要
 ```
 
-> **并行编译注意（SVG / Inkscape）**：含 `\includesvg` 的卷会把每张 SVG 交给 Inkscape 转成
-> PDF；多个编译进程**同时调用 Inkscape 会随机崩溃**（报 `Gio::DBus::Error`），导致
-> `_svg-raw.pdf` 缺失、该卷编译失败。
-> **首次全量构建请串行**：`make`（默认 `JOBS=1`）或 `make -j1`；SVG 产物生成后再并行
-> `make JOBS=8`。并行失败后 latexmk 会把错误记入 `*.fdb_latexmk`，直接重跑会误报，
-> 须先 `make distclean` 再重编。
+> **并行编译（已支持）**：含 `\includesvg` 的卷每张 SVG 都会调用 Inkscape；多个进程并发
+> 调用 Inkscape 会因 `Gio::DBus::Error` 随机崩溃。各卷 Makefile 已把 `tools/bin/inkscape`
+> （`flock` 串行化包装）加入 `PATH`，因此 `make JOBS=8` / `make -jN` 可**安全并行**。
+> 若曾并行失败：latexmk 会把错误记入 `*.fdb_latexmk`，请先 `make distclean` 再重编。
+>
+> **软链接（TeXStudio）**：`make`（及各卷 `make student/teacher`）会**自动在每卷目录建立**
+> 指向根公共文件（`gaokaozhenti.cls`/`PhyUnit.sty`/`ChoiceQuestion.sty`/`package`）的相对软链接，
+> 因此可直接用 TeXStudio 打开某卷 `.tex` 编译，无需额外配置。
 
 
 ---

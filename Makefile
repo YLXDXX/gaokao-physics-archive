@@ -26,9 +26,11 @@
 #  并行：各卷相互独立，可并行编译。JOBS 指定并发线程数，默认 1（串行）；
 #        可用 make JOBS=8 指定，也可用 make -j8（取 -jN 的 N）。
 #        每个单元内部仍由各自的 Makefile 控制（此处以 JOBS=1 串行，避免超配）。
-#  注意：含 \includesvg 的卷会调用 Inkscape；多个编译进程同时调用 Inkscape 会随机
-#        崩溃（Gio::DBus::Error）致 _svg-raw.pdf 缺失。**首次全量构建请串行**（make 或
-#        make -j1），之后可并行；并行失败后先 make distclean 再重编（latexmk 错误状态残留）。
+#  Inkscape：svg 宏包每张图调用一次 Inkscape；并发调用会因 Gio::DBus::Error 崩溃。
+#        各卷 Makefile 已把 tools/bin/inkscape（flock 串行化包装）加入 PATH，故可安全并行。
+#        若并行曾失败：latexmk 会把错误记入 *.fdb_latexmk，先 make distclean 再重编。
+#  软链接：各卷 make/all/student/teacher 会自动建立指向根公共文件的相对软链接（见 make links），
+#        便于用 TeXStudio 直接打开并编译各卷 .tex。
 # ===========================================================================
 PAPERS := 试卷/*/*
 # 指定年份只处理该年（如 make check YEAR=2000），成千套时便于增量自查

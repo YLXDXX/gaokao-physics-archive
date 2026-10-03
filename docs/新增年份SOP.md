@@ -8,8 +8,8 @@
 1. **取数**：`python3 tools/json_to_tex.py JSON/<年>/<年_地区>.json`
    （生成 `试卷/<年>/<地区>/<地区>.tex` 初稿与 `figs/`；初稿已自动补缺详解占位、
    非选择题 `\jdanswer`、多图/图片选项；**理综 / 理基节选**加 `--paper-type 理综物理部分`）。
-   新建卷目录还需复制一份 `Makefile`（模板见任一已有卷）并
-   `python3 tools/tex_links.py 试卷/<年>/<地区>` 建立公共文件软链接。
+   新建卷目录只需复制一份 `Makefile`（模板见任一已有卷）；`make` / `student` / `teacher`
+   会自动执行 `tools/tex_links.py` 在本卷建立软链接（供 TeXStudio 直接编译）。
    > 默认元数据 `%% number` **保留平台原题号**（显示序号由 `enumerate` 自动生成）。
    > 若确需重编号，用 `--renumber`：会写卷级 `%% sourceNumbers`，`check_meta.py` /
    > `check_review.py` 会按该映射回平台原题号比对。

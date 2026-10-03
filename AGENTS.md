@@ -38,8 +38,8 @@ make -C 试卷/<年>/<地区> check                                # 4 自查（
 ```
 
 > 统一在**仓库根**执行命令，用 `make -C 试卷/…` 进入卷目录；**不要** `cd`。
-> 新建卷目录时还需复制一份 `Makefile`（模板见任一已有卷）并执行
-> `python3 tools/tex_links.py 试卷/<年>/<地区>` 建立公共文件软链接。
+> 新建卷目录时复制一份 `Makefile`（模板见任一已有卷）即可；`make`（含 `student`/`teacher`）
+> 会自动执行 `tools/tex_links.py` 在本卷建立指向根公共文件的相对软链接（供 TeXStudio 直接编译）。
 
 ## 硬性规则（会被 `make check` 检查）
 

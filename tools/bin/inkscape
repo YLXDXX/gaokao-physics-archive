@@ -1,0 +1,28 @@
+#!/bin/sh
+# ===========================================================================
+#  tools/bin/inkscape —— Inkscape 串行化包装（供并行编译使用）
+#
+#  背景：svg 宏包会为每张 SVG 调用一次 Inkscape；`make -jN` 时多个 Inkscape 进程
+#        并发调用会随机崩溃（报 `Gio::DBus::Error`），导致 <名>_svg-raw.pdf 缺失、
+#        该卷编译失败。本包装用 flock 把 Inkscape 调用串行化，从而可安全并行编译。
+#
+#  用法：无需手动调用；各卷 Makefile 已把本目录加入 PATH，svg 宏包按名调用 inkscape
+#        时即命中本脚本。若系统无 flock（如部分 macOS），退化为直接调用（此时应串行）。
+# ===========================================================================
+set -u
+selfdir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd) || exit 1
+# 从 PATH 中剔除本目录，避免递归调用自身
+clean=
+oifs=$IFS
+IFS=:
+for d in $PATH; do
+	[ "$d" = "$selfdir" ] && continue
+	clean=${clean:+$clean:}$d
+done
+IFS=$oifs
+PATH=$clean
+export PATH
+if command -v flock >/dev/null 2>&1; then
+	exec flock "${INKSCAPE_LOCK:-${TMPDIR:-/tmp}/gaokao-physics-inkscape.lock}" inkscape "$@"
+fi
+exec inkscape "$@"

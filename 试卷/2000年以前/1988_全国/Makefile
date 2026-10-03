@@ -10,6 +10,7 @@
 #    make tikz-compare 生成「重绘 TikZ 与原图」对比图（tikz_compare/，需先登记 TikZ/tikz_sources.json）
 #    make check      规范自查（结构/元数据、内容、答案、公式编号、单位、版面、缺字、跨项复查）
 #    make links      创建/更新指向项目根公共文件（文档类/宏包）的软链接
+#                    （make/all/student/teacher 会自动先执行，便于 TeXStudio 直接编译）
 #    make clean      清理辅助文件
 #    make distclean  清理辅助文件与 PDF 成品
 #
@@ -27,6 +28,8 @@
 # ===========================================================================
 ROOT     := ../../..
 export TEXINPUTS := $(ROOT):
+# 并行编译时经 tools/bin/inkscape（flock 串行化）调用 Inkscape，避免并发 Gio::DBus::Error 崩溃
+export PATH := $(abspath $(ROOT))/tools/bin:$(PATH)
 # svg 宏包需调用 Inkscape，故开启 shell-escape
 LATEXMK  := latexmk -xelatex -shell-escape -interaction=nonstopmode -halt-on-error
 
@@ -49,7 +52,7 @@ all: tikz
 	@$(MAKE) --no-print-directory student
 	@$(MAKE) --no-print-directory teacher
 
-student teacher: tikz
+student teacher: tikz links
 
 student:
 	@for d in $(BASE); do printf '%s\0' "$$d"; done \
