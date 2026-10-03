@@ -1,0 +1,14 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2002/上海春季理综/pdfimages/p1_0.jpg",
+      "crops": [
+        {"rect": [0, 0, 280, 236], "target": "试卷/2002/上海春季理综/figs/14a.png"},
+        {"rect": [280, 0, 313, 236], "target": "试卷/2002/上海春季理综/figs/14b.png"},
+        {"rect": [593, 0, 293, 236], "target": "试卷/2002/上海春季理综/figs/14c.png"},
+        {"rect": [886, 0, 232, 236], "target": "试卷/2002/上海春季理综/figs/14d.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

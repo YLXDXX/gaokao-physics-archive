@@ -1,0 +1,14 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2002/2002_上海理综/tiku_images/28001-29000/28485_2.png",
+      "crops": [
+        {"rect": [9, 148, 178, 303], "target": "试卷/2002/上海理综/figs/30b_A.png"},
+        {"rect": [379, 149, 295, 312], "target": "试卷/2002/上海理综/figs/30b_B.png"},
+        {"rect": [937, 31, 351, 432], "target": "试卷/2002/上海理综/figs/30b_C.png"},
+        {"rect": [1361, 14, 473, 443], "target": "试卷/2002/上海理综/figs/30b_D.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

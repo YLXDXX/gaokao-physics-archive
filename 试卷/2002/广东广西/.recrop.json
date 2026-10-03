@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2002/广东广西/pdfimages/p5_9.jpg",
+      "crops": [
+        {"rect": [8, 0, 470, 432], "target": "试卷/2002/广东广西/figs/20a.png"},
+        {"rect": [500, 0, 816, 432], "target": "试卷/2002/广东广西/figs/20b.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}
