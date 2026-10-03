@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2006/2006_全国理综Ⅱ/tiku_images/1-1000/797.png",
+      "crops": [
+        {"rect": [13, 5, 357, 371], "target": "试卷/2006/全国理综Ⅱ/figs/22a.png"},
+        {"rect": [597, 9, 361, 370], "target": "试卷/2006/全国理综Ⅱ/figs/22b.png"}
+      ],
+      "trim": {"padding": 4, "threshold": 200}
+    },
+    {
+      "source": "JSON/2006/2006_全国理综Ⅱ/tiku_images/1-1000/798.png",
+      "crops": [
+        {"rect": [18, 18, 516, 483], "target": "试卷/2006/全国理综Ⅱ/figs/22c.png"}
+      ],
+      "trim": {"padding": 4, "threshold": 200}
+    }
+  ]
+}
