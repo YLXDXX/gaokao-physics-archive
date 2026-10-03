@@ -1,0 +1,45 @@
+{
+  "trim": {"padding": 6, "threshold": 200},
+  "entries": [
+    {
+      "source": "材料处理/2023/广东/pdfimages/p3_2.jpg",
+      "crops": [
+        {"rect": [0, 0, 532, 150], "target": "试卷/2023/广东/figs/07a.png"},
+        {"rect": [606, 0, 594, 163], "target": "试卷/2023/广东/figs/07b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2023/广东/pdfimages/p4_3.jpg",
+      "crops": [
+        {"rect": [0, 0, 777, 414], "target": "试卷/2023/广东/figs/09a.png"},
+        {"rect": [794, 0, 406, 374], "target": "试卷/2023/广东/figs/09b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2023/广东/pdfimages/p5_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 480], "target": "试卷/2023/广东/figs/11a.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2023/广东/pdfimages/p6_7.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 205], "target": "试卷/2023/广东/figs/11b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2023/广东/pdfimages/p6_8.jpg",
+      "crops": [
+        {"rect": [0, 0, 476, 384], "target": "试卷/2023/广东/figs/12a.png"},
+        {"rect": [515, 0, 685, 385], "target": "试卷/2023/广东/figs/12b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2023/广东/pdfimages/p8_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 399, 565], "target": "试卷/2023/广东/figs/14a.png"},
+        {"rect": [541, 90, 659, 478], "target": "试卷/2023/广东/figs/14b.png"}
+      ]
+    }
+  ]
+}

@@ -267,4 +267,21 @@
 
 \NewDocumentCommand \UMeVcSq { O{} } { \__phyunit_space:n{#1} \mathrm{MeV}/\mathrm{c}^{2} } % 质量：MeV/c² 兆电子伏特每光速平方
 
+\NewDocumentCommand \UkgmcmsqAq { O{} } { \__phyunit_space:n{#1} \mathrm{kg}\cdot\mathrm{m}^{3}\cdot\mathrm{s}^{-4}\cdot\mathrm{A}^{-2} } % 复合：kg·m³·s⁻⁴·A⁻² 静电力常量 k 的基本单位
+
+% ── 新增单位（2026-10-02）：按「类别：符号 中文全称」注释 ─────────────────
+\NewDocumentCommand \UJm { O{} } { \__phyunit_space:n{#1} \mathrm{J}/\mathrm{m} } % 复合：J/m 焦耳每米
+
+\NewDocumentCommand \UOpm { O{} } { \__phyunit_space:n{#1} \Omega/\mathrm{m} } % 电阻线密度：Ω/m 欧姆每米
+
+\NewDocumentCommand \UTmA { O{} } { \__phyunit_space:n{#1} \mathrm{T}\cdot\mathrm{m}/\mathrm{A} } % 磁场系数：T·m/A 特斯拉米每安培
+
+% ── 新增单位（2021 上海）：按「类别：符号 中文全称」注释 ─────────────────
+\NewDocumentCommand \UJKmol { O{} } { \__phyunit_space:n{#1} \mathrm{J}\cdot\mathrm{K}^{-1}\cdot\mathrm{mol}^{-1} } % 定压摩尔热容：J·K⁻¹·mol⁻¹ 焦耳每开尔文摩尔
+
+\NewDocumentCommand \Ukgmqskmol { O{} } { \__phyunit_space:n{#1} \mathrm{kg}\cdot\mathrm{m}^{2}\cdot\mathrm{s}^{-2}\cdot\mathrm{K}^{-1}\cdot\mathrm{mol}^{-1} } % 复合：kg·m²·s⁻²·K⁻¹·mol⁻¹
+
+% ── 新增单位（2024 1月浙江）：按「类别：符号 中文全称」注释 ─────────────────
+\NewDocumentCommand \UTA { O{} } { \__phyunit_space:n{#1} \mathrm{T}/\mathrm{A} } % 磁场系数：T/A 特斯拉每安培
+
 \endinput
