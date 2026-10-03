@@ -1,0 +1,97 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2024/河北/pdfimages/p2_1.jpg",
+      "crops": [
+        {"rect": [0, 0, 580, 325], "target": "试卷/2024/河北/figs/04a.png"},
+        {"rect": [625, 0, 575, 325], "target": "试卷/2024/河北/figs/04b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/河北/pdfimages/p2_3.jpg",
+      "crops": [
+        {"rect": [0, 0, 451, 311], "target": "试卷/2024/河北/figs/05an.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/河北/pdfimages/p5_9.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 598], "target": "试卷/2024/河北/figs/10an1.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/河北/pdfimages/p5_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 633], "target": "试卷/2024/河北/figs/10an2.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/河北/pdfimages/p5_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 500, 552], "target": "试卷/2024/河北/figs/10an3.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/河北/pdfimages/p6_12.jpg",
+      "crops": [
+        {"rect": [0, 0, 1000, 309], "target": "试卷/2024/河北/figs/11.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/河北/pdfimages/p6_13.jpg",
+      "crops": [
+        {"rect": [0, 0, 348, 425], "target": "试卷/2024/河北/figs/11a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/河北/pdfimages/p7_14.jpg",
+      "crops": [
+        {"rect": [0, 0, 700, 715], "target": "试卷/2024/河北/figs/11b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/河北/pdfimages/p7_15.jpg",
+      "crops": [
+        {"rect": [0, 0, 700, 733], "target": "试卷/2024/河北/figs/11an.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/河北/pdfimages/p8_16.jpg",
+      "crops": [
+        {"rect": [0, 0, 300, 438], "target": "试卷/2024/河北/figs/12a.png"},
+        {"rect": [315, 0, 692, 438], "target": "试卷/2024/河北/figs/12b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/河北/pdfimages/p8_17.jpg",
+      "crops": [
+        {"rect": [0, 0, 700, 625], "target": "试卷/2024/河北/figs/12c.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/河北/pdfimages/p8_18.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 372], "target": "试卷/2024/河北/figs/12d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/河北/pdfimages/p9_19.jpg",
+      "crops": [
+        {"rect": [0, 0, 500, 408], "target": "试卷/2024/河北/figs/12e.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

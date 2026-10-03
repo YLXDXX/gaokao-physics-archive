@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2024/6月浙江/pdfimages/p9_17.jpg",
+      "crops": [
+        {"rect": [0, 0, 510, 430], "target": "试卷/2024/6月浙江/figs/16c.png"},
+        {"rect": [640, 0, 560, 430], "target": "试卷/2024/6月浙江/figs/16d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/6月浙江/pdfimages/p9_18.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 305], "target": "试卷/2024/6月浙江/figs/16e.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2024/安徽/pdfimages/p4_5.jpg",
+      "crops": [
+        {"rect": [0, 10, 245, 350], "target": "试卷/2024/安徽/figs/08a.jpg"},
+        {"rect": [272, 0, 233, 380], "target": "试卷/2024/安徽/figs/08b.jpg"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2024/安徽/pdfimages/p5_6.jpg",
+      "crops": [
+        {"rect": [30, 5, 410, 265], "target": "试卷/2024/安徽/figs/09a.jpg"},
+        {"rect": [465, 5, 335, 300], "target": "试卷/2024/安徽/figs/09b.jpg"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2024/安徽/pdfimages/p8_9.jpg",
+      "crops": [
+        {"rect": [0, 0, 318, 255], "target": "试卷/2024/安徽/figs/11b.jpg"},
+        {"rect": [355, 0, 305, 215], "target": "试卷/2024/安徽/figs/11c.jpg"},
+        {"rect": [695, 0, 305, 225], "target": "试卷/2024/安徽/figs/11d.jpg"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2024/安徽/pdfimages/p9_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 402, 337], "target": "试卷/2024/安徽/figs/12a.jpg"},
+        {"rect": [558, 22, 442, 302], "target": "试卷/2024/安徽/figs/12b.jpg"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "JSON/2024/2024_安徽/tiku_images/41001-42000/41029_2.png",
+      "crops": [
+        {"rect": [0, 0, 630, 495], "target": "试卷/2024/安徽/figs/04b1.jpg"},
+        {"rect": [657, 0, 579, 495], "target": "试卷/2024/安徽/figs/04b2.jpg"},
+        {"rect": [1302, 0, 566, 495], "target": "试卷/2024/安徽/figs/04b3.jpg"},
+        {"rect": [1947, 0, 603, 495], "target": "试卷/2024/安徽/figs/04b4.jpg"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

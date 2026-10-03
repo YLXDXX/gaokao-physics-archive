@@ -1,0 +1,92 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2024/江西/pdfimages/p3_2.jpg",
+      "crops": [
+        {"rect": [0, 0, 700, 352], "target": "试卷/2024/江西/figs/06a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/江西/pdfimages/p3_3.jpg",
+      "crops": [
+        {"rect": [0, 0, 352, 282], "target": "试卷/2024/江西/figs/06b.png"},
+        {"rect": [356, 0, 344, 282], "target": "试卷/2024/江西/figs/06c.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/江西/pdfimages/p3_4.jpg",
+      "crops": [
+        {"rect": [0, 25, 500, 340], "target": "试卷/2024/江西/figs/07a.png"},
+        {"rect": [505, 0, 495, 350], "target": "试卷/2024/江西/figs/07b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/江西/pdfimages/p4_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 355, 264], "target": "试卷/2024/江西/figs/08.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/江西/pdfimages/p6_7.jpg",
+      "crops": [
+        {"rect": [0, 0, 700, 560], "target": "试卷/2024/江西/figs/11b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/江西/pdfimages/p6_8.jpg",
+      "crops": [
+        {"rect": [0, 0, 554, 198], "target": "试卷/2024/江西/figs/11a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/江西/pdfimages/p7_9.jpg",
+      "crops": [
+        {"rect": [0, 0, 700, 547], "target": "试卷/2024/江西/figs/11an.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/江西/pdfimages/p8_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 1000, 682], "target": "试卷/2024/江西/figs/12a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/江西/pdfimages/p8_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 700, 522], "target": "试卷/2024/江西/figs/12b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/江西/pdfimages/p9_12.jpg",
+      "crops": [
+        {"rect": [0, 0, 1000, 662], "target": "试卷/2024/江西/figs/12an.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/江西/pdfimages/p10_14.jpg",
+      "crops": [
+        {"rect": [0, 0, 498, 565], "target": "试卷/2024/江西/figs/14a.png"},
+        {"rect": [500, 0, 500, 565], "target": "试卷/2024/江西/figs/14b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/江西/pdfimages/p11_15.jpg",
+      "crops": [
+        {"rect": [0, 0, 625, 345], "target": "试卷/2024/江西/figs/15a.png"},
+        {"rect": [628, 0, 372, 345], "target": "试卷/2024/江西/figs/15b.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

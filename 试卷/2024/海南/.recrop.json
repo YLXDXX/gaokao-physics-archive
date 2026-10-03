@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2024/海南/pdfimages/p7_10.jpg",
+      "crops": [
+        {"rect": [2, 106, 434, 215], "target": "试卷/2024/海南/figs/14a.png"},
+        {"rect": [451, 4, 310, 311], "target": "试卷/2024/海南/figs/14b.png"},
+        {"rect": [797, 167, 700, 197], "target": "试卷/2024/海南/figs/14c.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2024/海南/pdfimages/p8_11.jpg",
+      "crops": [
+        {"rect": [1, 153, 348, 420], "target": "试卷/2024/海南/figs/14d.png"},
+        {"rect": [428, 148, 150, 470], "target": "试卷/2024/海南/figs/14e.png"},
+        {"rect": [731, 3, 469, 613], "target": "试卷/2024/海南/figs/14f.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2024/1月浙江/pdfimages/p1_0.jpg",
+      "crops": [
+        {"rect": [0, 0, 295, 198], "target": "试卷/2024/1月浙江/figs/02a.png"},
+        {"rect": [300, 0, 285, 198], "target": "试卷/2024/1月浙江/figs/02b.png"},
+        {"rect": [591, 0, 287, 198], "target": "试卷/2024/1月浙江/figs/02c.png"},
+        {"rect": [908, 0, 292, 198], "target": "试卷/2024/1月浙江/figs/02d.png"}
+      ],
+      "trim": {"padding": 4}
+    },
+    {
+      "source": "材料处理/2024/1月浙江/pdfimages/p5_7.jpg",
+      "crops": [
+        {"rect": [0, 0, 352, 520], "target": "试卷/2024/1月浙江/figs/10a.png"},
+        {"rect": [460, 20, 740, 500], "target": "试卷/2024/1月浙江/figs/10b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2024/1月浙江/pdfimages/p10_13.jpg",
+      "crops": [
+        {"rect": [0, 0, 549, 440], "target": "试卷/2024/1月浙江/figs/16c.png"},
+        {"rect": [789, 0, 711, 440], "target": "试卷/2024/1月浙江/figs/16d.png"}
+      ],
+      "erase_labels": "panels",
+      "trim": {"padding": 6}
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2024/广西/pdfimages/p2_2.jpg",
+      "crops": [
+        {"rect": [0, 0, 445, 265], "target": "试卷/2024/广西/figs/06a.jpg"},
+        {"rect": [575, 0, 425, 268], "target": "试卷/2024/广西/figs/06b.jpg"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2024/广西/pdfimages/p6_10.jpg",
+      "crops": [
+        {"rect": [0, 245, 215, 190], "target": "试卷/2024/广西/figs/11a.jpg"},
+        {"rect": [228, 245, 220, 190], "target": "试卷/2024/广西/figs/11b.jpg"},
+        {"rect": [470, 0, 530, 425], "target": "试卷/2024/广西/figs/11c.jpg"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2024/广西/pdfimages/p6_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 380, 220], "target": "试卷/2024/广西/figs/12a.jpg"},
+        {"rect": [398, 0, 272, 215], "target": "试卷/2024/广西/figs/12b.jpg"},
+        {"rect": [742, 0, 258, 215], "target": "试卷/2024/广西/figs/12c.jpg"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2024/广西/pdfimages/p8_13.jpg",
+      "crops": [
+        {"rect": [0, 0, 470, 245], "target": "试卷/2024/广西/figs/14a.jpg"},
+        {"rect": [600, 0, 400, 245], "target": "试卷/2024/广西/figs/14b.jpg"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2024/广西/pdfimages/p10_16.jpg",
+      "crops": [
+        {"rect": [0, 0, 625, 390], "target": "试卷/2024/广西/figs/15a.jpg"},
+        {"rect": [650, 50, 350, 350], "target": "试卷/2024/广西/figs/15b.jpg"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

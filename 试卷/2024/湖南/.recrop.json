@@ -1,0 +1,14 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2024/湖南/pdfimages/p8_13.jpg",
+      "crops": [
+        {"rect": [0, 0, 295, 278], "target": "试卷/2024/湖南/figs/11a.png"},
+        {"rect": [337, 76, 287, 242], "target": "试卷/2024/湖南/figs/11b.png"},
+        {"rect": [651, 140, 292, 132], "target": "试卷/2024/湖南/figs/11c.png"},
+        {"rect": [1012, 109, 188, 205], "target": "试卷/2024/湖南/figs/11d.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

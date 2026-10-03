@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2024/全国新课标/pdfimages/p5_9.jpg",
+      "crops": [
+        {"rect": [0, 0, 463, 375], "target": "试卷/2024/全国新课标/figs/10a.jpg"},
+        {"rect": [498, 118, 249, 260], "target": "试卷/2024/全国新课标/figs/10b.jpg"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}
