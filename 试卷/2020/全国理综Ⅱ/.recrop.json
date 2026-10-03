@@ -1,0 +1,48 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2020/全国理综Ⅱ/pdfimages/p2_1.jpg",
+      "crops": [
+        {"rect": [10, 11, 599, 285], "target": "试卷/2020/全国理综Ⅱ/figs/04a.png"},
+        {"rect": [620, 16, 402, 260], "target": "试卷/2020/全国理综Ⅱ/figs/04b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/全国理综Ⅱ/pdfimages/p6_4.jpg",
+      "crops": [
+        {"rect": [1, 41, 377, 320], "target": "试卷/2020/全国理综Ⅱ/figs/10a.png"},
+        {"rect": [486, 7, 410, 420], "target": "试卷/2020/全国理综Ⅱ/figs/10b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/全国理综Ⅱ/pdfimages/p4_3.jpg",
+      "crops": [
+        {"rect": [0, 0, 235, 255], "target": "试卷/2020/全国理综Ⅱ/figs/07_an.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/全国理综Ⅱ/pdfimages/p6_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 409, 372], "target": "试卷/2020/全国理综Ⅱ/figs/10_an.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/全国理综Ⅱ/pdfimages/p7_7.jpg",
+      "crops": [
+        {"rect": [0, 0, 314, 283], "target": "试卷/2020/全国理综Ⅱ/figs/11_an.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/全国理综Ⅱ/pdfimages/p11_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 733, 220], "target": "试卷/2020/全国理综Ⅱ/figs/14_an.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2020/全国理综Ⅲ/pdfimages/p4_2.jpg",
+      "crops": [
+        {"rect": [0, 0, 385, 260], "target": "试卷/2020/全国理综Ⅲ/figs/07a.png"},
+        {"rect": [400, 0, 600, 260], "target": "试卷/2020/全国理综Ⅲ/figs/07b.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2020/全国理综Ⅲ/pdfimages/p5_3.jpg",
+      "crops": [
+        {"rect": [0, 0, 478, 300], "target": "试卷/2020/全国理综Ⅲ/figs/09a.png"},
+        {"rect": [490, 0, 710, 300], "target": "试卷/2020/全国理综Ⅲ/figs/09b.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2020/全国理综Ⅲ/pdfimages/p6_6.jpg",
+      "crops": [
+        {"rect": [0, 0, 518, 380], "target": "试卷/2020/全国理综Ⅲ/figs/10b.png"},
+        {"rect": [520, 175, 180, 215], "target": "试卷/2020/全国理综Ⅲ/figs/10c.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

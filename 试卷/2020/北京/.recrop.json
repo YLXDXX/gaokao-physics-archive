@@ -1,0 +1,101 @@
+{
+  "entries": [
+    {
+      "source": "试卷/2020/北京/recrop_src/06.png",
+      "crops": [
+        {"rect": [40, 40, 970, 640],  "target": "试卷/2020/北京/figs/06a.png"},
+        {"rect": [1190, 40, 1010, 640], "target": "试卷/2020/北京/figs/06b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "试卷/2020/北京/recrop_src/12.png",
+      "crops": [
+        {"rect": [40, 50, 1060, 800], "target": "试卷/2020/北京/figs/12a.png"},
+        {"rect": [1280, 50, 920, 800], "target": "试卷/2020/北京/figs/12b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "试卷/2020/北京/recrop_src/18.png",
+      "crops": [
+        {"rect": [40, 40, 850, 950],  "target": "试卷/2020/北京/figs/18a.png"},
+        {"rect": [1100, 40, 1100, 950], "target": "试卷/2020/北京/figs/18b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2020/北京/pdfimages/p5_2.jpg",
+      "crops": [
+        {"rect": [0, 0, 447, 292], "target": "试卷/2020/北京/figs/11a.png"},
+        {"rect": [447, 0, 553, 292], "target": "试卷/2020/北京/figs/11b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/北京/pdfimages/p12_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 229, 400], "target": "试卷/2020/北京/figs/19a.png"},
+        {"rect": [273, 0, 227, 400], "target": "试卷/2020/北京/figs/19b.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    },
+    {
+      "source": "JSON/2020/2020_北京/tiku_images/32001-33000/32595_1.png",
+      "crops": [
+        {"rect": [0, 0, 1135, 228], "target": "试卷/2020/北京/figs/15a.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "JSON/2020/2020_北京/tiku_images/32001-33000/32595_2.png",
+      "crops": [
+        {"rect": [0, 0, 600, 468], "target": "试卷/2020/北京/figs/15b.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "JSON/2020/2020_北京/tiku_images/32001-33000/32595_3.png",
+      "crops": [
+        {"rect": [0, 0, 796, 412], "target": "试卷/2020/北京/figs/15c.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "JSON/2020/2020_北京/tiku_images/32001-33000/32596_1.png",
+      "crops": [
+        {"rect": [0, 0, 354, 212],   "target": "试卷/2020/北京/figs/16a.png"},
+        {"rect": [354, 0, 346, 212], "target": "试卷/2020/北京/figs/16b.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "JSON/2020/2020_北京/tiku_images/32001-33000/32596_2.png",
+      "crops": [
+        {"rect": [0, 0, 617, 310], "target": "试卷/2020/北京/figs/16c.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "试卷/2020/北京/recrop_src/16d.png",
+      "crops": [
+        {"rect": [0, 0, 1639, 437], "target": "试卷/2020/北京/figs/16d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2020/2020_北京/tiku_images/32001-33000/32600_1.png",
+      "crops": [
+        {"rect": [0, 0, 700, 425], "target": "试卷/2020/北京/figs/20a.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "试卷/2020/北京/recrop_src/20b.png",
+      "crops": [
+        {"rect": [0, 0, 1600, 700], "target": "试卷/2020/北京/figs/20b.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

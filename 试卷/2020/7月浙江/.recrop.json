@@ -1,0 +1,32 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2020/7月浙江/pdfimages/p9_16.jpg",
+      "crops": [
+        {"rect": [6, 71, 810, 272], "target": "试卷/2020/7月浙江/figs/17a.png"},
+        {"rect": [843, 0, 716, 353], "target": "试卷/2020/7月浙江/figs/17b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2020/7月浙江/pdfimages/p11_21.jpg",
+      "crops": [
+        {"rect": [9, 19, 472, 404], "target": "试卷/2020/7月浙江/figs/18a.png"},
+        {"rect": [583, 14, 474, 409], "target": "试卷/2020/7月浙江/figs/18b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2020/7月浙江/pdfimages/p13_28.jpg",
+      "crops": [
+        {"rect": [0, 0, 278, 378], "target": "试卷/2020/7月浙江/figs/19a.png"},
+        {"rect": [300, 0, 500, 380], "target": "试卷/2020/7月浙江/figs/19b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2020/7月浙江/pdfimages/p15_30.jpg",
+      "crops": [
+        {"rect": [30, 99, 594, 271], "target": "试卷/2020/7月浙江/figs/21a.png"},
+        {"rect": [637, 10, 548, 337], "target": "试卷/2020/7月浙江/figs/21b.png"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2020/天津/pdfimages/p1_0.jpg",
+      "crops": [
+        {"rect": [0, 0, 400, 318], "target": "试卷/2020/天津/figs/01a.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/天津/pdfimages/p1_2.jpg",
+      "crops": [
+        {"rect": [0, 0, 400, 294], "target": "试卷/2020/天津/figs/01b.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/天津/pdfimages/p1_1.jpg",
+      "crops": [
+        {"rect": [0, 0, 400, 241], "target": "试卷/2020/天津/figs/01c.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    },
+    {
+      "source": "试卷/2020/天津/recrop_src/01d.png",
+      "crops": [
+        {"rect": [0, 0, 1080, 775], "target": "试卷/2020/天津/figs/01d.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/天津/pdfimages/p1_3.jpg",
+      "crops": [
+        {"rect": [0, 0, 300, 170], "target": "试卷/2020/天津/figs/02.jpg"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "试卷/2020/天津/recrop_src/04_an.png",
+      "crops": [
+        {"rect": [0, 0, 1300, 680], "target": "试卷/2020/天津/figs/04_an.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/天津/pdfimages/p3_4.jpg",
+      "crops": [
+        {"rect": [0, 0, 389, 308], "target": "试卷/2020/天津/figs/05.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/天津/pdfimages/p3_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 689, 521], "target": "试卷/2020/天津/figs/07.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/天津/pdfimages/p4_8.jpg",
+      "crops": [
+        {"rect": [0, 0, 566, 429], "target": "试卷/2020/天津/figs/07_an.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/天津/pdfimages/p4_7.jpg",
+      "crops": [
+        {"rect": [0, 0, 300, 195], "target": "试卷/2020/天津/figs/08.jpg"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/天津/pdfimages/p5_9.jpg",
+      "crops": [
+        {"rect": [0, 0, 1122, 370], "target": "试卷/2020/天津/figs/09a.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    },
+    {
+      "source": "试卷/2020/天津/recrop_src/09b_full.png",
+      "crops": [
+        {"rect": [0, 0, 400, 1760], "target": "试卷/2020/天津/figs/09b.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/天津/pdfimages/p5_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 700, 500], "target": "试卷/2020/天津/figs/09c.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/天津/pdfimages/p6_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 568], "target": "试卷/2020/天津/figs/09d.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/天津/pdfimages/p6_12.jpg",
+      "crops": [
+        {"rect": [0, 0, 1060, 463], "target": "试卷/2020/天津/figs/10.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2020/天津/pdfimages/p8_13.jpg",
+      "crops": [
+        {"rect": [0, 0, 1000, 336], "target": "试卷/2020/天津/figs/12.png"}
+      ],
+      "trim": {"padding": 10, "threshold": 200}
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2020/山东/pdfimages/p2_1.jpg",
+      "crops": [
+        {"rect": [3, 25, 308, 205], "target": "试卷/2020/山东/figs/05a.png"},
+        {"rect": [331, 3, 594, 224], "target": "试卷/2020/山东/figs/05b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2020/山东/pdfimages/p10_7.jpg",
+      "crops": [
+        {"rect": [0, 139, 277, 205], "target": "试卷/2020/山东/figs/14a.png"},
+        {"rect": [284, 5, 619, 353], "target": "试卷/2020/山东/figs/14b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2020/山东/pdfimages/p11_8.jpg",
+      "crops": [
+        {"rect": [0, 0, 711, 435], "target": "试卷/2020/山东/figs/14c.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2020/山东/pdfimages/p11_9.jpg",
+      "crops": [
+        {"rect": [0, 0, 481, 301], "target": "试卷/2020/山东/figs/14d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2020/山东/pdfimages/p11_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 617, 384], "target": "试卷/2020/山东/figs/14_an1.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2020/山东/pdfimages/p12_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 452, 275], "target": "试卷/2020/山东/figs/14_an2.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2020/山东/pdfimages/p13_12.jpg",
+      "crops": [
+        {"rect": [11, 0, 397, 335], "target": "试卷/2020/山东/figs/16a.png"},
+        {"rect": [409, 120, 493, 223], "target": "试卷/2020/山东/figs/16b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2020/山东/pdfimages/p14_13.jpg",
+      "crops": [
+        {"rect": [9, 3, 415, 349], "target": "试卷/2020/山东/figs/17a.png"},
+        {"rect": [505, 71, 256, 249], "target": "试卷/2020/山东/figs/17b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2020/山东/pdfimages/p5_3.jpg",
+      "crops": [
+        {"rect": [0, 0, 319, 282], "target": "试卷/2020/山东/figs/08.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2020/山东/pdfimages/p5_4.jpg",
+      "crops": [
+        {"rect": [0, 0, 153, 190], "target": "试卷/2020/山东/figs/08_an1.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2020/山东/pdfimages/p5_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 184, 218], "target": "试卷/2020/山东/figs/08_an2.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2020/山东/pdfimages/p19_15.jpg",
+      "crops": [
+        {"rect": [0, 0, 398, 191], "target": "试卷/2020/山东/figs/04_an.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2020/山东/pdfimages/p20_16.jpg",
+      "crops": [
+        {"rect": [0, 0, 346, 199], "target": "试卷/2020/山东/figs/10_an.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "/tmp/opencode/svg_src/04.png",
+      "crops": [
+        {"rect": [0, 0, 400, 355], "target": "试卷/2020/山东/figs/04a.png"},
+        {"rect": [400, 0, 400, 355], "target": "试卷/2020/山东/figs/04b.png"},
+        {"rect": [800, 0, 400, 355], "target": "试卷/2020/山东/figs/04c.png"},
+        {"rect": [1200, 0, 400, 360], "target": "试卷/2020/山东/figs/04d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "/tmp/opencode/svg_src/09.png",
+      "crops": [
+        {"rect": [0, 0, 770, 650], "target": "试卷/2020/山东/figs/09a.png"},
+        {"rect": [770, 0, 630, 650], "target": "试卷/2020/山东/figs/09b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "/tmp/opencode/svg_src/15.png",
+      "crops": [
+        {"rect": [0, 0, 520, 620], "target": "试卷/2020/山东/figs/15a.png"},
+        {"rect": [520, 0, 680, 620], "target": "试卷/2020/山东/figs/15b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "/tmp/opencode/svg_src/13a.png",
+      "crops": [
+        {"rect": [0, 0, 900, 620], "target": "试卷/2020/山东/figs/13a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "/tmp/opencode/svg_src/13b_pdf.png",
+      "crops": [
+        {"rect": [0, 0, 2560, 1485], "target": "试卷/2020/山东/figs/13b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "/tmp/opencode/svg_src/12a.png",
+      "crops": [
+        {"rect": [0, 0, 900, 932], "target": "试卷/2020/山东/figs/12.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "/tmp/opencode/svg_src/12b.png",
+      "crops": [
+        {"rect": [0, 0, 400, 380], "target": "试卷/2020/山东/figs/12a.png"},
+        {"rect": [400, 0, 400, 380], "target": "试卷/2020/山东/figs/12b.png"},
+        {"rect": [800, 0, 400, 380], "target": "试卷/2020/山东/figs/12c.png"},
+        {"rect": [1200, 0, 400, 380], "target": "试卷/2020/山东/figs/12d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "/tmp/opencode/svg_src/09an.png",
+      "crops": [
+        {"rect": [0, 0, 740, 700], "target": "试卷/2020/山东/figs/09_an.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

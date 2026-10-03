@@ -1,0 +1,573 @@
+\ifdefined\gkver\else\def\gkver{student}\fi
+\documentclass[\gkver]{gaokaozhenti}
+\newcommand{\ccnum}[1]{{\fontspec{Noto Sans CJK JP}#1}}
+\begin{document}
+
+\chapter{2020年全国理综Ⅲ}
+%% paperType: 理综物理部分
+
+\begin{enumerate}
+\item
+%% number: 1
+%% paperName: 2020年全国理综Ⅲ第 1 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 电磁感应
+%% point: 楞次定律推广
+%% method: 无
+%% score: 6
+%% degree: 550
+%% duplicateId: 0
+%% body:
+如图，水平放置的圆柱形光滑玻璃棒左边绕有一线圈，右边套有一金属圆环。圆环初始时静止。将图中开关 S 由断开状态拨至连接状态，电路接通的瞬间，可观察到\xzanswer{B}
+\onepicture[w=6cm]{\includesvg{figs/01}}
+\fourchoices[answer=B]
+{拨至 M 端或 N 端，圆环都向左运动}
+{拨至 M 端或 N 端，圆环都向右运动}
+{拨至 M 端时圆环向左运动，拨至 N 端时向右运动}
+{拨至 M 端时圆环向右运动，拨至 N 端时向左运动}
+%% answer: B
+%% memo:
+\memoanswer{
+无论开关 S 拨至哪一端，当把电路接通一瞬间，左边线圈中的电流从无到有，电流在线圈轴线上的磁场从无到有，从而引起穿过圆环的磁通量突然增大，根据楞次定律（增反减同），右边圆环中产生了与左边线圈中方向相反的电流，异向电流相互排斥，所以无论哪种情况，圆环均向右运动。
+
+故选 B。
+}
+
+\item
+%% number: 2
+%% paperName: 2020年全国理综Ⅲ第 2 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 运动和力
+%% point: 动量守恒定律
+%% method: 无
+%% score: 6
+%% degree: 550
+%% duplicateId: 0
+%% body:
+甲、乙两个物块在光滑水平桌面上沿同一直线运动，甲追上乙，并与乙发生碰撞，碰撞前后甲、乙的速度随时间的变化如图中实线所示。已知甲的质量为 $1\Ukg$，则碰撞过程两物块损失的机械能为\xzanswer{A}
+\onepicture[w=7cm]{\includesvg{figs/02}}
+\fourchoices[answer=A]
+{$3\UJ$}
+{$4\UJ$}
+{$5\UJ$}
+{$6\UJ$}
+%% answer: A
+%% memo:
+\memoanswer{
+由 $v-t$ 图可知，碰前甲、乙的速度分别为 $v_{\text{甲}}=5\Ums$，$v_{\text{乙}}=1\Ums$；碰后甲、乙的速度分别为 $v_{\text{甲}}'=-1\Ums$，$v_{\text{乙}}'=2\Ums$。甲、乙两物块碰撞过程中，由动量守恒得
+$m_{\text{甲}}v_{\text{甲}}+m_{\text{乙}}v_{\text{乙}}=m_{\text{甲}}v_{\text{甲}}'+m_{\text{乙}}v_{\text{乙}}'$
+解得 $m_{\text{乙}}=6\Ukg$。
+则损失的机械能为
+$\Delta E=\frac{1}{2}m_{\text{甲}}v_{\text{甲}}^{2}+\frac{1}{2}m_{\text{乙}}v_{\text{乙}}^{2}-\frac{1}{2}m_{\text{甲}}{v_{\text{甲}}'}^{2}-\frac{1}{2}m_{\text{乙}}{v_{\text{乙}}'}^{2}$
+解得 $\Delta E=3\UJ$。
+
+故选 A。
+}
+
+\item
+%% number: 3
+%% paperName: 2020年全国理综Ⅲ第 3 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 曲线运动
+%% point: 人造地球卫星
+%% method: 无
+%% score: 6
+%% degree: 550
+%% duplicateId: 0
+%% body:
+“嫦娥四号”探测器于 2019 年 1 月在月球背面成功着陆，着陆前曾绕月球飞行，某段时间可认为绕月做匀速圆周运动，圆周半径为月球半径的 $K$ 倍。已知地球半径 $R$ 是月球半径的 $P$ 倍，地球质量是月球质量的 $Q$ 倍，地球表面重力加速度大小为 $g$。则“嫦娥四号”绕月球做圆周运动的速率为\xzanswer{D}
+\fourchoices[answer=D]
+{$\sqrt{\frac{RKg}{QP}}$}
+{$\sqrt{\frac{RPKg}{Q}}$}
+{$\sqrt{\frac{RQg}{KP}}$}
+{$\sqrt{\frac{RPg}{QK}}$}
+%% answer: D
+%% memo:
+\memoanswer{
+假设在地球表面和月球表面上分别放置质量为 $m$ 和 $m_{0}$ 的两个物体，则在地球和月球表面处，分别有
+$G\frac{Mm}{R^{2}}=mg$
+$G\frac{\frac{M}{Q}m_{0}}{\left(\frac{R}{P}\right)^{2}}=m_{0}g'$
+解得 $g'=\frac{P^{2}}{Q}g$。
+设嫦娥四号卫星的质量为 $m_{1}$，根据万有引力提供向心力得
+$G\frac{\frac{M}{Q}m_{1}}{\left(K\frac{R}{P}\right)^{2}}=m_{1}\frac{v^{2}}{K\frac{R}{P}}$
+解得
+$v=\sqrt{\frac{RPg}{QK}}$。
+
+故选 D。
+}
+
+\item
+%% number: 4
+%% paperName: 2020年全国理综Ⅲ第 4 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 力物体的平衡
+%% point: 三力平衡
+%% method: 无
+%% score: 6
+%% degree: 550
+%% duplicateId: 0
+%% body:
+如图，悬挂甲物体的细线拴牢在一不可伸长的轻质细绳上 O 点处；绳的一端固定在墙上，另一端通过光滑定滑轮与物体乙相连。甲、乙两物体质量相等。系统平衡时，O 点两侧绳与竖直方向的夹角分别为 $\alpha$ 和 $\beta$。若 $\alpha=70^\circ$，则 $\beta$ 等于\xzanswer{B}
+\onepicture[w=5cm]{\includesvg{figs/04}}
+\fourchoices[answer=B]
+{$45^\circ$}
+{$55^\circ$}
+{$60^\circ$}
+{$70^\circ$}
+%% answer: B
+%% memo:
+\memoanswer{
+甲物体是拴牢在 O 点，且甲、乙两物体的质量相等，则甲、乙绳的拉力大小相等，O 点处于平衡状态，则左侧绳子拉力的方向在甲、乙绳子的角平分线上，如图所示。根据几何关系有
+\onepicture[w=5.5cm]{\includesvg{figs/04_an}}
+$180^\circ=2\beta+\alpha$
+解得 $\beta=55^\circ$。
+
+故选 B。
+}
+
+\item
+%% number: 5
+%% paperName: 2020年全国理综Ⅲ第 5 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 磁场
+%% point: 带电粒子在磁场中的运动
+%% method: 无
+%% score: 6
+%% degree: 550
+%% duplicateId: 0
+%% body:
+真空中有一匀强磁场，磁场边界为两个半径分别为 $a$ 和 $3a$ 的同轴圆柱面，磁场的方向与圆柱轴线平行，其横截面如图所示。一速率为 $v$ 的电子从圆心沿半径方向进入磁场。已知电子质量为 $m$，电荷量为 $e$，忽略重力。为使该电子的运动被限制在图中实线圆围成的区域内，磁场的磁感应强度最小为\xzanswer{C}
+\onepicture[w=5cm]{figs/05.png}
+\fourchoices[answer=C]
+{$\frac{3mv}{2ae}$}
+{$\frac{mv}{ae}$}
+{$\frac{3mv}{4ae}$}
+{$\frac{3mv}{5ae}$}
+%% answer: C
+%% memo:
+\memoanswer{
+电子在磁场中做匀速圆周运动，由洛伦兹力提供向心力
+$eBv=m\frac{v^{2}}{r}$
+则磁感应强度与圆周运动轨迹关系为
+$B=\frac{mv}{er}$
+即运动轨迹半径越大，磁场的磁感应强度越小。令电子运动轨迹最大的半径为 $r_{\max}$，为了使电子的运动被限制在图中实线圆围成的区域内，其最大半径的运动轨迹与实线圆相切，如图所示。
+\onepicture[w=5cm]{figs/05_an.jpg}
+A 点为电子做圆周运动的圆心，电子从圆心沿半径方向进入磁场，由左手定则可得，$AB\perp OB$，$\Delta ABO$ 为直角三角形，则由几何关系可得
+$\left(3a-r_{\max}\right)^{2}=r_{\max}^{2}+a^{2}$
+解得 $r_{\max}=\frac{4}{3}a$。
+解得磁场的磁感应强度最小值
+$B_{\min}=\frac{mv}{er_{\max}}=\frac{3mv}{4ae}$
+
+故选 C。
+}
+
+\item
+%% number: 6
+%% paperName: 2020年全国理综Ⅲ第 6 题 6 分
+%% typeId: 2
+%% type: 多选题
+%% chapter: 原子和原子核
+%% point: 人工核反应
+%% method: 无
+%% score: 6
+%% degree: 650
+%% duplicateId: 0
+%% body:
+1934 年，约里奥-居里夫妇用 $\alpha$ 粒子轰击铝箔，首次产生了人工放射性同位素 X，反应方程为：$\ce{^{4}_{2}He + ^{27}_{13}Al -> X + ^{1}_{0}n}$。X 会衰变成原子核 Y，衰变方程为 $\ce{X -> Y + ^{0}_{1}e}$，则\xzanswer{AC}
+\fourchoices[answer=AC]
+{X 的质量数与 Y 的质量数相等}
+{X 的电荷数比 Y 的电荷数少 1}
+{X 的电荷数比 $\ce{^{27}_{13}Al}$ 的电荷数多 2}
+{X 的质量数与 $\ce{^{27}_{13}Al}$ 的质量数相等}
+%% answer: AC
+%% memo:
+\memoanswer{
+设 X 和 Y 的质子数分别为 $n_{1}$ 和 $n_{2}$，质量数分别为 $m_{1}$ 和 $m_{2}$，则反应方程为
+$\ce{^{4}_{2}He + ^{27}_{13}Al -> X + ^{1}_{0}n}$，$\ce{^{m_{1}}_{n_{1}}X -> ^{m_{2}}_{n_{2}}Y + ^{0}_{1}e}$
+根据反应方程质子数和质量数守恒，解得
+$2+13=n_{1}$，$n_{1}=n_{2}+1$
+$4+27=m_{1}+1$，$m_{1}=m_{2}+0$
+解得 $n_{1}=15$，$n_{2}=14$，$m_{1}=30$，$m_{2}=30$。
+AC．X 的质量数（$m_{1}=30$）与 Y 的质量数（$m_{2}=30$）相等，比 $\ce{^{27}_{13}Al}$ 的质量数多 3，故 A 正确，D 错误；
+BC．X 的电荷数（$n_{1}=15$）比 Y 的电荷数（$n_{2}=14$）多 1，比 $\ce{^{27}_{13}Al}$ 的电荷数多 2，故 B 错误，C 正确。
+
+故选 AC。
+}
+
+\item
+%% number: 7
+%% paperName: 2020年全国理综Ⅲ第 7 题 6 分
+%% typeId: 2
+%% type: 多选题
+%% chapter: 交流电
+%% point: 变压器
+%% method: 无
+%% score: 6
+%% degree: 650
+%% duplicateId: 0
+%% body:
+在图\ref{2020全国理综Ⅲ07a}所示的交流电路中，电源电压的有效值为 $220\UV$，理想变压器原、副线圈的匝数比为 $10:1$，$R_{1}$、$R_{2}$、$R_{3}$ 均为固定电阻，$R_{2}=10\UO$，$R_{3}=20\UO$，各电表均为理想电表。已知电阻 $R_{2}$ 中电流 $i_{2}$ 随时间 $t$ 变化的正弦曲线如图\ref{2020全国理综Ⅲ07b}所示。下列说法正确的是\xzanswer{AD}
+\twopicture[labelA=2020全国理综Ⅲ07a, labelB=2020全国理综Ⅲ07b, wA=6.5cm, wB=7.5cm]
+{figs/07a.png}
+{figs/07b.png}
+\fourchoices[answer=AD]
+{所用交流电的频率为 $50\UHz$}
+{电压表的示数为 $100\UV$}
+{电流表的示数为 $1.0\UA$}
+{变压器传输的电功率为 $15.0\UW$}
+%% answer: AD
+%% memo:
+\memoanswer{
+A．交流电的频率为 $f=\frac{1}{T}=\frac{1}{0.02\Us}=50\UHz$，A 正确；
+B．通过 $R_{2}$ 电流的有效值为 $I=\frac{\sqrt{2}\UA}{\sqrt{2}}=1\UA$，$R_{2}$ 两端即副线圈两端的电压，根据欧姆定律可知 $U_{2}=IR_{2}=1\times10\UV=10\UV$，根据理想变压器的电压规律 $\frac{U_{1}}{U_{2}}=\frac{n_{1}}{n_{2}}$ 可知原线圈的电压 $U_{1}=\frac{n_{1}}{n_{2}}U_{2}=10\times10\UV=100\UV$，电阻 $R_{1}$ 两端分压即为电压表示数，即 $U_{V}=U_{0}-U_{1}=220\UV-100\UV=120\UV$。B 错误；
+C．电流表的示数为 $I_{A}=\frac{U_{2}}{R_{3}}=\frac{10}{20}\UA=0.5\UA$。C 错误；
+D．副线圈中流过的总电流为 $I_{2}=I+I_{A}=1\UA+0.5\UA=1.5\UA$，变压器原副线圈传输的功率为 $P=I_{2}U_{2}=15\UW$，D 正确。
+
+故选 AD。
+}
+
+\item
+%% number: 8
+%% paperName: 2020年全国理综Ⅲ第 8 题 6 分
+%% typeId: 2
+%% type: 多选题
+%% chapter: 电场
+%% point: 电场线
+%% method: 无
+%% score: 6
+%% degree: 450
+%% duplicateId: 0
+%% body:
+如图，$\angle$M 是锐角三角形 PMN 最大的内角，电荷量为 $q$（$q>0$）的点电荷固定在 P 点。下列说法正确的是\xzanswer{BC}
+\onepicture[w=5cm]{\includesvg{figs/08}}
+\fourchoices[answer=BC]
+{沿 MN 边，从 M 点到 N 点，电场强度的大小逐渐增大}
+{沿 MN 边，从 M 点到 N 点，电势先增大后减小}
+{正电荷在 M 点的电势能比其在 N 点的电势能大}
+{将正电荷从 M 点移动到 N 点，电场力所做的总功为负}
+%% answer: BC
+%% memo:
+\memoanswer{
+A．如图所示，点电荷的电场以点电荷为中心，向四周呈放射状。$\angle$M 是最大内角，所以 PN$>$PM，根据点电荷的场强公式 $E=k\frac{Q}{r^{2}}$（或者根据电场线的疏密程度）可知从 M$\to$N 电场强度先增大后减小，A 错误；
+\onepicture[w=5cm]{figs/08_an.png}
+B．电场线与等势面（图中虚线）处处垂直，沿电场线方向电势降低，所以从 M$\to$N 电势先增大后减小，B 正确；
+C．M、N 两点的电势大小关系为 $\varphi_{M}>\varphi_{N}$，根据电势能的公式 $E_{p}=q\varphi$ 可知正电荷在 M 点的电势能大于在 N 点的电势能，C 正确；
+D．正电荷从 M$\to$N，电势能减小，电场力所做的总功为正功，D 错误。
+
+故选 BC。
+}
+
+\item
+%% number: 9
+%% paperName: 2020年全国理综Ⅲ第 9 题 6 分
+%% typeId: 4
+%% type: 实验题
+%% chapter: 功和能
+%% point: 验证动能定理
+%% method: 无
+%% score: 6
+%% degree: 750
+%% duplicateId: 0
+%% body:
+某同学利用图\ref{2020全国理综Ⅲ09a}所示装置验证动能定理。调整木板的倾角平衡摩擦阻力后，挂上钩码，钩码下落，带动小车运动并打出纸带。某次实验得到的纸带及相关数据如图\ref{2020全国理综Ⅲ09b}所示。
+
+已知打出图\ref{2020全国理综Ⅲ09b}中相邻两点的时间间隔为 $0.02\Us$，从图\ref{2020全国理综Ⅲ09b}给出的数据中可以得到，打出 B 点时小车的速度大小 $v_{B}=$\tkanswer[1.5cm]{0.36}$\Ums$，打出 P 点时小车的速度大小 $v_{P}=$\tkanswer[1.5cm]{1.80}$\Ums$（结果均保留 2 位小数）。
+
+若要验证动能定理，除了需测量钩码的质量和小车的质量外，还需要从图\ref{2020全国理综Ⅲ09b}给出的数据中求得的物理量为\tkanswer[4cm]{B、P 之间的距离}。
+\twopicture[labelA=2020全国理综Ⅲ09a, labelB=2020全国理综Ⅲ09b, wA=7cm, wB=7cm, align=right]
+{figs/09a.png}
+{figs/09b.png}
+%% answer: 
+%% memo:
+\memoanswer{
+由匀变速直线运动中间时刻的瞬时速度等于平均速度
+$v_{B}=\frac{(4.00-2.56)\times10^{-2}}{0.04}\Ums=0.36\Ums$
+$v_{P}=\frac{(57.86-50.66)\times10^{-2}}{0.04}\Ums=1.80\Ums$
+验证动能定理需要求出小车运动的过程中拉力对小车做的功，所以还需要测量对应的 B、P 之间的距离。
+}
+
+\item
+%% number: 10
+%% paperName: 2020年全国理综Ⅲ第 10 题 9 分
+%% typeId: 4
+%% type: 实验题
+%% chapter: 电路
+%% point: 传感器
+%% method: 无
+%% score: 9
+%% degree: 450
+%% duplicateId: 0
+%% body:
+已知一热敏电阻当温度从 $10\UdC$ 升至 $60\UdC$ 时阻值从几千欧姆降至几百欧姆，某同学利用伏安法测量其阻值随温度的变化关系。所用器材：电源 $E$、开关 S、滑动变阻器 $R$（最大阻值为 $20\UO$）、电压表（可视为理想电表）和毫安表（内阻约为 $100\UO$）。
+\begin{enumerate}
+	\item
+	在答题卡上所给的器材符号之间画出连线，组成测量电路图。
+	\onepicture[w=4.5cm, align=right]{figs/10a.png}
+	\item
+	实验时，将热敏电阻置于温度控制室中，记录不同温度下电压表和毫安表的示数，计算出相应的热敏电阻阻值。若某次测量中电压表和毫安表的示数分别为 $5.5\UV$ 和 $3.0\UmA$，则此时热敏电阻的阻值为\_\_\_\_\_$\UkO$（保留 2 位有效数字）。实验中得到的该热敏电阻阻值 $R$ 随温度 $t$ 变化的曲线如图\ref{2020全国理综Ⅲ10b}所示。
+	\item
+	将热敏电阻从温控室取出置于室温下，测得达到热平衡后热敏电阻的阻值为 $2.2\UkO$。由图\ref{2020全国理综Ⅲ10b}求得，此时室温为\_\_\_\_\_$\UdC$（保留 3 位有效数字）。
+	\item
+	利用实验中的热敏电阻可以制作温控报警器，其电路的一部分如图\ref{2020全国理综Ⅲ10c}所示。图中，$E$ 为直流电源（电动势为 $10\UV$，内阻可忽略）；当图中的输出电压达到或超过 $6.0\UV$ 时，便触发报警器（图中未画出）报警。若要求开始报警时环境温度为 $50\UdC$，则图中\_\_\_\_\_（填“$R_{1}$”或“$R_{2}$”）应使用热敏电阻，另一固定电阻的阻值应为\_\_\_\_\_$\UkO$（保留 2 位有效数字）。
+	\twopicture[labelA=2020全国理综Ⅲ10b, labelB=2020全国理综Ⅲ10c, wA=8.5cm, wB=3.2cm, align=right]
+	{figs/10b.png}
+	{figs/10c.png}
+\end{enumerate}
+%% answer: 
+\jdanswer{
+\begin{enumerate}
+	\item
+	见解析图
+	\item
+	1.8
+	\item
+	25.5
+	\item
+	$R_{1}$，1.2
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+（1）由于采用伏安法测热敏电阻的阻值，且滑动变阻器的总阻值比热敏电阻的阻值小得多，同时需要较大的测量范围，故滑动变阻器采用分压式接法；由于电压表可视为理想电表，即其分流效果为零，但电流表的分压效果不为零，故电流表采用外接法，电路图如图所示。
+\onepicture[w=4.5cm]{figs/10_an.png}
+（2）根据欧姆定律可得，此时热敏电阻的阻值为 $R=\frac{U}{I}=\frac{5.5}{3.0\times10^{-3}}\UO\approx1.8\UkO$。
+（3）根据题图（a）可知，当热敏电阻的阻值为 $2.2\UkO$ 时，室温为 $25.5\UdC$。
+（4）当环境温度升高时，热敏电阻的阻值减小，电路中总电阻减小，根据闭合电路欧姆定律可知，总电流增大，定值电阻两端的电压增大，热敏电阻两端的电压减小；根据题意可知，$R_{1}$ 为热敏电阻；根据题图（a）可知，环境温度为 $50\UdC$ 时，热敏电阻的阻值为 $0.8\UkO$，热敏电阻两端的电压为 $4\UV$，根据串联电路中电流相等可得 $I=\frac{4\UV}{R_{1}}=\frac{6\UV}{R_{2}}$，解得 $R_{2}=1.2\UkO$。
+}
+
+\item
+%% number: 11
+%% paperName: 2020年全国理综Ⅲ第 11 题 12 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 电磁感应
+%% point: 电磁感应受力分析
+%% method: 无
+%% score: 12
+%% degree: 550
+%% duplicateId: 0
+%% body:
+如图，一边长为 $l_{0}$ 的正方形金属框 abcd 固定在水平面内，空间存在方向垂直于水平面、磁感应强度大小为 $B$ 的匀强磁场。一长度大于 $\sqrt{2}l_{0}$ 的均匀导体棒以速率 $v$ 自左向右在金属框上匀速滑过，滑动过程中导体棒始终与 ac 垂直且中点位于 ac 上，导体棒与金属框接触良好。已知导体棒单位长度的电阻为 $r$，金属框电阻可忽略。将导体棒与 a 点之间的距离记为 $x$，求导体棒所受安培力的大小随 $x$（$0\leq x\leq\sqrt{2}l_{0}$）变化的关系式。
+\onepicture[w=5cm, align=right]{\includesvg{figs/11}}
+%% answer: 
+\jdanswer{
+\begin{enumerate}
+	\item
+	$F=\frac{2B^{2}v}{r}x$，$0\leq x\leq\frac{\sqrt{2}}{2}l_{0}$
+	\item
+	$F=\frac{2B^{2}v}{r}(\sqrt{2}l_{0}-x)$，$\frac{\sqrt{2}}{2}l_{0}\leq x\leq\sqrt{2}l_{0}$
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+当导体棒与金属框接触的两点间棒的长度为 $l$ 时，由法拉第电磁感应定律可知导体棒上感应电动势的大小为
+$E=Blv$\ccnum{①}，
+由欧姆定律可知流过导体棒的感应电流为
+$I=\frac{E}{R}$\ccnum{②}，
+式中 $R$ 为这一段导体棒的电阻。按题意有
+$R=rl$\ccnum{③}，
+此时导体棒所受安培力大小为
+$F=BIl$\ccnum{④}，
+由题设和几何关系有
+$l=\begin{cases}2x, & 0\leq x\leq\frac{\sqrt{2}}{2}l_{0}\\[2pt]2(\sqrt{2}l_{0}-x), & \frac{\sqrt{2}}{2}l_{0}<x\leq\sqrt{2}l_{0}\end{cases}$\ccnum{⑤}，
+联立\ccnum{①}\ccnum{②}\ccnum{③}\ccnum{④}\ccnum{⑤}式得
+$F=\begin{cases}\frac{2B^{2}v}{r}x, & 0\leq x\leq\frac{\sqrt{2}}{2}l_{0}\\[2pt]\frac{2B^{2}v}{r}(\sqrt{2}l_{0}-x), & \frac{\sqrt{2}}{2}l_{0}<x\leq\sqrt{2}l_{0}\end{cases}$\ccnum{⑥}。
+}
+
+\item
+%% number: 12
+%% paperName: 2020年全国理综Ⅲ第 12 题 20 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 运动和力
+%% point: 传送带
+%% method: 无
+%% score: 20
+%% degree: 350
+%% duplicateId: 0
+%% body:
+如图，相距 $L=11.5\Um$ 的两平台位于同一水平面内，二者之间用传送带相接。传送带向右匀速运动，其速度的大小 $v$ 可以由驱动系统根据需要设定。质量 $m=10\Ukg$ 的载物箱（可视为质点），以初速度 $v_{0}=5.0\Ums$ 自左侧平台滑上传送带。载物箱与传送带间的动摩擦因数 $\mu=0.10$，重力加速度取 $g=10\Umsq$。
+\begin{enumerate}
+	\item
+	若 $v=4.0\Ums$，求载物箱通过传送带所需的时间；
+	\item
+	求载物箱到达右侧平台时所能达到的最大速度和最小速度；
+	\item
+	若 $v=6.0\Ums$，载物箱滑上传送带 $\Delta t=\frac{13}{12}\Us$ 后，传送带速度突然变为零。求载物箱从左侧平台向右侧平台运动的过程中，传送带对它的冲量。
+\end{enumerate}
+\onepicture[w=6cm, align=right]{figs/12.png}
+%% answer: 
+\jdanswer{
+\begin{enumerate}
+	\item
+	$2.75\Us$
+	\item
+	$v_{2}=4\sqrt{3}\Ums$，$v_{1}=\sqrt{2}\Ums$
+	\item
+	$I=0$
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+（1）传送带的速度为 $v=4.0\Ums$ 时，载物箱在传送带上先做匀减速运动，设其加速度大小为 $a$，由牛顿第二定律有
+$\mu mg=ma$\ccnum{①}，
+设载物箱滑上传送带后匀减速运动的距离为 $s_{1}$，由运动学公式得
+$v^{2}-v_{0}^{2}=-2as_{1}$\ccnum{②}，
+联立\ccnum{①}\ccnum{②}式，代入题给数据得
+$s_{1}=4.5\Um$\ccnum{③}，
+因此，载物箱在到达右侧平台前，速度先减小至 $v$，然后开始做匀速运动。设载物箱从滑上传送带到离开传送带所用时间为 $t_{1}$，做匀减速运动所用的时间为 $t_{1}'$，由运动学公式得
+$v=v_{0}-at_{1}'$\ccnum{④}，
+$t_{1}=t_{1}'+\frac{L-s_{1}}{v}$\ccnum{⑤}，
+联立\ccnum{①}\ccnum{③}\ccnum{④}\ccnum{⑤}式并代入题给数据得
+$t_{1}=2.75\Us$\ccnum{⑥}。
+
+（2）当载物箱滑上传送带后一直做匀减速运动时，到达右侧平台时的速度最小，设为 $v_{1}$；当载物箱滑上传送带后一直做匀加速运动时，到达右侧平台时的速度最大，设为 $v_{2}$。由动能定理得
+$-\mu mgL=\frac{1}{2}mv_{1}^{2}-\frac{1}{2}mv_{0}^{2}$\ccnum{⑦}，
+$\mu mgL=\frac{1}{2}mv_{2}^{2}-\frac{1}{2}mv_{0}^{2}$\ccnum{⑧}，
+由\ccnum{⑦}\ccnum{⑧}式并代入题给条件得
+$v_{1}=\sqrt{2}\Ums$，$v_{2}=4\sqrt{3}\Ums$\ccnum{⑨}。
+
+（3）传送带的速度为 $v=6.0\Ums$ 时，由于 $v_{0}<v<v_{2}$，载物箱先做匀加速运动，加速度大小仍为 $a$。设载物箱做匀加速运动通过的距离为 $s_{2}$，所用时间为 $t_{2}$，由运动学公式得
+$v=v_{0}+at_{2}$\ccnum{⑩}，
+$v^{2}-v_{0}^{2}=2as_{2}$\ccnum{⑪}，
+联立\ccnum{①}\ccnum{⑩}\ccnum{⑪}式并代入题给数据得
+$t_{2}=1.0\Us$\ccnum{⑫}，
+$s_{2}=5.5\Um$\ccnum{⑬}。
+因此载物箱加速运动 $1.0\Us$、向右运动 $5.5\Um$ 时，达到与传送带相同的速度。此后载物箱与传送带共同匀速运动（$\Delta t-t_{2}$）的时间后，传送带突然停止。设载物箱匀速运动通过的距离为 $s_{3}$，有
+$s_{3}=(\Delta t-t_{2})v$\ccnum{⑭}，
+由\ccnum{①}\ccnum{⑫}\ccnum{⑬}\ccnum{⑭}式可知，$\frac{1}{2}mv^{2}>\mu mg(L-s_{2}-s_{3})$，即载物箱运动到右侧平台时的速度大于零，设为 $v_{3}$。由运动学公式有
+$v_{3}^{2}-v^{2}=-2a(L-s_{2}-s_{3})$\ccnum{⑮}，
+设载物箱通过传送带的过程中，传送带对它的冲量为 $I$，由动量定理有
+$I=m(v_{3}-v_{0})$\ccnum{⑯}，
+联立\ccnum{①}\ccnum{⑫}\ccnum{⑬}\ccnum{⑭}\ccnum{⑮}\ccnum{⑯}式并代入题给数据得
+$I=0$\ccnum{⑰}。
+}
+
+\item
+%% number: 13
+%% paperName: 2020年全国理综Ⅲ第 13 题 10 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 气体性质
+%% point: 气体多过程
+%% method: 无
+%% score: 10
+%% degree: 550
+%% duplicateId: 0
+%% body:
+\begin{enumerate}
+	\item
+	（5 分）如图，一开口向上的导热气缸内。用活塞封闭了一定质量的理想气体，活塞与气缸壁间无摩擦。现用外力作用在活塞上。使其缓慢下降。环境温度保持不变，系统始终处于平衡状态。在活塞下降过程中\xzanswer{BCD}
+	\fivechoices[answer=BCD]
+	{气体体积逐渐减小，内能增知}
+	{气体压强逐渐增大，内能不变}
+	{气体压强逐渐增大，放出热量}
+	{外界对气体做功，气体内能不变}
+	{外界对气体做功，气体吸收热量}
+	\onepicture[w=3.5cm, align=right]{\includesvg{figs/13a}}
+	\item
+	（10 分）如图，两侧粗细均匀、横截面积相等、高度均为 $H=18\Ucm$ 的 U 型管，左管上端封闭，右管上端开口。右管中有高 $h_{0}=4\Ucm$ 的水银柱，水银柱上表面离管口的距离 $l=12\Ucm$。管底水平段的体积可忽略。环境温度为 $T_{1}=283\UK$。大气压强 $p_{0}=76\UcmHg$。
+	\begin{enumerate}
+		\item
+		现从右侧端口缓慢注入水银（与原水银柱之间无气隙），恰好使水银柱下端到达右管底部。此时水银柱的高度为多少？
+		\item
+		再将左管中密封气体缓慢加热，使水银柱上表面恰与右管口平齐，此时密封气体的温度为多少？
+	\end{enumerate}
+	\onepicture[w=3.5cm, align=right]{\includesvg{figs/13b}}
+\end{enumerate}
+%% answer: 
+\jdanswer{
+\begin{enumerate}
+	\item
+	BCD
+	\item
+	（i）$12.9\Ucm$；（ii）$363\UK$
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+（1）A．理想气体的内能与温度之间唯一决定，温度保持不变，所以内能不变，A 错误；
+BCED．由理想气体状态方程 $\frac{pV}{T}=C$，可知体积减少，温度不变，所以压强增大。因为温度不变，内能不变，体积减少，外界对系统做功，由热力学第一定律 $\Delta U=W+Q$ 可知，系统放热，BCD 正确，E 错误。
+
+故选 BCD。
+
+（2）（i）设密封气体初始体积为 $V_{1}$，压强为 $p_{1}$，左、右管的截面积均为 $S$，密封气体先经等温压缩过程体积变为 $V_{2}$，压强变为 $p_{2}$。由玻意耳定律有
+$p_{1}V_{1}=p_{2}V_{2}$\ccnum{①}，
+设注入水银后水银柱高度为 $h$，水银的密度为 $\rho$，按题设条件有
+$p_{1}=p_{0}+\rho gh_{0}$\ccnum{②}，$p_{2}=p_{0}+\rho gh$\ccnum{③}，
+$V_{1}=S(2H-l-h_{0})$，$V_{2}=SH$\ccnum{④}，
+联立\ccnum{①}\ccnum{②}\ccnum{③}\ccnum{④}式并代入题给数据得
+$h=12.9\Ucm$\ccnum{⑤}。
+
+（ii）密封气体再经等压膨胀过程体积变为 $V_{3}$，温度变为 $T_{2}$，由盖-吕萨克定律得
+$\frac{V_{2}}{T_{1}}=\frac{V_{3}}{T_{2}}$\ccnum{⑥}，
+按题设条件有
+$V_{3}=S(2H-h)$\ccnum{⑦}，
+联立\ccnum{④}\ccnum{⑤}\ccnum{⑥}\ccnum{⑦}式并代入题给数据得
+$T_{2}=363\UK$\ccnum{⑧}。
+}
+
+\item
+%% number: 14
+%% paperName: 2020年全国理综Ⅲ第 14 题 10 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 光学
+%% point: 光的折射
+%% method: 无
+%% score: 10
+%% degree: 550
+%% duplicateId: 0
+%% body:
+\begin{enumerate}
+	\item
+	（5 分）如图，一列简谐横波平行于 $x$ 轴传播，图中的实线和虚线分别为 $t=0$ 和 $t=0.1\Us$ 时的波形图。已知平衡位置在 $x=6\Um$ 处的质点，在 0 到 $0.1\Us$ 时间内运动方向不变。这列简谐波的周期为\_\_\_\_\_$\Us$，波速为\_\_\_\_\_$\Ums$，传播方向沿 $x$ 轴\_\_\_\_\_（填“正方向”或“负方向”）。
+	\onepicture[w=7cm, align=right]{\includesvg{figs/14a}}
+	\item
+	（10 分）如图，一折射率为 $\sqrt{3}$ 的材料制作的三棱镜，其横截面为直角三角形 ABC，$\angle$A$=90^\circ$，$\angle$B$=30^\circ$。一束平行光平行于 BC 边从 AB 边射入棱镜，不计光线在棱镜内的多次反射，求 AC 边与 BC 边上有光出射区域的长度的比值。
+	\onepicture[w=6cm, align=right]{\includesvg{figs/14b}}
+\end{enumerate}
+%% answer: 
+\jdanswer{
+\begin{enumerate}
+	\item
+	$0.4\Us$，$10\Ums$，负方向
+	\item
+	$2$
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+（1）因为 $x=6\Um$ 处的质点在 $0\sim0.1\Us$ 内运动方向不变，所以该处质点从正向位移最大处经过四分之一个周期向下运动至平衡位置处，即
+$\frac{1}{4}T=0.1\Us$
+解得周期为 $T=0.4\Us$，所以波速为
+$v=\frac{\lambda}{T}=\frac{4\Um}{0.4\Us}=10\Ums$
+在虚线上，$x=6\Um$ 处的质点向下运动，根据同侧法可知波沿 $x$ 轴负方向传播。
+
+（2）设从 D 点入射的光线经折射后恰好射向 C 点，光在 AB 边上的入射角为 $\theta_{1}$，折射角为 $\theta_{2}$，如图（a）所示，由折射定律有
+$\sin\theta_{1}=n\sin\theta_{2}$\ccnum{①}，
+\onepicture[w=5.5cm]{figs/14_an1.jpg}
+设从 DB 范围入射的光折射后在 BC 边上的入射角为 $\theta'$，由几何关系有
+$\theta'=30^\circ+\theta_{2}$\ccnum{②}，
+代入题中数据解得
+$\theta_{2}=30^\circ$，$\theta'=60^\circ$，
+$n\sin\theta'>1$\ccnum{③}，
+所以从 DB 范围入射的光折射后在 BC 边上发生全反射，反射光线垂直射到 AC 边，AC 边上全部有光射出。设从 AD 范围入射的光折射后在 AC 边上的入射角为 $\theta''$，如图（b）所示。由几何关系可知
+\onepicture[w=5.5cm]{figs/14_an2.jpg}
+$\theta''=90^\circ-\theta_{2}$\ccnum{④}，
+根据已知条件可知
+$n\sin\theta''>1$\ccnum{⑤}，
+即从 AD 范围入射的光折射后在 AC 边上发生全反射，反射光线垂直射到 BC 边上。设 BC 边上有光线射出的部分为 CF，由几何关系得
+$CF=AC\cdot\sin30^\circ$\ccnum{⑥}，
+AC 边与 BC 边有光出射区域的长度比值为
+$\frac{AC}{CF}=2$\ccnum{⑦}。
+}
+
+\end{enumerate}
+
+\end{document}
