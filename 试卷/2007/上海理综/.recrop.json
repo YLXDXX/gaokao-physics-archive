@@ -1,0 +1,44 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2007/上海理综/pdfimages/p1_0.jpg",
+      "crops": [
+        {"rect": [0, 0, 91, 119], "target": "试卷/2007/上海理综/figs/05a.png"},
+        {"rect": [91, 0, 91, 119], "target": "试卷/2007/上海理综/figs/05b.png"},
+        {"rect": [182, 0, 89, 119], "target": "试卷/2007/上海理综/figs/05c.png"},
+        {"rect": [271, 0, 91, 119], "target": "试卷/2007/上海理综/figs/05d.png"},
+        {"rect": [362, 0, 88, 135], "target": "试卷/2007/上海理综/figs/05.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2007/上海理综/pdfimages/p2_4.jpg",
+      "crops": [
+        {"rect": [0, 0, 114, 77], "target": "试卷/2007/上海理综/figs/44a.png"},
+        {"rect": [118, 0, 111, 77], "target": "试卷/2007/上海理综/figs/44b.png"},
+        {"rect": [233, 0, 111, 77], "target": "试卷/2007/上海理综/figs/44c.png"},
+        {"rect": [349, 0, 101, 77], "target": "试卷/2007/上海理综/figs/44d.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2007/上海理综/pdfimages/p2_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 139, 100], "target": "试卷/2007/上海理综/figs/45a.png"},
+        {"rect": [148, 0, 139, 100], "target": "试卷/2007/上海理综/figs/45b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2007/上海理综/pdfimages/p3_7.jpg",
+      "crops": [
+        {"rect": [0, 0, 200, 165], "target": "试卷/2007/上海理综/figs/45c.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2007/上海理综/pdfimages/p3_6.jpg",
+      "crops": [
+        {"rect": [0, 0, 84, 97], "target": "试卷/2007/上海理综/figs/46a.png"},
+        {"rect": [106, 0, 139, 97], "target": "试卷/2007/上海理综/figs/46b.png"},
+        {"rect": [267, 0, 233, 97], "target": "试卷/2007/上海理综/figs/46c.png"}
+      ]
+    }
+  ]
+}

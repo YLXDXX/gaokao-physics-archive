@@ -1,0 +1,32 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2007/2007_全国理综Ⅰ/tiku_images/1401-1800/1712-1.png",
+      "crops": [
+        {"rect": [0, 0, 306, 144], "target": "试卷/2007/全国理综Ⅰ/figs/15.png"}
+      ],
+      "trim": {"padding": 6},
+      "compare": true
+    },
+    {
+      "source": "JSON/2007/2007_全国理综Ⅰ/tiku_images/1401-1800/1712-2.png",
+      "crops": [
+        {"rect": [18, 4, 290, 145], "target": "试卷/2007/全国理综Ⅰ/figs/15a.png"},
+        {"rect": [346, 4, 330, 145], "target": "试卷/2007/全国理综Ⅰ/figs/15b.png"},
+        {"rect": [18, 168, 290, 145], "target": "试卷/2007/全国理综Ⅰ/figs/15c.png"},
+        {"rect": [346, 168, 330, 145], "target": "试卷/2007/全国理综Ⅰ/figs/15d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2007/2007_全国理综Ⅰ/tiku_images/1401-1800/1718-2.png",
+      "crops": [
+        {"rect": [8, 8, 142, 116], "target": "试卷/2007/全国理综Ⅰ/figs/21a.png"},
+        {"rect": [180, 8, 142, 116], "target": "试卷/2007/全国理综Ⅰ/figs/21b.png"},
+        {"rect": [351, 8, 142, 116], "target": "试卷/2007/全国理综Ⅰ/figs/21c.png"},
+        {"rect": [523, 8, 142, 116], "target": "试卷/2007/全国理综Ⅰ/figs/21d.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}
