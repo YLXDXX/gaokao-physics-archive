@@ -312,4 +312,9 @@
 % ── 新增单位（2007 广东理科基础）：按「类别：符号 中文全称」注释 ─────────────────
 \NewDocumentCommand \UMF { O{} } { \__phyunit_space:n{#1} \mathrm{MF} } % 电容：MF 兆法拉
 
+% ── 新增单位（2000年以前 1979 全国）：按「类别：符号 中文全称」注释 ─────────────────
+\NewDocumentCommand \UJg { O{} } { \__phyunit_space:n{#1} \mathrm{J}/\mathrm{g} } % 比热/潜热：J/g 焦耳每克
+\NewDocumentCommand \UJgdC { O{} } { \__phyunit_space:n{#1} \mathrm{J}/(\mathrm{g}\cdot{}^\circ\mathrm{C}) } % 比热：J/(g·℃) 焦耳每克摄氏度
+\NewDocumentCommand \Ukgcmq { O{} } { \__phyunit_space:n{#1} \mathrm{kg}/\mathrm{cm}^2 } % 压强：kg/cm² 千克每平方厘米
+
 \endinput

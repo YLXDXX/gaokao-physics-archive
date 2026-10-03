@@ -178,7 +178,10 @@ def process_paper(json_path: Path, out_dir: Path, *, force: bool,
 
     figs_dir = out_dir / "figs"
     figs_dir.mkdir(parents=True, exist_ok=True)
-    tex_path = out_dir / f"{region}.tex"
+    # 输出文件名默认与“地区”同名；特殊年份桶（如 `2000年以前/1978_全国`）目录名含
+    # 完整卷名，此时取目录名，得到 `<学年>_<地区>.tex`（见 高考物理真题制作规范.md 第一节）。
+    out_stem = out_dir.name or region
+    tex_path = out_dir / f"{out_stem}.tex"
     if tex_path.exists() and not force:
         print(f"[跳过] {tex_path} 已存在（--force 覆盖）")
         return 0

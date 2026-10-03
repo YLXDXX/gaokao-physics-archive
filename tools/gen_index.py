@@ -121,7 +121,8 @@ def parse_progress(path: Path = PROGRESS) -> dict[str, dict]:
         return years
     cur: str | None = None
     for line in path.read_text(encoding="utf-8").splitlines():
-        m = re.match(r"^###\s*(\d{4})\s*年", line)
+        # 年份小节标题：普通年份 `### 2020 年（…）`；特殊桶 `### 2000年以前（…）`
+        m = re.match(r"^###\s*(\d{4}年以前|\d{4})", line)
         if m:
             cur = m.group(1)
             years[cur] = {"heading": line.strip(), "rows": {}}
@@ -281,7 +282,8 @@ def check(root: Path = ROOT, verbose: bool = True) -> list[str]:
 # ---------------------------------------------------------------------------
 def render_year_readme(year: str, facts: dict[str, dict], rows: dict[str, dict]) -> str:
     n = sum(f["questions"] for f in facts.values())
-    out = [f"# {year} 年试卷索引", "",
+    heading = f"{year}试卷索引" if year.endswith("以前") else f"{year} 年试卷索引"
+    out = [f"# {heading}", "",
            "> 本文件由 `tools/gen_index.py --write` 生成，请勿手改；"
            f"进度见 [`进度记录.md`](../../进度记录.md)，异常见 "
            f"[`异常记录/{year}.md`](../../异常记录/{year}.md)。", "",
@@ -317,7 +319,7 @@ def write(root: Path = ROOT, verbose: bool = True) -> None:
             total_y = len(papers)
             block = (f"{README_START}\n"
                      f"- **已完成**：{total_y} 个年份、共 **{total_p} 套**卷、**{total_q} 题**"
-                     f"（{ '、'.join(f'{y} 年 {len(v)} 套' for y, v in sorted(papers.items())) }）。\n"
+                     f"（{ '、'.join((y if y.endswith('以前') else f'{y} 年') + f' {len(v)} 套' for y, v in sorted(papers.items())) }）。\n"
                      f"- **材料就位**：`材料处理/` 已完成 402 份 PDF 的三路转换与提图（本地，不入库）。\n"
                      f"- **待制作**：其余年份/地区，按批次推进。\n"
                      f"{README_END}")

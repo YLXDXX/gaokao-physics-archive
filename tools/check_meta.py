@@ -29,15 +29,21 @@ CHOICE_TYPES = ("单选", "多选", "选择题")
 
 
 def infer_json(tex: Path) -> Optional[Path]:
-    """试卷/<年>/<地区>/<地区>.tex → JSON/<年>/<年_<地区>.json。"""
+    """试卷/<年>/<地区>/<地区>.tex → JSON/<年>/<年_<地区>.json。
+
+    特殊年份桶（如 ``试卷/2000年以前/1978_全国/1978_全国.tex``）：桶名不是 4 位数字，
+    目录名本身即完整卷名（含学年），对应 ``JSON/2000年以前/1978_全国.json``。
+    """
     try:
         rel = tex.resolve().relative_to(ROOT / "试卷")
     except ValueError:
         return None
-    if len(rel.parts) < 3 or not re.fullmatch(r"\d{4}", rel.parts[0]):
+    if len(rel.parts) < 3:
         return None
     year, region = rel.parts[0], rel.parts[1]
-    return ROOT / "JSON" / year / f"{year}_{region}.json"
+    if re.fullmatch(r"\d{4}", year):
+        return ROOT / "JSON" / year / f"{year}_{region}.json"
+    return ROOT / "JSON" / year / f"{region}.json"
 
 
 def _norm(v) -> str:
