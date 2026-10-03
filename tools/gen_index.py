@@ -48,6 +48,14 @@ README_START = "<!-- PROGRESS:START -->"
 README_END = "<!-- PROGRESS:END -->"
 
 
+def year_sort_key(year: str):
+    """年份排序键：`2000年以前` 视为早于 2000，排在最前；其余按数字升序。"""
+    if year.endswith("以前"):
+        m = re.match(r"(\d{4})", year)
+        return (0, int(m.group(1)) if m else 0)
+    return (1, int(year) if year.isdigit() else 9999)
+
+
 # ---------------------------------------------------------------------------
 # 扫描
 # ---------------------------------------------------------------------------
@@ -397,7 +405,7 @@ def write(root: Path = ROOT, verbose: bool = True) -> None:
             overview = parse_overview(root / "进度记录.md")
             block = (f"{README_START}\n"
                      f"- **已完成**：{total_y} 个年份、共 **{total_p} 套**卷、**{total_q} 题**"
-                     f"（{ '、'.join((y if y.endswith('以前') else f'{y} 年') + f' {len(v)} 套' for y, v in sorted(papers.items())) }）。\n"
+                     f"（{ '、'.join((y if y.endswith('以前') else f'{y} 年') + f' {len(v)} 套' for y, v in sorted(papers.items(), key=lambda kv: year_sort_key(kv[0]))) }）。\n"
                      f"- **材料就位**：{overview.get('材料就位', '')}\n"
                      f"- **待制作**：{overview.get('待制作', '')}\n"
                      f"{README_END}")
@@ -438,7 +446,7 @@ def status_report(root: Path = ROOT) -> str:
     progress = parse_progress(root / "进度记录.md")
     tally = anomaly_tally(root)
     lines = ["各年份进度概要："]
-    for year in sorted(papers):
+    for year in sorted(papers, key=year_sort_key):
         q = sum(f["questions"] for f in papers[year].values())
         ph = sum(f["placeholder"] for f in papers[year].values())
         rows = progress.get(year, {}).get("rows", {})
