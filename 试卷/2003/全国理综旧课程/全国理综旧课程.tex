@@ -1,0 +1,99 @@
+\ifdefined\gkver\else\def\gkver{student}\fi
+\documentclass[\gkver]{gaokaozhenti}
+\begin{document}
+
+\chapter{2003年全国理综旧课程}
+%% paperType: 理综物理部分
+
+\begin{enumerate}
+\item
+%% number: 17
+%% paperName: 2003年全国理综旧课程第 17 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 光学
+%% point: 光的电磁说
+%% method: 无
+%% score: 6
+%% degree: 850
+%% duplicateId: 0
+%% body:
+一束单色光从空气射入玻璃中，则其\xzanswer{C}
+\fourchoices[answer=C]
+{频率不变，波长变长}
+{频率变大，波长不变}
+{频率不变，波长变短}
+{频率变小，波长不变}
+%% answer: C
+%% memo:
+\memoanswer{
+光的频率由光源决定，光从空气射入玻璃时频率不变；光在玻璃中的传播速度小于在空气中的速度，
+由 $v=\lambda f$ 可知，频率不变而波速减小时波长变短。
+}
+
+\item
+%% number: 21
+%% paperName: 2003年全国理综旧课程第 21 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 电场
+%% point: 电势能电势差电场力做功
+%% method: 无
+%% score: 6
+%% degree: 450
+%% duplicateId: 0
+%% body:
+图中虚线所示为静电场中的等势面 1、2、3、4，相邻的等势面之间的电势差相等，其中等势面 3 的电势为 0。一带正电的点电荷在静电力的作用下运动，经过 a、b 点时的动能分别为 $26\UeV$ 和 $5\UeV$。当这一点电荷运动到某一位置，其电势能变为 $-8\UeV$ 时，它的动能应为\xzanswer{C}
+\onepicture[align=right]{figs/21.png}
+\fourchoices[answer=C]
+{$8\UeV$}
+{$13\UeV$}
+{$20\UeV$}
+{$34\UeV$}
+%% answer: C
+%% memo:
+\memoanswer{
+点电荷从 a 到 b 动能减少 $21\UeV$，由能量守恒可知电势能增加 $21\UeV$。图中 a 在等势面 1 上、
+b 在等势面 4 上，相邻等势面电势差相等，共跨 3 个间隔，故每相邻两等势面间的电势能差为
+$7\UeV$。已知等势面 3 的电势为 0，则等势面 1 的电势为 $-14\UV$，a 点的电势能为 $-14\UeV$。
+点电荷的总能量 $E=E_{k}+E_{p}=26\UeV+(-14\UeV)=12\UeV$。当电势能变为 $-8\UeV$ 时，
+动能 $E_{k}'=E-E_{p}'=12\UeV-(-8\UeV)=20\UeV$。故选 C。
+}
+
+\item
+%% number: 25
+%% paperName: 2003年全国理综旧课程第 25 题 20 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 交流电
+%% point: 交流电
+%% method: 无
+%% score: 20
+%% degree: 350
+%% duplicateId: 0
+%% body:
+曾经流行过一种向自行车车头灯供电的小型交流发电机，图 1 为其结构示意图。图中 N、S 是一对固定的磁极，abcd 为固定在转轴上的矩形线框，转轴过 bc 中点、与 ab 边平行，它的一端有一半径 $r_{0}=1.0\Ucm$ 的摩擦小轮，小轮与自行车车轮的边缘相接触，如图 2 所示。当车轮转动时，因摩擦而带动小轮转动，从而使线框在磁极间转动。设线框由 $N=800$ 匝导线圈组成，每匝线圈的面积 $S=20\Ucmq$，磁极间的磁场可视做匀强磁场，磁感强度 $B=0.010\UT$，自行车车轮的半径 $R_{1}=35\Ucm$，小齿轮的半径 $R_{2}=4.0\Ucm$，大齿轮的半径 $R_{3}=10.0\Ucm$（见图 2）。现从静止开始使大齿轮加速转动，问大齿轮的角速度为多大才能使发电机输出电压的有效值 $U=3.2\UV$？（假定摩擦小轮与自行车轮之间无相对滑动）
+\onepicture[w=12cm, align=right]{figs/25.png}
+%% answer:
+\jdanswer{
+$3.2\Urads$。
+}
+%% memo:
+\memoanswer{
+设大齿轮、小齿轮、车轮、摩擦小轮的角速度分别为 $\omega_{3}$、$\omega_{2}$、$\omega_{1}$、$\omega_{0}$。
+链条不打滑，大、小齿轮边缘线速度相等，有 $\omega_{3}R_{3}=\omega_{2}R_{2}$；小齿轮与自行车车轮共轴，
+故 $\omega_{2}=\omega_{1}$；摩擦小轮与车轮边缘接触处不打滑，有 $\omega_{1}R_{1}=\omega_{0}r_{0}$。
+由以上三式得 $\omega_{0}=\omega_{3}\frac{R_{3}R_{1}}{R_{2}r_{0}}$。
+
+发电机线框产生的感应电动势的峰值 $E_{m}=NBS\omega_{0}$，输出电压的有效值
+$U=\frac{E_{m}}{\sqrt{2}}=\frac{NBS\omega_{0}}{\sqrt{2}}$，故
+\[
+\omega_{3}=\frac{\sqrt{2}U r_{0}R_{2}}{NBS R_{3}R_{1}}
+=\frac{\sqrt{2}\times3.2\times0.010\times0.040}{800\times0.010\times2.0\times10^{-3}\times0.10\times0.35}\Urads
+\approx3.2\Urads.
+\]
+}
+
+\end{enumerate}
+
+\end{document}

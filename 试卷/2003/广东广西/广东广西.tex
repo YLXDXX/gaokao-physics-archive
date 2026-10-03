@@ -1,0 +1,116 @@
+\ifdefined\gkver\else\def\gkver{student}\fi
+\documentclass[\gkver]{gaokaozhenti}
+\begin{document}
+
+\chapter{2003年广东广西}
+
+\begin{enumerate}
+\item
+%% number: 3
+%% paperName: 2003年广东广西高考第 3 题 4 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 气体性质
+%% point: 分子力
+%% method: 无
+%% score: 4
+%% degree: 750
+%% duplicateId: 0
+%% body:
+相距很远的两个分子，以一定的初速度相向运动，直到距离最小。在这个过程中，两分子间的分子势能\xzanswer{D}
+\fourchoices[answer=D]
+{一直增大}
+{一直减小}
+{先增大，后减小}
+{先减小，后增大}
+%% answer: D
+%% memo:
+\memoanswer{
+两分子从相距很远到距离最小的过程中，分子间先表现为引力、后表现为斥力：在分子力表现为
+引力的阶段，分子力做正功，分子势能减小；当分子间距离减小到平衡位置之后，分子力表现为斥力，
+分子力做负功，分子势能增大。
+}
+
+\item
+%% number: 11
+%% paperName: 2003年广东广西高考第 11 题 6 分
+%% typeId: 4
+%% type: 实验题
+%% chapter: 电路
+%% point: 多用表的使用
+%% method: 无
+%% score: 6
+%% degree: 850
+%% duplicateId: 0
+%% body:
+下图为一正在测量中的多用电表表盘。
+\begin{enumerate}
+	\item
+	如果是用直流 $10\UV$ 挡测量电压，则读数为\tkanswer[1.6cm]{6.5}$\UV$。
+	\item
+	如果是用 $\times100$ 挡测量电阻，则读数为\tkanswer[2.2cm]{$8.0\times10^{2}$}$\UO$。
+	\item
+	如果是用直流 $5\UmA$ 挡测量电流，则读数为\tkanswer[1.6cm]{3.25}$\UmA$。
+\end{enumerate}
+\onepicture[align=right]{figs/11.png}
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	$6.5\UV$。
+	\item
+	$8.0\times10^{2}\UO$。
+	\item
+	$3.25\UmA$。
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+（1）直流 $10\UV$ 挡的分度值为 $0.2\UV$，指针位于 6 后第 2.5 格处，读数为 $6.5\UV$。
+（2）选用 $\times100$ 挡时，表盘读数为 8.0，故被测电阻为 $8.0\times100\UO=8.0\times10^{2}\UO$。
+（3）直流 $5\UmA$ 挡的分度值为 $0.1\UmA$，表盘读数为 $3.25\UmA$。
+}
+
+\item
+%% number: 18
+%% paperName: 2003年广东广西高考第 18 题 13 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 交流电
+%% point: 交流电
+%% method: 无
+%% score: 13
+%% degree: 450
+%% duplicateId: 0
+%% body:
+在图 1 所示区域（图中直角坐标系 $Oxy$ 的 1，3 象限）内有匀强磁场，磁感强度方向垂直于图面向里，大小为 $B$。半径为 $l$，圆心角为 $60^{\circ}$ 的扇形导线框 OPQ 以角速度 $\omega$ 绕 O 点在图面内沿逆时针方向匀速转动，导线框回路电阻为 $R$。
+\begin{enumerate}
+	\item
+	求线框中感应电流的最大值 $I_{0}$ 和交变感应电流的频率 $f$；
+	\item
+	在图 2 上画出线框转一周的时间内感应电流 $I$ 随时间 $t$ 变化的图象。（规定与图 1 中线框的位置相应的时刻为 $t=0$）
+\end{enumerate}
+\twopicture[labelA=2003广东广西18a, labelB=2003广东广西18b, align=right]
+{figs/18a.png}
+{figs/18b.png}
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	$I_{0}=\frac{B\omega l^{2}}{2R}$，$f=\frac{\pi}{\omega}$。
+	\item
+	如图所示。
+	\onepicture[w=6cm]{figs/18_an}
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+（1）线框在磁场中转动时，只有一条半径边在磁场边界外切割磁感线，产生的感应电动势为
+$E=\frac{1}{2}Bl^{2}\omega$，故感应电流的最大值 $I_{0}=\frac{E}{R}=\frac{B\omega l^{2}}{2R}$。
+（2）线框每转过 $\frac{\pi}{3}$ 的圆心角，切割磁感线的半径边更换一次，感应电流方向改变一次，
+故其随时间变化的图象如答案图所示。
+}
+
+\end{enumerate}
+
+\end{document}
