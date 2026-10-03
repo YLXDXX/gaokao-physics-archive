@@ -1,0 +1,43 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2022/北京/pdfimages/p7_24.jpg",
+      "crops": [
+        {"rect": [0, 0, 1010, 340], "target": "试卷/2022/北京/figs/15a.png"},
+        {"rect": [1090, 0, 1006, 340], "target": "试卷/2022/北京/figs/15b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2022/北京/pdfimages/p8_29.jpg",
+      "crops": [
+        {"rect": [0, 0, 381, 282], "target": "试卷/2022/北京/figs/15c.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2022/北京/pdfimages/p4_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 1063, 792], "target": "试卷/2022/北京/figs/09an.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/北京/pdfimages/p9_33.jpg",
+      "crops": [
+        {"rect": [0, 0, 1850, 1625], "target": "试卷/2022/北京/figs/16an.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/北京/pdfimages/p10_38.jpg",
+      "crops": [
+        {"rect": [0, 0, 179, 148], "target": "试卷/2022/北京/figs/17an.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/北京/pdfimages/p13_47.jpg",
+      "crops": [
+        {"rect": [0, 0, 271, 288], "target": "试卷/2022/北京/figs/22an.png"}
+      ]
+    }
+  ]
+}

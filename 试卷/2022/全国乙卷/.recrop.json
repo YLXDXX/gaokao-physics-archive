@@ -1,0 +1,81 @@
+{
+  "trim": {"padding": 8, "threshold": 200},
+  "entries": [
+    {
+      "source": "材料处理/2022/全国乙卷/pdfimages/p5_17.jpg",
+      "erase": [[330, 490, 220, 130]],
+      "crops": [
+        {"rect": [0, 0, 3438, 625], "target": "试卷/2022/全国乙卷/figs/08a.png"},
+        {"rect": [0, 790, 3438, 540], "target": "试卷/2022/全国乙卷/figs/08b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/全国乙卷/pdfimages/p6_20.jpg",
+      "crops": [
+        {"rect": [0, 0, 1100, 610], "target": "试卷/2022/全国乙卷/figs/10b.png"},
+        {"rect": [1120, 0, 1147, 610], "target": "试卷/2022/全国乙卷/figs/10c.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/全国乙卷/pdfimages/p6_21.jpg",
+      "crops": [
+        {"rect": [0, 0, 483, 450], "target": "试卷/2022/全国乙卷/figs/10a.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/全国乙卷/pdfimages/p8_29.jpg",
+      "crops": [
+        {"rect": [0, 0, 1400, 875], "target": "试卷/2022/全国乙卷/figs/12a.png"},
+        {"rect": [1400, 0, 1110, 875], "target": "试卷/2022/全国乙卷/figs/12b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/全国乙卷/pdfimages/p1_3.jpg",
+      "crops": [
+        {"rect": [0, 0, 419, 195], "target": "试卷/2022/全国乙卷/figs/02_an.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/全国乙卷/pdfimages/p2_7.jpg",
+      "crops": [
+        {"rect": [0, 0, 403, 435], "target": "试卷/2022/全国乙卷/figs/03_an.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/全国乙卷/pdfimages/p3_12.jpg",
+      "crops": [
+        {"rect": [0, 0, 447, 490], "target": "试卷/2022/全国乙卷/figs/05_an.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/全国乙卷/pdfimages/p7_24.jpg",
+      "crops": [
+        {"rect": [0, 0, 847, 793], "target": "试卷/2022/全国乙卷/figs/10_an.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/全国乙卷/pdfimages/p7_25.jpg",
+      "crops": [
+        {"rect": [0, 0, 778, 425], "target": "试卷/2022/全国乙卷/figs/10_an2.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/全国乙卷/pdfimages/p11_39.jpg",
+      "crops": [
+        {"rect": [0, 0, 527, 385], "target": "试卷/2022/全国乙卷/figs/14_an.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/全国乙卷/pdfimages/p9_32.jpg",
+      "crops": [
+        {"rect": [0, 0, 371, 328], "target": "试卷/2022/全国乙卷/figs/13a.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/全国乙卷/pdfimages/p10_35.jpg",
+      "crops": [
+        {"rect": [0, 0, 177, 318], "target": "试卷/2022/全国乙卷/figs/13b.png"}
+      ]
+    }
+  ]
+}

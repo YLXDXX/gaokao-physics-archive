@@ -1,0 +1,21 @@
+{
+  "trim": {"padding": 6, "threshold": 200},
+  "entries": [
+    {
+      "source": "材料处理/2022/广东/pdfimages/p7_32.jpg",
+      "crops": [
+        {"rect": [4, 4, 1657, 1128], "target": "试卷/2022/广东/figs/11a.png"},
+        {"rect": [1992, 449, 886, 631], "target": "试卷/2022/广东/figs/11b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/广东/pdfimages/p8_35.jpg",
+      "crops": [
+        {"rect": [3, 3, 1350, 548], "target": "试卷/2022/广东/figs/12a.png"},
+        {"rect": [247, 602, 936, 710], "target": "试卷/2022/广东/figs/12b.png"},
+        {"rect": [1500, 44, 1492, 1270], "target": "试卷/2022/广东/figs/12c.png"}
+      ],
+      "erase": [[634, 469, 100, 80]]
+    }
+  ]
+}

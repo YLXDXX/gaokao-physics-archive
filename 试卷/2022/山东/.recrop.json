@@ -1,0 +1,28 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2022/山东/pdfimages/p8_32.jpg",
+      "crops": [
+        {"rect": [8, 8, 1130, 648], "target": "试卷/2022/山东/figs/10a.png"},
+        {"rect": [1380, 288, 900, 248], "target": "试卷/2022/山东/figs/10b.png"},
+        {"rect": [2470, 288, 890, 248], "target": "试卷/2022/山东/figs/10c.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2022/山东/pdfimages/p12_45.jpg",
+      "crops": [
+        {"rect": [0, 150, 800, 1270], "target": "试卷/2022/山东/figs/13b.png"},
+        {"rect": [1000, 0, 1668, 1455], "target": "试卷/2022/山东/figs/13c.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2022/山东/pdfimages/p11_42.jpg",
+      "crops": [
+        {"rect": [0, 0, 2459, 545], "target": "试卷/2022/山东/figs/13a.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

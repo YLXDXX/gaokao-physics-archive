@@ -1,0 +1,13 @@
+{
+  "trim": {"padding": 6, "threshold": 200},
+  "entries": [
+    {
+      "source": "材料处理/2022/重庆/pdfimages/p3_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 290, 223], "target": "试卷/2022/重庆/figs/07a.png"},
+        {"rect": [322, 0, 215, 223], "target": "试卷/2022/重庆/figs/07b.png"}
+      ],
+      "erase": [[100, 192, 140, 31], [390, 192, 147, 31]]
+    }
+  ]
+}

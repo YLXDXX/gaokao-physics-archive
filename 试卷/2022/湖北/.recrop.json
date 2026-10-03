@@ -1,0 +1,36 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2022/湖北/pdfimages/p4_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 829, 1031], "target": "试卷/2022/湖北/figs/08_an1.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/湖北/pdfimages/p5_15.jpg",
+      "crops": [
+        {"rect": [0, 0, 829, 982], "target": "试卷/2022/湖北/figs/08_an2.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/湖北/pdfimages/p8_25.jpg",
+      "crops": [
+        {"rect": [14, 978, 1338, 702], "target": "试卷/2022/湖北/figs/12a.png"},
+        {"rect": [1454, 17, 1303, 1821], "target": "试卷/2022/湖北/figs/12b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/湖北/pdfimages/p8_26.jpg",
+      "crops": [
+        {"rect": [0, 0, 770, 715], "target": "试卷/2022/湖北/figs/13a.png"},
+        {"rect": [1080, 0, 1176, 715], "target": "试卷/2022/湖北/figs/13b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2022/湖北/pdfimages/p9_29.jpg",
+      "crops": [
+        {"rect": [0, 0, 1344, 1285], "target": "试卷/2022/湖北/figs/13c.png"}
+      ]
+    }
+  ]
+}

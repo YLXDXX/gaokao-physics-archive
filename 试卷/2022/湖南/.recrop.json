@@ -1,0 +1,36 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2022/2022_湖南/tiku_images/37001-38000/37276.png",
+      "crops": [
+        {"rect": [0, 0, 473, 345], "target": "试卷/2022/湖南/figs/03a.png"},
+        {"rect": [500, 0, 300, 310], "target": "试卷/2022/湖南/figs/03b.png"}
+      ]
+    },
+    {
+      "source": "JSON/2022/2022_湖南/tiku_images/37001-38000/37287.png",
+      "crops": [
+        {"rect": [0, 0, 445, 316], "target": "试卷/2022/湖南/figs/14a.png"},
+        {"rect": [455, 0, 345, 316], "target": "试卷/2022/湖南/figs/14b.png"}
+      ]
+    },
+    {
+      "source": "JSON/2022/2022_湖南/tiku_images/37001-38000/37290.png",
+      "crops": [
+        {"rect": [0, 0, 360, 317], "target": "试卷/2022/湖南/figs/16a.png"},
+        {"rect": [365, 0, 435, 317], "target": "试卷/2022/湖南/figs/16b.png"}
+      ],
+      "erase": [[108, 262, 84, 46], [510, 270, 84, 44]]
+    },
+    {
+      "source": "材料处理/2022/湖南/svg_render/05.png",
+      "crops": [
+        {"rect": [0, 0, 660, 470], "target": "试卷/2022/湖南/figs/05a.png"},
+        {"rect": [690, 0, 660, 470], "target": "试卷/2022/湖南/figs/05b.png"},
+        {"rect": [1470, 0, 660, 470], "target": "试卷/2022/湖南/figs/05c.png"},
+        {"rect": [2260, 0, 540, 470], "target": "试卷/2022/湖南/figs/05d.png"}
+      ],
+      "trim": {"padding": 10}
+    }
+  ]
+}
