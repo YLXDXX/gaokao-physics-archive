@@ -73,7 +73,13 @@ def parse_source_numbers(text: str) -> List[int]:
     return [int(x) for x in re.findall(r"\d+", m.group(1))] if m else []
 
 
-def json_answers(tex: Path) -> Dict[int, str]:
+def json_answers(tex: Path) -> Dict[int, set]:
+    """返回 {题号: {答案集合}}。
+
+    平台常把同号的多道题（试点教材 / 常规题）拆成多条同号项，答案可能不同；
+    元数据合并约定“以最后一条为准”，但成品 tex 会**逐条保留**这些同号题。
+    故此处按题号汇集**全部**答案，比对时命中任一即视为一致，避免误报。
+    """
     jp = infer_json(tex)
     if not jp or not jp.is_file():
         return {}
@@ -81,7 +87,7 @@ def json_answers(tex: Path) -> Dict[int, str]:
         data = json.loads(jp.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return {}
-    out: Dict[int, str] = {}
+    out: Dict[int, set] = {}
     for it in data.get("items", []):
         n = it.get("number")
         if not isinstance(n, int):
@@ -89,7 +95,7 @@ def json_answers(tex: Path) -> Dict[int, str]:
         t = it.get("type") or ""
         if any(k in t for k in CHOICE_TYPES):
             txt = re.sub(r"<[^>]+>", "", it.get("answer") or "")
-            out[n] = re.sub(r"[^A-I]", "", txt)
+            out.setdefault(n, set()).add(re.sub(r"[^A-I]", "", txt))
     return out
 
 
@@ -140,9 +146,9 @@ def check_file(tex: Path) -> Tuple[List[str], List[str]]:
             if len(set(present.values())) > 1:
                 errs.append(f"{tex.name}: 第 {n} 题选择题答案三处不一致：{present}")
             key = _akey(n)
-            if key in jans and present and jans[key] not in present.values():
+            if key in jans and present and not (jans[key] & set(present.values())):
                 errs.append(f"{tex.name}: 第 {n} 题答案与 JSON 不符："
-                            f"JSON={jans[key]}，tex={present}")
+                            f"JSON={sorted(jans[key])}，tex={present}")
 
         # 4) \ref 目标须定义
         for ref in set(re.findall(r"\\ref\{([^}]+)\}", block)):
