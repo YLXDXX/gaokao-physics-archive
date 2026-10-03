@@ -135,6 +135,13 @@ make index        # 刷新 试卷/<年>/README.md 与 README 进度概要
 make progress     # 打印各年份进度概要
 ```
 
+> **并行编译注意（SVG / Inkscape）**：含 `\includesvg` 的卷会把每张 SVG 交给 Inkscape 转成
+> PDF；多个编译进程**同时调用 Inkscape 会随机崩溃**（报 `Gio::DBus::Error`），导致
+> `_svg-raw.pdf` 缺失、该卷编译失败。
+> **首次全量构建请串行**：`make`（默认 `JOBS=1`）或 `make -j1`；SVG 产物生成后再并行
+> `make JOBS=8`。并行失败后 latexmk 会把错误记入 `*.fdb_latexmk`，直接重跑会误报，
+> 须先 `make distclean` 再重编。
+
 
 ---
 

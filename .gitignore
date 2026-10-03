@@ -12,8 +12,11 @@ opencode.jsonc
 # Inkscape / svg 宏包生成物（各处 svg-inkscape/ 均忽略）
 svg-inkscape/
 /试卷/**/svg-inkscape/
-# 各卷编译产物（PDF、TikZ 图片 PDF、编译日志、Inkscape 中间件）
+# 各卷编译产物（学生版/教师版 PDF、TikZ 图片 PDF、编译日志、Inkscape 中间件）
+# 注意：figs/ 下的 PDF 是个别题的「源图」（矢量裁剪 / 预渲染产物），必须入库；
+#       故用否定规则把 figs/ 下的 PDF 排除在忽略之外（否则 Git 下载包会缺图、无法编译）。
 /试卷/**/*.pdf
+!/试卷/**/figs/*.pdf
 *.make.log
 *.tikz.log
 # 工具/对比/裁剪产物（本地，不入库）
