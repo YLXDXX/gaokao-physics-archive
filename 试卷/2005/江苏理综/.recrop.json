@@ -1,0 +1,41 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2005/江苏理综/pdfimages/p6_6.jpg",
+      "crops": [
+        {"rect": [0, 0, 400, 368], "target": "试卷/2005/江苏理综/figs/11_an.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2005/江苏理综/pdfimages/p6_render600.png",
+      "crops": [
+        {"rect": [700, 3900, 1120, 1190], "target": "试卷/2005/江苏理综/figs/12_an1.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2005/江苏理综/pdfimages/p7_7.jpg",
+      "crops": [
+        {"rect": [0, 0, 300, 236], "target": "试卷/2005/江苏理综/figs/12_an2.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2005/江苏理综/pdfimages/p7_8.jpg",
+      "crops": [
+        {"rect": [0, 0, 300, 251], "target": "试卷/2005/江苏理综/figs/15_an.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2005/江苏理综/pdfimages/p8_9.jpg",
+      "crops": [
+        {"rect": [0, 0, 400, 284], "target": "试卷/2005/江苏理综/figs/17_an.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2005/江苏理综/pdfimages/p9_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 200, 128], "target": "试卷/2005/江苏理综/figs/18_an.png"}
+      ]
+    }
+  ],
+  "trim": {"padding": 6, "threshold": 205}
+}

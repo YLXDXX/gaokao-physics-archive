@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2009/2009_广东理综/tiku_images/5201-5600/5286_2.png",
+      "crops": [
+        {"rect": [0, 0, 158, 98], "target": "试卷/2009/广东理综/figs/08b.png"},
+        {"rect": [158, 0, 166, 98], "target": "试卷/2009/广东理综/figs/08c.png"},
+        {"rect": [324, 0, 167, 98], "target": "试卷/2009/广东理综/figs/08d.png"},
+        {"rect": [491, 0, 169, 98], "target": "试卷/2009/广东理综/figs/08e.png"}
+      ],
+      "trim": {"padding": 4}
+    },
+    {
+      "source": "JSON/2009/2009_广东理综/tiku_images/5201-5600/5299.png",
+      "crops": [
+        {"rect": [0, 0, 256, 170], "target": "试卷/2009/广东理综/figs/18a.png"},
+        {"rect": [256, 0, 314, 170], "target": "试卷/2009/广东理综/figs/18b.png"}
+      ],
+      "trim": {"padding": 4}
+    }
+  ]
+}

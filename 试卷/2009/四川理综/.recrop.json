@@ -1,0 +1,48 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2009/2009_四川理综/tiku_images/5201-5600/5305.png",
+      "crops": [
+        {"rect": [2, 3, 204, 92], "target": "试卷/2009/四川理综/figs/17a.png"},
+        {"rect": [234, 0, 230, 105], "target": "试卷/2009/四川理综/figs/17b.png"}
+      ],
+      "trim": {"padding": 3, "threshold": 200}
+    },
+    {
+      "source": "JSON/2009/2009_四川理综/tiku_images/5201-5600/5311.png",
+      "crops": [
+        {"rect": [7, 0, 273, 142], "target": "试卷/2009/四川理综/figs/22f.png"},
+        {"rect": [349, 18, 418, 114], "target": "试卷/2009/四川理综/figs/22g.png"}
+      ],
+      "trim": {"padding": 3, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2009/四川理综/pdfimages/page4_600-4.png",
+      "crops": [
+        {"rect": [640, 4240, 1140, 620], "target": "试卷/2009/四川理综/figs/22_an.png"}
+      ],
+      "trim": {"padding": 3, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2009/四川理综/pdfimages/p3_0.jpg",
+      "crops": [
+        {"rect": [0, 0, 156, 82], "target": "试卷/2009/四川理综/figs/21_an.png"}
+      ],
+      "trim": {"padding": 2, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2009/四川理综/pdfimages/p6_1.jpg",
+      "crops": [
+        {"rect": [0, 0, 87, 102], "target": "试卷/2009/四川理综/figs/24_an.png"}
+      ],
+      "trim": {"padding": 2, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2009/四川理综/pdfimages/p7_2.jpg",
+      "crops": [
+        {"rect": [0, 0, 166, 263], "target": "试卷/2009/四川理综/figs/25_an.png"}
+      ],
+      "trim": {"padding": 2, "threshold": 200}
+    }
+  ]
+}

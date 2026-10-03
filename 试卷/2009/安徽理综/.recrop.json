@@ -1,0 +1,14 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2009/2009_安徽理综/tiku_images/4601-5200/5197.png",
+      "crops": [
+        {"rect": [10, 9, 150, 105], "target": "试卷/2009/安徽理综/figs/16a.png"},
+        {"rect": [185, 9, 150, 105], "target": "试卷/2009/安徽理综/figs/16b.png"},
+        {"rect": [361, 9, 150, 105], "target": "试卷/2009/安徽理综/figs/16c.png"},
+        {"rect": [536, 9, 150, 105], "target": "试卷/2009/安徽理综/figs/16d.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

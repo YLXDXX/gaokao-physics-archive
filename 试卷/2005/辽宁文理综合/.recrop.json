@@ -1,0 +1,44 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2005/辽宁文理综合/pdfimages/p1_0.jpg",
+      "crops": [
+        {"rect": [4, 3, 109, 112], "target": "试卷/2005/辽宁文理综合/figs/33a.png"},
+        {"rect": [148, 3, 108, 113], "target": "试卷/2005/辽宁文理综合/figs/33b.png"},
+        {"rect": [284, 3, 103, 113], "target": "试卷/2005/辽宁文理综合/figs/33c.png"},
+        {"rect": [411, 4, 103, 113], "target": "试卷/2005/辽宁文理综合/figs/33d.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2005/辽宁文理综合/pdfimages/p1_1.jpg",
+      "crops": [
+        {"rect": [0, 0, 104, 143], "target": "试卷/2005/辽宁文理综合/figs/31.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2005/辽宁文理综合/pdfimages/p1_2.jpg",
+      "crops": [
+        {"rect": [0, 0, 140, 115], "target": "试卷/2005/辽宁文理综合/figs/32.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2005/辽宁文理综合/pdfimages/p2_3.jpg",
+      "crops": [
+        {"rect": [0, 0, 192, 116], "target": "试卷/2005/辽宁文理综合/figs/34.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2005/辽宁文理综合/pdfimages/p2_4.jpg",
+      "crops": [
+        {"rect": [0, 0, 143, 93], "target": "试卷/2005/辽宁文理综合/figs/39.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2005/辽宁文理综合/pdfimages/p2_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 170, 104], "target": "试卷/2005/辽宁文理综合/figs/39_an.png"}
+      ]
+    }
+  ],
+  "trim": {"padding": 6, "threshold": 205}
+}

@@ -1,0 +1,14 @@
+{
+  "entries": [
+    {
+      "source": "试卷/2009/广东理科基础/figs/06.png",
+      "crops": [
+        {"rect": [0, 0, 140, 100],   "target": "试卷/2009/广东理科基础/figs/06a.png"},
+        {"rect": [155, 0, 140, 100], "target": "试卷/2009/广东理科基础/figs/06b.png"},
+        {"rect": [325, 0, 195, 100], "target": "试卷/2009/广东理科基础/figs/06c.png"},
+        {"rect": [540, 0, 200, 100], "target": "试卷/2009/广东理科基础/figs/06d.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    }
+  ]
+}

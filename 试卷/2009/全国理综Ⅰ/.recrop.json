@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2009/2009_全国理综Ⅰ/tiku_images/4601-5200/5135-1.png",
+      "crops": [
+        {"rect": [13, 0, 249, 106], "target": "试卷/2009/全国理综Ⅰ/figs/20a.png"},
+        {"rect": [380, 0, 249, 106], "target": "试卷/2009/全国理综Ⅰ/figs/20b.png"}
+      ],
+      "trim": {"padding": 4, "threshold": 200}
+    },
+    {
+      "source": "JSON/2009/2009_全国理综Ⅰ/tiku_images/4601-5200/5135-2.png",
+      "crops": [
+        {"rect": [8, 0, 174, 106], "target": "试卷/2009/全国理综Ⅰ/figs/20c.png"},
+        {"rect": [207, 0, 188, 106], "target": "试卷/2009/全国理综Ⅰ/figs/20d.png"},
+        {"rect": [402, 0, 189, 106], "target": "试卷/2009/全国理综Ⅰ/figs/20e.png"},
+        {"rect": [597, 0, 175, 106], "target": "试卷/2009/全国理综Ⅰ/figs/20f.png"}
+      ],
+      "trim": {"padding": 4, "threshold": 200}
+    }
+  ]
+}

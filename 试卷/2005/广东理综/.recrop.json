@@ -1,0 +1,70 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2005/2005_广东理综/tiku_images/1001-1400/1313.png",
+      "crops": [
+        {"rect": [0, 0, 205, 218], "target": "试卷/2005/广东理综/figs/09a.png"},
+        {"rect": [216, 0, 100, 218], "target": "试卷/2005/广东理综/figs/09b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2005/2005_广东理综/tiku_images/1001-1400/1315.png",
+      "crops": [
+        {"rect": [0, 0, 490, 166], "target": "试卷/2005/广东理综/figs/11a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2005/2005_广东理综/tiku_images/1001-1400/1316.png",
+      "crops": [
+        {"rect": [0, 0, 490, 80], "target": "试卷/2005/广东理综/figs/11b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2005/2005_广东理综/tiku_images/1001-1400/1317.png",
+      "crops": [
+        {"rect": [0, 0, 290, 258], "target": "试卷/2005/广东理综/figs/12a.png"},
+        {"rect": [300, 0, 412, 258], "target": "试卷/2005/广东理综/figs/12b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2005/广东理综/pdfimages/p4_3.jpg",
+      "crops": [
+        {"rect": [0, 0, 311, 251], "target": "试卷/2005/广东理综/figs/12a_an.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2005/广东理综/pdfimages/p4_4.jpg",
+      "crops": [
+        {"rect": [0, 0, 551, 343], "target": "试卷/2005/广东理综/figs/12b_an.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2005/2005_广东理综/tiku_images/1001-1400/1318.png",
+      "crops": [
+        {"rect": [0, 0, 182, 214], "target": "试卷/2005/广东理综/figs/13a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2005/2005_广东理综/tiku_images/1001-1400/1319.png",
+      "crops": [
+        {"rect": [0, 0, 170, 185], "target": "试卷/2005/广东理综/figs/13b.png"},
+        {"rect": [172, 0, 94, 185], "target": "试卷/2005/广东理综/figs/13c.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2005/2005_广东理综/tiku_images/1001-1400/1319_an.png",
+      "crops": [
+        {"rect": [0, 0, 116, 174], "target": "试卷/2005/广东理综/figs/13c_an.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

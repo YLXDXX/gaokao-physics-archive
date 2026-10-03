@@ -1,0 +1,32 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2009/2009_海南/tiku_images/5201-5600/5258.png",
+      "crops": [
+        {"rect": [0, 0, 135, 126], "target": "试卷/2009/海南/figs/02a.png"},
+        {"rect": [148, 0, 168, 126], "target": "试卷/2009/海南/figs/02b.png"},
+        {"rect": [358, 0, 140, 126], "target": "试卷/2009/海南/figs/02c.png"},
+        {"rect": [523, 0, 129, 126], "target": "试卷/2009/海南/figs/02d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2009/2009_海南/tiku_images/5201-5600/5270_1.png",
+      "crops": [
+        {"rect": [0, 0, 205, 269], "target": "试卷/2009/海南/figs/14a.png"},
+        {"rect": [210, 0, 328, 269], "target": "试卷/2009/海南/figs/14b.png"}
+      ],
+      "erase": [[35, 243, 58, 24], [355, 243, 62, 24]],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2009/2009_海南/tiku_images/5201-5600/5276.png",
+      "crops": [
+        {"rect": [0, 86, 314, 100], "target": "试卷/2009/海南/figs/18b.png"},
+        {"rect": [315, 0, 256, 186], "target": "试卷/2009/海南/figs/18c.png"}
+      ],
+      "erase": [[95, 156, 82, 30], [408, 156, 78, 30]],
+      "trim": {"padding": 6}
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2009/2009_山东理综/tiku_images/4601-5200/5181_1.png",
+      "crops": [
+        {"rect": [0, 0, 175, 100], "target": "试卷/2009/山东理综/figs/17a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2009/2009_山东理综/tiku_images/4601-5200/5181_2.png",
+      "crops": [
+        {"rect": [11, 5, 159, 100], "target": "试卷/2009/山东理综/figs/17b.png"},
+        {"rect": [175, 5, 159, 100], "target": "试卷/2009/山东理综/figs/17c.png"},
+        {"rect": [340, 5, 157, 100], "target": "试卷/2009/山东理综/figs/17d.png"},
+        {"rect": [505, 5, 157, 100], "target": "试卷/2009/山东理综/figs/17e.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2009/2009_山东理综/tiku_images/4601-5200/5189.png",
+      "crops": [
+        {"rect": [4, 0, 292, 222], "target": "试卷/2009/山东理综/figs/25a.png"},
+        {"rect": [369, 38, 260, 152], "target": "试卷/2009/山东理综/figs/25b.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

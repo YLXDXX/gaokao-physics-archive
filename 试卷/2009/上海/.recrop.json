@@ -1,0 +1,30 @@
+{
+  "entries": [
+    {
+      "source": "/tmp/opencode/fig/2084-hi.png",
+      "crops": [
+        {"rect": [0, 10, 590, 390], "target": "试卷/2009/上海/figs/03a.png"},
+        {"rect": [600, 10, 595, 390], "target": "试卷/2009/上海/figs/03b.png"},
+        {"rect": [1200, 10, 600, 390], "target": "试卷/2009/上海/figs/03c.png"},
+        {"rect": [1810, 10, 590, 390], "target": "试卷/2009/上海/figs/03d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "/tmp/opencode/fig/2099-hi.png",
+      "crops": [
+        {"rect": [0, 30, 1300, 790], "target": "试卷/2009/上海/figs/18a.png"},
+        {"rect": [1450, 40, 950, 780], "target": "试卷/2009/上海/figs/18b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "/tmp/opencode/fig/2103-hi.png",
+      "crops": [
+        {"rect": [0, 30, 1100, 880], "target": "试卷/2009/上海/figs/22a.png"},
+        {"rect": [1120, 110, 1260, 800], "target": "试卷/2009/上海/figs/22b.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

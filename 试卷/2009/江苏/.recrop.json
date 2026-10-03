@@ -1,0 +1,49 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2009/2009_江苏/tiku_images/4601-5200/4996.png",
+      "crops": [
+        {"rect": [2, 2, 129, 93], "target": "试卷/2009/江苏/figs/04a.png"},
+        {"rect": [183, 2, 129, 93], "target": "试卷/2009/江苏/figs/04b.png"},
+        {"rect": [364, 2, 129, 93], "target": "试卷/2009/江苏/figs/04c.png"},
+        {"rect": [545, 2, 129, 93], "target": "试卷/2009/江苏/figs/04d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2009/2009_江苏/tiku_images/4601-5200/5168_1.png",
+      "crops": [
+        {"rect": [0, 0, 233, 95], "target": "试卷/2009/江苏/figs/10a.png"}
+      ],
+      "trim": {"padding": 4}
+    },
+    {
+      "source": "JSON/2009/2009_江苏/tiku_images/4601-5200/5168_2.png",
+      "crops": [
+        {"rect": [0, 0, 314, 84], "target": "试卷/2009/江苏/figs/10b.png"}
+      ],
+      "trim": {"padding": 4}
+    },
+    {
+      "source": "JSON/2009/2009_江苏/tiku_images/4601-5200/5168_3.png",
+      "crops": [
+        {"rect": [0, 0, 481, 228], "target": "试卷/2009/江苏/figs/10c.png"}
+      ],
+      "trim": {"padding": 4}
+    },
+    {
+      "source": "JSON/2009/2009_江苏/tiku_images/4601-5200/5169_1.png",
+      "crops": [
+        {"rect": [0, 0, 312, 132], "target": "试卷/2009/江苏/figs/11a.png"}
+      ],
+      "trim": {"padding": 4}
+    },
+    {
+      "source": "JSON/2009/2009_江苏/tiku_images/4601-5200/5169_2.png",
+      "crops": [
+        {"rect": [0, 0, 397, 77], "target": "试卷/2009/江苏/figs/11b.png"}
+      ],
+      "trim": {"padding": 4}
+    }
+  ]
+}

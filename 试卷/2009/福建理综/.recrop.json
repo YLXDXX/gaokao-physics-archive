@@ -1,0 +1,33 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2009/2009_福建理综/tiku_images/5201-5600/5245.png",
+      "crops": [
+        {"rect": [0, 34, 345, 117], "target": "试卷/2009/福建理综/figs/16a.png"},
+        {"rect": [352, 4, 200, 180], "target": "试卷/2009/福建理综/figs/16b.png"}
+      ],
+      "erase": [[428, 164, 50, 22]],
+      "erase_labels": "panels",
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2009/2009_福建理综/tiku_images/5201-5600/5246.png",
+      "crops": [
+        {"rect": [0, 1, 282, 123], "target": "试卷/2009/福建理综/figs/17a.png"},
+        {"rect": [300, 1, 273, 123], "target": "试卷/2009/福建理综/figs/17b.png"}
+      ],
+      "erase_labels": "panels",
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2009/2009_福建理综/tiku_images/5201-5600/5251.png",
+      "crops": [
+        {"rect": [4, 25, 255, 145], "target": "试卷/2009/福建理综/figs/21a.png"},
+        {"rect": [292, 4, 251, 164], "target": "试卷/2009/福建理综/figs/21b.png"}
+      ],
+      "erase": [[88, 144, 78, 30], [392, 148, 55, 24]],
+      "erase_labels": "panels",
+      "trim": {"padding": 6}
+    }
+  ]
+}

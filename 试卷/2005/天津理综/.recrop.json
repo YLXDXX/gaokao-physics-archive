@@ -1,0 +1,21 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2005/天津理综/pdfimages/p2_0.jpg",
+      "crops": [
+        {
+          "rect": [1, 1, 84, 100],
+          "target": "试卷/2005/天津理综/figs/22b.png"
+        },
+        {
+          "rect": [144, 0, 106, 126],
+          "target": "试卷/2005/天津理综/figs/22c.png"
+        }
+      ],
+      "erase_labels": "panels",
+      "trim": {
+        "padding": 6
+      }
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "entries": [
+    {
+      "source": "/tmp/opencode/src300/page-02.png",
+      "crops": [
+        {"rect": [1660, 2468, 820, 500], "target": "试卷/2009/宁夏理综/figs/18_an.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "/tmp/opencode/src300/page-05.png",
+      "crops": [
+        {"rect": [348, 1460, 480, 260], "target": "试卷/2009/宁夏理综/figs/23_an.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "/tmp/opencode/src300/page-06.png",
+      "crops": [
+        {"rect": [1600, 2540, 700, 680], "target": "试卷/2009/宁夏理综/figs/25_an.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "/tmp/opencode/src300/page-08.png",
+      "crops": [
+        {"rect": [1650, 880, 420, 340], "target": "试卷/2009/宁夏理综/figs/34a.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "/tmp/opencode/src300/page-09.png",
+      "crops": [
+        {"rect": [1450, 1400, 900, 530], "target": "试卷/2009/宁夏理综/figs/35_an1.png"},
+        {"rect": [1480, 2620, 880, 520], "target": "试卷/2009/宁夏理综/figs/35_an2.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "/tmp/opencode/src300/19b.png",
+      "crops": [
+        {"rect": [8, 8, 167, 94], "target": "试卷/2009/宁夏理综/figs/19b.png"},
+        {"rect": [195, 8, 160, 94], "target": "试卷/2009/宁夏理综/figs/19c.png"},
+        {"rect": [383, 8, 168, 94], "target": "试卷/2009/宁夏理综/figs/19d.png"},
+        {"rect": [571, 8, 168, 94], "target": "试卷/2009/宁夏理综/figs/19e.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

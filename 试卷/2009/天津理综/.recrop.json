@@ -1,0 +1,24 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2009/2009_天津理综/tiku_images/5201-5600/5208.png",
+      "crops": [
+        {"rect": [5, 4, 130, 86], "target": "试卷/2009/天津理综/figs/01a.png"},
+        {"rect": [181, 10, 129, 80], "target": "试卷/2009/天津理综/figs/01b.png"},
+        {"rect": [356, 1, 130, 89], "target": "试卷/2009/天津理综/figs/01c.png"},
+        {"rect": [532, 10, 129, 95], "target": "试卷/2009/天津理综/figs/01d.png"}
+      ],
+      "compare": true
+    },
+    {
+      "source": "JSON/2009/2009_天津理综/tiku_images/5201-5600/5210-2.png",
+      "crops": [
+        {"rect": [8, 9, 134, 92], "target": "试卷/2009/天津理综/figs/03a.png"},
+        {"rect": [161, 9, 133, 89], "target": "试卷/2009/天津理综/figs/03b.png"},
+        {"rect": [307, 9, 134, 89], "target": "试卷/2009/天津理综/figs/03c.png"},
+        {"rect": [464, 9, 133, 89], "target": "试卷/2009/天津理综/figs/03d.png"}
+      ],
+      "compare": true
+    }
+  ]
+}

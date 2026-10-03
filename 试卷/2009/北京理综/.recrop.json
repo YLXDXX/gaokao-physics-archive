@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2009/2009_北京理综/tiku_images/2000-2200/2073-BeiJing200917-2.png",
+      "crops": [
+        {"rect": [5, 0, 169, 128], "target": "试卷/2009/北京理综/figs/17b.png"},
+        {"rect": [195, 0, 169, 128], "target": "试卷/2009/北京理综/figs/17c.png"},
+        {"rect": [381, 0, 169, 128], "target": "试卷/2009/北京理综/figs/17d.png"},
+        {"rect": [567, 0, 169, 128], "target": "试卷/2009/北京理综/figs/17e.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2009/2009_北京理综/tiku_images/2000-2200/2077-BeiJing200921-2.png",
+      "crops": [
+        {"rect": [0, 0, 375, 277], "target": "试卷/2009/北京理综/figs/21b.png"},
+        {"rect": [375, 0, 354, 277], "target": "试卷/2009/北京理综/figs/21c.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2009/2009_浙江理综/tiku_images/4601-5200/5164-1.png",
+      "crops": [
+        {"rect": [0, 0, 360, 187], "target": "试卷/2009/浙江理综/figs/22c.png"},
+        {"rect": [360, 0, 360, 187], "target": "试卷/2009/浙江理综/figs/22d.png"}
+      ],
+      "trim": {"padding": 8, "threshold": 200}
+    }
+  ]
+}

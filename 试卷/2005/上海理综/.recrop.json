@@ -1,0 +1,11 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2005/上海理综/pdfimages/p7_15.jpg",
+      "crops": [
+        {"rect": [0, 0, 400, 214], "target": "试卷/2005/上海理综/figs/33.png"}
+      ]
+    }
+  ],
+  "trim": {"padding": 6, "threshold": 205}
+}

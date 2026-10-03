@@ -1,0 +1,12 @@
+{
+  "trim": {"padding": 4, "threshold": 200},
+  "entries": [
+    {
+      "source": "JSON/2009/2009_重庆理综/tiku_images/5201-5600/5324-1.png",
+      "crops": [
+        {"rect": [0, 0, 245, 242], "target": "试卷/2009/重庆理综/figs/22a.png"},
+        {"rect": [315, 0, 438, 242], "target": "试卷/2009/重庆理综/figs/22b.png"}
+      ]
+    }
+  ]
+}
