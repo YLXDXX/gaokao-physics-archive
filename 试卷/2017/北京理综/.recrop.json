@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2017/北京理综/pdfimages/p2_1.jpg",
+      "crops": [
+        {"rect": [0, 0, 280, 272], "target": "试卷/2017/北京理综/figs/19a.png"},
+        {"rect": [290, 0, 324, 272], "target": "试卷/2017/北京理综/figs/19b.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

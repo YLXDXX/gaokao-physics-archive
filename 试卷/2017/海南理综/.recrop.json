@@ -1,0 +1,27 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2017/海南理综/pdfimages/p6_22.jpg",
+      "crops": [
+        {"rect": [3, 10, 368, 155], "target": "试卷/2017/海南理综/figs/11a.png"},
+        {"rect": [507, 10, 368, 155], "target": "试卷/2017/海南理综/figs/11b.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2017/海南理综/pdfimages/p6_23.jpg",
+      "crops": [
+        {"rect": [5, 12, 540, 330], "target": "试卷/2017/海南理综/figs/12a.png"}
+      ],
+      "trim": {"padding": 8}
+    },
+    {
+      "source": "材料处理/2017/海南理综/pdfimages/p6_24.jpg",
+      "crops": [
+        {"rect": [1, 2, 434, 209], "target": "试卷/2017/海南理综/figs/12b.png"},
+        {"rect": [505, 2, 434, 209], "target": "试卷/2017/海南理综/figs/12c.png"}
+      ],
+      "trim": {"padding": 8}
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2017/11月浙江/pdfimages/p1_2.jpg",
+      "crops": [
+        {"rect": [4, 2, 289, 231], "target": "试卷/2017/11月浙江/figs/06a.png"},
+        {"rect": [307, 2, 290, 231], "target": "试卷/2017/11月浙江/figs/06b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2017/11月浙江/pdfimages/p2_4.jpg",
+      "crops": [
+        {"rect": [8, 2, 365, 185], "target": "试卷/2017/11月浙江/figs/09b.png"},
+        {"rect": [448, 4, 365, 184], "target": "试卷/2017/11月浙江/figs/09c.png"},
+        {"rect": [6, 258, 358, 184], "target": "试卷/2017/11月浙江/figs/09d.png"},
+        {"rect": [448, 258, 358, 184], "target": "试卷/2017/11月浙江/figs/09e.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2017/11月浙江/pdfimages/p4_11.jpg",
+      "crops": [
+        {"rect": [0, 0, 165, 392], "target": "试卷/2017/11月浙江/figs/17a.png"},
+        {"rect": [200, 0, 170, 392], "target": "试卷/2017/11月浙江/figs/17b.png"},
+        {"rect": [370, 0, 160, 392], "target": "试卷/2017/11月浙江/figs/17c.png"},
+        {"rect": [560, 0, 258, 392], "target": "试卷/2017/11月浙江/figs/17d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2017/11月浙江/pdfimages/p5_16.jpg",
+      "crops": [
+        {"rect": [0, 0, 411, 276], "target": "试卷/2017/11月浙江/figs/18a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2017/11月浙江/pdfimages/p5_14.jpg",
+      "crops": [
+        {"rect": [0, 0, 558, 336], "target": "试卷/2017/11月浙江/figs/18b.jpg"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2017/11月浙江/pdfimages/p5_15.jpg",
+      "crops": [
+        {"rect": [0, 0, 500, 421], "target": "试卷/2017/11月浙江/figs/18c.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

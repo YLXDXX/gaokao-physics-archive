@@ -1,0 +1,94 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2017/全国理综Ⅰ/pdfimages/18opts.png",
+      "comment": "18opts.png 由 JSON 中 23430_2.svg 以白底 rsvg-convert -w 2766 -b white 渲染后按四选项裁剪",
+      "crops": [
+        {"rect": [0, 0, 490, 322], "target": "试卷/2017/全国理综Ⅰ/figs/18a.png"},
+        {"rect": [784, 0, 454, 322], "target": "试卷/2017/全国理综Ⅰ/figs/18b.png"},
+        {"rect": [1531, 0, 451, 322], "target": "试卷/2017/全国理综Ⅰ/figs/18c.png"},
+        {"rect": [2273, 0, 493, 322], "target": "试卷/2017/全国理综Ⅰ/figs/18d.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "JSON/2017/2017_全国理综Ⅰ/tiku_images/23001-24000/23434_1.png",
+      "crops": [
+        {"rect": [0, 0, 1104, 460], "target": "试卷/2017/全国理综Ⅰ/figs/22a.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "JSON/2017/2017_全国理综Ⅰ/tiku_images/23001-24000/23434_2.png",
+      "crops": [
+        {"rect": [0, 0, 1407, 310], "target": "试卷/2017/全国理综Ⅰ/figs/22b.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "JSON/2017/2017_全国理综Ⅰ/tiku_images/23001-24000/23435_1.png",
+      "crops": [
+        {"rect": [0, 0, 800, 665], "target": "试卷/2017/全国理综Ⅰ/figs/23a.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "JSON/2017/2017_全国理综Ⅰ/tiku_images/23001-24000/23435_2.png",
+      "crops": [
+        {"rect": [0, 0, 615, 395], "target": "试卷/2017/全国理综Ⅰ/figs/23b.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "JSON/2017/2017_全国理综Ⅰ/tiku_images/23001-24000/23435_an.png",
+      "crops": [
+        {"rect": [0, 0, 491, 530], "target": "试卷/2017/全国理综Ⅰ/figs/23_an1.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2017/全国理综Ⅰ/pdfimages/p8_12.jpg",
+      "crops": [
+        {"rect": [0, 0, 286, 303], "target": "试卷/2017/全国理综Ⅰ/figs/21_an.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2017/全国理综Ⅰ/pdfimages/p9_14.jpg",
+      "crops": [
+        {"rect": [0, 0, 600, 500], "target": "试卷/2017/全国理综Ⅰ/figs/23_an2.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "JSON/2017/2017_全国理综Ⅰ/tiku_images/23001-24000/23439.png",
+      "crops": [
+        {"rect": [0, 0, 689, 589], "target": "试卷/2017/全国理综Ⅰ/figs/33b.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "JSON/2017/2017_全国理综Ⅰ/tiku_images/23001-24000/23440.png",
+      "crops": [
+        {"rect": [0, 0, 332, 312], "target": "试卷/2017/全国理综Ⅰ/figs/34a.png"},
+        {"rect": [388, 88, 232, 220], "target": "试卷/2017/全国理综Ⅰ/figs/34b.png"},
+        {"rect": [754, 86, 243, 220], "target": "试卷/2017/全国理综Ⅰ/figs/34c.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "JSON/2017/2017_全国理综Ⅰ/tiku_images/23001-24000/23441.png",
+      "crops": [
+        {"rect": [0, 0, 499, 853], "target": "试卷/2017/全国理综Ⅰ/figs/34d.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    },
+    {
+      "source": "材料处理/2017/全国理综Ⅰ/pdfimages/p12_15.jpg",
+      "crops": [
+        {"rect": [0, 0, 441, 753], "target": "试卷/2017/全国理综Ⅰ/figs/34d_an.png"}
+      ],
+      "trim": {"padding": 6, "threshold": 200}
+    }
+  ]
+}

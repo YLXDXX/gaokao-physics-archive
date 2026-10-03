@@ -1,0 +1,77 @@
+{
+  "_comment": "2017 全国理综Ⅱ 多子图裁剪 recipe。源图取平台 JSON 内嵌图与 OCR 源 PDF 裁切图（材料处理/ovis/images；merged.md 头部 source_sha256 与当前 PDF 不一致，属 PDF 在 OCR 后更新所致，正文内容以 merged.md 为准且与 PDF 一致）。",
+  "entries": [
+    {
+      "source": "JSON/2017/2017_全国理综Ⅱ/tiku_images/23001-24000/23501.png",
+      "crops": [
+        {"rect": [0, 20, 395, 290], "target": "试卷/2017/全国理综Ⅱ/figs/20a.png"},
+        {"rect": [378, 15, 629, 295], "target": "试卷/2017/全国理综Ⅱ/figs/20b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2017/全国理综Ⅱ/ovis/images/page_3_bbox_469_535_661_609.jpg",
+      "crops": [
+        {"rect": [0, 0, 272, 148], "target": "试卷/2017/全国理综Ⅱ/figs/22a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2017/全国理综Ⅱ/ovis/images/page_3_bbox_685_556_859_609.jpg",
+      "crops": [
+        {"rect": [0, 0, 246, 106], "target": "试卷/2017/全国理综Ⅱ/figs/22b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2017/全国理综Ⅱ/ovis/images/page_4_bbox_151_93_567_343.jpg",
+      "crops": [
+        {"rect": [0, 0, 588, 500], "target": "试卷/2017/全国理综Ⅱ/figs/22c.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2017/2017_全国理综Ⅱ/tiku_images/23001-24000/23504.png",
+      "crops": [
+        {"rect": [0, 45, 393, 415], "target": "试卷/2017/全国理综Ⅱ/figs/23a.png"},
+        {"rect": [487, 10, 513, 445], "target": "试卷/2017/全国理综Ⅱ/figs/23b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2017/2017_全国理综Ⅱ/tiku_images/23001-24000/23504_an.png",
+      "crops": [
+        {"rect": [0, 0, 500, 412], "target": "试卷/2017/全国理综Ⅱ/figs/23_an.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2017/全国理综Ⅱ/ovis/images/page_10_bbox_451_444_603_526.jpg",
+      "crops": [
+        {"rect": [0, 0, 215, 164], "target": "试卷/2017/全国理综Ⅱ/figs/16_an1.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2017/全国理综Ⅱ/ovis/images/page_10_bbox_691_444_841_526.jpg",
+      "crops": [
+        {"rect": [0, 0, 212, 164], "target": "试卷/2017/全国理综Ⅱ/figs/16_an2.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2017/全国理综Ⅱ/ovis/images/page_10_bbox_636_742_845_881.jpg",
+      "crops": [
+        {"rect": [0, 0, 296, 278], "target": "试卷/2017/全国理综Ⅱ/figs/18_an.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2017/全国理综Ⅱ/ovis/images/page_14_bbox_643_792_842_961.jpg",
+      "crops": [
+        {"rect": [0, 0, 282, 338], "target": "试卷/2017/全国理综Ⅱ/figs/34_an.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2017/2017_全国理综Ⅲ/tiku_images/23001-24000/23450.png",
+      "crops": [
+        {"rect": [0, 0, 565, 452], "target": "试卷/2017/全国理综Ⅲ/figs/22a.png"},
+        {"rect": [565, 0, 435, 452], "target": "试卷/2017/全国理综Ⅲ/figs/22b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2017/2017_全国理综Ⅲ/tiku_images/23001-24000/23455.png",
+      "crops": [
+        {"rect": [0, 0, 302, 500], "target": "试卷/2017/全国理综Ⅲ/figs/33b.png"},
+        {"rect": [302, 0, 298, 500], "target": "试卷/2017/全国理综Ⅲ/figs/33c.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2017/2017_全国理综Ⅲ/tiku_images/23001-24000/23451_1.png",
+      "crops": [
+        {"rect": [0, 0, 600, 526], "target": "试卷/2017/全国理综Ⅲ/figs/23a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2017/2017_全国理综Ⅲ/tiku_images/23001-24000/23451_2.png",
+      "crops": [
+        {"rect": [0, 0, 700, 290], "target": "试卷/2017/全国理综Ⅲ/figs/23b.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

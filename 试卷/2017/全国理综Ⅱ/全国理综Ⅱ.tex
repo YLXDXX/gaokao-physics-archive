@@ -1,0 +1,672 @@
+\ifdefined\gkver\else\def\gkver{student}\fi
+\documentclass[\gkver]{gaokaozhenti}
+\newcommand{\ccnum}[1]{{\fontspec{Noto Sans CJK JP}#1}}
+\begin{document}
+
+\chapter{2017年全国理综Ⅱ}
+%% paperType: 理综物理部分
+
+\begin{enumerate}
+\item
+%% number: 14
+%% paperName: 2017年全国理综Ⅱ第 14 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 曲线运动
+%% point: 竖直平面圆周运动
+%% method: 无
+%% score: 6
+%% degree: 850
+%% duplicateId: 0
+%% body:
+如图，一光滑大圆环固定在桌面上，环面位于竖直平面内，在大圆环上套着一个小环。小环由大圆环的最高点从静止开始下滑，在小环下滑的过程中，大圆环对它的作用力 \xzanswer{A}
+
+\onepicture[w=4cm]{\includesvg{figs/14}}
+
+\fourchoices[answer=A]
+{一直不做功}
+{一直做正功}
+{始终指向大圆环圆心}
+{始终背离大圆环圆心}
+
+%% answer: A
+%% memo:
+\memoanswer{
+	大圆环光滑，没有摩擦力对小环做功，大圆环给小环的弹力与小环速度方向始终垂直，对小环也不做功，故 A 正确 B 错误；由受力分析可得，一开始大圆环对小环的弹力背离大圆环圆心，后来大圆环对小环的弹力指向大圆环圆心，故 CD 错误。
+
+	故选 A。
+}
+
+\item
+%% number: 15
+%% paperName: 2017年全国理综Ⅱ第 15 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 原子和原子核
+%% point: 半衰期
+%% method: 无
+%% score: 6
+%% degree: 650
+%% duplicateId: 0
+%% body:
+一静止的铀核放出一个 $\alpha$ 粒子衰变成钍核，衰变方程为 \ce{^{238}_{92}U -> ^{234}_{90}Th + ^{4}_{2}He}。下列说法正确的是 \xzanswer{B}
+
+\fourchoices[answer=B]
+{衰变后钍核的动能等于 $\alpha$ 粒子的动能}
+{衰变后钍核的动量大小等于 $\alpha$ 粒子的动量大小}
+{铀核的半衰期等于其放出一个 $\alpha$ 粒子所经历的时间}
+{衰变后 $\alpha$ 粒子与钍核的质量之和等于衰变前铀核的质量}
+
+%% answer: B
+%% memo:
+\memoanswer{
+	根据动量守恒定律可知，生成的钍核的动量与 $\alpha$ 粒子的动量等大反向，选项 B 正确；根据 $E_k = \frac{p^2}{2m}$ 可知，衰变后钍核的动能小于 $\alpha$ 粒子的动能，选项 A 错误；铀核的半衰期等于一半数量的铀核衰变需要的时间，而放出一个 $\alpha$ 粒子所经历的时间是一个原子核衰变的时间，故两者不等，选项 C 错误；由于该反应放出能量，由质能方程可知，衰变后 $\alpha$ 粒子与钍核的质量之和小于衰变前铀核的质量，选项 D 错误。
+
+	故选 B。
+}
+
+\item
+%% number: 16
+%% paperName: 2017年全国理综Ⅱ第 16 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 力物体的平衡
+%% point: 多力平衡
+%% method: 无
+%% score: 6
+%% degree: 550
+%% duplicateId: 0
+%% body:
+如图，一物块在水平拉力 $F$ 的作用下沿水平桌面做匀速直线运动。若保持 $F$ 的大小不变，而方向与水平面成 $60^\circ$ 角，物块也恰好做匀速直线运动。物块与桌面间的动摩擦因数为 \xzanswer{C}
+
+\onepicture[w=5.5cm]{\includesvg{figs/16}}
+
+\fourchoices[answer=C]
+{$2 - \sqrt{3}$}
+{$\frac{\sqrt{3}}{6}$}
+{$\frac{\sqrt{3}}{3}$}
+{$\frac{\sqrt{3}}{2}$}
+
+%% answer: C
+%% memo:
+\memoanswer{
+	物块在水平拉力 $F$ 作用下做匀速直线运动时
+	$F = \mu mg$
+
+	物块在斜向上的拉力作用下做匀速直线运动时
+	$F\cos 60^\circ = \mu N'$
+
+	$N' = mg - F\sin 60^\circ$
+
+	联立可得
+	$\mu = \frac{\sqrt{3}}{3}$
+
+	故 C 正确。
+
+	\onepicture[w=3.2cm]{figs/16_an1}
+	\onepicture[w=3.2cm]{figs/16_an2}
+}
+
+\item
+%% number: 17
+%% paperName: 2017年全国理综Ⅱ第 17 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 曲线运动
+%% point: 平抛运动
+%% method: 极值
+%% score: 6
+%% degree: 450
+%% duplicateId: 0
+%% body:
+如图，半圆形光滑轨道固定在水平地面上，半圆的直径与地面垂直。一小物块以速度 $v$ 从轨道下端滑入轨道，并从轨道上端水平飞出，小物块落地点到轨道下端的距离与轨道半径有关，此距离最大时，对应的轨道半径为（重力加速度大小为 $g$） \xzanswer{B}
+
+\onepicture[w=5cm]{\includesvg{figs/17}}
+
+\fourchoices[answer=B]
+{$\frac{v^2}{16g}$}
+{$\frac{v^2}{8g}$}
+{$\frac{v^2}{4g}$}
+{$\frac{v^2}{2g}$}
+
+%% answer: B
+%% memo:
+\memoanswer{
+	物块由最低点到最高点有
+	$\frac{1}{2}mv^2 = 2mgr + \frac{1}{2}mv_1^2$
+
+	物块做平抛运动
+	$x = v_1t$，$t = \sqrt{\frac{4r}{g}}$
+
+	联立解得
+	$x = \sqrt{\frac{4v^2}{g}r - 16r^2}$
+
+	由数学知识可知，当
+	$r = \frac{\frac{4v^2}{g}}{2 \times 16} = \frac{v^2}{8g}$
+
+	时，$x$ 最大，故选 B。
+}
+
+\item
+%% number: 18
+%% paperName: 2017年全国理综Ⅱ第 18 题 6 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 磁场
+%% point: 带电粒子在磁场中的运动
+%% method: 无
+%% score: 6
+%% degree: 450
+%% duplicateId: 0
+%% body:
+如图，虚线所示的圆形区域内存在一垂直于纸面的匀强磁场，P 为磁场边界上的一点。大量相同的带电粒子以相同的速率经过 P 点，在纸面内沿不同的方向射入磁场。若粒子射入速率为 $v_1$，这些粒子在磁场边界的出射点分布在六分之一圆周上；若粒子射入速率为 $v_2$，相应的出射点分布在三分之一圆周上。不计重力及带电粒子之间的相互作用。则 $v_2:v_1$ 为 \xzanswer{C}
+
+\onepicture[w=4cm]{\includesvg{figs/18}}
+
+\fourchoices[answer=C]
+{$\sqrt{3}:2$}
+{$\sqrt{2}:1$}
+{$\sqrt{3}:1$}
+{$3:\sqrt{2}$}
+
+%% answer: C
+%% memo:
+\memoanswer{
+	如图所示，设圆形磁场区域的半径为 $R$，由题意，粒子以速率 $v_1$ 射入磁场，最远可到达 A 点，粒子以速率 $v_2$ 射入磁场，最远可到达 B 点，结合几何知识，以速率 $v_1$ 射入磁场的粒子的轨道半径 $r_1 = \frac{R}{2}$，以速率 $v_2$ 射入磁场的粒子的轨道半径 $r_2 = \frac{\sqrt{3}R}{2}$，粒子在匀强磁场中做圆周运动 $qvB = m\frac{v^2}{r}$，轨道半径 $r = \frac{mv}{qB}$，联立可得 $\frac{v_2}{v_1} = \frac{r_2}{r_1} = \frac{\sqrt{3}}{1}$，故 C 正确。
+
+	\onepicture[w=4.5cm]{figs/18_an}
+}
+
+\item
+%% number: 19
+%% paperName: 2017年全国理综Ⅱ第 19 题 6 分
+%% typeId: 2
+%% type: 多选题
+%% chapter: 曲线运动
+%% point: 开普勒定律
+%% method: 无
+%% score: 6
+%% degree: 550
+%% duplicateId: 0
+%% body:
+如图，海王星绕太阳沿椭圆轨道运动，P 为近日点，Q 为远日点，M、N 为轨道短轴的两个端点，运行的周期为 $T_0$。若只考虑海王星和太阳之间的相互作用，则海王星在从 P 经过 M、Q 到 N 的运动过程中 \xzanswer{CD}
+
+\onepicture[w=5.5cm]{\includesvg{figs/19}}
+
+\fourchoices[answer=CD]
+{从 P 到 M 所用的时间等于 $\frac{T_0}{4}$}
+{从 Q 到 N 阶段，机械能逐渐变大}
+{从 P 到 Q 阶段，速率逐渐变小}
+{从 M 到 N 阶段，万有引力对它先做负功后做正功}
+
+%% answer: CD
+%% memo:
+\memoanswer{
+	由开普勒第二定律知，行星与太阳的连线在相等时间内扫过的面积相等，所以从 P 到 M 所用的时间小于从 M 到 Q 所用的时间，而从 P 到 Q 所用的时间为 $\frac{T_0}{2}$，所以从 P 到 M 所用的时间小于 $\frac{T_0}{4}$，故 A 错误；从 Q 到 N 阶段，只有万有引力对海王星做功，机械能保持不变，故 B 错误；从 P 到 Q 阶段，海王星机械能守恒，势能增大，所以动能减少，速率减小，故 C 正确；从 M 到 Q 阶段，万有引力做负功，从 Q 到 N 阶段，万有引力做正功，故 D 正确。
+
+	故选 CD。
+}
+
+\item
+%% number: 20
+%% paperName: 2017年全国理综Ⅱ第 20 题 6 分
+%% typeId: 2
+%% type: 多选题
+%% chapter: 电磁感应
+%% point: 电磁感应中图象
+%% method: 无
+%% score: 6
+%% degree: 550
+%% duplicateId: 0
+%% body:
+两条平行虚线间存在一匀强磁场，磁感应强度方向与纸面垂直。边长为 $0.1 \Um$、总电阻为 $0.005 \UO$ 的正方形导线框 abcd 位于纸面内，cd 边与磁场边界平行，如图 \ref{2017全国理综Ⅱ20a} 所示。已知导线框一直向右做匀速直线运动，cd 边于 $t = 0$ 时刻进入磁场。线框中感应电动势随时间变化的图线如图 \ref{2017全国理综Ⅱ20b} 所示（感应电流的方向为顺时针时，感应电动势取正）。下列说法正确的是 \xzanswer{BC}
+
+\twopicture[labelA=2017全国理综Ⅱ20a, labelB=2017全国理综Ⅱ20b, h=3.4cm]
+{figs/20a.png}
+{figs/20b.png}
+
+\fourchoices[answer=BC]
+{磁感应强度的大小为 $0.5 \UT$}
+{导线框运动速度的大小为 $0.5 \Ums$}
+{磁感应强度的方向垂直于纸面向外}
+{在 $t = 0.4 \Us$ 至 $t = 0.6 \Us$ 这段时间内，导线框所受的安培力大小为 $0.1 \UN$}
+
+%% answer: BC
+%% memo:
+\memoanswer{
+	由 $E-t$ 图象可知，线框经过 $0.2 \Us$ 全部进入磁场，则速度
+	$v = \frac{l}{t} = \frac{0.1}{0.2} \Ums = 0.5 \Ums$
+
+	选项 B 正确；$E = 0.01 \UV$，根据 $E = BLv$ 可知 $B = 0.2 \UT$，选项 A 错误；根据楞次定律可知，磁感应强度的方向垂直于纸面向外，选项 C 正确；在 $t = 0.4 \Us$ 至 $t = 0.6 \Us$ 这段时间内，导线框中的感应电流
+	$I = \frac{E}{R} = \frac{0.01}{0.005} \UA = 2 \UA$
+
+	所受的安培力大小为 $F = BIL = 0.04 \UN$，选项 D 错误。
+
+	故选 BC。
+}
+
+\item
+%% number: 21
+%% paperName: 2017年全国理综Ⅱ第 21 题 6 分
+%% typeId: 2
+%% type: 多选题
+%% chapter: 磁场
+%% point: 左手定则
+%% method: 无
+%% score: 6
+%% degree: 450
+%% duplicateId: 0
+%% body:
+某同学自制的简易电动机示意图如图所示。矩形线圈由一根漆包线绕制而成，漆包线的两端分别从线圈的一组对边的中间位置引出，并作为线圈的转轴。将线圈架在两个金属支架之间，线圈平面位于竖直面内，永磁铁置于线圈下方。为了使电池与两金属支架连接后线圈能连续转动起来，该同学应将 \xzanswer{AD}
+
+\onepicture[w=5.5cm]{figs/21.png}
+
+\fourchoices[answer=AD]
+{左、右转轴下侧的绝缘漆都刮掉}
+{左、右转轴上下两侧的绝缘漆都刮掉}
+{左转轴上侧的绝缘漆刮掉，右转轴下侧的绝缘漆刮掉}
+{左转轴上下两侧的绝缘漆都刮掉，右转轴下侧的绝缘漆刮掉}
+
+%% answer: AD
+%% memo:
+\memoanswer{
+	先有半个周期通电，另外半个周期不通电，线圈就可以借助惯性做完整的圆周运动。选项 C 中左转轴上侧和右转轴下侧的绝缘漆刮掉，整个周期内都不通电，线圈无法运动，故 C 错误；选项 B 中，左右两侧转轴的上下都把绝缘漆刮掉，后半个周期线圈受力方向相反，线圈不能做完整的圆周运动，故 B 错误；选项 AD 只有半个周期通电，可以实现线圈做完整的圆周运动，故 AD 正确。
+
+	故选 AD。
+}
+
+\item
+%% number: 22
+%% paperName: 2017年全国理综Ⅱ第 22 题 6 分
+%% typeId: 4
+%% type: 实验题
+%% chapter: 直线运动
+%% point: DIS测瞬时速度
+%% method: 无
+%% score: 6
+%% degree: 450
+%% duplicateId: 0
+%% body:
+某同学研究在固定斜面上运动物体的平均速度、瞬时速度和加速度之间的关系。使用的器材有：斜面、滑块、长度不同的矩形挡光片、光电计时器。
+
+实验步骤如下：
+\begin{steps}
+	\item
+	如图 \ref{2017全国理综Ⅱ22a}，将光电门固定在斜面下端附近；将一挡光片安装在滑块上，记下挡光片前端相对于斜面的位置，令滑块从斜面上方由静止开始下滑；
+	\item
+	当滑块上的挡光片经过光电门时，用光电计时器测得光线被挡光片遮住的时间 $\Delta t$；
+	\item
+	用 $\Delta s$ 表示挡光片沿运动方向的长度，如图 \ref{2017全国理综Ⅱ22b} 所示，$\overline{v}$ 表示滑块在挡光片遮住光线的 $\Delta t$ 时间内的平均速度大小，求出 $\overline{v}$；
+	\item
+	将另一挡光片换到滑块上，使滑块上的挡光片前端与①中的位置相同，令滑块由静止开始下滑，重复步骤②、③；
+	\item
+	多次重复步骤④；
+	\item
+	利用实验中得到的数据作出 $\overline{v}-\Delta t$ 图，如图 \ref{2017全国理综Ⅱ22c} 所示。
+\end{steps}
+
+完成下列填空：
+\begin{enumerate}
+	\item
+	用 $a$ 表示滑块下滑的加速度大小，用 $v_A$ 表示挡光片前端到达光电门时滑块的瞬时速度大小，则 $\overline{v}$ 与 $v_A$、$a$ 和 $\Delta t$ 的关系式为 $\overline{v} =$ \tkanswer[2cm]{}。
+	\item
+	由图 \ref{2017全国理综Ⅱ22c} 可求得，$v_A =$ \tkanswer[1.5cm]{} $\Ucms$，$a =$ \tkanswer[1.5cm]{} $\Ucmsq$。（结果保留 3 位有效数字）
+\end{enumerate}
+\threepicture[labelA=2017全国理综Ⅱ22a, labelB=2017全国理综Ⅱ22b, labelC=2017全国理综Ⅱ22c, hA=2.6cm, hB=2.6cm, hC=4.4cm, align=right]
+{figs/22a.png}
+{figs/22b.png}
+{figs/22c.png}
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	$\overline{v} = v_A + \frac{1}{2}a\Delta t$
+
+	\item
+	52.1，16.3（15.8 \textasciitilde{} 16.8）
+
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+	（1）做匀变速直线运动的物体，平均速度等于中间时刻的瞬时速度，所以
+	$\overline{v} = v_{\frac{t}{2}} = v_A + a\frac{\Delta t}{2}$
+
+	（2）$v_A$ 为图线与纵轴的截距，大小约为 $v_A = 52.1 \Ucms$；图线斜率的 2 倍为加速度，由图知
+	$k = \frac{\Delta\overline{v}}{\Delta t} = 8.125 \Ucmsq$
+
+	则 $a = 16.3 \Ucmsq$。
+}
+
+\item
+%% number: 23
+%% paperName: 2017年全国理综Ⅱ第 23 题 9 分
+%% typeId: 4
+%% type: 实验题
+%% chapter: 电路
+%% point: 电路实验
+%% method: 无
+%% score: 9
+%% degree: 450
+%% duplicateId: 0
+%% body:
+某同学利用如图 \ref{2017全国理综Ⅱ23a} 所示的电路测量一微安表（量程为 $100 \UuA$，内阻大约为 $2500 \UO$）的内阻。可使用的器材有：两个滑动变阻器 $R_1$、$R_2$（其中一个阻值为 $20 \UO$，另一个阻值为 $2000 \UO$）；电阻箱 $R_z$（最大阻值为 $99999.9 \UO$）；电源 $E$（电动势约为 $1.5 \UV$）；单刀开关 $S_1$ 和 $S_2$。C、D 分别为两个滑动变阻器的滑片。
+\begin{enumerate}
+	\item
+	按原理图（a）将图 \ref{2017全国理综Ⅱ23b} 中的实物连线。
+	\item
+	完成下列填空：
+	①$R_1$ 的阻值为 \tkanswer[1.5cm]{} $\UO$（填“20”或“2000”）。
+	②为了保护微安表，开始时将 $R_1$ 的滑片 C 滑到接近图 \ref{2017全国理综Ⅱ23a} 中的滑动变阻器的 \tkanswer[1.5cm]{} 端（填“左”或“右”）对应的位置；将 $R_2$ 的滑片 D 置于中间位置附近。
+	③将电阻箱 $R_z$ 的阻值置于 $2500.0 \UO$，接通 $S_1$。将 $R_1$ 的滑片置于适当位置，再反复调节 $R_2$ 的滑片 D 的位置。最终使得接通 $S_2$ 前后，微安表的示数保持不变，这说明 $S_2$ 接通前 B 与 D 所在位置的电势 \tkanswer[1.5cm]{}（填“相等”或“不相等”）。
+	④将电阻箱 $R_z$ 和微安表位置对调，其他条件保持不变，发现将 $R_z$ 的阻值置于 $2601.0 \UO$ 时，在接通 $S_2$ 前后，微安表的示数也保持不变。待测微安表的内阻为 \tkanswer[1.5cm]{} $\UO$（结果保留到个位）。
+	\item
+	写出一条提高测量微安表内阻精度的建议：\tkanswer[2cm]{}。
+\end{enumerate}
+\twopicture[labelA=2017全国理综Ⅱ23a, labelB=2017全国理综Ⅱ23b, h=3.4cm, align=right]
+{figs/23a.png}
+{figs/23b.png}
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	连线如图
+
+	\item
+	①20，②左，③相等，④2550
+
+	\item
+	调节 $R_1$ 上的分压，尽可能使微安表接近满量程
+
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+	（1）实物连线如图：
+	\onepicture[w=5cm]{figs/23_an.png}
+
+	（2）①滑动变阻器 $R_1$ 要接成分压电路，则要选择阻值较小的 $20 \UO$ 的滑动变阻器；
+
+	②为了保护微安表，开始时将 $R_1$ 的滑片 C 滑到接近图 \ref{2017全国理综Ⅱ23a} 中滑动变阻器的左端对应的位置；
+
+	③将电阻箱 $R_z$ 的阻值置于 $2500.0 \UO$，接通 $S_1$；将 $R_1$ 的滑片置于适当位置，再反复调节 $R_2$ 的滑片 D 的位置；最终使得接通 $S_2$ 前后，微安表的示数保持不变，这说明 $S_2$ 接通前后在 $BD$ 中无电流流过，可知 B 与 D 所在位置的电势相等；
+
+	④设滑片 P 两侧电阻分别为 $R_{21}$ 和 $R_{22}$，因 B 与 D 所在位置的电势相等，可知
+	$\frac{R_{z1}}{R_{21}} = \frac{R_A}{R_{22}}$
+
+	同理当 $R_z$ 和微安表对调后，仍有
+	$\frac{R_A}{R_{21}} = \frac{R_{z2}}{R_{22}}$
+
+	联立两式解得
+	$R_A = \sqrt{R_{z1}R_{z2}} = \sqrt{2500 \times 2601} \UO = 2550 \UO$
+
+	（3）为了提高测量精度，调节 $R_1$ 上的分压，尽可能使微安表接近满量程。
+}
+
+\item
+%% number: 24
+%% paperName: 2017年全国理综Ⅱ第 24 题 12 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 直线运动
+%% point: 匀变速直线运动
+%% method: 无
+%% score: 12
+%% degree: 550
+%% duplicateId: 0
+%% body:
+为提高冰球运动员的加速能力，教练员在冰面上与起跑线距离 $s_0$ 和 $s_1$（$s_1 < s_0$）处分别设置一个挡板和一面小旗，如图所示。训练时，让运动员和冰球都位于起跑线上，教练员将冰球以初速度 $v_0$ 击出，使冰球在冰面上沿垂直于起跑线的方向滑向挡板；冰球被击出的同时，运动员垂直于起跑线从静止出发滑向小旗。训练要求当冰球到达挡板时，运动员至少到达小旗处。假定运动员在滑行过程中做匀加速运动，冰球到达挡板时的速度为 $v_1$。重力加速度大小为 $g$。求：
+\begin{enumerate}
+	\item
+	冰球与冰面之间的动摩擦因数；
+	\item
+	满足训练要求的运动员的最小加速度。
+\end{enumerate}
+\onepicture[w=5cm, align=right]{\includesvg{figs/24}}
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	$\frac{v_0^2 - v_1^2}{2gs_0}$
+
+	\item
+	$\frac{s_1(v_0 + v_1)^2}{2s_0^2}$
+
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+	（1）设冰球的质量为 $m$，冰球与冰面之间的动摩擦因数为 $\mu$，由动能定理得
+	$-\mu mgs_0 = \frac{1}{2}mv_1^2 - \frac{1}{2}mv_0^2$ ①
+
+	解得 $\mu = \frac{v_0^2 - v_1^2}{2gs_0}$ ②。
+
+	（2）冰球到达挡板时，满足训练要求的运动员中，刚好到达小旗处的运动员的加速度最小，设这种情况下，冰球和运动员的加速度大小分别为 $a_1$ 和 $a_2$，所用的时间为 $t$，由运动学公式得
+	$v_0^2 - v_1^2 = 2a_1s_0$ ③
+
+	$v_0 - v_1 = a_1t$ ④
+
+	$s_1 = \frac{1}{2}a_2t^2$ ⑤
+
+	联立③④⑤式得 $a_2 = \frac{s_1(v_1 + v_0)^2}{2s_0^2}$ ⑥。
+}
+
+\item
+%% number: 25
+%% paperName: 2017年全国理综Ⅱ第 25 题 20 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 电场
+%% point: 带电粒子的偏转
+%% method: 无
+%% score: 20
+%% degree: 350
+%% duplicateId: 0
+%% body:
+如图，两水平面（虚线）之间的距离为 $H$，其间的区域存在方向水平向右的匀强电场。自该区域上方的 A 点将质量为 $m$、电荷量分别为 $q$ 和 $-q$（$q > 0$）的带电小球 M、N 先后以相同的初速度沿平行于电场的方向射出。小球在重力作用下进入电场区域，并从该区域的下边界离开。已知 N 离开电场时的速度方向竖直向下；M 在电场中做直线运动，刚离开电场时的动能为 N 刚离开电场时动能的 1.5 倍。不计空气阻力，重力加速度大小为 $g$。求：
+\begin{enumerate}
+	\item
+	M 与 N 在电场中沿水平方向的位移之比；
+	\item
+	A 点距电场上边界的高度；
+	\item
+	该电场的电场强度大小。
+\end{enumerate}
+\onepicture[w=6cm, align=right]{\includesvg{figs/25}}
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	$3:1$
+
+	\item
+	$\frac{1}{3}H$
+
+	\item
+	$E = \frac{mg}{\sqrt{2}q}$
+
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+	（1）设小球 M、N 在 A 点水平射出时的初速度大小为 $v_0$，则它们进入电场时的水平速度仍然为 $v_0$。M、N 在电场中运动的时间 $t$ 相等，电场力作用下产生的加速度沿水平方向，大小均为 $a$，在电场中沿水平方向的位移分别为 $s_1$ 和 $s_2$，由题给条件和运动学公式得
+	$v_0 - at = 0$ \ccnum{①}
+
+	$s_1 = v_0t + \frac{1}{2}at^2$ \ccnum{②}
+
+	$s_2 = v_0t - \frac{1}{2}at^2$ \ccnum{③}
+
+	联立\ccnum{①}\ccnum{②}\ccnum{③}式得 $\frac{s_1}{s_2} = 3$ \ccnum{④}。
+
+	（2）设 A 点距电场上边界的高度为 $h$，小球下落 $h$ 时在竖直方向的分速度为 $v_y$，由运动学公式得
+	$v_y^2 = 2gh$ \ccnum{⑤}
+
+	$H = v_yt + \frac{1}{2}gt^2$ \ccnum{⑥}
+
+	M 进入电场后做直线运动，由几何关系得
+	$\frac{v_0}{v_y} = \frac{s_1}{H}$ \ccnum{⑦}
+
+	联立\ccnum{①}\ccnum{②}\ccnum{⑤}\ccnum{⑥}\ccnum{⑦}式可得 $h = \frac{1}{3}H$ \ccnum{⑧}。
+
+	（3）设电场强度的大小为 $E$，小球 M 进入电场后做直线运动，则
+	$\frac{v_0}{v_y} = \frac{qE}{mg}$ \ccnum{⑨}
+
+	设 M、N 离开电场时的动能分别为 $E_{k1}$、$E_{k2}$，由动能定理得
+	$E_{k1} = \frac{1}{2}m(v_0^2 + v_y^2) + mgH + qEs_1$ \ccnum{⑩}
+
+	$E_{k2} = \frac{1}{2}m(v_0^2 + v_y^2) + mgH - qEs_2$ \ccnum{⑪}
+
+	由已知条件
+	$E_{k1} = 1.5E_{k2}$ \ccnum{⑫}
+
+	联立\ccnum{④}\ccnum{⑤}\ccnum{⑦}\ccnum{⑧}\ccnum{⑨}\ccnum{⑩}\ccnum{⑪}\ccnum{⑫}式可得 $E = \frac{mg}{\sqrt{2}q}$ \ccnum{⑬}。
+}
+
+\item
+%% number: 33
+%% paperName: 2017年全国理综Ⅱ第 33 题 10 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 气体性质
+%% point: 盖吕萨克定律
+%% method: 无
+%% score: 10
+%% degree: 450
+%% duplicateId: 0
+%% body:
+{}[物理——选修 3-3]（15 分）
+\begin{enumerate}
+	\item
+	（5 分）如图，用隔板将一绝热气缸分成两部分，隔板左侧充有理想气体，隔板右侧与绝热活塞之间是真空。现将隔板抽开，气体会自发扩散至整个气缸。待气体达到稳定后，缓慢推压活塞，将气体压回到原来的体积。假设整个系统不漏气。下列说法正确的是 \xzanswer{ABD}
+
+	\onepicture[w=6cm]{figs/33.png}
+
+	\fivechoices[answer=ABD]
+	{气体自发扩散前后内能相同}
+	{气体在被压缩的过程中内能增大}
+	{在自发扩散过程中，气体对外界做功}
+	{气体在被压缩的过程中，外界对气体做功}
+	{气体在被压缩的过程中，气体分子的平均动能不变}
+
+	\item
+	（10 分）一热气球体积为 $V$，内部充有温度为 $T_a$ 的热空气，气球外冷空气的温度为 $T_b$。已知空气在 1 个大气压、温度 $T_0$ 时的密度为 $\rho_0$，该气球内、外的气压始终都为 1 个大气压，重力加速度大小为 $g$。
+	\begin{enumerate}
+		\item
+		求该热气球所受浮力的大小；
+		\item
+		求该热气球内空气所受的重力；
+		\item
+		设充气前热气球的质量为 $m_0$，求充气后它还能托起的最大质量。
+	\end{enumerate}
+\end{enumerate}
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	ABD
+
+	\item
+	$\frac{\rho_0gVT_0}{T_b}$，$\frac{\rho_0gVT_0}{T_a}$，$\frac{\rho_0VT_0}{T_b} - \frac{\rho_0VT_0}{T_a} - m_0$
+
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+	（1）气体向真空扩散过程中不对外做功，且又因为气缸绝热，可知气体自发扩散前后内能相同，选项 A 正确，C 错误；气体在被压缩的过程中活塞对气体做功，因气缸绝热，则气体内能增大，选项 BD 正确；气体在被压缩的过程中，因气体内能增加，则温度升高，气体分子的平均动能增加，选项 E 错误。故选 ABD。
+
+	（2）（i）设 1 个大气压下质量为 $m$ 的空气在温度为 $T_0$ 时的体积为 $V_0$，密度为
+	$\rho_0 = \frac{m}{V_0}$ ①
+
+	在温度为 $T$ 时的体积为 $V_T$，密度为
+	$\rho(T) = \frac{m}{V_T}$ ②
+
+	由盖-吕萨克定律得
+	$\frac{V_0}{T_0} = \frac{V_T}{T}$ ③
+
+	联立①②③式得 $\rho(T) = \rho_0\frac{T_0}{T}$ ④
+
+	气球所受到的浮力为
+	$f = \rho(T_b)gV$ ⑤
+
+	联立④⑤式得 $f = \rho_0Vg\frac{T_0}{T_b}$ ⑥。
+
+	（ii）气球内热空气所受的重力为
+	$G = \rho(T_a)Vg$ ⑦
+
+	联立④⑦式得 $G = \rho_0Vg\frac{T_0}{T_a}$ ⑧。
+
+	（iii）设该气球还能托起的最大质量为 $m$，由力的平衡条件得
+	$mg = f - G - m_0g$ ⑨
+
+	联立⑥⑧⑨式得 $m = \rho_0VT_0\left(\frac{1}{T_b} - \frac{1}{T_a}\right) - m_0$ ⑩。
+}
+
+\item
+%% number: 34
+%% paperName: 2017年全国理综Ⅱ第 34 题 10 分
+%% typeId: 6
+%% type: 计算题
+%% chapter: 光学
+%% point: 光的折射
+%% method: 无
+%% score: 10
+%% degree: 650
+%% duplicateId: 0
+%% body:
+{}[物理——选修 3-4]（15 分）
+\begin{enumerate}
+	\item
+	（5 分）在双缝干涉实验中，用绿色激光照射在双缝上，在缝后的屏幕上显示出干涉图样。若要增大干涉图样中两相邻亮条纹的间距，可选用的方法是 \xzanswer{ACD}
+
+	\fivechoices[answer=ACD]
+	{改用红色激光}
+	{改用蓝色激光}
+	{减小双缝间距}
+	{将屏幕向远离双缝的位置移动}
+	{将光源向远离双缝的位置移动}
+
+	\item
+	（10 分）一直桶状容器的高为 $2l$，底面是边长为 $l$ 的正方形；容器内装满某种透明液体，过容器中心轴 DD$'$、垂直于左右两侧面的剖面图如图所示。容器右侧内壁涂有反光材料，其他内壁涂有吸光材料。在剖面的左下角处有一点光源，已知由液体上表面的 D 点射出的两束光线相互垂直，求该液体的折射率。
+	\onepicture[w=4.5cm, align=right]{\includesvg{figs/34}}
+\end{enumerate}
+%% answer:
+\jdanswer{
+\begin{enumerate}
+	\item
+	ACD
+
+	\item
+	1.55
+
+\end{enumerate}
+}
+%% memo:
+\memoanswer{
+	（1）两相邻亮条纹的间距 $\Delta x = \frac{l}{d}\lambda$，要想增大 $\Delta x$，可使用波长更长的红色激光，而不能使用波长更短的蓝色激光，故 A 正确 B 错误；可以减小双缝间的距离 $d$，故 C 正确；将屏幕向远离双缝的位置移动，即增大 $l$，也可以增大 $\Delta x$，故 D 正确；将光源向远离双缝的位置移动，对 $\Delta x$ 无影响，故 E 错误。故选 ACD。
+
+	（2）设从光源发出直接射到 D 点的光线的入射角为 $i_1$，折射角为 $r_1$。在剖面内作光源相对于反光壁的镜像对称点 C，连接 C、D，交反光壁于 E 点，由光源射向 E 点的光线，反射后沿 ED 射向 D 点。光线在 D 点的入射角为 $i_2$，折射角为 $r_2$，如图所示。
+
+	\onepicture[w=4cm]{figs/34_an.png}
+
+	设液体的折射率为 $n$，由折射定律得
+	$n\sin i_1 = \sin r_1$ ①
+
+	$n\sin i_2 = \sin r_2$ ②
+
+	由题意知
+	$r_1 + r_2 = 90^\circ$ ③
+
+	联立①②③式得
+	$n^2 = \frac{1}{\sin^2 i_1 + \sin^2 i_2}$ ④
+
+	由几何关系得
+	$\sin i_1 = \frac{\frac{l}{2}}{\sqrt{4l^2 + \frac{l^2}{4}}} = \frac{1}{\sqrt{17}}$ ⑤
+
+	$\sin i_2 = \frac{\frac{3}{2}l}{\sqrt{4l^2 + \frac{9l^2}{4}}} = \frac{3}{5}$ ⑥
+
+	联立④⑤⑥式得 $n = 1.55$ ⑦。
+}
+
+\end{enumerate}
+
+\end{document}
