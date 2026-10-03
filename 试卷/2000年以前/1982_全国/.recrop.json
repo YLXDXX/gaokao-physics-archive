@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2000年以前/1982_全国/pdfimages/p4_7.jpg",
+      "crops": [
+        {"rect": [6, 9, 308, 514], "target": "试卷/2000年以前/1982_全国/figs/15a.png"},
+        {"rect": [369, 213, 229, 310], "target": "试卷/2000年以前/1982_全国/figs/15b.png"}
+      ],
+      "erase_labels": "panels",
+      "trim": {"padding": 8}
+    }
+  ]
+}

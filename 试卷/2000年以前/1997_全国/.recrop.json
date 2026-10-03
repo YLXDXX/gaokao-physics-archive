@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2000年以前/1997_全国/pdfimages/p5_7.jpg",
+      "crops": [
+        {"rect": [0, 0, 1212, 600], "target": "试卷/2000年以前/1997_全国/figs/26a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2000年以前/1997_全国/pdfimages/p6_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 855, 515], "target": "试卷/2000年以前/1997_全国/figs/26b.png"},
+        {"rect": [858, 0, 770, 515], "target": "试卷/2000年以前/1997_全国/figs/26c.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

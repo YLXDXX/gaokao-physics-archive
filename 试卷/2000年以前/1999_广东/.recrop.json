@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2000年以前/1999_广东/pdfimages/json_06.png",
+      "crops": [
+        {"rect": [13, 12, 91, 108], "target": "试卷/2000年以前/1999_广东/figs/06a.png"},
+        {"rect": [219, 7, 92, 108], "target": "试卷/2000年以前/1999_广东/figs/06b.png"},
+        {"rect": [431, 8, 95, 108], "target": "试卷/2000年以前/1999_广东/figs/06c.png"},
+        {"rect": [645, 3, 92, 108], "target": "试卷/2000年以前/1999_广东/figs/06d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2000年以前/1999_广东/pdfimages/json_23.png",
+      "crops": [
+        {"rect": [8, 4, 136, 353], "target": "试卷/2000年以前/1999_广东/figs/23a.png"},
+        {"rect": [144, 10, 171, 353], "target": "试卷/2000年以前/1999_广东/figs/23b.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}
