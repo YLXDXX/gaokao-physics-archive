@@ -38,6 +38,41 @@
       "crops": [
         {"rect": [0, 0, 271, 288], "target": "试卷/2022/北京/figs/22an.png"}
       ]
+    },
+    {
+      "source": "材料处理/2022/北京/pdfimages/p8_28.jpg",
+      "crops": [
+        {"rect": [0, 0, 275, 500], "target": "试卷/2022/北京/figs/16a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2022/北京/pdfimages/p8_27.jpg",
+      "crops": [
+        {"rect": [0, 0, 2470, 345], "target": "试卷/2022/北京/figs/16b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2022/北京/pdfimages/p9_32.jpg",
+      "crops": [
+        {"rect": [0, 0, 1775, 1580], "target": "试卷/2022/北京/figs/16c.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2022/北京/pdfimages/p12_43.jpg",
+      "crops": [
+        {"rect": [0, 0, 394, 320], "target": "试卷/2022/北京/figs/22a.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2022/北京/pdfimages/p12_44.jpg",
+      "crops": [
+        {"rect": [0, 0, 289, 290], "target": "试卷/2022/北京/figs/22b.png"}
+      ],
+      "trim": {"padding": 6}
     }
   ]
 }
