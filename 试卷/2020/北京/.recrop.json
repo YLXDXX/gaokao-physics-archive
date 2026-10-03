@@ -30,6 +30,7 @@
         {"rect": [0, 0, 447, 292], "target": "试卷/2020/北京/figs/11a.png"},
         {"rect": [447, 0, 553, 292], "target": "试卷/2020/北京/figs/11b.png"}
       ],
+      "erase": [[447, 138, 10, 40]],
       "trim": {"padding": 8, "threshold": 200}
     },
     {

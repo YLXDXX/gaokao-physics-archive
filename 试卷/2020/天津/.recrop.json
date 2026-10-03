@@ -73,14 +73,15 @@
     {
       "source": "材料处理/2020/天津/pdfimages/p5_9.jpg",
       "crops": [
-        {"rect": [0, 0, 1122, 370], "target": "试卷/2020/天津/figs/09a.png"}
+        {"rect": [0, 0, 1122, 478], "target": "试卷/2020/天津/figs/09a.png"}
       ],
+      "erase": [[575, 415, 95, 65]],
       "trim": {"padding": 10, "threshold": 200}
     },
     {
       "source": "试卷/2020/天津/recrop_src/09b_full.png",
       "crops": [
-        {"rect": [0, 0, 400, 1760], "target": "试卷/2020/天津/figs/09b.png"}
+        {"rect": [0, 0, 400, 1730], "target": "试卷/2020/天津/figs/09b.png"}
       ],
       "trim": {"padding": 10, "threshold": 200}
     },
