@@ -19,8 +19,10 @@
 
 也接受紧凑形式：对象里直接含 `number/category/...` 与顶层 `year`/`region`。
 
-合并规则：以 `(地区, 题号, 类别, 问题)` 为键去重；命中则更新“处理建议/状态”，
-未命中则追加到该年主表格末尾。类别/状态取值须合法（见 `异常记录/_模板.md`）。
+合并规则：以 `(地区, 题号, 类别, 问题)` 为键去重；命中则更新“处理建议/状态”。
+统一格式（含 `## 状态` 分区小节）下按条目「状态」并入对应分区，状态变化时移动到目标
+分区，并重排为 待补充 → 待处理/处理中 → 待人工核验 → 已解决（已解决置末）；
+旧版单表格格式则追加/更新到首个表格。类别/状态取值须合法（见 `异常记录/_模板.md`）。
 
 用法::
 
@@ -49,6 +51,16 @@ except Exception:  # 直接运行时的回退
     ANOM_OK = {"待处理", "处理中", "已解决", "待人工核验", "待补充"}
 
 HEADER_COLS = ["地区", "题号", "类别", "问题", "处理建议", "状态"]
+
+# 统一格式的状态分区小节顺序（「已解决」置末）
+STATUS_ORDER = ["待补充", "待处理 / 处理中", "待人工核验", "已解决"]
+STATUS_TO_GROUP = {
+    "待补充": "待补充",
+    "待处理": "待处理 / 处理中",
+    "处理中": "待处理 / 处理中",
+    "待人工核验": "待人工核验",
+    "已解决": "已解决",
+}
 
 
 def load_entries(paths: List[Path]) -> List[dict]:
@@ -89,7 +101,7 @@ def _row_line(e: dict) -> str:
 
 
 def find_table(lines: List[str]) -> Tuple[int, int]:
-    """返回主表格数据行的 (start, end)（不含表头与分隔行）；找不到返回 (-1, -1)。"""
+    """返回**首个**六列表格数据行的 (start, end)（不含表头与分隔行）；找不到返回 (-1, -1)。"""
     hdr = -1
     for i, l in enumerate(lines):
         if l.lstrip().startswith("|") and all(c in _row_cells(l) for c in HEADER_COLS):
@@ -104,9 +116,93 @@ def find_table(lines: List[str]) -> Tuple[int, int]:
     return start, end
 
 
+def _find_table_in(lines: List[str], lo: int, hi: int) -> Tuple[int, int]:
+    """在 [lo, hi) 内查找六列表格数据行范围；找不到返回 (-1, -1)。"""
+    hi = min(hi, len(lines))
+    hdr = -1
+    for i in range(lo, hi):
+        if lines[i].lstrip().startswith("|") and all(c in _row_cells(lines[i]) for c in HEADER_COLS):
+            hdr = i
+            break
+    if hdr < 0:
+        return -1, -1
+    start = hdr + 2
+    end = start
+    while end < hi and lines[end].lstrip().startswith("|"):
+        end += 1
+    return start, end
+
+
+def _status_headings(lines: List[str]) -> List[Tuple[int, str]]:
+    """返回 [(行号, 状态分区标题)]，仅识别合法状态小节。"""
+    return [(i, ln[3:].strip()) for i, ln in enumerate(lines)
+            if ln.startswith("## ") and ln[3:].strip() in STATUS_ORDER]
+
+
+def _find_existing(records: Dict[str, List[List[str]]], key: Tuple[str, ...]):
+    for g in STATUS_ORDER:
+        for i, c in enumerate(records[g]):
+            if (c[0], c[1], c[2], c[3]) == key:
+                return g, i
+    return None, None
+
+
 def merge_year(text: str, entries: List[dict]) -> Tuple[str, List[str]]:
-    """把某年的条目合并进文本；返回 (新文本, 变更说明)。"""
+    """把某年的条目合并进文本；返回 (新文本, 变更说明)。
+
+    - 统一格式（含 `## 状态` 分区小节）：按条目「状态」并入对应分区；重复键就地更新，
+      状态变化时移动到目标分区；最终按 待补充 → 待处理/处理中 → 待人工核验 → 已解决
+      重排（空分区省略、已解决置末）。
+    - 旧版单表格格式：保持“首个表格追加/更新”的兼容行为。
+    """
     lines = text.splitlines()
+    changes: List[str] = []
+    sh = _status_headings(lines)
+
+    if sh:
+        first = sh[0][0]
+        preamble = lines[:first]
+        while preamble and preamble[-1].strip() in ("", "---"):
+            preamble.pop()
+        records: Dict[str, List[List[str]]] = {g: [] for g in STATUS_ORDER}
+        for k, (hi, title) in enumerate(sh):
+            hi_next = sh[k + 1][0] if k + 1 < len(sh) else len(lines)
+            s, e = _find_table_in(lines, hi, hi_next)
+            if s >= 0:
+                for i in range(s, e):
+                    c = _row_cells(lines[i])
+                    if len(c) >= 6:
+                        records[title].append(c[:6])
+        for e in entries:
+            target = STATUS_TO_GROUP[e["status"]]
+            key = (e["region"], e["number"], e["category"], e["problem"])
+            call = [e["region"], e["number"], e["category"],
+                    e["problem"], e["action"], e["status"]]
+            g, i = _find_existing(records, key)
+            if g is not None:
+                old = records[g][i]
+                if old[4] != e["action"] or old[5] != e["status"]:
+                    changes.append(f"[更新] {e['region']} {e['number']} {e['category']}"
+                                   f"：{old[5]} → {e['status']}")
+                if g == target:
+                    records[g][i] = call
+                else:
+                    records[g].pop(i)
+                    records[target].append(call)
+            else:
+                records[target].append(call)
+                changes.append(f"[新增] {e['region']} {e['number']} {e['category']}")
+        out = list(preamble)
+        for g in STATUS_ORDER:
+            if not records[g]:
+                continue
+            out += ["", "---", "", f"## {g}", "",
+                    "| 地区 | 题号 | 类别 | 问题 | 处理建议 | 状态 |",
+                    "| :--- | :--- | :--- | :--- | :--- | :--- |"]
+            out += ["| " + " | ".join(c) + " |" for c in records[g]]
+        return "\n".join(out).rstrip() + "\n", changes
+
+    # 旧版单表格兼容
     start, end = find_table(lines)
     if start < 0:
         return text, ["[跳过] 未找到六列表格"]
@@ -115,7 +211,6 @@ def merge_year(text: str, entries: List[dict]) -> Tuple[str, List[str]]:
         c = _row_cells(lines[i])
         if len(c) >= 6:
             existing[(c[0], c[1], c[2], c[3])] = i
-    changes: List[str] = []
     appended: List[str] = []
     for e in entries:
         key = (e["region"], e["number"], e["category"], e["problem"])

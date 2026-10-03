@@ -39,6 +39,8 @@ STATUS_OK = set(STATUS_ENUM)
 # 异常记录状态枚举（`异常记录/<年>.md` 的“状态”列）
 ANOM_STATUS = ["待处理", "处理中", "已解决", "待人工核验", "待补充"]
 ANOM_OK = set(ANOM_STATUS)
+# 异常记录统一结构：状态分区小节的顺序（「已解决」置末）
+ANOM_SECTIONS = ["待补充", "待处理 / 处理中", "待人工核验", "已解决"]
 # 异常记录表头列（允许两种：含“类别”的完整表 / 简化表）
 ANOM_COLS = ["地区", "题号", "类别", "问题", "处理建议", "状态"]
 
@@ -279,6 +281,21 @@ def check(root: Path = ROOT, verbose: bool = True) -> list[str]:
                     errs.append(f"异常记录/{year}.md 状态非法：{cells[-1]}")
         if not info["has_category"]:
             errs.append(f"异常记录/{year}.md 的表头缺少“类别”列")
+        # 统一结构：制作说明 + 状态分区（待补充→待处理/处理中→待人工核验→已解决，已解决置末）
+        heads = [ln.strip()[3:].strip() for ln in p.read_text(encoding="utf-8").splitlines()
+                 if ln.startswith("## ")]
+        if heads:
+            status_heads = [h for h in heads if h in ANOM_SECTIONS]
+            if "制作说明" not in heads:
+                errs.append(f"异常记录/{year}.md 缺少 `## 制作说明` 小节")
+            if status_heads:
+                idxs = [ANOM_SECTIONS.index(h) for h in status_heads]
+                if idxs != sorted(idxs):
+                    errs.append(
+                        f"异常记录/{year}.md 状态小节顺序应为 "
+                        "待补充→待处理/处理中→待人工核验→已解决")
+                if status_heads[-1] != "已解决":
+                    errs.append(f"异常记录/{year}.md 「已解决」小节应置于文末")
 
     # 2b. 年份索引 试卷/<年>/README.md
     for year in sorted(papers):

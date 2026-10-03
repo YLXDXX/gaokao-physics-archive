@@ -83,6 +83,24 @@ class TestGenIndex(unittest.TestCase):
             errs = gen_index.check(root, verbose=False)
             self.assertTrue(any("类别" in e for e in errs))
 
+    def test_check_bad_anomaly_structure(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            _make_repo(root)
+            (root / "异常记录" / "2020.md").write_text(
+                "# 异常记录 · 2020 年\n\n## 制作说明\n\n说明。\n\n"
+                "## 已解决\n\n"
+                "| 地区 | 题号 | 类别 | 问题 | 处理建议 | 状态 |\n"
+                "| :--- | :--- | :--- | :--- | :--- | :--- |\n"
+                "| 测试 | 1 | 公式 | 示例 | 已改 | 已解决 |\n\n"
+                "## 待补充\n\n"
+                "| 地区 | 题号 | 类别 | 问题 | 处理建议 | 状态 |\n"
+                "| :--- | :--- | :--- | :--- | :--- | :--- |\n"
+                "| 测试 | 2 | 缺详解 | 无 | 占位 | 待补充 |\n",
+                encoding="utf-8")
+            errs = gen_index.check(root, verbose=False)
+            self.assertTrue(any("状态小节顺序" in e or "已解决" in e for e in errs))
+
 
 if __name__ == "__main__":
     unittest.main()
