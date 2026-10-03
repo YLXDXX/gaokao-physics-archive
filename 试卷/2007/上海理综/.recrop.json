@@ -23,7 +23,7 @@
       "source": "材料处理/2007/上海理综/pdfimages/p2_5.jpg",
       "crops": [
         {"rect": [0, 0, 139, 100], "target": "试卷/2007/上海理综/figs/45a.png"},
-        {"rect": [148, 0, 139, 100], "target": "试卷/2007/上海理综/figs/45b.png"}
+        {"rect": [148, 0, 152, 100], "target": "试卷/2007/上海理综/figs/45b.png"}
       ]
     },
     {
