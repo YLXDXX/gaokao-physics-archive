@@ -1,0 +1,20 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2019/北京理综/pdfimages/p1_0.jpg",
+      "crops": [
+        {"rect": [0, 0, 709, 238], "target": "试卷/2019/北京理综/figs/14a.png"},
+        {"rect": [0, 275, 709, 174], "target": "试卷/2019/北京理综/figs/14b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2019/北京理综/pdfimages/p4_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 227, 250], "target": "试卷/2019/北京理综/figs/23b.png"},
+        {"rect": [227, 0, 345, 250], "target": "试卷/2019/北京理综/figs/23c.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}
