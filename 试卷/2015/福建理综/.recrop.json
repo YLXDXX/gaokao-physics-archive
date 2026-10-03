@@ -27,13 +27,6 @@
         {"rect": [628, 0, 528, 460], "target": "试卷/2015/福建理综/figs/19f.png"}
       ],
       "trim": {"padding": 6}
-    },
-    {
-      "source": "材料处理/2015/福建理综/pdfimages/p2_10.jpg",
-      "crops": [
-        {"rect": [0, 0, 262, 239], "target": "试卷/2015/福建理综/figs/19g.png"}
-      ],
-      "trim": {"padding": 6}
     }
   ]
 }
