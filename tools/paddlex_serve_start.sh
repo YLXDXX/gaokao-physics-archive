@@ -19,7 +19,7 @@ cd "$(dirname "$0")"
 
 CONDA_ROOT="${CONDA_ROOT:-/opt/anaconda}"
 CONDA_ENV="${CONDA_ENV:-BaiduPaddle}"
-PADDLE_PIPELINE="${PADDLE_PIPELINE:-/home/shui/myservice/OCR/PaddleOCR/my_PaddleOCR-VL-1.6.yaml}"
+PADDLE_PIPELINE="${PADDLE_PIPELINE:-$HOME/myservice/OCR/PaddleOCR/my_PaddleOCR-VL-1.6.yaml}"
 PADDLE_PORT="${PADDLE_PORT:-8203}"
 
 # shellcheck disable=SC1091

@@ -28,7 +28,7 @@
     python3 tools/ocr_batch.py pdftotext                  # 旁证（可先跑）
     python3 tools/ocr_batch.py paddle                     # 验证引擎
     ./tools/paddlex_serve_stop.sh                         # 释放显存
-    /home/shui/.conda/envs/ovis_ocr/bin/python tools/ocr_batch.py ovis   # 底本（复用模型）
+    ~/.conda/envs/ovis_ocr/bin/python tools/ocr_batch.py ovis   # 底本（复用模型）
     python3 tools/ocr_batch.py merge
     python3 tools/ocr_batch.py extract
 
@@ -62,9 +62,9 @@ HERE = Path(__file__).resolve().parent
 
 # PaddleOCR-VL 客户端所用解释器（可用环境变量覆盖）
 PADDLE_PYTHON = os.environ.get(
-    "PADDLE_PYTHON", "/home/shui/.conda/envs/BaiduPaddle/bin/python"
+    "PADDLE_PYTHON", os.path.expanduser("~/.conda/envs/BaiduPaddle/bin/python")
 )
-OVIS_MODEL = os.environ.get("OVIS_MODEL", "/home/shui/AI/ATH-MaaS/OvisOCR2")
+OVIS_MODEL = os.environ.get("OVIS_MODEL", os.path.expanduser("~/AI/ATH-MaaS/OvisOCR2"))
 
 
 def _split(pdf: Path) -> Optional[Tuple[str, str]]:

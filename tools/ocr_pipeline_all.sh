@@ -71,7 +71,7 @@ SERVE_PID=""
 log "Paddle 阶段完成，服务已停止。"
 
 log "===== 阶段 3/5：OvisOCR2（底本）====="
-OVIS_PY="${OVIS_PYTHON:-/home/shui/.conda/envs/ovis_ocr/bin/python}"
+OVIS_PY="${OVIS_PYTHON:-$HOME/.conda/envs/ovis_ocr/bin/python}"
 "$OVIS_PY" tools/ocr_batch.py ovis "${PASSTHRU[@]}"
 
 log "===== 阶段 4/5：生成 merged.md ====="

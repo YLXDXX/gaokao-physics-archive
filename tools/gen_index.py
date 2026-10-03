@@ -145,6 +145,32 @@ def parse_progress(path: Path = PROGRESS) -> dict[str, dict]:
     return years
 
 
+def parse_overview(path: Path = PROGRESS) -> dict[str, str]:
+    """解析 进度记录.md「一、总览」的加粗条目，返回 {已完成/材料就位/待制作: 文本}。
+
+    续行（缩进的下一行）并入上一条目。README 概要块据此与进度记录保持一致，
+    避免在生成器里硬编码过时文案。
+    """
+    out: dict[str, str] = {}
+    if not path.exists():
+        return out
+    key: str | None = None
+    for line in path.read_text(encoding="utf-8").splitlines():
+        m = re.match(r"^-\s*\*\*(已完成|材料就位|待制作)\*\*[:：]\s*(.*)$", line)
+        if m:
+            key = m.group(1)
+            out[key] = m.group(2).strip()
+            continue
+        if key and line[:1] in (" ", "\t") and line.strip():
+            cont = line.strip()
+            sep = "" if out[key][-1:] in "；;。，,、）)" else " "
+            out[key] = f"{out[key]}{sep}{cont}"
+            continue
+        if line.startswith("-") or line.startswith("#"):
+            key = None
+    return out
+
+
 # ---------------------------------------------------------------------------
 # 解析 异常记录/<年>.md
 # ---------------------------------------------------------------------------
@@ -265,12 +291,46 @@ def check(root: Path = ROOT, verbose: bool = True) -> list[str]:
             if f"]({region}/)" not in t:
                 errs.append(f"试卷/{year}/README.md 未列出 {region}")
 
-    # 3. README 概要块存在
+    # 3. README 概要块存在，且「已完成/材料就位/待制作」与 进度记录.md 总览一致
     readme = root / "README.md"
+    overview = parse_overview(root / "进度记录.md")
     if readme.exists():
         t = readme.read_text(encoding="utf-8")
-        if README_START not in t or README_END not in t:
+        m = re.search(re.escape(README_START) + r"(.*?)" + re.escape(README_END), t, re.S)
+        if not m:
             errs.append("README.md 缺少进度概要标记 PROGRESS:START/END")
+        else:
+            block = m.group(1)
+
+            def _norm(s: str) -> str:
+                return re.sub(r"\s+", "", s)
+
+            for label in ("已完成", "材料就位", "待制作"):
+                if label not in overview:
+                    continue
+                bm = re.search(rf"^\s*-\s*\*\*{label}\*\*[:：]\s*(.*)$", block, re.M)
+                if not bm:
+                    errs.append(f"README.md 概要块缺少「{label}」条目")
+                    continue
+                if _norm(bm.group(1)) != _norm(overview[label]):
+                    errs.append(f"README.md 概要「{label}」与 进度记录.md 总览不一致")
+
+    # 3b. 异常记录.md 年份索引完整，且索引套数与实际相符
+    anom_index = root / "异常记录.md"
+    if anom_index.exists():
+        ai = anom_index.read_text(encoding="utf-8")
+        for year in sorted(papers):
+            if f"(异常记录/{year}.md)" not in ai:
+                errs.append(f"异常记录.md 年份索引缺少 {year}（应链接 异常记录/{year}.md）")
+                continue
+            rm = re.search(
+                r"\|\s*" + re.escape(year) + r"\s*\|\s*\[[^\]]*\]\(异常记录/"
+                + re.escape(year) + r"\.md\)\s*\|([^|]*)\|([^|]*)\|", ai)
+            if rm:
+                nm = re.search(r"(\d+)\s*套", rm.group(2))
+                if nm and int(nm.group(1)) != len(papers[year]):
+                    errs.append(
+                        f"异常记录.md 索引 {year} 套数不符：{nm.group(1)} vs 实际 {len(papers[year])}")
 
     log(f"校验完成：年份 {len(papers)} 个、试卷 {sum(len(v) for v in papers.values())} 套，"
         f"错误 {len(errs)} 处。")
@@ -317,11 +377,12 @@ def write(root: Path = ROOT, verbose: bool = True) -> None:
             total_p = sum(len(v) for v in papers.values())
             total_q = sum(f["questions"] for v in papers.values() for f in v.values())
             total_y = len(papers)
+            overview = parse_overview(root / "进度记录.md")
             block = (f"{README_START}\n"
                      f"- **已完成**：{total_y} 个年份、共 **{total_p} 套**卷、**{total_q} 题**"
                      f"（{ '、'.join((y if y.endswith('以前') else f'{y} 年') + f' {len(v)} 套' for y, v in sorted(papers.items())) }）。\n"
-                     f"- **材料就位**：`材料处理/` 已完成 402 份 PDF 的三路转换与提图（本地，不入库）。\n"
-                     f"- **待制作**：其余年份/地区，按批次推进。\n"
+                     f"- **材料就位**：{overview.get('材料就位', '')}\n"
+                     f"- **待制作**：{overview.get('待制作', '')}\n"
                      f"{README_END}")
             t = re.sub(re.escape(README_START) + r".*?" + re.escape(README_END),
                        block, t, flags=re.S)

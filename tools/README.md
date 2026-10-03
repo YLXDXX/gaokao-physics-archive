@@ -45,8 +45,8 @@
 环境（可用环境变量覆盖，见脚本头）：
 
 - `CONDA_ROOT=/opt/anaconda`；`OVIS_ENV=ovis_ocr`、`PADDLE_ENV=BaiduPaddle`；
-- `OVIS_MODEL=/home/shui/AI/ATH-MaaS/OvisOCR2`；
-- PaddleOCR-VL pipeline：`PADDLE_PIPELINE`（默认 `/home/shui/myservice/OCR/PaddleOCR/my_PaddleOCR-VL-1.6.yaml`）；
+- `OVIS_MODEL`（OvisOCR2 模型目录，示例 `~/AI/ATH-MaaS/OvisOCR2`）；
+- PaddleOCR-VL pipeline：`PADDLE_PIPELINE`（示例 `~/myservice/OCR/PaddleOCR/my_PaddleOCR-VL-1.6.yaml`）；
 - poppler：`pdftotext` / `pdfimages`。
 
 ## 三、多子图裁剪（依赖外部 **splitpicture**）

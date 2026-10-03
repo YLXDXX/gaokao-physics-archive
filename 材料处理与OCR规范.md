@@ -42,7 +42,7 @@ make material PDF=Docx/2026/2026_湖北.pdf OUT=材料处理/2026/湖北
 > 或用**一键编排** `tools/ocr_pipeline_all.sh`（等价 `make material-batch`）——
 > 后者自动启停 PaddleOCR-VL 服务并做端口健康检查，任一阶段失败即停。
 
-脚本依次执行（与 `Teach_Assess` 项目一致）。**运行前须先启动 PaddleOCR-VL 服务**：
+脚本依次执行如下。**运行前须先启动 PaddleOCR-VL 服务**：
 
 ```bash
 # ── 旁证：pdftotext（文字版 PDF；扫描版可失败） ──
@@ -56,7 +56,7 @@ conda run -n BaiduPaddle python tools/PaddleOCR_PDF_to_md.py -i "<源PDF>" -o "<
 # ── 引擎甲：OvisOCR2（底本） ──
 conda run -n ovis_ocr python tools/pdf_to_md.py \
     --input "<源PDF>" --output "<处理目录>/ovis" \
-    --model-path /home/shui/AI/ATH-MaaS/OvisOCR2 --enforce-eager
+    --model-path "$OVIS_MODEL" --enforce-eager
 
 # ── 生成 merged.md（以 Ovis 为底本 + 三路差异记录） ──
 python3 tools/material_merge.py "<处理目录>" --force
@@ -65,7 +65,7 @@ python3 tools/material_merge.py "<处理目录>" --force
 python3 tools/pdf_extract_images.py "<处理目录>" --force
 ```
 
-- OvisOCR2 环境：Anaconda `ovis_ocr`，模型 `/home/shui/AI/ATH-MaaS/OvisOCR2/`。
+- OvisOCR2 环境：Anaconda `ovis_ocr`，模型目录由环境变量 `OVIS_MODEL` 指定（示例 `~/AI/ATH-MaaS/OvisOCR2/`）。
 - PaddleOCR-VL 环境：Anaconda `BaiduPaddle`，服务默认 `127.0.0.1:8203`。
 - `tools/check_material.py` 校验四要素（`ovis/output.md`、`paddle/output.md`、
   `pdftotext.txt`、`merged.md`）齐全非空、图片引用有效、底稿未漂移。

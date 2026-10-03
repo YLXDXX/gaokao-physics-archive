@@ -7,7 +7,7 @@
 #  例：
 #    tools/ocr_pipeline.sh Docx/2026/2026_湖北.pdf 材料处理/2026/湖北
 #
-#  流程（与 Teach_Assess 项目一致）：
+#  流程：
 #    [甲·底本] OvisOCR2        -> <处理目录>/ovis/output.md   + ovis/images/
 #    [乙·验证] PaddleOCR-VL    -> <处理目录>/paddle/output.md + paddle/images/
 #    [旁证]    pdftotext       -> <处理目录>/pdftotext.txt
@@ -15,7 +15,7 @@
 #    再用 tools/pdf_extract_images.py 从原 PDF 无损提取内嵌图到 pdfimages/。
 #
 #  依赖环境（与本机一致）：
-#    * OvisOCR2：Anaconda 环境 ovis_ocr，模型 /home/shui/AI/ATH-MaaS/OvisOCR2
+#    * OvisOCR2：Anaconda 环境 ovis_ocr，模型由 OVIS_MODEL 指定（示例 ~/AI/ATH-MaaS/OvisOCR2）
 #    * PaddleOCR-VL：Anaconda 环境 BaiduPaddle，服务 127.0.0.1:8203
 #        （先 tools/paddlex_serve_start.sh 启动，用完 tools/paddlex_serve_stop.sh 关闭）
 #    * poppler：pdftotext / pdfimages
@@ -32,7 +32,7 @@ ROOT="$(cd "$HERE/.." && pwd)"
 CONDA_ROOT="${CONDA_ROOT:-/opt/anaconda}"
 OVIS_ENV="${OVIS_ENV:-ovis_ocr}"
 PADDLE_ENV="${PADDLE_ENV:-BaiduPaddle}"
-OVIS_MODEL="${OVIS_MODEL:-/home/shui/AI/ATH-MaaS/OvisOCR2}"
+OVIS_MODEL="${OVIS_MODEL:-$HOME/AI/ATH-MaaS/OvisOCR2}"
 
 # 使 conda 命令可用（非交互 shell 默认无 conda）
 if ! command -v conda >/dev/null 2>&1; then

@@ -1,7 +1,7 @@
 # splitpicture 使用说明（高考物理真题库）
 
-> 外部工具 **splitpicture**（源码：`/home/shui/Desktop/My/program/splitpicture/`，
-> gitee：<https://gitee.com/ylxdxx/splitpicture>）用于**图像切分、去白边、填白、
+> 外部工具 **splitpicture**（源码见 gitee：
+> <https://gitee.com/ylxdxx/splitpicture>）用于**图像切分、去白边、填白、
 > 智能检测图形/子图/标签**。本项目用它把**从 PDF 无损提取的内嵌图**按子图裁剪、
 > 去标签，回填各卷 `figs/`（见 `材料处理与OCR规范.md` 第五节、
 > `高考物理真题制作规范.md` 第五节）。
