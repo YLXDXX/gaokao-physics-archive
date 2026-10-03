@@ -1,0 +1,27 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2011/2011_安徽理综/tiku_images/4201-4600/4484-2.png",
+      "crops": [
+        {"rect": [4, 1, 112, 112], "target": "试卷/2011/安徽理综/figs/18a.png"},
+        {"rect": [167, 1, 112, 112], "target": "试卷/2011/安徽理综/figs/18b.png"},
+        {"rect": [323, 3, 113, 112], "target": "试卷/2011/安徽理综/figs/18c.png"},
+        {"rect": [472, 2, 113, 112], "target": "试卷/2011/安徽理综/figs/18d.png"}
+      ]
+    },
+    {
+      "source": "JSON/2011/2011_安徽理综/tiku_images/4201-4600/4488-2.png",
+      "crops": [
+        {"rect": [0, 55, 290, 202], "target": "试卷/2011/安徽理综/figs/21b.png"},
+        {"rect": [341, 0, 339, 263], "target": "试卷/2011/安徽理综/figs/21c.png"}
+      ]
+    },
+    {
+      "source": "JSON/2011/2011_安徽理综/tiku_images/4201-4600/4486.png",
+      "crops": [
+        {"rect": [2, 5, 124, 130], "target": "试卷/2011/安徽理综/figs/20a.png"},
+        {"rect": [178, 5, 152, 130], "target": "试卷/2011/安徽理综/figs/20b.png"}
+      ]
+    }
+  ]
+}

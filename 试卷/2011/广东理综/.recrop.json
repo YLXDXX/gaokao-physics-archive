@@ -1,0 +1,41 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2011/2011_广东理综/tiku_images/4201-4600/4497.png",
+      "crops": [
+        {"rect": [0, 0, 175, 104], "target": "试卷/2011/广东理综/figs/19a.png"},
+        {"rect": [175, 0, 260, 112], "target": "试卷/2011/广东理综/figs/19b.png"}
+      ]
+    },
+    {
+      "source": "JSON/2011/2011_广东理综/tiku_images/4201-4600/4500.png",
+      "crops": [
+        {"rect": [0, 30, 366, 112], "target": "试卷/2011/广东理综/figs/34_1a.png"},
+        {"rect": [370, 0, 446, 250], "target": "试卷/2011/广东理综/figs/34_1b.png"}
+      ],
+      "erase": [[575, 226, 45, 26]]
+    },
+    {
+      "source": "JSON/2011/2011_广东理综/tiku_images/4201-4600/4501.png",
+      "crops": [
+        {"rect": [0, 4, 353, 224], "target": "试卷/2011/广东理综/figs/34_2a.png"},
+        {"rect": [0, 248, 353, 185], "target": "试卷/2011/广东理综/figs/34_2b.png"},
+        {"rect": [437, 0, 380, 415], "target": "试卷/2011/广东理综/figs/34_2c.png"}
+      ]
+    },
+    {
+      "source": "JSON/2011/2011_广东理综/tiku_images/4201-4600/4502.png",
+      "crops": [
+        {"rect": [0, 0, 300, 272], "target": "试卷/2011/广东理综/figs/35a.png"},
+        {"rect": [300, 0, 334, 272], "target": "试卷/2011/广东理综/figs/35b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2011/广东理综/ovis/images/page_5_bbox_616_713_906_999.jpg",
+      "crops": [
+        {"rect": [0, 0, 410, 292], "target": "试卷/2011/广东理综/figs/35_an1.png"},
+        {"rect": [0, 292, 410, 280], "target": "试卷/2011/广东理综/figs/35_an2.png"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2011/全国理综/pdfimages/p4_0.jpg",
+      "crops": [
+        {"rect": [0, 0, 235, 111], "target": "试卷/2011/全国理综/figs/23a.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2011/全国理综/pdfimages/p4_1.jpg",
+      "crops": [
+        {"rect": [0, 0, 368, 290], "target": "试卷/2011/全国理综/figs/23b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2011/全国理综/pdfimages/p4_2.jpg",
+      "crops": [
+        {"rect": [0, 0, 358, 168], "target": "试卷/2011/全国理综/figs/23c.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2011/全国理综/pdfimages/p4_3.jpg",
+      "crops": [
+        {"rect": [0, 0, 197, 245], "target": "试卷/2011/全国理综/figs/23d.png"}
+      ]
+    },
+    {
+      "source": "JSON/2011/2011_全国理综/tiku_images/4201-4600/4529.png",
+      "crops": [
+        {"rect": [1, 3, 249, 89], "target": "试卷/2011/全国理综/figs/26a.png"},
+        {"rect": [1, 109, 249, 89], "target": "试卷/2011/全国理综/figs/26b.png"}
+      ]
+    }
+  ]
+}

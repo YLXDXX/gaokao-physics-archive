@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2011/2011_天津理综/tiku_images/4601-5200/4640.png",
+      "crops": [
+        {"rect": [5, 5, 126, 160], "target": "试卷/2011/天津理综/figs/04a.png"},
+        {"rect": [133, 10, 202, 150], "target": "试卷/2011/天津理综/figs/04b.png"}
+      ],
+      "compare": true
+    }
+  ]
+}
