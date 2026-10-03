@@ -1,0 +1,32 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2015/全国课标Ⅱ/pdfimages/p2_4.jpg",
+      "erase": [[215, 343, 130, 52]],
+      "crops": [
+        {"rect": [0, 0, 479, 395], "target": "试卷/2015/全国课标Ⅱ/figs/17b.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2015/全国课标Ⅱ/pdfimages/p2_5.jpg",
+      "erase": [[215, 343, 130, 52]],
+      "crops": [
+        {"rect": [0, 0, 483, 396], "target": "试卷/2015/全国课标Ⅱ/figs/17c.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2015/全国课标Ⅱ/pdfimages/p2_6.jpg",
+      "erase": [[215, 343, 130, 52]],
+      "crops": [
+        {"rect": [0, 0, 481, 395], "target": "试卷/2015/全国课标Ⅱ/figs/17d.png"}
+      ]
+    },
+    {
+      "source": "材料处理/2015/全国课标Ⅱ/pdfimages/p2_7.jpg",
+      "erase": [[215, 343, 130, 50]],
+      "crops": [
+        {"rect": [0, 0, 481, 393], "target": "试卷/2015/全国课标Ⅱ/figs/17e.png"}
+      ]
+    }
+  ]
+}

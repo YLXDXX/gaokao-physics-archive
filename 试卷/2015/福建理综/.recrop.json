@@ -1,0 +1,39 @@
+{
+  "entries": [
+    {
+      "source": "JSON/2015/2015_福建理综/tiku_images/8001-8500/8189.png",
+      "crops": [
+        {"rect": [16, 0, 156, 122], "target": "试卷/2015/福建理综/figs/16a.png"},
+        {"rect": [194, 0, 156, 122], "target": "试卷/2015/福建理综/figs/16b.png"},
+        {"rect": [372, 0, 156, 122], "target": "试卷/2015/福建理综/figs/16c.png"},
+        {"rect": [549, 0, 156, 122], "target": "试卷/2015/福建理综/figs/16d.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "JSON/2015/2015_福建理综/tiku_images/8001-8500/8192.png",
+      "crops": [
+        {"rect": [10, 10, 148, 184], "target": "试卷/2015/福建理综/figs/19a.png"},
+        {"rect": [158, 10, 147, 184], "target": "试卷/2015/福建理综/figs/19b.png"},
+        {"rect": [310, 15, 145, 180], "target": "试卷/2015/福建理综/figs/19c.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2015/福建理综/pdfimages/p2_9.jpg",
+      "crops": [
+        {"rect": [5, 115, 312, 330], "target": "试卷/2015/福建理综/figs/19d.png"},
+        {"rect": [330, 285, 275, 140], "target": "试卷/2015/福建理综/figs/19e.png"},
+        {"rect": [628, 0, 528, 460], "target": "试卷/2015/福建理综/figs/19f.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2015/福建理综/pdfimages/p2_10.jpg",
+      "crops": [
+        {"rect": [0, 0, 262, 239], "target": "试卷/2015/福建理综/figs/19g.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}

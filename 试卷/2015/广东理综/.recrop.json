@@ -1,0 +1,37 @@
+{
+  "entries": [
+    {
+      "source": "材料处理/2015/广东理综/pdfimages/p3_5.jpg",
+      "crops": [
+        {"rect": [0, 0, 370, 320], "target": "试卷/2015/广东理综/figs/34a.png"},
+        {"rect": [370, 0, 582, 320], "target": "试卷/2015/广东理综/figs/34b.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2015/广东理综/pdfimages/p4_6.jpg",
+      "crops": [
+        {"rect": [5, 2, 517, 245], "target": "试卷/2015/广东理综/figs/34c.png"},
+        {"rect": [535, 23, 299, 233], "target": "试卷/2015/广东理综/figs/34d.png"},
+        {"rect": [887, 22, 299, 237], "target": "试卷/2015/广东理综/figs/34e.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2015/广东理综/pdfimages/p4_7.jpg",
+      "crops": [
+        {"rect": [1, 1, 350, 338], "target": "试卷/2015/广东理综/figs/34f.png"},
+        {"rect": [418, 14, 468, 296], "target": "试卷/2015/广东理综/figs/34g.png"}
+      ],
+      "trim": {"padding": 6}
+    },
+    {
+      "source": "材料处理/2015/广东理综/pdfimages/p5_8.jpg",
+      "crops": [
+        {"rect": [1, 6, 582, 251], "target": "试卷/2015/广东理综/figs/35a.png"},
+        {"rect": [588, 5, 323, 251], "target": "试卷/2015/广东理综/figs/35b.png"}
+      ],
+      "trim": {"padding": 6}
+    }
+  ]
+}
