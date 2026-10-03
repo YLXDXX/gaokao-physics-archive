@@ -11,7 +11,7 @@
 - 需要到某卷目录执行时，从根目录用：
   - `make -C 试卷/<年>/<地区> student`（不要 `cd 试卷/… && make student`）
   - `python3 tools/xxx.py 试卷/<年>/<地区>/<地区>.tex`
-  - `python3 tools/tex_links.py 试卷/<年>/<地区>`
+  - `python3 tools/tex_links.py 试卷/<年>/<地区>`（一般无需手动：`make`/`student`/`teacher` 会自动建立软链接）
 
 ## 2. 临时文件：只放 `/tmp/opencode/`
 

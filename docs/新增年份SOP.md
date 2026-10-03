@@ -48,4 +48,4 @@
 
 - [ ] `make check` 全绿；`make tools-test` 通过；`make check-docs` 通过。
 - [ ] `进度记录.md` / `异常记录/<年>.md` 已更新；`make index` 已刷新。
-- [ ] 无构建产物入库（`*.pdf`、日志、`svg-inkscape/` 均已忽略）。
+- [ ] 无编译产物入库（`*_学生版.pdf`/`*_教师版.pdf`/日志/`svg-inkscape/` 已忽略）；**`试卷/**/figs/*.pdf` 是源图，必须入库**。

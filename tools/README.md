@@ -18,12 +18,16 @@
 | `check_content.py` | 试卷**内容书写检查**：裸单位（应用 PhyUnit）、图片充当公式；并提示段落未分行 / 中英文间距（见 `LaTeX_format_ReadMe.md`） | `python3 tools/check_content.py 试卷/` |
 | `check_layout_cmds.py` | **版面微调命令检查**：禁止原生 `\newpage`/`\clearpage`/`\vfill`/`\vfil`/`\hfil`，应改用仅学生版生效的 `\gknewpage` 等（见 `LaTeX_format_ReadMe.md` 第 34 条） | `python3 tools/check_layout_cmds.py 试卷/` |
 | `textfix/` | **共性问题正则修正模块**（数字间全角冒号、行内公式连字符、`\dfrac`→`\frac`），默认只检查、`--write` 写回 | `python3 tools/textfix/textfix.py --check 试卷/` |
-| `tex_links.py` | 为各卷目录创建指向根公共文件（`gaokaozhenti.cls`/`PhyUnit.sty`/`ChoiceQuestion.sty`/`package`）的相对软链接 | `python3 tools/tex_links.py` |
+| `tex_links.py` | 为各卷目录创建指向根公共文件（`gaokaozhenti.cls`/`PhyUnit.sty`/`ChoiceQuestion.sty`/`package`）的相对软链接（各卷 Makefile 的 `make`/`student`/`teacher` 会**自动执行**，便于 TeXStudio 直接编译） | `python3 tools/tex_links.py` |
 | `gen_index.py` | **索引/进度生成与共享库**：扫描 `试卷/`，生成 `试卷/<年>/README.md`、刷新 README 进度概要、回填 `进度记录.md` 题数（`--check` 校验） | `python3 tools/gen_index.py --write`（`make index`） |
 | `review_to_ledger.py` | 由**复核结果 JSON** 生成/更新 `异常记录/<年>.md` 台账（按 `地区/题号/类别/问题` 去重、更新状态；按状态并入对应分区、状态变化时移动分区） | `python3 tools/review_to_ledger.py 复核结果.json --write` |
 | `check_docs_text.py` | **文档体检**：扫描根 / `docs/` / `tools/` 的 Markdown，检查过时 `cd` 用法与失效相对链接 | `python3 tools/check_docs_text.py` |
 | `check_docs.py` | **文档一致性校验**：`进度记录.md` ↔ `试卷/` 双向一致、状态取值、题数相符、年份索引与 `异常记录/<年>.md` 表头/状态规范及**统一结构**（制作说明 + 状态分区顺序，已解决置末） | `python3 tools/check_docs.py`（`make check-docs`，已接入 `make check`） |
 | `status.py` | **各年份进度概要**：套数、题数、进度表“已完成”计数 | `python3 tools/status.py`（`make progress`） |
+
+> **并行编译包装**：`bin/inkscape` 用 `flock` 串行化 Inkscape 调用，规避 `make -jN` 并发时
+> `Gio::DBus::Error` 崩溃；各卷 Makefile 已把 `tools/bin` 加入 `PATH`，无需手动调用
+> （无 `flock` 的系统退化为直接调用，此时应串行编译）。
 
 ## 二、材料处理（PDF → Markdown / 图片）
 

@@ -43,7 +43,8 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 │   ├── tex_to_json.py           # 成品 .tex → 档案 JSON（反向抽取）
 │   ├── textfix/                 # 共性问题正则修正模块（含规则、命令行与测试）
 │   ├── test_*.py                # 工具单元测试（make tools-test）
-│   ├── tex_links.py             # 为各卷目录建立公共文件相对软链接
+│   ├── tex_links.py             # 为各卷目录建立公共文件相对软链接（make 时自动执行）
+│   ├── bin/inkscape             # Inkscape 串行化包装（并行编译用；各卷 Makefile 已加入 PATH）
 │   ├── ocr_pipeline.sh          # PDF → Markdown 双引擎 + pdftotext 管线（单份）
 │   ├── ocr_batch.py             # 批量材料处理驱动（分阶段、断点续跑）
 │   ├── ocr_pipeline_all.sh      # 全库一键编排（自动启停服务、失败即停）
@@ -86,7 +87,8 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 └── README.md
 ```
 
-> `JSON/`、`Docx/`、`材料处理/`、`svg-inkscape/`、`试卷/**/*.pdf`（编译产物）已在 `.gitignore` 中忽略，只保留在本地。
+> `JSON/`、`Docx/`、`材料处理/`、`svg-inkscape/` 与各卷**编译产物**（`*_学生版.pdf`/`*_教师版.pdf`、
+> `TikZ/*.pdf` 等）已在 `.gitignore` 中忽略，只保留在本地；**`试卷/**/figs/*.pdf` 是源图，已入库**。
 > 入库的是**可复现的源文件**（`.tex`、`.sty`、`.cls`、`figs/`、`Makefile`、文档）。
 
 ---
