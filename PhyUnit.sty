@@ -3,33 +3,24 @@
 
 \RequirePackage{expl3}
 
-\ProvidesExplPackage{PhyUnit}{2026-09-16}{0.2}{中学物理单位}
+\ProvidesExplPackage{PhyUnit}{2026-10-04}{0.3}{中学物理单位}
+
+% 直立 μ（\upmu）：若存在 upgreek 宏包则加载，否则给出等价回退定义，
+% 用于 \Uum、\UuA、\UmuF、\UuWb 等带 μ 词头的单位。
+\file_if_exist:nTF { upgreek.sty }
+  { \RequirePackage { upgreek } }
+  { \cs_new_protected:Npn \upmu { \ensuremath { \mathrm { \mu } } } }
 
 
 
 %
 %常见中学物理单位，包括一些非国际制单位和一些常见的其它学科单位
 %
-% ── 新增单位规范（如遇到本文件没有的单位，可在此新增）────────────────────
-%  1. 命令名：\U + 单位符号（去空格），前缀并入，如 keV→\UkeV、GeV→\UGeV、
-%     THz→\UTHZ、kPa→\UkPa；同一单位有 μ/u 两种写法时可并存别名（见 \UuA/\UmuA）。
-%  2. 统一形式：\NewDocumentCommand \Uxxx { O{} } { \__phyunit_space:n{#1} <正文> }
-%     可选参数 O{} 用于传入 "a" 以抑制前导细空格（\__phyunit_space:n 已处理）；
-%     正文一律 \mathrm{...}，乘号用 \cdot，斜杠用 /，上/下标用 ^/_（如 \mathrm{m}/\mathrm{s}^2）。
-%  3. 每行末尾必须写清注释，格式为「类别：符号 中文全称」，
-%     例如 % 能量：keV 千电子伏特。
-%  4. 新增请**追加到文件末尾**（或同类单位之后），避免与既有命名冲突；
-%     新增后应能被各卷直接 \Uxxx 调用，禁止在正文里裸写单位。
-%
 
 
 \cs_new:Npn \__phyunit_space:n #1 { \str_if_eq:nnTF {#1} {a} {} {\,} }
 
-% \upmu 回退定义：本包微前缀单位（\Uum/\UuA/\UmuA…）用到 \upmu，
-% 它通常由 upgreek 提供；本包不强制依赖 upgreek，未定义时给出等价定义。
-\cs_if_exist:NF \upmu { \cs_new_protected:Npn \upmu { \ensuremath { \mathrm { \mu } } } }
-
-\NewDocumentCommand \UAi {O{}} {\__phyunit_space:n{#1}\mathrm{\mathring{A}}} % Å（长度，埃）
+\NewDocumentCommand \UAi {O{}} {\__phyunit_space:n{#1}\mathring{\mathrm{A}}} % Å（长度，埃）
 \NewDocumentCommand \UAm {O{}} {\__phyunit_space:n{#1}\mathrm{A}\cdot\mathrm{m}} % A·m
 \NewDocumentCommand \UA {O{}} {\__phyunit_space:n{#1}\mathrm{A}} % A （电流）
 \NewDocumentCommand \UAs {O{}} {\__phyunit_space:n{#1}\mathrm{A}/\mathrm{s}} % A/s （电流强度变化率）
@@ -149,8 +140,8 @@
 \NewDocumentCommand \UmuA {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{A}} % μA （电流，微安）
 \NewDocumentCommand \UmA {O{}} {\__phyunit_space:n{#1}\mathrm{mA}} % mA （电流，毫安）
 \NewDocumentCommand \Uu {O{}} {\__phyunit_space:n{#1}\mathrm{u}} % u （原子质量单位）
-\NewDocumentCommand \UuF {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{F}} % uF （电容）
-\NewDocumentCommand \UmuF {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{F}} % uF （电容）
+\NewDocumentCommand \UuF {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{F}} % μF （电容）
+\NewDocumentCommand \UmuF {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{F}} % μF （电容）
 \NewDocumentCommand \UuH {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{H}} % μH （自感系数）
 \NewDocumentCommand \UmuH {O{}} {\__phyunit_space:n{#1}\upmu\mathrm{H}} % μH （自感系数）
 \NewDocumentCommand \UVm {O{}} {\__phyunit_space:n{#1}\mathrm{V}/\mathrm{m}} % V/m （同电场强度）
@@ -183,48 +174,48 @@
 \NewDocumentCommand \UAU {O{}} {\__phyunit_space:n{#1}\mathrm{AU}} % AU （天文单位）
 \NewDocumentCommand \Ucd {O{}} {\__phyunit_space:n{#1}\mathrm{cd}} % cd 发光强度
 \NewDocumentCommand \Ut {O{}} {\__phyunit_space:n{#1}\mathrm{t}} % t 质量单位（吨）
-\NewDocumentCommand \Upm { O{} } { \__phyunit_space:n{#1} \mathrm{pm} } % 长度：fm
+\NewDocumentCommand \Upm { O{} } { \__phyunit_space:n{#1} \mathrm{pm} } % 长度：pm
 \NewDocumentCommand \Ufm { O{} } { \__phyunit_space:n{#1} \mathrm{fm} } % 长度：fm
 \NewDocumentCommand \UmsT { O{} } { \__phyunit_space:n{#1} \mathrm{ms} } % 时间：ms 毫秒
-\NewDocumentCommand \Uus  { O{} } { \__phyunit_space:n{#1} \mu\mathrm{s} } % 时间：μs
+\NewDocumentCommand \Uus  { O{} } { \__phyunit_space:n{#1} \upmu\mathrm{s} } % 时间：μs
 \NewDocumentCommand \Uns  { O{} } { \__phyunit_space:n{#1} \mathrm{ns} } % 时间：ns
 \NewDocumentCommand \Ud   { O{} } { \__phyunit_space:n{#1} \mathrm{d} } % 时间： d（天）
 \NewDocumentCommand \UkA { O{} } { \__phyunit_space:n{#1} \mathrm{kA} } % 电流：kA
 \NewDocumentCommand \UnA { O{} } { \__phyunit_space:n{#1} \mathrm{nA} } % 电流：nA
 \NewDocumentCommand \UpA { O{} } { \__phyunit_space:n{#1} \mathrm{pA} } % 电流：pA
-\NewDocumentCommand \UuV { O{} } { \__phyunit_space:n{#1} \mu\mathrm{V} } % 电压：μV
+\NewDocumentCommand \UuV { O{} } { \__phyunit_space:n{#1} \upmu\mathrm{V} } % 电压：μV
 \NewDocumentCommand \UMV { O{} } { \__phyunit_space:n{#1} \mathrm{MV} } % 电压：MV
 \NewDocumentCommand \UmO { O{} } { \__phyunit_space:n{#1} \mathrm{m}\Omega } % 电阻：mΩ
 \NewDocumentCommand \UGO { O{} } { \__phyunit_space:n{#1} \mathrm{G}\Omega } % 电阻：GΩ
 \NewDocumentCommand \UmF { O{} } { \__phyunit_space:n{#1} \mathrm{mF} } % 电容：mF
 \NewDocumentCommand \UnH { O{} } { \__phyunit_space:n{#1} \mathrm{nH} } % 电感：nH
 \NewDocumentCommand \UGHz { O{} } { \__phyunit_space:n{#1} \mathrm{GHz} } % 频率：GHz
-\NewDocumentCommand \Uug { O{} } { \__phyunit_space:n{#1} \mu\mathrm{g} } % 质量：μg
+\NewDocumentCommand \Uug { O{} } { \__phyunit_space:n{#1} \upmu\mathrm{g} } % 质量：μg
 \NewDocumentCommand \Ung { O{} } { \__phyunit_space:n{#1} \mathrm{ng} } % 质量：ng
 \NewDocumentCommand \Ummol { O{} } { \__phyunit_space:n{#1} \mathrm{mmol} } % 物质的量：mmol
-\NewDocumentCommand \Uumol { O{} } { \__phyunit_space:n{#1} \mu\mathrm{mol} }  % 物质的量： μmol
+\NewDocumentCommand \Uumol { O{} } { \__phyunit_space:n{#1} \upmu\mathrm{mol} }  % 物质的量： μmol
 \NewDocumentCommand \UMJ { O{} } { \__phyunit_space:n{#1} \mathrm{MJ} } % 能量：MJ
 \NewDocumentCommand \UmJ { O{} } { \__phyunit_space:n{#1} \mathrm{mJ} } % 能量：mJ
-\NewDocumentCommand \UuJ { O{} } { \__phyunit_space:n{#1} \mu\mathrm{J} } % 能量：μJ
+\NewDocumentCommand \UuJ { O{} } { \__phyunit_space:n{#1} \upmu\mathrm{J} } % 能量：μJ
 \NewDocumentCommand \UMW { O{} } { \__phyunit_space:n{#1} \mathrm{MW} } % 功率：MW
 \NewDocumentCommand \UmW { O{} } { \__phyunit_space:n{#1} \mathrm{mW} } % 功率：mW
 \NewDocumentCommand \UMPa { O{} } { \__phyunit_space:n{#1} \mathrm{MPa} } % 压强：MPa
 \NewDocumentCommand \UhPa { O{} } { \__phyunit_space:n{#1} \mathrm{hPa} } % 压强：hPa 百帕
 \NewDocumentCommand \UmC { O{} } { \__phyunit_space:n{#1} \mathrm{mC} } % 电荷：mC
-\NewDocumentCommand \UuC { O{} } { \__phyunit_space:n{#1} \mu\mathrm{C} } % 电荷：μC
+\NewDocumentCommand \UuC { O{} } { \__phyunit_space:n{#1} \upmu\mathrm{C} } % 电荷：μC
 \NewDocumentCommand \UnC { O{} } { \__phyunit_space:n{#1} \mathrm{nC} } % 电荷： nC
 \NewDocumentCommand \Ugcmc { O{} } { \__phyunit_space:n{#1} \mathrm{g}/\mathrm{cm}^3 } % 密度：g/cm^3
 \NewDocumentCommand \UmolL { O{} } { \__phyunit_space:n{#1} \mathrm{mol}/\mathrm{L} } % 物质的量浓度：mol/L
 \NewDocumentCommand \Ukcal { O{} } { \__phyunit_space:n{#1} \mathrm{kcal} } % 热量：kcal
-\NewDocumentCommand \UWh { O{} } { \__phyunit_space:n{#1} \mathrm{W}\cdot\mathrm{h} } % 电能：Wh
+\NewDocumentCommand \UWh { O{} } { \__phyunit_space:n{#1} \mathrm{W}\cdot\mathrm{h} } % 电能：W·h
 \NewDocumentCommand \UAh { O{} } { \__phyunit_space:n{#1} \mathrm{A}\cdot\mathrm{h} } % 电能：A·h
 \NewDocumentCommand \ULs   { O{} } { \__phyunit_space:n{#1} \mathrm{L}/\mathrm{s} } % 流量：L/s,
-\NewDocumentCommand \ULmin { O{} } { \__phyunit_space:n{#1} \mathrm{L}/\mathrm{min} } % 流量： m^3/h
+\NewDocumentCommand \ULmin { O{} } { \__phyunit_space:n{#1} \mathrm{L}/\mathrm{min} } % 流量：L/min
 \NewDocumentCommand \Umch  { O{} } { \__phyunit_space:n{#1} \mathrm{m}^3/\mathrm{h} } % 流量： m^3/h
 \NewDocumentCommand \UkVm  { O{} } { \__phyunit_space:n{#1} \mathrm{kV}/\mathrm{m} } % 电场强度：kV/m,
 \NewDocumentCommand \UkVcm { O{} } { \__phyunit_space:n{#1} \mathrm{kV}/\mathrm{cm} } % 电场强度：kV/cm
 \NewDocumentCommand \UmT { O{} } { \__phyunit_space:n{#1} \mathrm{mT} } % 磁场：mT,
-\NewDocumentCommand \UuT { O{} } { \__phyunit_space:n{#1} \mu\mathrm{T} } % 磁场：μT
+\NewDocumentCommand \UuT { O{} } { \__phyunit_space:n{#1} \upmu\mathrm{T} } % 磁场：μT
 \NewDocumentCommand \UGs { O{} } { \__phyunit_space:n{#1} \mathrm{Gs} } % 磁场： Gs（高斯）
 \NewDocumentCommand \UMx { O{} } { \__phyunit_space:n{#1} \mathrm{Mx} } % 磁场： Mx（麦克斯韦）
 \NewDocumentCommand \Ulx { O{} } { \__phyunit_space:n{#1} \mathrm{lx} } % 光照：lx
@@ -245,76 +236,103 @@
 \NewDocumentCommand \UcalgdC { O{} } { \__phyunit_space:n{#1} \mathrm{cal}/(\mathrm{g}\cdot{}^\circ\mathrm{C}) } % cal/(g·℃) 化学/热学
 \NewDocumentCommand \UkcalKgdC { O{} } { \__phyunit_space:n{#1} \mathrm{kcal}/(\mathrm{kg}\cdot{}^\circ\mathrm{C}) } % kcal/(kg·℃) 化学/热学
 
-% ── 新增单位（2026-10-02）：按「类别：符号 中文全称」注释 ─────────────────
-\NewDocumentCommand \UkeV { O{} } { \__phyunit_space:n{#1} \mathrm{keV} } % 能量：keV 千电子伏特
-\NewDocumentCommand \UGeV { O{} } { \__phyunit_space:n{#1} \mathrm{GeV} } % 能量：GeV 吉电子伏特
-\NewDocumentCommand \UTHZ { O{} } { \__phyunit_space:n{#1} \mathrm{THz} } % 频率：THz 太赫兹
-\NewDocumentCommand \Umms { O{} } { \__phyunit_space:n{#1} \mathrm{mm}/\mathrm{s} } % 速度：mm/s 毫米每秒
-\NewDocumentCommand \UNmm { O{} } { \__phyunit_space:n{#1} \mathrm{N}/\mathrm{mm} } % 劲度系数：N/mm 牛每毫米
-\NewDocumentCommand \Ukgm { O{} } { \__phyunit_space:n{#1} \mathrm{kg}/\mathrm{m} } % 质量线密度：kg/m 千克每米
+%
+% ── 以下为各学科项目新增单位的整合（v0.3）────────────────────────────────
+%
 
+% 面积
+\NewDocumentCommand \Ukmq { O{} } { \__phyunit_space:n{#1} \mathrm{km}^2 } % km^2 （面积）
+
+% 质量
+\NewDocumentCommand \Ukgm { O{} } { \__phyunit_space:n{#1} \mathrm{kg}/\mathrm{m} } % 质量线密度：kg/m 千克每米
+\NewDocumentCommand \UGeVcSq { O{} } { \__phyunit_space:n{#1} \mathrm{GeV}/\mathrm{c}^{2} } % 质量：GeV/c² 吉电子伏特每光速平方
+\NewDocumentCommand \UMeVcSq { O{} } { \__phyunit_space:n{#1} \mathrm{MeV}/\mathrm{c}^{2} } % 质量：MeV/c² 兆电子伏特每光速平方
+
+% 时间
+\NewDocumentCommand \Ufs { O{} } { \__phyunit_space:n{#1} \mathrm{fs} } % 时间：fs 飞秒
+\NewDocumentCommand \Ups { O{} } { \__phyunit_space:n{#1} \mathrm{ps} } % 时间：ps 皮秒
+
+% 速度
+\NewDocumentCommand \Umh { O{} } { \__phyunit_space:n{#1} \mathrm{m}/\mathrm{h} } % m/h （速度）
+\NewDocumentCommand \Umms { O{} } { \__phyunit_space:n{#1} \mathrm{mm}/\mathrm{s} } % 速度：mm/s 毫米每秒
+\NewDocumentCommand \Umqs { O{} } { \__phyunit_space:n{#1} \mathrm{m}^2/\mathrm{s} } % 复合：m²/s 平方米每秒（运动黏度）
+
+% 力
+\NewDocumentCommand \UmN { O{} } { \__phyunit_space:n{#1} \mathrm{mN} } % 力：mN 毫牛
+\NewDocumentCommand \UNmm { O{} } { \__phyunit_space:n{#1} \mathrm{N}/\mathrm{mm} } % 劲度系数：N/mm 牛每毫米
+\NewDocumentCommand \UNmn { O{} } { \__phyunit_space:n{#1} \mathrm{m}/\mathrm{N} } % 劲度系数倒数：m/N 米每牛（与毫牛 \UmN 区分）
 \NewDocumentCommand \UNsqmq { O{} } { \__phyunit_space:n{#1} \mathrm{N}\cdot\mathrm{s}^2/\mathrm{m}^2 } % 复合：N·s²/m² 牛秒平方每平方米
 
-\NewDocumentCommand \Umqs { O{} } { \__phyunit_space:n{#1} \mathrm{m}^2/\mathrm{s} } % 速度面积积：m²/s 平方米每秒
+% 压强
+\NewDocumentCommand \Ukgcmq { O{} } { \__phyunit_space:n{#1} \mathrm{kg}/\mathrm{cm}^2 } % 压强：kg/cm² 千克每平方厘米
 
-% ── 新增单位（2026-10-02）：按「类别：符号 中文全称」注释 ─────────────────
+% 能量与功
+\NewDocumentCommand \UGeV { O{} } { \__phyunit_space:n{#1} \mathrm{GeV} } % 能量：GeV 吉电子伏特
+\NewDocumentCommand \UkeV { O{} } { \__phyunit_space:n{#1} \mathrm{keV} } % 能量：keV 千电子伏特
+\NewDocumentCommand \UeVm { O{} } { \__phyunit_space:n{#1} \mathrm{eV}\cdot\mathrm{m} } % eV·m （hc 的单位）
+\NewDocumentCommand \UJg { O{} } { \__phyunit_space:n{#1} \mathrm{J}/\mathrm{g} } % 比热/潜热：J/g 焦耳每克
+\NewDocumentCommand \UJgdC { O{} } { \__phyunit_space:n{#1} \mathrm{J}/(\mathrm{g}\cdot{}^\circ\mathrm{C}) } % 比热：J/(g·℃) 焦耳每克摄氏度
+\NewDocumentCommand \UJm { O{} } { \__phyunit_space:n{#1} \mathrm{J}/\mathrm{m} } % 复合：J/m 焦耳每米
+\NewDocumentCommand \UJmc { O{} } { \__phyunit_space:n{#1} \mathrm{J}/\mathrm{m}^{3} } % J/m^3 （能量密度）
+\NewDocumentCommand \UJsmq { O{} } { \__phyunit_space:n{#1} \mathrm{J}/(\mathrm{s}\cdot\mathrm{m}^2) } % J/(s·m^2) （能流密度、太阳辐射功率密度）
+\NewDocumentCommand \UkJg { O{} } { \__phyunit_space:n{#1} \mathrm{kJ}/\mathrm{g} } % kJ/g （熔解热、汽化热）
+\NewDocumentCommand \Ukgmqs { O{} } { \__phyunit_space:n{#1} \mathrm{kg}\cdot\mathrm{m}^2/\mathrm{s} } % 复合：kg·m²/s 千克二次方米每秒（普朗克常量单位）
+
+% 功率
+\NewDocumentCommand \Ukgmqsc { O{} } { \__phyunit_space:n{#1} \mathrm{kg}\cdot\mathrm{m}^{2}/\mathrm{s}^{3} } % 功率：kg·m²/s³ 千克二次方米每秒三次方
+
+% 电流
+\NewDocumentCommand \UAmq { O{} } { \__phyunit_space:n{#1} \mathrm{A}/\mathrm{m}^{2} } % A/m^2 （电流密度）
+
+% 电压
+\NewDocumentCommand \UCF { O{} } { \__phyunit_space:n{#1} \mathrm{C}/\mathrm{F} } % 电压等效单位：C/F 库仑每法拉
+\NewDocumentCommand \UTmqs { O{} } { \__phyunit_space:n{#1} \mathrm{T}\cdot\mathrm{m}^{2}/\mathrm{s} } % 电压等效单位：T·m²/s 特斯拉二次方米每秒
+\NewDocumentCommand \UWA { O{} } { \__phyunit_space:n{#1} \mathrm{W}/\mathrm{A} } % 电压等效单位：W/A 瓦每安培
+
+% 电阻与电阻率 / 电导
+\NewDocumentCommand \UOmdiv { O{} } { \__phyunit_space:n{#1} \Omega/\mathrm{m} } % Ω/m （导线单位长度电阻）
+\NewDocumentCommand \UOpm { O{} } { \__phyunit_space:n{#1} \Omega/\mathrm{m} } % 电阻线密度：Ω/m 欧姆每米（同 \UOmdiv）
+\NewDocumentCommand \UOmn { O{} } { \__phyunit_space:n{#1} \Omega^{-1}\cdot\mathrm{m}^{-1} } % Ω^{-1}·m^{-1} （电导率）
+\NewDocumentCommand \USm { O{} } { \__phyunit_space:n{#1} \mathrm{S}/\mathrm{m} } % S/m （电导率，同 \UOmn）
+
+% 电容
+\NewDocumentCommand \UFm { O{} } { \__phyunit_space:n{#1} \mathrm{F}/\mathrm{m} } % F/m （介电常数 ε 的单位）
+\NewDocumentCommand \UMF { O{} } { \__phyunit_space:n{#1} \mathrm{MF} } % 电容：MF 兆法拉
+
+% 磁学
+\NewDocumentCommand \UCTms { O{} } { \__phyunit_space:n{#1} \mathrm{C}\cdot\mathrm{T}\cdot\mathrm{m}/\mathrm{s} } % 复合单位：C·T·m/s 库仑特斯拉米每秒
+\NewDocumentCommand \UTA { O{} } { \__phyunit_space:n{#1} \mathrm{T}/\mathrm{A} } % 磁场系数：T/A 特斯拉每安培
+\NewDocumentCommand \UTAm { O{} } { \__phyunit_space:n{#1} \mathrm{T}\cdot\mathrm{A}\cdot\mathrm{m} } % 复合单位：T·A·m 特斯拉安培米
+\NewDocumentCommand \UTmA { O{} } { \__phyunit_space:n{#1} \mathrm{T}\cdot\mathrm{m}/\mathrm{A} } % 磁场系数：T·m/A 特斯拉米每安培
+\NewDocumentCommand \UTs { O{} } { \__phyunit_space:n{#1} \mathrm{T}/\mathrm{s} } % 磁场变化率：T/s 特斯拉每秒
 \NewDocumentCommand \UuWb { O{} } { \__phyunit_space:n{#1} \upmu\mathrm{Wb} } % 磁通量：μWb 微韦伯
 \NewDocumentCommand \UmuWb { O{} } { \__phyunit_space:n{#1} \upmu\mathrm{Wb} } % 磁通量：μWb 微韦伯
 
-\NewDocumentCommand \UGeVcSq { O{} } { \__phyunit_space:n{#1} \mathrm{GeV}/\mathrm{c}^{2} } % 质量：GeV/c² 吉电子伏特每光速平方
+% 频率
+\NewDocumentCommand \UTHZ { O{} } { \__phyunit_space:n{#1} \mathrm{THz} } % 频率：THz 太赫兹
 
-\NewDocumentCommand \UTs { O{} } { \__phyunit_space:n{#1} \mathrm{T}/\mathrm{s} } % 磁场变化率：T/s 特斯拉每秒
+% 温度
+\NewDocumentCommand \UdCn { O{} } { \__phyunit_space:n{#1} {}^\circ\mathrm{C}^{-1} } % ℃^{-1} （电阻率温度系数的单位）
+\NewDocumentCommand \UKn { O{} } { \__phyunit_space:n{#1} \mathrm{K}^{-1} } % K^{-1} （线膨胀系数、温度系数的单位）
 
-\NewDocumentCommand \UMeVcSq { O{} } { \__phyunit_space:n{#1} \mathrm{MeV}/\mathrm{c}^{2} } % 质量：MeV/c² 兆电子伏特每光速平方
+% 摩尔与热学量
+\NewDocumentCommand \UJK { O{} } { \__phyunit_space:n{#1} \mathrm{J}/\mathrm{K} } % J/K （热容量、玻尔兹曼常量的单位）
+\NewDocumentCommand \UJKmol { O{} } { \__phyunit_space:n{#1} \mathrm{J}\cdot\mathrm{K}^{-1}\cdot\mathrm{mol}^{-1} } % 定压摩尔热容：J·K⁻¹·mol⁻¹ 焦耳每开尔文摩尔
+\NewDocumentCommand \UmK { O{} } { \__phyunit_space:n{#1} \mathrm{m}\cdot\mathrm{K} } % m·K （维恩位移定律常量 b 的单位）
+\NewDocumentCommand \UWmqKq { O{} } { \__phyunit_space:n{#1} \mathrm{W}/(\mathrm{m}^2\cdot\mathrm{K}^4) } % W/(m^2·K^4) （斯特藩-玻尔兹曼常量 σ 的单位）
+\NewDocumentCommand \Ukgmqskmol { O{} } { \__phyunit_space:n{#1} \mathrm{kg}\cdot\mathrm{m}^{2}\cdot\mathrm{s}^{-2}\cdot\mathrm{K}^{-1}\cdot\mathrm{mol}^{-1} } % 复合：kg·m²·s⁻²·K⁻¹·mol⁻¹（摩尔气体常量 R 的基本单位）
 
+% 密度与浓度
+\NewDocumentCommand \UgL { O{} } { \__phyunit_space:n{#1} \mathrm{g}/\mathrm{L} } % g/L （密度）
+
+% 电磁学常量单位
+\NewDocumentCommand \UCqNmq { O{} } { \__phyunit_space:n{#1} \mathrm{C}^{2}/(\mathrm{N}\cdot\mathrm{m}^{2}) } % 复合单位：C²/(N·m²) 库仑平方每牛二次方米（真空电容率 ε₀ 单位）
 \NewDocumentCommand \UkgmcmsqAq { O{} } { \__phyunit_space:n{#1} \mathrm{kg}\cdot\mathrm{m}^{3}\cdot\mathrm{s}^{-4}\cdot\mathrm{A}^{-2} } % 复合：kg·m³·s⁻⁴·A⁻² 静电力常量 k 的基本单位
 
-% ── 新增单位（2026-10-02）：按「类别：符号 中文全称」注释 ─────────────────
-\NewDocumentCommand \UJm { O{} } { \__phyunit_space:n{#1} \mathrm{J}/\mathrm{m} } % 复合：J/m 焦耳每米
-
-\NewDocumentCommand \UOpm { O{} } { \__phyunit_space:n{#1} \Omega/\mathrm{m} } % 电阻线密度：Ω/m 欧姆每米
-
-\NewDocumentCommand \UTmA { O{} } { \__phyunit_space:n{#1} \mathrm{T}\cdot\mathrm{m}/\mathrm{A} } % 磁场系数：T·m/A 特斯拉米每安培
-
-% ── 新增单位（2021 上海）：按「类别：符号 中文全称」注释 ─────────────────
-\NewDocumentCommand \UJKmol { O{} } { \__phyunit_space:n{#1} \mathrm{J}\cdot\mathrm{K}^{-1}\cdot\mathrm{mol}^{-1} } % 定压摩尔热容：J·K⁻¹·mol⁻¹ 焦耳每开尔文摩尔
-
-\NewDocumentCommand \Ukgmqskmol { O{} } { \__phyunit_space:n{#1} \mathrm{kg}\cdot\mathrm{m}^{2}\cdot\mathrm{s}^{-2}\cdot\mathrm{K}^{-1}\cdot\mathrm{mol}^{-1} } % 复合：kg·m²·s⁻²·K⁻¹·mol⁻¹
-
-% ── 新增单位（2024 1月浙江）：按「类别：符号 中文全称」注释 ─────────────────
-\NewDocumentCommand \UTA { O{} } { \__phyunit_space:n{#1} \mathrm{T}/\mathrm{A} } % 磁场系数：T/A 特斯拉每安培
-
-% ── 新增单位（2022 福建）：按「类别：符号 中文全称」注释 ─────────────────
-\NewDocumentCommand \UmN { O{} } { \__phyunit_space:n{#1} \mathrm{mN} } % 力：mN 毫牛
-
-% ── 新增单位（2021 1月浙江）：按「类别：符号 中文全称」注释 ─────────────────
-\NewDocumentCommand \Ukgmqsc { O{} } { \__phyunit_space:n{#1} \mathrm{kg}\cdot\mathrm{m}^{2}/\mathrm{s}^{3} } % 功率：kg·m²/s³ 千克二次方米每秒三次方
-
-% ── 新增单位（2020 海南）：按「类别：符号 中文全称」注释 ─────────────────
+% 流量
 \NewDocumentCommand \Ugs { O{} } { \__phyunit_space:n{#1} \mathrm{g}/\mathrm{s} } % 质量流量：g/s 克每秒
 
-% ── 新增单位（2019 天津理综）：按「类别：符号 中文全称」注释 ─────────────────
-\NewDocumentCommand \Ukgmqs { O{} } { \__phyunit_space:n{#1} \mathrm{kg}\cdot\mathrm{m}^2/\mathrm{s} } % 复合：kg·m²/s 千克二次方米每秒（普朗克常量单位）
-
-% ── 新增单位（2016 江苏理综）：按「类别：符号 中文全称」注释 ─────────────────
-\NewDocumentCommand \UNmn { O{} } { \__phyunit_space:n{#1} \mathrm{m}/\mathrm{N} } % 劲度系数倒数：m/N 米每牛（与毫牛 \UmN 区分）
-
-% ── 新增单位（2011 北京理综）：按「类别：符号 中文全称」注释 ─────────────────
-\NewDocumentCommand \UCF { O{} } { \__phyunit_space:n{#1} \mathrm{C}/\mathrm{F} } % 电压等效单位：C/F 库仑每法拉
-\NewDocumentCommand \UWA { O{} } { \__phyunit_space:n{#1} \mathrm{W}/\mathrm{A} } % 电压等效单位：W/A 瓦每安培
-\NewDocumentCommand \UTmqs { O{} } { \__phyunit_space:n{#1} \mathrm{T}\cdot\mathrm{m}^{2}/\mathrm{s} } % 电压等效单位：T·m²/s 特斯拉二次方米每秒
-\NewDocumentCommand \UCTms { O{} } { \__phyunit_space:n{#1} \mathrm{C}\cdot\mathrm{T}\cdot\mathrm{m}/\mathrm{s} } % 复合单位：C·T·m/s 库仑特斯拉米每秒
-\NewDocumentCommand \UTAm { O{} } { \__phyunit_space:n{#1} \mathrm{T}\cdot\mathrm{A}\cdot\mathrm{m} } % 复合单位：T·A·m 特斯拉安培米
-
-% ── 新增单位（2010 上海）：按「类别：符号 中文全称」注释 ─────────────────
-\NewDocumentCommand \UCqNmq { O{} } { \__phyunit_space:n{#1} \mathrm{C}^{2}/(\mathrm{N}\cdot\mathrm{m}^{2}) } % 复合单位：C²/(N·m²) 库仑平方每牛二次方米（真空电容率 ε₀ 单位）
-
-% ── 新增单位（2007 广东理科基础）：按「类别：符号 中文全称」注释 ─────────────────
-\NewDocumentCommand \UMF { O{} } { \__phyunit_space:n{#1} \mathrm{MF} } % 电容：MF 兆法拉
-
-% ── 新增单位（2000年以前 1979 全国）：按「类别：符号 中文全称」注释 ─────────────────
-\NewDocumentCommand \UJg { O{} } { \__phyunit_space:n{#1} \mathrm{J}/\mathrm{g} } % 比热/潜热：J/g 焦耳每克
-\NewDocumentCommand \UJgdC { O{} } { \__phyunit_space:n{#1} \mathrm{J}/(\mathrm{g}\cdot{}^\circ\mathrm{C}) } % 比热：J/(g·℃) 焦耳每克摄氏度
-\NewDocumentCommand \Ukgcmq { O{} } { \__phyunit_space:n{#1} \mathrm{kg}/\mathrm{cm}^2 } % 压强：kg/cm² 千克每平方厘米
+% 迁移率等
+\NewDocumentCommand \UmqsmV { O{} } { \__phyunit_space:n{#1} \mathrm{m}^{2}/(\mathrm{s}\cdot\mathrm{V}) } % m^2/(s·V) （离子迁移率）
 
 \endinput
