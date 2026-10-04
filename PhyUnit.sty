@@ -3,7 +3,7 @@
 
 \RequirePackage{expl3}
 
-\ProvidesExplPackage{PhyUnit}{2026-10-04}{0.3}{中学物理单位}
+\ProvidesExplPackage{PhyUnit}{2026-10-04}{0.3.1}{中学物理单位}
 
 % 直立 μ（\upmu）：若存在 upgreek 宏包则加载，否则给出等价回退定义，
 % 用于 \Uum、\UuA、\UmuF、\UuWb 等带 μ 词头的单位。
@@ -54,7 +54,7 @@
 \NewDocumentCommand \UH {O{}} {\__phyunit_space:n{#1}\mathrm{H}} % H （自感系数）
 \NewDocumentCommand \UHs {O{}} {\__phyunit_space:n{#1}\mathrm{H}/\mathrm{s}} % H/s （同电阻）
 \NewDocumentCommand \UHz {O{}} {\__phyunit_space:n{#1}\mathrm{Hz}} % Hz （频率）
-\NewDocumentCommand \UJcal {O{}} {\__phyunit_space:n{#1}\mathrm{J}/\mathrm{cal}} % 热功当量单位
+\NewDocumentCommand \UJcal {O{}} {\__phyunit_space:n{#1}\mathrm{J}/\mathrm{cal}} % 热功当量：J/cal 焦耳每卡
 \NewDocumentCommand \UJcdots {O{}} {\__phyunit_space:n{#1}\mathrm{J}\cdot\mathrm{s}} % J·s（普朗克常数 h 单位）
 \NewDocumentCommand \UJC {O{}} {\__phyunit_space:n{#1}\mathrm{J}/\mathrm{C}} % J/C （同电压）
 \NewDocumentCommand \UJkgdC {O{}} {\__phyunit_space:n{#1}\mathrm{J}/(\mathrm{kg}\cdot{}^\circ\mathrm{C})} % 比热 J/(kg·℃)
@@ -68,7 +68,7 @@
 \NewDocumentCommand \Ukgmc {O{}} {\__phyunit_space:n{#1}\mathrm{kg}/\mathrm{m}^3} % kg/m^3 （密度）
 \NewDocumentCommand \Ukgmol {O{}} {\__phyunit_space:n{#1}\mathrm{kg}/\mathrm{mol}} % kg/mol （摩尔质量单位，化学当量）
 \NewDocumentCommand \Ukgmsq {O{}} {\__phyunit_space:n{#1}\mathrm{kg}\cdot\mathrm{m}/\mathrm{s}^2} % kg·m/s^2 （力的单位，F=ma）
-\NewDocumentCommand \Ukgmqsq {O{}} {\__phyunit_space:n{#1}\mathrm{kg}\cdot\mathrm{m}^2\cdot\mathrm{s}^{-2}} % kg·m^2/s^2 （能量的单位，J）
+\NewDocumentCommand \Ukgmqsq {O{}} {\__phyunit_space:n{#1}\mathrm{kg}\cdot\mathrm{m}^2\cdot\mathrm{s}^{-2}} % kg·m²·s⁻² （能量的单位，J）
 \NewDocumentCommand \Ukgms {O{}} {\__phyunit_space:n{#1}\mathrm{kg}\cdot\mathrm{m}/\mathrm{s}} % kg·m/s （冲量动量单位，p=mv）
 \NewDocumentCommand \Ukg {O{}} {\__phyunit_space:n{#1}\mathrm{kg}} % kg （质量）
 \NewDocumentCommand \Ukgs {O{}} {\__phyunit_space:n{#1}\mathrm{kg}/\mathrm{s}} % kg/s
