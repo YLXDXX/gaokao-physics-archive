@@ -5,10 +5,15 @@
 收集各年份、各地区的高考物理真题，按**统一版式与规范**制作成一份份**可独立编译**的
 LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质量高考真题库建设提供数据基础。
 
+项目地址：
+
+- Gitee：[https://gitee.com/ylxdxx/gaokao-physics-archive](https://gitee.com/ylxdxx/gaokao-physics-archive)
+- Github：[https://github.com/YLXDXX/gaokao-physics-archive](https://github.com/YLXDXX/gaokao-physics-archive)
+
 > 本项目的若干工程经验：
 > **去中心化**（每份卷独立目录、独立 `Makefile`、独立图片）、公共样式只在根目录一份、
 > 材料处理采用**双 OCR 引擎 + pdftotext 交叉验证**、题目统一以 `ChoiceQuestion.sty`
-> 的图片命令与答案/解析命令排版。
+> 的选择题命令图片命令与答案/解析命令排版、各内容统一使用 `PhyUnit.sty` 排版物理单位。
 
 ---
 
@@ -190,3 +195,16 @@ TeX / 中文字体自动回退 / poppler / splitpicture / OCR / Python 依赖等
 **[`docs/运行环境.md`](docs/运行环境.md)**。要点：本地 TeX Live 2025（`xelatex` + `latexmk`，
 `svg` 经 Inkscape，编译开启 `-shell-escape`）；中文字体在有/无 Windows 字体的系统均可编译；
 材料处理脚本需 Conda 环境与 PaddleOCR-VL 服务。
+
+## 七、一点说明
+
+特别感谢上海第八中学的范老师，他分门别类对各年高考题做了精心整理，无私分享，提供了本项目最基本的原始材料，他的小站 [enjoyphysics.cn](https://enjoyphysics.cn/) 做得很好，大家可以去看一下。
+
+高考真题库的建议当前还有大量工作未完成，需要各位的通力合作，现需刷题、校对、排版、制图、编程等各方面人手，感兴趣的小伙伴可以通过邮件（ylxdxx@qq.com）联系我。
+
+愿:
+
+> 古今共栽树，天下齐乘凉
+
+---
+
