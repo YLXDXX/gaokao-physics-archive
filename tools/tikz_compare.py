@@ -34,7 +34,20 @@ TikZ 重画（``TikZ/<名>.tex`` → ``TikZ/<名>.pdf``）；稍微复杂或实�
 
     python3 tools/tikz_compare.py <目录>          # 试卷/<年>/<地区> 目录（含 TikZ/）
     python3 tools/tikz_compare.py <目录> --dpi 200
+    python3 tools/tikz_compare.py <目录> --no-orphans   # 只处理正文引用到的 TikZ
     make tikz-compare                            # 全项目（根目录）
+
+两种提交方式都能处理
+-------------------
+- **标准（推荐）**：``TikZ/`` 下有 ``tikz_sources.json`` 登记原图，且本卷 ``.tex``
+  已用 ``\\onepicture{TikZ/<名>.pdf}`` 接入。按文档分张生成对比图。
+  原图可直接指向 ``试卷/<年>/<地区>/figs/<名>.png``（项目已把图放在 ``figs/``，
+  一般**无需**再建 ``TikZ/originals/``；仅当原图不在 figs 时才另存）。
+- **非标准但可处理**：只上传 ``TikZ/*.tex``（未登记、未接入）。**默认**会为这些
+  “孤儿源”生成 ``tikz_compare/<目录名>_未引用TikZ_重绘前后.png``：原图按
+  ``TikZ/originals/<名>`` → ``figs/<名>``（**同名**）自动推断。故该做法下
+  **TikZ 文件名必须与 figs 原图同名**，否则无法配原图（会在输出中列出）。
+  用 ``--no-orphans`` 可关闭。
 """
 from __future__ import annotations
 
@@ -99,6 +112,14 @@ def referenced_tikz(tex: Path) -> List[str]:
         if n not in names:
             names.append(n)
     return names
+
+
+def tikz_sources(lesson: Path) -> List[str]:
+    """返回 ``TikZ/*.tex`` 源文件名（去扩展名，排序）。"""
+    d = lesson / "TikZ"
+    if not d.is_dir():
+        return []
+    return sorted(p.stem for p in d.glob("*.tex"))
 
 
 def render_tikz(pdf: Path, out_png: Path, dpi: int) -> bool:
@@ -183,30 +204,72 @@ def make_sheet(rows: List[Tuple[str, str, str, Image.Image, Image.Image]],
     return canvas
 
 
+def _rel(p: Path) -> Path:
+    """尽量给出相对项目根的路径，否则原样返回（便于目录在仓库外时也不报错）。"""
+    try:
+        return p.relative_to(ROOT)
+    except ValueError:
+        return p
+
+
+def _infer_original(lesson: Path, tikz: str):
+    """未登记时按 ``TikZ/originals/<名>`` → ``figs/<名>`` 推断原图，返回 entry 或 None。"""
+    for base in ("TikZ/originals", "figs"):
+        for ext in (".png", ".jpg", ".jpeg", ".jfif", ".svg"):
+            p = lesson / base / f"{tikz}{ext}"
+            if p.exists():
+                return {"tikz": tikz, "original": str(_rel(p)), "note": "自动推断（未登记）"}
+    return None
+
+
+def _rasterize_svg(svg: Path, out_png: Path) -> bool:
+    """把 SVG 渲染为 PNG（优先 rsvg-convert，退回 Inkscape）；成功返回 True。"""
+    cmds = [
+        ["rsvg-convert", "-b", "white", "-w", "1400", str(svg), "-o", str(out_png)],
+        ["inkscape", str(svg), "-o", str(out_png), "-w", "1400"],
+    ]
+    for cmd in cmds:
+        try:
+            subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except Exception:
+            continue
+        if out_png.exists():
+            return True
+    return False
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="生成重绘 TikZ 与原图的分文档对比图（tikz_compare/）")
     ap.add_argument("lesson", help="目录（试卷/<年>/<地区>，含 TikZ/，如 试卷/<年>/<地区>）")
     ap.add_argument("--dpi", type=int, default=200, help="TikZ PDF 渲染 DPI（默认 200）")
     ap.add_argument("--row-h", type=int, default=300, help="每行图片高度（像素，默认 300）")
+    ap.add_argument("--no-orphans", dest="include_orphans", action="store_false",
+                    help="只处理正文引用到的 TikZ，忽略未接入的 TikZ 源（默认也处理孤儿源）")
     args = ap.parse_args(argv)
 
     lesson = Path(args.lesson).resolve()
     tikz_dir = lesson / "TikZ"
     out_dir = lesson / OUT_DIRNAME
 
-    # 先收集本目录各文档实际引用的 TikZ；无引用则直接跳过（无 TikZ 的课题不报错）。
+    mapping, has_mapping = load_mapping(lesson)
+
+    # 本目录各文档实际引用的 TikZ
     referenced_all: Dict[str, List[str]] = {}
     for tex in sorted(lesson.glob("*.tex")):
         refs = referenced_tikz(tex)
         if refs:
             referenced_all[tex.name] = refs
     total_refs = sorted({t for refs in referenced_all.values() for t in refs})
-    if not total_refs:
+
+    # “孤儿源”：已上传 TikZ/*.tex 但未被任何 .tex 引用、也未登记原图（半成品/未接线）
+    orphans = (sorted(set(tikz_sources(lesson)) - set(total_refs) - set(mapping))
+               if args.include_orphans else [])
+
+    if not total_refs and not orphans:
         print(f">> {lesson.name}：无 TikZ 引用，跳过。")
         return 0
 
-    mapping, has_mapping = load_mapping(lesson)
-    if not has_mapping:
+    if total_refs and not has_mapping:
         raise SystemExit(
             f"缺少映射文件：{tikz_dir / 'tikz_sources.json'}\n"
             f"本目录的 .tex 引用了 TikZ（{', '.join(total_refs)}），"
@@ -219,42 +282,66 @@ def main(argv=None) -> int:
     tmp = Path(tempfile.mkdtemp(prefix="tikzcmp_"))
     rendered: Dict[str, Path] = {}
     missing: List[str] = []
+    used: set = set()
+
+    def make_rows(tikz_list: List[str], infer: bool):
+        """把若干 TikZ 名解析为对比行；无法配到原图/未编译者记入 missing。"""
+        rows = []
+        for tikz in tikz_list:
+            e = mapping.get(tikz)
+            if e is None and infer:
+                e = _infer_original(lesson, tikz)
+            if e is None:
+                missing.append(f"{tikz}.tex（未登记且未在 figs/ 等找到原图；"
+                               "若有原图请登记 tikz_sources.json，或把原图命名为 figs/<名>.png）")
+                continue
+            # 已显式声明“无原题图”（自编题等，original 为 null/空）：不生成对比。
+            if not e.get("original"):
+                used.add(tikz)
+                continue
+            pdf = tikz_dir / f"{tikz}.pdf"
+            if not pdf.exists():
+                missing.append(f"{tikz}.pdf（未编译，先 make tikz）")
+                continue
+            original = (ROOT / str(e.get("original", ""))).resolve()
+            if original.suffix.lower() == ".svg" and original.exists():
+                png = tmp / f"{tikz}_orig.png"
+                if _rasterize_svg(original, png):
+                    original = png
+            if not original.exists():
+                missing.append(f"{tikz}: 原图不存在 {e.get('original')}")
+                continue
+            if tikz not in rendered:
+                png = tmp / f"{tikz}.png"
+                if not render_tikz(pdf, png, args.dpi):
+                    missing.append(f"{tikz}.pdf（渲染失败）")
+                    continue
+                rendered[tikz] = png
+            orig = _fit(Image.open(original).convert("RGB"), args.row_h)
+            timg = _fit(Image.open(rendered[tikz]).convert("RGB"), args.row_h)
+            rows.append((tikz, original.name, str(e.get("note", "")), orig, timg))
+            used.add(tikz)
+        return rows
+
     try:
         sheets = 0
-        used: set = set()
         for tex in sorted(lesson.glob("*.tex")):
             refs = [t for t in referenced_tikz(tex) if t in mapping]
             if not refs:
                 continue
-            rows = []
-            for tikz in refs:
-                e = mapping[tikz]
-                # 已显式声明“无原题图”（自编题等，original 为 null/空）：不生成对比，也不算未登记。
-                if not e.get("original"):
-                    used.add(tikz)
-                    continue
-                pdf = tikz_dir / f"{tikz}.pdf"
-                if not pdf.exists():
-                    missing.append(f"{tex.name}: {tikz}.pdf（未编译）")
-                    continue
-                original = (ROOT / str(e.get("original", ""))).resolve()
-                if not original.exists():
-                    missing.append(f"{tex.name}: {tikz} 原图不存在 {e.get('original')}")
-                    continue
-                if tikz not in rendered:
-                    png = tmp / f"{tikz}.png"
-                    if not render_tikz(pdf, png, args.dpi):
-                        missing.append(f"{tikz}.pdf（渲染失败）")
-                        continue
-                    rendered[tikz] = png
-                orig = _fit(Image.open(original).convert("RGB"), args.row_h)
-                timg = _fit(Image.open(rendered[tikz]).convert("RGB"), args.row_h)
-                rows.append((tikz, original.name, str(e.get("note", "")), orig, timg))
-                used.add(tikz)
+            rows = make_rows(refs, infer=False)
             if rows:
                 out = out_dir / f"{tex.stem}_重绘前后.png"
                 make_sheet(rows, f"重绘前后对比：{tex.name}", row_h=args.row_h).save(out)
-                print(f"[对比图] {out.relative_to(ROOT)}（{len(rows)} 张）")
+                print(f"[对比图] {_rel(out)}（{len(rows)} 张）")
+                sheets += 1
+        if orphans:
+            rows = make_rows(orphans, infer=True)
+            if rows:
+                out = out_dir / f"{lesson.name}_未引用TikZ_重绘前后.png"
+                make_sheet(rows, f"重绘前后对比（未接入正文的 TikZ 源）：{lesson.name}",
+                           row_h=args.row_h).save(out)
+                print(f"[对比图] {_rel(out)}（{len(rows)} 张，含未引用源）")
                 sheets += 1
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -272,7 +359,6 @@ def main(argv=None) -> int:
             print("  -", m)
     if sheets == 0:
         print("未生成对比图（引用到的 TikZ 均未登记原图；无原题图者属正常）。")
-        return 0
     return 0
 
 

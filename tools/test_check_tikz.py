@@ -101,6 +101,60 @@ class TestCheckTikz(unittest.TestCase):
             errors, _w, _n = check_lesson(d, root=d)
             self.assertTrue(any("JSON" in e for e in errors), errors)
 
+    def test_orphan_source_warns_when_unreferenced(self):
+        # 典型半成品 PR：只上传 TikZ/*.tex，正文未引用、无登记文件。
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            (d / "TikZ").mkdir()
+            (d / "TikZ" / "A.tex").write_text(r"\documentclass{standalone}", encoding="utf-8")
+            (d / "doc.tex").write_text("题干", encoding="utf-8")
+            errors, warnings, n = check_lesson(d, root=d)
+            self.assertEqual(errors, [])
+            self.assertTrue(any("TikZ/A.tex" in w for w in warnings), warnings)
+
+    def test_orphan_source_warns_alongside_valid_ref(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            _img(d / "figs" / "o.png")
+            _lesson(d, ["A"], [{"tikz": "A", "original": "figs/o.png"}])
+            (d / "TikZ" / "B.tex").write_text(r"\documentclass{standalone}", encoding="utf-8")
+            errors, warnings, _n = check_lesson(d, root=d)
+            self.assertEqual(errors, [])
+            self.assertTrue(any("TikZ/B.tex" in w for w in warnings), warnings)
+
+    def test_referenced_missing_tex_source_warns(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            _img(d / "figs" / "o.png")
+            _lesson(d, ["A"], [{"tikz": "A", "original": "figs/o.png"}])
+            errors, warnings, _n = check_lesson(d, root=d)
+            self.assertEqual(errors, [])
+            self.assertTrue(any("缺少 TikZ/A.tex" in w for w in warnings), warnings)
+            # 补上 .tex 源后不再提示
+            (d / "TikZ" / "A.tex").write_text(r"\documentclass{standalone}", encoding="utf-8")
+            _e, warnings2, _n2 = check_lesson(d, root=d)
+            self.assertFalse(any("缺少 TikZ/A.tex" in w for w in warnings2), warnings2)
+
+    def test_orphan_name_match_note(self):
+        # 同名 figs/ 原图存在 → 提示“可自动对比”，不应出现“未找到同名原图”
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            (d / "TikZ").mkdir()
+            (d / "TikZ" / "A.tex").write_text(r"\documentclass{standalone}", encoding="utf-8")
+            _img(d / "figs" / "A.png")
+            (d / "doc.tex").write_text("题干", encoding="utf-8")
+            _e, warnings, _n = check_lesson(d, root=d)
+            self.assertTrue(any("TikZ/A.tex" in w for w in warnings), warnings)
+            self.assertFalse(any("未找到同名原图" in w for w in warnings), warnings)
+        # 无同名 figs/ → 提示名字必须一致
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            (d / "TikZ").mkdir()
+            (d / "TikZ" / "B.tex").write_text(r"\documentclass{standalone}", encoding="utf-8")
+            (d / "doc.tex").write_text("题干", encoding="utf-8")
+            _e, warnings, _n = check_lesson(d, root=d)
+            self.assertTrue(any("未找到同名原图" in w for w in warnings), warnings)
+
 
 if __name__ == "__main__":
     unittest.main()

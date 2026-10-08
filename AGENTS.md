@@ -62,6 +62,8 @@ make index          # 刷新 试卷/<年>/README.md 与 README 进度概要
 make check-docs     # 进度 / 年份索引 / 异常记录 一致性
 make progress       # 查看各年概要 + 欠账台账（未闭合异常、缺详解）
 make tools-test     # 工具单元测试
+make fetch-pr PR=1  # 接取协作者 PR 到本地分支 pr/1（审查，见 docs/代码审查指南.md）
+make pr-check PR=1  # 接取并只对 PR 改动的试卷目录自查
 ```
 
 - 新增/更新异常写入 `异常记录/<年>.md`（统一结构：`## 制作说明` + 状态分区表，表头

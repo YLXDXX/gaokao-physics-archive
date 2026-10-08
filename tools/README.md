@@ -72,8 +72,8 @@
 
 | 脚本 | 用途 |
 | :--- | :--- |
-| `tikz_compare.py` | 生成「左＝原图 / 右＝重绘 TikZ」对比图到 `tikz_compare/`，供人工逐张核对 |
-| `check_tikz.py` | 校验 `TikZ/tikz_sources.json` 的登记与 `TikZ/*.pdf` 引用一致 |
+| `tikz_compare.py` | 生成「左＝原图 / 右＝重绘 TikZ」对比图到 `tikz_compare/`，供人工逐张核对；**默认**也为**未接入正文/未登记**的 `TikZ/*.tex`（“只上传 TikZ 文件夹”）出图（原图按 `TikZ/originals/<名>` → `figs/<名>` **同名**自动推断，`.svg` 自动渲染）；`--no-orphans` 可只处理已接入的 |
+| `check_tikz.py` | 校验 `TikZ/tikz_sources.json` 的登记与 `TikZ/*.pdf` 引用一致；并提示**已上传但未被引用、也未登记**的 `TikZ/*.tex`（不推荐做法；若同名 `figs/` 原图缺失会额外告警） |
 
 登记文件 `试卷/<年>/<地区>/TikZ/tikz_sources.json` 格式：
 
@@ -88,9 +88,10 @@
 
 - `tikz`：`TikZ/<tikz>.pdf` 的文件名（去扩展名）；
 - `original`：相对项目根的原图路径（**必须存在**）；确无原题图者写 `null`（如自编题）。
-  为让 `make check` 在无 `JSON/`、`材料处理/` 的克隆环境中也能通过，建议把原图**随源码入库**：
-  放在该卷 `TikZ/originals/<名>.png`（原为矢量图时用 `pdftoppm`/Inkscape 渲染为 PNG），
-  再在 `tikz_sources.json` 指向它。
+  **原图已在 `figs/` 时直接指向** `试卷/<年>/<地区>/figs/<名>.png` 即可（`figs/` 已入库，
+  **无需**再建 `TikZ/originals/`）。仅当原图不在 `figs/` 时，才把原图**随源码入库**到该卷
+  `TikZ/originals/<名>.png`（原为矢量图时用 `pdftoppm`/Inkscape 渲染为 PNG）再指向它。
+- 命名：`TikZ/<名>.tex` 建议与 `figs/<名>` **同名**；有登记且正文已接入时可用其它名，但不推荐。
 
 ## 五、检查项汇总
 
@@ -109,7 +110,7 @@
 
 **根目录** `make check` 在各卷之上再执行：
 
-11. `check_tikz.py`（TikZ 原图登记）；
+11. `check_tikz.py`（TikZ 原图登记 / 未接入的“孤儿源” / 引用却缺 `.tex` 源）；
 12. `check_recrop.py`（裁剪 recipe；并提示孤儿 figs）；
 13. `check_material.py`（材料完整性：四要素 / 图片引用 / manifest 文件齐全 / 纯矢量页清单）；
 14. `check_glyphs.py`（全库编译日志缺字兜底）；
@@ -117,7 +118,8 @@
 16. `check_docs.py`（进度 / 年份索引 / 异常记录 文档一致性，`make check-docs`）；
 17. `check_docs_text.py`（文档体检：过时 `cd` 用法、失效相对链接）。
 
-> `make check YEAR=2000` 只查该年；`make check-changed` 只查 git 改动；`make ci` 抽样构建 + 全量自查。
+> `make check YEAR=2000` 只查该年；`make check-changed` 只查工作树**未提交**改动
+> （审查他人 PR 分支用 `make pr-check`）；`make ci` 抽样构建 + 全量自查。
 
 ## 六、tools 单元测试
 
@@ -126,11 +128,11 @@ make tools-test
 # 等价于：
 python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch \
     tools.test_check_content tools.test_check_recrop tools.test_check_tikz \
-    tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures \
-    tools.test_gen_index tools.test_json_to_tex tools.test_html2latex \
-    tools.test_check_meta tools.test_check_answers tools.test_check_units \
-    tools.test_check_formula_numbers tools.test_review_to_ledger \
-    tools.test_tex_to_json
+    tools.test_tikz_compare tools.test_match_figures tools.test_pdf_extract_images \
+    tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex \
+    tools.test_html2latex tools.test_check_meta tools.test_check_answers \
+    tools.test_check_units tools.test_check_formula_numbers \
+    tools.test_review_to_ledger tools.test_tex_to_json
 ```
 
 覆盖正则规则（含裸单位）/ 批量映射 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 /

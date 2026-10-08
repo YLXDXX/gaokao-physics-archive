@@ -20,6 +20,8 @@
 #    make check-material   材料四要素/图片引用/底稿漂移检查
 #    make tools-test   运行 tools 单元测试（textfix / check_recrop / check_tikz / match_figures / pdf_extract_images / recrop_figures）
 #    make links        为全部试卷目录创建指向根公共文件的软链接
+#    make fetch-pr PR=1 [REMOTE=gitee]  接取远程 PR 到本地分支 pr/1（审查用）
+#    make pr-check PR=1 [REMOTE=gitee]  接取后只对 PR 改动的试卷目录跑 check
 #    make clean        清理各卷辅助文件
 #    make distclean    清理各卷辅助文件与 PDF 成品
 #
@@ -56,7 +58,7 @@ endef
 
 .PHONY: all student teacher tikz tikz-compare check check-tikz check-recrop links \
         clean distclean material material-batch material-merge extract-images check-material tools-test \
-        index progress check-docs check-changed ci
+        index progress check-docs check-changed ci fetch-pr pr-check
 
 all:
 	$(call RUN_DIRS,$(PAPERS),all)
@@ -112,10 +114,42 @@ check-changed:
 		echo "===== $$d : check ====="; \
 		$(MAKE) -s -C "$$d" JOBS=1 check || exit 1; done
 
+# ---------------------------------------------------------------------------
+# 接取远程 PR / 审查（详见 docs/代码审查指南.md）
+#   make fetch-pr PR=1 [REMOTE=gitee]   拉取 PR 到本地分支 pr/1，并打印 diff 概况
+#   make pr-check PR=1 [REMOTE=gitee]   接取后只对本 PR 改动的试卷目录跑 check
+# REMOTE 默认 gitee（本仓库还配置了 github / origin）。
+# ---------------------------------------------------------------------------
+REMOTE ?= gitee
+
+fetch-pr:
+	@[ -n "$(PR)" ] || { echo "用法: make fetch-pr PR=<编号> [REMOTE=gitee]"; exit 1; }
+	git fetch $(REMOTE)
+	git fetch $(REMOTE) refs/pull/$(PR)/head:pr/$(PR)
+	@echo ">> 已取到 PR #$(PR) → 本地分支 pr/$(PR)"
+	@git --no-pager diff --stat $(REMOTE)/main...pr/$(PR) 2>/dev/null \
+		|| echo "（提示：远端基线 $(REMOTE)/main 不可用，可改用 REMOTE=origin）"
+	@echo ">> 切换审查：git switch pr/$(PR)   （返回：git switch -）"
+
+pr-check:
+	@[ -n "$(PR)" ] || { echo "用法: make pr-check PR=<编号> [REMOTE=gitee]"; exit 1; }
+	@$(MAKE) --no-print-directory fetch-pr PR=$(PR) REMOTE=$(REMOTE)
+	@git diff --quiet && git diff --cached --quiet \
+		|| { echo "工作树有未提交改动，请先提交/暂存后再审查 PR"; exit 1; }
+	@cur=$$(git symbolic-ref --short -q HEAD || git rev-parse --short HEAD); \
+	trap 'git switch --quiet "$$cur" >/dev/null 2>&1 || true' EXIT INT TERM; \
+	git switch --quiet pr/$(PR); \
+	DIRS=$$( git -c core.quotepath=false diff --name-only $(REMOTE)/main...pr/$(PR) \
+		| awk -F/ '$$1=="试卷" && NF>=3 {print $$1"/"$$2"/"$$3}' | sort -u ); \
+	if [ -z "$$DIRS" ]; then echo "PR #$(PR) 未改动任何试卷目录，跳过试卷自查。"; \
+	else for d in $$DIRS; do [ -f "$$d/Makefile" ] || continue; \
+		echo "===== $$d : check ====="; \
+		$(MAKE) -s -C "$$d" JOBS=1 check || exit 1; done; fi
+
 # 抽样构建 + 全量自查（CI 入口；大规模时用 YEAR=… 限定）
 ci:
 	@echo "===== 工具单元测试 + 文档校验 ====="
-	@python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
+	@python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_tikz_compare tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
     tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json
 	@python3 tools/check_docs.py
 	@echo "===== 抽样编译（首份试卷） ====="
@@ -133,7 +167,7 @@ check-recrop:
 # 工具单元测试（共性问题修正 / 批量映射 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 / 裁剪回填）
 tools-test:
 	@echo "===== tools 单元测试 ====="
-	@python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
+	@python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_tikz_compare tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
     tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json
 
 # 材料处理管线（需 Conda 环境 / PaddleOCR-VL 服务；详见 材料处理与OCR规范.md）

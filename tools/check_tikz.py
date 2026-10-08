@@ -15,6 +15,12 @@
 检查项（[提示]，不影响退出码）：
 
 - ``tikz_sources.json`` 中登记了但本目录任何 ``.tex`` 都未引用的 TikZ（可删除）；
+- 引用了 ``TikZ/<名>.pdf`` 但缺少 ``TikZ/<名>.tex`` 源文件（``TikZ/*.pdf`` 不入库，
+  克隆环境无法重建）；
+- ``TikZ/*.tex`` **源文件**既未被本目录 ``.tex`` 引用、也未登记原图（半成品/未接线，
+  常见于“只上传 TikZ 文件夹”的 PR）。标准做法是登记原图并在正文用
+  ``\\onepicture{TikZ/<名>.pdf}`` 接入；若坚持直接上传，**文件名必须与 ``figs/``
+  原图同名**，否则 ``tikz_compare`` 无法自动配原图——本项会就此给出提示；
 - 已登记原图的 TikZ，其 ``TikZ/<名>.pdf`` 尚未编译；
 - 有“已登记原图”的 TikZ，但尚未生成 ``tikz_compare/*_重绘前后.png``（该目录 Git 忽略）。
 
@@ -64,6 +70,49 @@ def _lesson_refs(directory: Path) -> List[str]:
     return names
 
 
+def tikz_sources(directory: Path) -> set:
+    """本目录 ``TikZ/*.tex`` 的图名集合（去扩展名）。
+
+    用于发现“已上传源文件但未接入正文/未登记原图”的半成品（见 PR 审查）。
+    """
+    d = directory / "TikZ"
+    if not d.is_dir():
+        return set()
+    return {p.stem for p in d.glob("*.tex")}
+
+
+# 原图可用的扩展名（figs/ 下，或 TikZ/originals/ 下）
+ORIG_EXTS = (".png", ".jpg", ".jpeg", ".svg", ".jfif")
+
+
+def find_original(directory: Path, tikz: str):
+    """按 ``TikZ/originals/<名>`` → ``figs/<名>``（同名）找原图，返回相对本目录的 Path 或 None。"""
+    for base in ("TikZ/originals", "figs"):
+        for ext in ORIG_EXTS:
+            p = directory / base / f"{tikz}{ext}"
+            if p.exists():
+                return p
+    return None
+
+
+def orphan_sources_warnings(directory: Path, rel, referenced, registered) -> List[str]:
+    """返回“TikZ/*.tex 既未被引用也未登记”（不推荐的直接上传方式）的提示行。
+
+    这类文件仍可被 ``tikz_compare`` 处理，但**文件名必须与对应 ``figs/`` 原图同名**，
+    否则无法自动配原图。提示信息用于后续排查与补登记/接入。
+    """
+    out: List[str] = []
+    for t in sorted(tikz_sources(directory) - set(referenced) - set(registered)):
+        msg = (f"{rel}: TikZ/{t}.tex 未被本目录任何 .tex 引用、也未在 tikz_sources.json 登记"
+               "（不推荐“只上传 TikZ 文件夹”的做法；推荐登记原图并在正文用 "
+               f"\\onepicture{{TikZ/{t}.pdf}} 接入）")
+        if find_original(directory, t) is None:
+            msg += (f"；且未找到同名原图 figs/{t}.png（该做法下 TikZ 文件名必须与 figs 同名，"
+                    "否则 tikz_compare 无法自动配原图）")
+        out.append(msg)
+    return out
+
+
 def check_lesson(directory: Path, root: Path = ROOT) -> Tuple[List[str], List[str], int]:
     """校验单个目录，返回 (errors, warnings, 已登记原图条数)。不依赖全局状态，便于测试。
 
@@ -76,21 +125,25 @@ def check_lesson(directory: Path, root: Path = ROOT) -> Tuple[List[str], List[st
     referenced = _lesson_refs(directory)
     mapping_path = directory / "TikZ" / "tikz_sources.json"
     if not referenced:
-        # 无 TikZ 引用：若有登记文件，提示未使用；否则跳过。
+        # 无 TikZ 引用：若有登记文件，提示未使用；并提示“已上传但未接线”的 TikZ 源。
+        registered: set = set()
         if mapping_path.exists():
             try:
                 data = json.loads(mapping_path.read_text(encoding="utf-8"))
                 for e in data.get("entries", []):
                     t = str(e.get("tikz", "")).strip()
                     if t:
+                        registered.add(t)
                         warnings.append(f"{rel}: 未在任何 .tex 中引用 TikZ/{t}.pdf（可删除该登记）")
             except Exception:
                 pass
+        warnings += orphan_sources_warnings(directory, rel, referenced, registered)
         return errors, warnings, 0
 
     if not mapping_path.exists():
         errors.append(f"{rel}: 本目录 .tex 引用了 TikZ（{', '.join(referenced)}），"
                       f"但缺少 {mapping_path.relative_to(ROOT) if str(mapping_path).startswith(str(ROOT)) else mapping_path}")
+        warnings += orphan_sources_warnings(directory, rel, referenced, set())
         return errors, warnings, 0
 
     try:
@@ -147,6 +200,13 @@ def check_lesson(directory: Path, root: Path = ROOT) -> Tuple[List[str], List[st
     for t in registered:
         if t not in referenced:
             warnings.append(f"{rel}: 未在任何 .tex 中引用 TikZ/{t}.pdf（可删除该登记）")
+    # 被引用但缺少 .tex 源（.pdf 不入库，克隆环境无法重建）= 提示
+    for t in referenced:
+        if not (directory / "TikZ" / f"{t}.tex").exists():
+            warnings.append(f"{rel}: 引用 TikZ/{t}.pdf 但缺少 TikZ/{t}.tex 源文件"
+                            "（TikZ/*.pdf 不入库，克隆环境将无法重建）")
+    # 已上传源文件但既未引用也未登记 = 提示（半成品/未接线，见 PR 审查）
+    warnings += orphan_sources_warnings(directory, rel, referenced, set(registered))
 
     # 已登记原图却未生成对比图 = 提示
     if have_original:
@@ -186,7 +246,8 @@ def main(argv=None) -> int:
     for d in lessons:
         referenced = _lesson_refs(d)
         mapping_exists = (d / "TikZ" / "tikz_sources.json").exists()
-        if not referenced and not mapping_exists:
+        # 无引用、无登记、也没有 TikZ/*.tex 源：本目录无 TikZ 事项，跳过。
+        if not referenced and not mapping_exists and not tikz_sources(d):
             continue
         checked += 1
         errors, warnings, n_orig = check_lesson(d)

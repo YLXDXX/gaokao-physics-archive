@@ -74,6 +74,7 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 ├── docs/                        # 从 README 移出的细则
 │   ├── 新增年份SOP.md            # 新增年份 / 制作一份卷的操作清单
 │   ├── 编译方法.md               # 批量/单卷编译命令、两版开关、版面微调
+│   ├── 代码审查指南.md           # 接收协作者 PR 的接取/审查流程（维护者）
 │   ├── 运行环境.md               # TeX / 字体 / poppler / splitpicture / OCR / Python
 │   └── AGENTS.md                # 工具使用与权限约定（经本地 opencode.json 加载）
 ├── gaokaozhenti.cls             # 公共文档类（ctexbook + 公共宏包 + 列表样式）
@@ -81,6 +82,9 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 ├── PhyUnit.sty                  # 物理单位宏包
 ├── package/exam-zh-choices.sty  # 选项排版依赖
 ├── ChoiceQuestion-manual.md     # ChoiceQuestion.sty 使用说明
+├── CONTRIBUTING.md              # 面向人类协作者的贡献指南（提交前自查、禁提交项）
+├── .gitee/PULL_REQUEST_TEMPLATE.md  # Gitee PR 模板（自查清单）
+├── .github/pull_request_template.md # GitHub 镜像版 PR 模板（同款清单）
 ├── AGENTS.md                    # 给 AI / 协作者的仓库约定与制作顺序（入口）
 ├── 高考物理真题制作规范.md        # 【核心】真题制作规范（结构/元数据/图片/答案/解析）
 ├── LaTeX_format_ReadMe.md        # LaTeX 文档格式基本要求（排版细则，全卷共用）
@@ -140,6 +144,8 @@ make JOBS=8       # 并行 8 线程
 make check        # 规范自查 + 内容 + 共性问题 + 缺字 + 成品复查 + 文档索引校验
 make index        # 刷新 试卷/<年>/README.md 与 README 进度概要
 make progress     # 打印各年份进度概要
+make fetch-pr PR=1   # 接取 Gitee PR 到本地分支 pr/1（审查用，见 docs/代码审查指南.md）
+make pr-check PR=1   # 接取并只对 PR 改动的试卷目录跑 check
 ```
 
 > **并行编译（已支持）**：含 `\includesvg` 的卷每张 SVG 都会调用 Inkscape；多个进程并发
@@ -159,11 +165,13 @@ make progress     # 打印各年份进度概要
 | 文档 | 内容 |
 | :--- | :--- |
 | `AGENTS.md` | 给 AI / 协作者的仓库约定、目录与制作顺序（入口） |
+| `CONTRIBUTING.md` | 面向人类协作者的贡献指南（制作摘要、提交前自查、禁提交项、TikZ 重绘登记） |
 | `高考物理真题制作规范.md` | 【核心】文档结构、元数据字段与顺序、图片命令与引用标签、答案与解析、异常记录 |
 | `LaTeX_format_ReadMe.md` | LaTeX 文档格式基本要求（排版细则：两版开关、答案命令、图片与编号、公式单位、段落分行等） |
 | `材料处理与OCR规范.md` | PDF→Markdown 双引擎交叉验证、无损提取图片、底稿漂移检查 |
 | `docs/新增年份SOP.md` | 新增年份 / 制作一份卷的可勾选清单 |
 | `docs/编译方法.md` | 批量/单卷编译命令、两版开关、版面微调 |
+| `docs/代码审查指南.md` | 接收协作者 PR：`make fetch-pr`/`pr-check`、审查流程、项目专属清单（维护者） |
 | `docs/运行环境.md` | TeX / 字体 / poppler / splitpicture / OCR / Python |
 | `docs/AGENTS.md` | 工具使用与权限约定（工作目录固定在仓库根、临时/渲染文件只放 `/tmp/opencode/`、子代理约定；由本地 `opencode.json` 加载） |
 | `进度记录.md` | 各年份/地区制作进度明细（题数、状态、说明、异常链接） |

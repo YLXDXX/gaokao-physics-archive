@@ -153,6 +153,10 @@ python3 tools/recrop_figures.py apply   试卷/2026/云南/.recrop.json      # �
 - 重绘须在 `TikZ/tikz_sources.json` **登记原图**，并 `make tikz-compare` 生成
   `tikz_compare/<文档>_重绘前后.png` **逐张核对**；登记格式见 `tools/README.md`。
   `make check` 的 `check_tikz.py` 校验登记一致性。
+- **标准做法**：`TikZ/<名>.tex` 与 `figs/<名>` **同名**；`original` 原图已在 `figs/` 时
+  直接指向 `试卷/<年>/<地区>/figs/<名>.png`，**无需再建 `TikZ/originals/`**（仅当原图不在
+  `figs/` 时才另存 `originals/`）。**只上传 `TikZ/*.tex`（未登记、未接入）不推荐**：
+  `check_tikz.py` 会告警，`tikz-compare` 默认仍出图，但文件名**必须与 `figs/` 同名**。
 
 ---
 

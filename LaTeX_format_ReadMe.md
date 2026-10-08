@@ -251,11 +251,14 @@ LaTeX 文档的**基本格式要求**，是后续大量真题转换与人工校�
     - 正文引用一律用 `\ref{标签}`（显示为图号/子图字母），**不使用 `\subref`**。
 
 29. **TikZ 重绘（人工）“重绘前后”核对**：确需 TikZ 重绘的图，一律写成该卷 `TikZ/` 下的
-    **独立图片文档**（`standalone` 文档类，一张图一个 `.tex`），编译为 PDF，正文用
-    `\onepicture{TikZ/<名>.pdf}` 引用。**重绘须在本卷 `TikZ/tikz_sources.json` 登记原图**
-    （格式见 `tools/README.md`；原图建议随源码入库到 `TikZ/originals/`，确无原题图者写
-    `null`），并 `make tikz-compare` 生成 `tikz_compare/<文档>_重绘前后.png`（左＝原图 /
-    右＝重绘）**逐张核对**形状、方向、标注、比例；`make check-tikz` 校验登记一致性。
+    **独立图片文档**（`standalone` 文档类，一张图一个 `.tex`，**建议与 `figs/<名>` 同名**），
+    编译为 PDF，正文用 `\onepicture{TikZ/<名>.pdf}` 引用。**重绘须在本卷 `TikZ/tikz_sources.json`
+    登记原图**（格式见 `tools/README.md`）：原图已在 `figs/` 时 `original` 直接指向
+    `试卷/<年>/<地区>/figs/<名>.png` 即可，**一般无需再建 `TikZ/originals/`**（仅当原图不在
+    `figs/` 时才另存 `originals/` 入库；确无原题图者写 `null`），并 `make tikz-compare` 生成
+    `tikz_compare/<文档>_重绘前后.png`（左＝原图 / 右＝重绘）**逐张核对**形状、方向、标注、比例；
+    `make check-tikz` 校验登记一致性。**只上传 `TikZ/*.tex` 而不登记/接入**属不推荐做法，
+    `tikz-compare` 默认仍会出图，但文件名须与 `figs/` 同名。
 
 30. **TikZ 坐标图纵横比**：`\begin{tikzpicture}[x=…,y=…]` 中横、纵比例应**分别选取**，
     使整图（含坐标轴与标注）宽高比大致在 **1.2:1 ~ 2:1** 之间；**坐标比例不得过小**，
