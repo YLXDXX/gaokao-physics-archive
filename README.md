@@ -145,7 +145,7 @@ make check        # 规范自查 + 内容 + 共性问题 + 缺字 + 成品复查
 make index        # 刷新 试卷/<年>/README.md 与 README 进度概要
 make progress     # 打印各年份进度概要
 make fetch-pr PR=1   # 接取 Gitee PR 到本地分支 pr/1（审查用，见 docs/代码审查指南.md）
-make pr-check PR=1   # 接取并只对 PR 改动的试卷目录跑 check
+make pr-check PR=1   # 接取并对 PR 改动卷先 make all 再 check
 ```
 
 > **并行编译（已支持）**：含 `\includesvg` 的卷每张 SVG 都会调用 Inkscape；多个进程并发

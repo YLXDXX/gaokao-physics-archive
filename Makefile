@@ -117,7 +117,8 @@ check-changed:
 # ---------------------------------------------------------------------------
 # 接取远程 PR / 审查（详见 docs/代码审查指南.md）
 #   make fetch-pr PR=1 [REMOTE=gitee]   拉取 PR 到本地分支 pr/1，并打印 diff 概况
-#   make pr-check PR=1 [REMOTE=gitee]   接取后只对本 PR 改动的试卷目录跑 check
+#   make pr-check PR=1 [REMOTE=gitee]   接取后对 PR 改动的试卷目录先 make all 再 check
+#                                       （先编译 TikZ/两版，才能查出编译期问题，如缺字）
 # REMOTE 默认 gitee（本仓库还配置了 github / origin）。
 # ---------------------------------------------------------------------------
 REMOTE ?= gitee
@@ -143,6 +144,8 @@ pr-check:
 		| awk -F/ '$$1=="试卷" && NF>=3 {print $$1"/"$$2"/"$$3}' | sort -u ); \
 	if [ -z "$$DIRS" ]; then echo "PR #$(PR) 未改动任何试卷目录，跳过试卷自查。"; \
 	else for d in $$DIRS; do [ -f "$$d/Makefile" ] || continue; \
+		echo "===== $$d : all（编译 TikZ + 两版）====="; \
+		$(MAKE) -s -C "$$d" JOBS=1 all || exit 1; \
 		echo "===== $$d : check ====="; \
 		$(MAKE) -s -C "$$d" JOBS=1 check || exit 1; done; fi
 
