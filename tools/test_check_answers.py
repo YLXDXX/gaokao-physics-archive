@@ -40,6 +40,29 @@ class TestCheckAnswers(unittest.TestCase):
             errs, warns = check_answers.check_file(_write(Path(d), text))
             self.assertEqual(errs, [])
 
+    def test_experiment_count_mismatch_no_warning(self):
+        # 实验题（typeId=4）题干含选项等无需作答项，答案项数不同也不提示
+        text = HEAD + (
+            "\\item\n%% number: 1\n%% typeId: 4\n%% type: 实验题\n%% body:\n"
+            "\\begin{enumerate}\n\\item\n选 A\n\\item\nA．x\n\\item\nB．y\n"
+            "\\end{enumerate}\n"
+            "%% answer:\n\\jdanswer{\n\\begin{enumerate}\n\\item\nA\n\\end{enumerate}\n}\n"
+            "%% memo:\n\\memoanswer{解}\n\\end{enumerate}\n")
+        with tempfile.TemporaryDirectory() as d:
+            errs, warns = check_answers.check_file(_write(Path(d), text))
+            self.assertEqual(errs, [])
+            self.assertEqual(warns, [])
+
+    def test_calc_count_mismatch_warns(self):
+        # 计算题（typeId=6）答案 enumerate 项数与小问不一致 → 提示
+        text = HEAD + BODY2 + (
+            "\\jdanswer{\n\\begin{enumerate}\n\\item\n甲\n\\end{enumerate}\n}\n"
+            "%% memo:\n\\memoanswer{解}\n\\end{enumerate}\n")
+        with tempfile.TemporaryDirectory() as d:
+            errs, warns = check_answers.check_file(_write(Path(d), text))
+            self.assertEqual(errs, [])
+            self.assertTrue(any("不一致" in w for w in warns))
+
     def test_missing_jdanswer(self):
         # 有 \tkanswer 但多小问缺 \jdanswer
         text = HEAD + BODY2 + (

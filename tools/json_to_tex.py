@@ -26,7 +26,7 @@
 
 初稿已尽量贴近规范：HTML/公式转换用 `tools/html2latex.py`（DOM 解析，正确处理
 上下标、表格与公式片段合并）；缺 `memo` 自动写占位 `\\memoanswer`；非选择题按小问生成
-`\\jdanswer`（多小问 → `enumerate`）；同题多图 → `\\twopicture…`；图片选项 →
+`\\jdanswer`（多小问 → `enumerate`；实验题答案为初稿，必要时按规范改为手动编号）；同题多图 → `\\twopicture…`；图片选项 →
 `\\fourchoices[ispicture=true]`；`（A）`/`A．` 选项均可解析。
 但仍须对照 `merged.md` 与原 PDF 逐题校对重写。
 """
@@ -324,7 +324,7 @@ def process_paper(json_path: Path, out_dir: Path, *, force: bool,
         lines.extend(question_lines)
         lines.append("%% answer: " + (answer_letters if is_choice else ""))
 
-        # ---- 非选择题：\jdanswer（多小问 → enumerate） ----
+        # ---- 非选择题：\jdanswer（计算题多小问 → enumerate；实验题答案可手动编号） ----
         if not is_choice:
             ans_paras = _answer_paragraphs(answer_html)
             if len(ans_paras) >= 2:

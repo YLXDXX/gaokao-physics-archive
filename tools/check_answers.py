@@ -5,8 +5,11 @@
 本脚本补上**非选择题**：
 
 1. 非选择题必须给出答案：至少含 `\\jdanswer`（多小问/计算）或 `\\tkanswer`（填空）；
-2. 题面小问数与 `\\jdanswer` 的 `enumerate` 项数一致（不一致给提示）；
+2. **计算题 / 解答题**：题面小问数与 `\\jdanswer` 的 `enumerate` 项数一致（不一致给提示）；
 3. 题面有 2 个及以上小问时，必须有 `\\jdanswer`（仅有 `\\tkanswer` 视为缺失）。
+
+**实验题**（`typeId=4`）：题干 `enumerate` 中常含实验步骤、选项等**无需作答**的项，答案可在
+`\\jdanswer{}` 内手动编号、不套 `enumerate`，故只要求有答案命令、**不做项数比对**。
 
 小问数按“题干区（`%% body:` 到 `%% answer:`）中嵌套 `\\item` 数”估算，`steps` 环境不计入。
 
@@ -93,10 +96,12 @@ def check_file(tex: Path) -> Tuple[List[str], List[str]]:
         if has_jd:
             jdm = re.search(r"\\jdanswer\*?\s*\{(.*?)\n\}", ans, flags=re.S)
             jitems = _count_items(jdm.group(1)) if jdm else 0
+            # 实验题（typeId=4）题干常混入实验步骤/选项等无需作答项，答案可手动编号，
+            # 故不做项数比对；计算题（typeId=6 等）仍比对。
             # 仅当题干只有一个 enumerate（视为唯一小问列表）时才比对项数，
             # 避免把“实验步骤写成 enumerate”等多列表情况误报。
             n_env = len(re.findall(r"\\begin\{enumerate\}", body))
-            if n_env == 1 and subq and jitems and jitems != subq:
+            if type_id != 4 and n_env == 1 and subq and jitems and jitems != subq:
                 warns.append(f"{tex.name}: 第 {n} 题小问数 {subq} 与 \\jdanswer 项数 {jitems} 不一致")
     return errs, warns
 

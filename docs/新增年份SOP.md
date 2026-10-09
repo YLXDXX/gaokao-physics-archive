@@ -18,7 +18,8 @@
 3. **逐题校对**：以 `merged.md` / JSON / 原 PDF 为准，核对题干、数据、单位、上下标、公式、选项与答案、
    图片（子图拆分与摆放）、详解；公式编号①②③与评分标准若原卷有则**忠实保留**。
 4. **规范化排版**：单顶层 `enumerate`；13 项元数据；图片一律 ChoiceQuestion 命令；单位一律 PhyUnit；
-   非选择题必须有 `\jdanswer`（多小问）或 `\tkanswer`（填空）；每题一条基本 `\memoanswer{}`。
+   非选择题必须有 `\jdanswer`（多小问）或 `\tkanswer`（填空）；计算题答案 `enumerate` 与小问一一对应、
+   实验题答案可手动编号对应；每题一条基本 `\memoanswer{}`。
    （如有**人工手绘 TikZ**：命名与 `figs/<名>` 同名、在 `TikZ/tikz_sources.json` 登记原图、
    正文接入 `\onepicture{TikZ/<名>.pdf}`，见 `高考物理真题制作规范.md` §5.4。）
 5. **编译**：在仓库根执行 `make -C 试卷/<年>/<地区> student && make -C 试卷/<年>/<地区> teacher`（两版均须成功）。

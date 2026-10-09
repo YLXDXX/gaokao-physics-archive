@@ -12,7 +12,7 @@
 | `check_paper.py` | 试卷**规范自查**：文档骨架（含两版开关 `\gkver`）、13 项元数据顺序、图片命令、引用标签、图片存在、每题基本详解 | `python3 tools/check_paper.py 试卷/2025/湖北/湖北.tex` |
 | `check_meta.py` | **元数据 ↔ 平台 JSON 逐字段一致**（防转换漂移，含选择题 `%% answer`） | `python3 tools/check_meta.py 试卷/2000/上海/上海.tex` |
 | `check_formula_numbers.py` | **解析公式编号检查**：只识别公式编号（过滤 `①过程`、`图象为②`、小问标签），要求 ①–⑳ 从 ① 起连续、无悬空引用 | `python3 tools/check_formula_numbers.py 试卷/` |
-| `check_answers.py` | **非选择题答案对应**：必须有 `\jdanswer`/`\tkanswer`，小问数与 `\jdanswer` 项数比对 | `python3 tools/check_answers.py 试卷/` |
+| `check_answers.py` | **非选择题答案对应**：必须有 `\jdanswer`/`\tkanswer`；计算题比对小问数与 `\jdanswer` 项数，实验题（typeId=4）免项数比对（答案可手动编号） | `python3 tools/check_answers.py 试卷/` |
 | `check_units.py` | **PhyUnit 宏检查**：`\Uxxx` 是否均已定义；`--suggest` 给出裸单位建议宏 | `python3 tools/check_units.py 试卷/` |
 | `tex_to_json.py` | 由成品 `.tex` **反向抽取档案 JSON**（元数据/题干/答案/详解），`--compare` 与平台 JSON 核对 | `python3 tools/tex_to_json.py 试卷/2000/上海/上海.tex --compare JSON/2000/2000_上海.json` |
 | `check_content.py` | 试卷**内容书写检查**：裸单位（应用 PhyUnit）、图片充当公式；并提示段落未分行 / 中英文间距（见 `LaTeX_format_ReadMe.md`） | `python3 tools/check_content.py 试卷/` |

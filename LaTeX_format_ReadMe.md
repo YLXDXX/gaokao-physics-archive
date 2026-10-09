@@ -105,14 +105,16 @@ LaTeX 文档的**基本格式要求**，是后续大量真题转换与人工校�
     | :--- | :--- |
     | 选择题答案括号 | `\xzanswer{AB}` |
     | 划线填空（含实验题中答案为字母组合的填空） | `\tkanswer[宽度]{答案}` |
-    | 多小问答案 | `\jdanswer{ \begin{enumerate} … \end{enumerate} }` |
+    | 计算题多小问答案 | `\jdanswer{ \begin{enumerate} … \end{enumerate} }`（与小问一一对应） |
+    | 实验题答案 | `\jdanswer{}` 内手动编号（可不套 `enumerate`，见第 8 条） |
     | 作图 / 连线题 | `\drawpicanswer{原图}{答案图}` |
     | 题目详解 | `\memoanswer{…}`（可多条，作者补充用 `\memoanswer[作者]{…}`） |
 
     - **答案侧（`\xzanswer`/`\tkanswer`/`\jdanswer`/`\memoanswer`）由 `answer_shown`
       开关统一显隐**（见第 2 条），学生版不出现；
-    - `\jdanswer` 会把 `enumerate` 渲染为**内联编号**，故**小问答案必须用 `enumerate`
-      与小问一一对应**（保持自动编号）；`\jdanswer*` 则保留普通 `enumerate` 排版；
+    - `\jdanswer` 会把 `enumerate` 渲染为**内联编号**：**计算题 / 解答题**的小问答案用
+      `enumerate` 与小问一一对应；**实验题**答案可不套 `enumerate`、直接手动编号（见第 8 条）；
+      `\jdanswer*` 则保留普通 `enumerate` 排版；
     - 每道题**必须有一条不带作者名的基本详解 `\memoanswer{}`**；`\memoanswer[作者]{}`
       只作补充、**不能替代**基本详解（基本详解在前、作者注解在后）。
 
@@ -125,9 +127,16 @@ LaTeX 文档的**基本格式要求**，是后续大量真题转换与人工校�
       （教师版显示、学生版自动隐藏）；仅最简单的示意图用 TikZ 复刻，复杂/实物图用原图；
       **不得出现解析“引图而图不在”**。解析图命名与存放见 `高考物理真题制作规范.md`。
 
-8. **小问与答案的对应**：题目中有小问（计算题、实验题、探究等）时，小问一律使用
-   `enumerate` 编号，答案也使用对应的 `enumerate`（放在 `\jdanswer{}` 内）；
-   **切勿把答案放错位置、错配小问**。
+8. **小问与答案的对应**：题目中有小问时，题干小问一律使用 `enumerate` 自动编号；
+   答案的编排分两类：
+
+    - **计算题 / 解答题**（每个小问都有答案）：答案用 `enumerate` 与小问**一一对应**
+      （放在 `\jdanswer{}` 内）；
+    - **实验题**（填空 / 选择为主，题干 `enumerate` 中常含实验步骤、选项等**无需作答**的项）：
+      答案**不必**套 `enumerate`，可在 `\jdanswer{}` 内**手动编号**与需作答的小问对应
+      （如 `（1）…（3）…`），以免出现空 `\item`；此为「自动编号」的例外，仅限实验题答案。
+
+    **切勿把答案放错位置、错配小问**。
 
 9. **来源注释（可选，人工溯源）**：本项目的**机器可读来源**是第 3 条元数据块；
    若人工另需在题干旁标注溯源，可在题前以注释形式记录（不参与排版、正文不出现）。
@@ -322,7 +331,7 @@ LaTeX 文档的**基本格式要求**，是后续大量真题转换与人工校�
 > - 第 1～4、15、28、33 条（骨架/两版/元数据/图片命令/标签）可用
 >   `python3 tools/check_paper.py 试卷/`；
 > - **元数据取值**须与平台 JSON 一致：`python3 tools/check_meta.py 试卷/`；
-> - **非选择题答案**（`\jdanswer`/`\tkanswer` 与小问对应）：`python3 tools/check_answers.py 试卷/`；
+> - **非选择题答案**（`\jdanswer`/`\tkanswer` 与小问对应；计算题比对项数、实验题可手动编号）：`python3 tools/check_answers.py 试卷/`；
 > - **单位宏**（`\Uxxx` 是否已在 `PhyUnit.sty` 定义）：`python3 tools/check_units.py 试卷/`；
 > - 第 34 条（原生版面命令）可用 `python3 tools/check_layout_cmds.py 试卷/`；
 > - 编译日志**缺字**（`\mathrm{汉字}` 丢字）可用 `python3 tools/check_glyphs.py 试卷/`；

@@ -47,7 +47,8 @@ make -C 试卷/<年>/<地区> check                                # 4 自查（
   单个顶层 `enumerate`；`\chapter{<年>年<地区>}`。
 - 每题 `\item` 后 13 项元数据注释，顺序固定，**取值须与 JSON 一致**（`check_meta.py`）。
 - 答案：选择 `\xzanswer`/`\fourchoices[answer=]`/`%% answer` 三处一致；
-  非选择题必须有 `\jdanswer`（多小问）或 `\tkanswer`（填空），小问与答案一一对应（`check_answers.py`）。
+  非选择题必须有 `\jdanswer`（多小问）或 `\tkanswer`（填空）；计算题答案 `enumerate` 与小问一一对应，
+  实验题答案可在 `\jdanswer` 内手动编号对应（`check_answers.py`）。
 - 每题一条基本 `\memoanswer{}`；缺原卷详解时写 `\memoanswer{本题原卷及材料中未提供详解，待补充。}` 并登记异常。
 - 图片只用 ChoiceQuestion 命令（`\onepicture`/`\twopicture`/`\fourchoices[ispicture=true]`），路径 `figs/`，
   尺寸用绝对 cm；**严禁 TikZ 重绘**（确需人工手绘并登记）。
