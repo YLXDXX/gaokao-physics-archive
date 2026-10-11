@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """tools/test_ocr_batch.py
 
-``tools/ocr_batch.py`` 的单元测试：目录映射（含 2000 年以前同名地区）、
+``tools/ocr_batch.py`` 的单元测试：目录映射（含 2000 年以前各年份）、
 pdfimages 完整性判定、重试与非空判定。
 
 运行::
@@ -35,14 +35,15 @@ class TestMapping(unittest.TestCase):
         outs = [out for _pdf, out in items]
         self.assertEqual(len(outs), len(set(outs)), "存在重复的处理目录映射")
 
-    def test_iter_pdfs_pre2000_full_stem(self):
-        """2000 年以前（非 4 位年份桶）一律用完整卷名作子目录。"""
+    def test_iter_pdfs_pre2000_region_short(self):
+        """2000 年以前与其余年份一致：按 材料处理/<年>/<地区> 组织（地区名唯一）。"""
         if not ocr_batch.DOCX.is_dir():
             self.skipTest("Docx/ 不存在")
-        items = ocr_batch.iter_pdfs(years=["2000年以前"])
-        for pdf, out in items:
-            self.assertEqual(out.parent.name, "2000年以前")
-            self.assertIn(out.name, pdf.stem)  # 子目录名即完整卷名
+        items = ocr_batch.iter_pdfs(years=["1985"])
+        names = sorted(out.name for _pdf, out in items)
+        self.assertEqual(names, ["上海", "全国"])
+        for _pdf, out in items:
+            self.assertEqual(out.parent.name, "1985")
 
     def test_iter_pdfs_year_region_short(self):
         """常规年份且地区唯一时，用短地区名。"""

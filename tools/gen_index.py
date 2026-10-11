@@ -49,7 +49,7 @@ README_END = "<!-- PROGRESS:END -->"
 
 
 def year_sort_key(year: str):
-    """年份排序键：`2000年以前` 视为早于 2000，排在最前；其余按数字升序。"""
+    """年份排序键：数字年份按数值升序；兼容非数字年份桶（如 `2000年以前`）令其排在最前。"""
     if year.endswith("以前"):
         m = re.match(r"(\d{4})", year)
         return (0, int(m.group(1)) if m else 0)
@@ -131,7 +131,7 @@ def parse_progress(path: Path = PROGRESS) -> dict[str, dict]:
         return years
     cur: str | None = None
     for line in path.read_text(encoding="utf-8").splitlines():
-        # 年份小节标题：普通年份 `### 2020 年（…）`；特殊桶 `### 2000年以前（…）`
+        # 年份小节标题：`### 2020 年（…）`（兼容非数字年份桶 `### 2000年以前（…）`）
         m = re.match(r"^###\s*(\d{4}年以前|\d{4})", line)
         if m:
             cur = m.group(1)

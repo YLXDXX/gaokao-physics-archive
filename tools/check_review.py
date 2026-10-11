@@ -52,8 +52,8 @@ def collect_tex(paths: List[Path]) -> List[Path]:
 def infer_json(tex: Path) -> Optional[Path]:
     """试卷/<年>/<地区>/<地区>.tex → JSON/<年>/<年_<地区>.json。
 
-    特殊年份桶（如 ``试卷/2000年以前/1978_全国/1978_全国.tex``）：桶名不是 4 位数字，
-    目录名本身即完整卷名（含学年），对应 ``JSON/2000年以前/1978_全国.json``。
+    年份目录为四位数字（如 ``试卷/1985/上海/上海.tex`` → ``JSON/1985/1985_上海.json``）；
+    非四位数字的年份桶作通用兜底（目录名即完整卷名，对应 ``JSON/<桶>/<卷名>.json``）。
     """
     try:
         rel = tex.resolve().relative_to(ROOT / "试卷")
