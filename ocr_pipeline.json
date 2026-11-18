@@ -1,0 +1,22 @@
+{
+  "pipeline": {
+    "base_roots": [
+      "Docx"
+    ],
+    "stages": [
+      "text",
+      "images",
+      "paddle",
+      "ovis",
+      "merge",
+      "check"
+    ],
+    "merge_script": "tools/material_merge.py",
+    "check_script": "tools/check_material.py",
+    "images_script": "tools/pdf_extract_images.py"
+  },
+  "paddle": {
+    "serve_start_script": "tools/paddlex_serve_start.sh",
+    "serve_stop_script": "tools/paddlex_serve_stop.sh"
+  }
+}

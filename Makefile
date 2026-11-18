@@ -17,7 +17,8 @@
 #    make material PDF=<源PDF> OUT=材料处理/<年>/<地区>   跑某卷的 OCR 材料管线
 #    make material-merge   为 材料处理/ 下各卷生成/校验 merged.md
 #    make extract-images   从源 PDF 无损提取内嵌图到 材料处理/…/pdfimages/
-#    make check-material   材料四要素/图片引用/底稿漂移检查
+#    make check-material   材料四要素/图片引用/逐页源数据/底稿漂移检查
+#    make ocr-plan|ocr-status|ocr-batch  OCR 流水线（OvisOCR3 + PaddleOCR-VL；ARGS 透传）
 #    make tools-test   运行 tools 单元测试（textfix / check_recrop / check_tikz / match_figures / pdf_extract_images / recrop_figures）
 #    make links        为全部试卷目录创建指向根公共文件的软链接
 #    make fetch-pr PR=1 [REMOTE=gitee]  接取远程 PR 到本地分支 pr/1（审查用）
@@ -58,6 +59,7 @@ endef
 
 .PHONY: all student teacher tikz tikz-compare check check-tikz check-recrop links \
         clean distclean material material-batch material-merge extract-images check-material tools-test \
+        ocr-plan ocr-status ocr-batch \
         index progress check-docs check-changed ci fetch-pr pr-check
 
 all:
@@ -152,8 +154,8 @@ pr-check:
 # 抽样构建 + 全量自查（CI 入口；大规模时用 YEAR=… 限定）
 ci:
 	@echo "===== 工具单元测试 + 文档校验 ====="
-	@python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_tikz_compare tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
-    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json
+	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_tikz_compare tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
+    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json tools.test_ocr_pipeline
 	@python3 tools/check_docs.py
 	@echo "===== 抽样编译（首份试卷） ====="
 	@d=$$(ls -d 试卷/*/* 2>/dev/null | head -1); \
@@ -170,20 +172,21 @@ check-recrop:
 # 工具单元测试（共性问题修正 / 批量映射 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 / 裁剪回填）
 tools-test:
 	@echo "===== tools 单元测试 ====="
-	@python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_tikz_compare tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
-    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json
+	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_tikz_compare tools.test_match_figures tools.test_pdf_extract_images tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
+    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json tools.test_ocr_pipeline
 
 # 材料处理管线（需 Conda 环境 / PaddleOCR-VL 服务；详见 材料处理与OCR规范.md）
+# 统一入口：python3 -m tools.ocr_pipeline（text→images→paddle→ovis→merge→check）
 material:
 	@[ -n "$(PDF)" ] && [ -n "$(OUT)" ] || { \
 		echo "用法: make material PDF=<源PDF> OUT=材料处理/<年>/<地区>"; exit 1; }
-	bash tools/ocr_pipeline.sh "$(PDF)" "$(OUT)"
+	$(OVIS_PYTHON) -m tools.ocr_pipeline run -c ocr_pipeline.json -i "$(PDF)" -o "$(OUT)" --auto-serve
 
-# 全库/多卷一键编排（五阶段，失败即停、断点续跑；参数经 ARGS 透传）
-#   例：make material-batch ARGS="--year 2026"
+# 全库/多卷一键编排（自动启停服务、断点续跑；参数经 ARGS 透传）
+#   例：make material-batch ARGS="--only 2026/湖北"
 #       make material-batch ARGS="--force"
 material-batch:
-	@bash tools/ocr_pipeline_all.sh $(ARGS)
+	@$(OVIS_PYTHON) -m tools.ocr_pipeline batch -c ocr_pipeline.json --root 材料处理 $(ARGS)
 
 material-merge:
 	@python3 tools/material_merge.py --root 材料处理
@@ -193,6 +196,23 @@ extract-images:
 
 check-material:
 	@python3 tools/check_material.py
+
+# ---------------------------------------------------------------------------
+# OCR 流水线（OvisOCR3 + PaddleOCR-VL；统一入口 python3 -m tools.ocr_pipeline）
+#   详见 OCR识别转换流程说明.md
+#   例：make ocr-status
+#       make ocr-batch ARGS="--auto-serve --only 2026/湖北"
+# ---------------------------------------------------------------------------
+OVIS_PYTHON ?= /home/shui/.conda/envs/ovis_ocr/bin/python
+
+ocr-plan:
+	@python3 -m tools.ocr_pipeline plan -c ocr_pipeline.json --root 材料处理 $(ARGS)
+
+ocr-status:
+	@python3 -m tools.ocr_pipeline status -c ocr_pipeline.json --root 材料处理 $(ARGS)
+
+ocr-batch:
+	@$(OVIS_PYTHON) -m tools.ocr_pipeline batch -c ocr_pipeline.json --root 材料处理 $(ARGS)
 
 links:
 	@python3 tools/tex_links.py

@@ -31,25 +31,21 @@
 
 ## 二、材料处理（PDF → Markdown / 图片）
 
-> 角色固定：**OvisOCR2 底本 + PaddleOCR-VL 验证 + pdftotext 旁证**；详见
+> 角色固定：**OvisOCR3 底本 + PaddleOCR-VL 验证 + pdftotext 旁证**；详见
 > [`../材料处理与OCR规范.md`](../材料处理与OCR规范.md)。
 
 | 脚本 | 用途 | 典型用法 |
 | :--- | :--- | :--- |
-| `ocr_pipeline.sh` | 一键三路转换 + 生成 `merged.md` + 无损提图（**单份**） | `tools/ocr_pipeline.sh Docx/2026/2026_湖北.pdf 材料处理/2026/湖北` |
-| `ocr_batch.py` | **批量**材料处理驱动（`list`/`status`/`pdftotext`/`paddle`/`ovis`/`merge`/`extract`，可断点续跑；Ovis 单进程只加载一次模型） | `python3 tools/ocr_batch.py status` |
-| `ocr_pipeline_all.sh` | **全库一键编排**：pdftotext → Paddle（自动启停+健康检查）→ Ovis → merged → 提图；失败即停、断点续跑 | `bash tools/ocr_pipeline_all.sh`（或 `make material-batch`） |
-| `pdf_to_md.py` | 引擎甲 **OvisOCR2**（底本） | 见 `ocr_pipeline.sh` |
-| `PaddleOCR_PDF_to_md.py` | 引擎乙 **PaddleOCR-VL**（验证，服务化） | 见 `ocr_pipeline.sh` |
-| `paddlex_serve_start.sh` / `paddlex_serve_stop.sh` | 启动 / 关闭 PaddleOCR-VL 服务（默认端口 8203） | `./tools/paddlex_serve_start.sh` |
+| `ocr_pipeline/`（`python3 -m tools.ocr_pipeline`） | **统一 OCR 流水线**：OvisOCR3 + PaddleOCR-VL，`text→images→paddle→ovis→merge→check`；逐页 `raw/structured/layout/pages` 源数据、批量、断点续跑、Paddle 自动分片/自动启停 | `make material PDF=… OUT=…`；`make ocr-batch ARGS="--auto-serve"` |
+| `paddlex_serve_start.sh` / `paddlex_serve_stop.sh` | 启动 / 关闭 PaddleOCR-VL 服务（默认端口 8203；`--auto-serve` 自动调用） | `./tools/paddlex_serve_start.sh` |
 | `material_merge.py` | 以 Ovis 为底本合并三路，生成/校验 `merged.md`（含底稿缺失/漂移守卫） | `python3 tools/material_merge.py --root 材料处理` |
 | `pdf_extract_images.py` | `pdfimages -all` **无损提取**原 PDF 内嵌图到 `pdfimages/` + `manifest.json`；纯矢量页可加 `--render` 用 `pdftoppm` 整页渲染 | `python3 tools/pdf_extract_images.py --root 材料处理 --render` |
-| `check_material.py` | 材料**四要素**（ovis/paddle/pdftotext/merged）完整性、图片引用有效、底稿漂移、manifest 文件齐全、纯矢量页清单 | `python3 tools/check_material.py` |
+| `check_material.py` | 材料**四要素**（ovis/paddle/pdftotext/merged）完整性、图片引用有效、底稿漂移、新版 manifest 逐页源数据、manifest 文件齐全、纯矢量页清单 | `python3 tools/check_material.py` |
 
 环境（可用环境变量覆盖，见脚本头）：
 
 - `CONDA_ROOT=/opt/anaconda`；`OVIS_ENV=ovis_ocr`、`PADDLE_ENV=BaiduPaddle`；
-- `OVIS_MODEL`（OvisOCR2 模型目录，示例 `~/AI/ATH-MaaS/OvisOCR2`）；
+- `OVIS_MODEL`（OvisOCR3 模型目录，默认 `/home/shui/AI/ATH-MaaS/OvisOCR3`）；
 - PaddleOCR-VL pipeline：`PADDLE_PIPELINE`（示例 `~/myservice/OCR/PaddleOCR/my_PaddleOCR-VL-1.6.yaml`）；
 - poppler：`pdftotext` / `pdfimages`。
 
@@ -126,7 +122,7 @@
 ```bash
 make tools-test
 # 等价于：
-python3 -m unittest tools.textfix.test_textfix tools.test_ocr_batch \
+python3 -m unittest tools.textfix.test_textfix tools.test_ocr_pipeline \
     tools.test_check_content tools.test_check_recrop tools.test_check_tikz \
     tools.test_tikz_compare tools.test_match_figures tools.test_pdf_extract_images \
     tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex \

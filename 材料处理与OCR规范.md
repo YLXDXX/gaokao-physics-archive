@@ -1,11 +1,11 @@
 # 材料处理与 OCR 规范（PDF → Markdown 多引擎交叉验证）
 
 本规范适用于高考真题制作中**以 JSON 为主、PDF/Docx 为辅**的校对与补全环节：
-把每份原始 PDF 用**两个独立 OCR 引擎**（OvisOCR2、PaddleOCR-VL）各转一遍，
+把每份原始 PDF 用**两个独立 OCR 引擎**（OvisOCR3、PaddleOCR-VL）各转一遍，
 文字版再辅以 `pdftotext`，逐项交叉验证得到唯一主数据源 `merged.md`；
 并从原 PDF **无损提取内嵌图**，为 JSON 缺图/复合图提供图片来源。
 
-> 角色固定：**OvisOCR2 为底本，PaddleOCR-VL 作验证，`pdftotext` 作辅助**；
+> 角色固定：**OvisOCR3 为底本，PaddleOCR-VL 作验证，`pdftotext` 作辅助**；
 > 冲突时回**原 PDF（原图）**裁定。
 
 ---
@@ -16,8 +16,11 @@
 
 ```
 材料处理/<年份>/<地区>/           # 与 试卷/<年份>/<地区>/ 一一对应，但相互分离
-├── ovis/output.md + images/     # 引擎甲·底本
-├── paddle/output.md + images/   # 引擎乙·验证
+├── source.json                  # 源 PDF 路径/页数/sha256/文字版判定
+├── ovis/output.md + images/     # 引擎甲·底本（OvisOCR3）
+├── ovis/raw|structured|layout|pages/  # 逐页原始响应/规范化版面/纯版面/页 Markdown
+├── paddle/output.md + images/   # 引擎乙·验证（PaddleOCR-VL）
+├── paddle/raw|structured|pages/ # 逐页版面框与规范化 Markdown
 ├── pdftotext.txt                # 旁证
 ├── merged.md                    # 最终主数据源
 └── pdfimages/                   # 原 PDF 内嵌图无损提取 + manifest.json
@@ -29,46 +32,53 @@
 
 ---
 
-## 二、三路转换（`tools/ocr_pipeline.sh`）
+## 二、三路转换（`python3 -m tools.ocr_pipeline`）
 
 ```bash
-tools/ocr_pipeline.sh Docx/2026/2026_湖北.pdf 材料处理/2026/湖北
-# 或（等价，根目录 Makefile 入口）：
+# 单卷（等价根目录 Makefile 入口）
 make material PDF=Docx/2026/2026_湖北.pdf OUT=材料处理/2026/湖北
+
+# 或直接用统一流水线（Paddle 自动启停、逐页断点续跑）
+/home/shui/.conda/envs/ovis_ocr/bin/python -m tools.ocr_pipeline run \
+    -c ocr_pipeline.json -i Docx/2026/2026_湖北.pdf \
+    -o 材料处理/2026/湖北 --auto-serve
 ```
 
-> **批量 / 全库**：`tools/ocr_pipeline.sh` 只处理**单份**。多卷或全库用
-> `tools/ocr_batch.py`（分阶段、断点续跑、Ovis 模型单进程只加载一次），
-> 或用**一键编排** `tools/ocr_pipeline_all.sh`（等价 `make material-batch`）——
-> 后者自动启停 PaddleOCR-VL 服务并做端口健康检查，任一阶段失败即停。
+> **批量 / 全库**：`make material-batch ARGS="--auto-serve"`（等价
+> `python3 -m tools.ocr_pipeline batch -c ocr_pipeline.json --root 材料处理`）。
+> 分阶段、断点续跑、Paddle 自动分块与自动启停；筛选改用 `--only 2026/湖北`
+> （旧的 `--year/--region` 已移除）。中断后重复同一命令即可续跑。
 
-脚本依次执行如下。**运行前须先启动 PaddleOCR-VL 服务**：
+流水线按 `text → images → paddle → ovis → merge → check` 顺序执行：
 
 ```bash
-# ── 旁证：pdftotext（文字版 PDF；扫描版可失败） ──
+# ── text：pdftotext 旁证 + source.json ──
 pdftotext -layout "<源PDF>" "<处理目录>/pdftotext.txt"
 
-# ── 引擎乙：PaddleOCR-VL（服务化） ──
-./tools/paddlex_serve_start.sh                 # 先启动服务（默认 127.0.0.1:8203）
-conda run -n BaiduPaddle python tools/PaddleOCR_PDF_to_md.py -i "<源PDF>" -o "<处理目录>/paddle"
-./tools/paddlex_serve_stop.sh                  # 用完关闭，释放显存
+# ── images：无损提取内嵌图（文字版 PDF） ──
+python3 tools/pdf_extract_images.py --pdf "<源PDF>" --out "<处理目录>/pdfimages" --quiet
 
-# ── 引擎甲：OvisOCR2（底本） ──
-conda run -n ovis_ocr python tools/pdf_to_md.py \
-    --input "<源PDF>" --output "<处理目录>/ovis" \
-    --model-path "$OVIS_MODEL" --enforce-eager
+# ── paddle：PaddleOCR-VL（服务化；--auto-serve 自动启动/关闭） ──
+#    逐页保存 paddle/raw/page_N.json（prunedResult）与 structured/pages
 
-# ── 生成 merged.md（以 Ovis 为底本 + 三路差异记录） ──
+# ── ovis：OvisOCR3（底本） ──
+#    逐页保存 ovis/raw|structured|layout|pages 与 Markdown
+
+# ── merge：以 Ovis 为底本 + 三路差异记录 ──
 python3 tools/material_merge.py "<处理目录>" --force
 
-# ── 无损提取内嵌图 ──
-python3 tools/pdf_extract_images.py "<处理目录>" --force
+# ── check：四要素 + 逐页源数据 + 图片引用 + 底稿漂移 ──
+python3 tools/check_material.py "<处理目录>"
 ```
 
-- OvisOCR2 环境：Anaconda `ovis_ocr`，模型目录由环境变量 `OVIS_MODEL` 指定（示例 `~/AI/ATH-MaaS/OvisOCR2/`）。
-- PaddleOCR-VL 环境：Anaconda `BaiduPaddle`，服务默认 `127.0.0.1:8203`。
+- OvisOCR3：沿用 Anaconda `ovis_ocr` 环境，模型 `/home/shui/AI/ATH-MaaS/OvisOCR3`；
+  可用 `OVIS_MODEL` 覆盖。PyMuPDF/Pillow/requests/vllm 依赖原环境已具备。
+- PaddleOCR-VL：Anaconda `BaiduPaddle`，服务默认 `127.0.0.1:8203`。
+- 两个引擎共用 GPU，**不要同时运行**；流水线已强制规范阶段顺序。
 - `tools/check_material.py` 校验四要素（`ovis/output.md`、`paddle/output.md`、
-  `pdftotext.txt`、`merged.md`）齐全非空、图片引用有效、底稿未漂移。
+  `pdftotext.txt`、`merged.md`）齐全非空、图片引用有效、底稿未漂移，
+  并在 `ovis/manifest.json` / `paddle/manifest.json` 存在时强制逐页
+  `raw/structured/layout/pages` 源数据齐全（旧格式只提示升级）。
 
 ---
 
@@ -79,7 +89,7 @@ python3 tools/pdf_extract_images.py "<处理目录>" --force
 | 文字 | 三路一致直接采用；两路一致取多数；互异回原 PDF 目视核对 |
 | 公式 | 取 LaTeX 更完整、可编译、与原图逐符号一致者 |
 | 表格 | 比对行列与单元格，跨页以不丢行、不串列者为准 |
-| 图片 | 文字版优先原 PDF 无损提取；扫描版取更清晰者 |
+| 图片 | 文字版优先原 PDF 无损提取；扫描版取更清晰者；bbox 以 `ovis/structured` 或 Paddle `layout_det_res` 为准 |
 | 数字/单位/上下标 | 双引擎 + pdftotext + 原图多方核对 |
 | 无法裁定 | 以原 PDF（原图）为最终裁决，存疑记入 `merged.md` 头部与 `异常记录/<年份>.md` |
 
@@ -108,6 +118,7 @@ pandoc -f docx -t markdown --extract-media=材料处理/2026/湖北/docx_media \
 
 1. **JSON 中的图片数据**（`JSON/.../tiku_images/…`）——首选，直接复制到 `figs/`；
 2. **JSON 缺图** → 从对应 `.pdf` 用 `pdf_extract_images.py`（`pdfimages -all`）无损提取；
+   Paddle 的 `paddle/structured` 与 OvisOCR3 的 `ovis/structured` 可用于按 bbox 复核/补裁；
 3. 纯矢量页（`pdfimages -list` 为 0 张）→ `pdftoppm -r 600 -png <PDF> <前缀>` 整页渲染后再裁
    （可直接用 `python3 tools/pdf_extract_images.py --root 材料处理 --render` 自动渲染落盘）；
 4. 无 PDF 时，可用 Docx 内嵌媒体（`unzip` 解出 `word/media/`）。

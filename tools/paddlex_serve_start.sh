@@ -1,6 +1,6 @@
 #!/bin/bash
 # ===========================================================================
-#  启动 PaddleOCR-VL 识别服务（PaddleOCR_PDF_to_md.py 的验证引擎）
+#  启动 PaddleOCR-VL 识别服务（OvisOCR3 统一流水线的验证引擎）
 #
 #  用法：
 #    ./tools/paddlex_serve_start.sh            # 前台运行（终端可见日志，Ctrl+C 关闭）

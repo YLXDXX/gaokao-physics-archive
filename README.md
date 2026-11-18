@@ -12,7 +12,7 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 
 > 本项目的若干工程经验：
 > **去中心化**（每份卷独立目录、独立 `Makefile`、独立图片）、公共样式只在根目录一份、
-> 材料处理采用**双 OCR 引擎 + pdftotext 交叉验证**、题目统一以 `ChoiceQuestion.sty`
+> 材料处理采用**双 OCR 引擎（OvisOCR3 + PaddleOCR-VL）+ pdftotext 交叉验证**、题目统一以 `ChoiceQuestion.sty`
 > 的选择题命令图片命令与答案/解析命令排版、各内容统一使用 `PhyUnit.sty` 排版物理单位。
 
 ---
@@ -32,7 +32,7 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 ├── JSON/                        # 【本地·Git 忽略】平台 JSON 原始数据（<年>/<年_地区>.json + tiku_images/）
 ├── Docx/                        # 【本地·Git 忽略】平台 Word / PDF 原始文档（<年>/<年_地区>.docx/.pdf）
 ├── 材料处理/<年份>/<地区>/       # 【本地·Git 忽略】材料处理目录（PDF→markdown、OCR、图片提取；
-│                                #   与 试卷/ 分离，含 ovis/ paddle/ pdftotext.txt merged.md pdfimages/ 等）
+│                                #   与 试卷/ 分离，含 source.json、ovis/、paddle/、pdftotext.txt、merged.md、pdfimages/ 等）
 ├── tools/                       # 脚本
 │   ├── json_to_tex.py           # JSON → LaTeX 初稿 + 图片素材（制作第一步）
 │   ├── html2latex.py            # HTML/公式 → LaTeX 的 DOM 转换器（json_to_tex 调用）
@@ -50,14 +50,10 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 │   ├── test_*.py                # 工具单元测试（make tools-test）
 │   ├── tex_links.py             # 为各卷目录建立公共文件相对软链接（make 时自动执行）
 │   ├── bin/inkscape             # Inkscape 串行化包装（并行编译用；各卷 Makefile 已加入 PATH）
-│   ├── ocr_pipeline.sh          # PDF → Markdown 双引擎 + pdftotext 管线（单份）
-│   ├── ocr_batch.py             # 批量材料处理驱动（分阶段、断点续跑）
-│   ├── ocr_pipeline_all.sh      # 全库一键编排（自动启停服务、失败即停）
-│   ├── pdf_to_md.py             # 引擎甲 OvisOCR2（底本）
-│   ├── PaddleOCR_PDF_to_md.py   # 引擎乙 PaddleOCR-VL（验证）
+│   ├── ocr_pipeline/            # 统一 OCR 流水线（OvisOCR3 + PaddleOCR-VL；python3 -m tools.ocr_pipeline）
 │   ├── material_merge.py        # 三路交叉验证生成 merged.md
 │   ├── pdf_extract_images.py    # 从原 PDF 无损提取内嵌图（pdfimages 封装）
-│   ├── check_material.py        # 材料四要素 / 图片引用 / 底稿漂移检查
+│   ├── check_material.py        # 材料四要素 / 图片引用 / 逐页源数据 / 底稿漂移检查
 │   ├── recrop_figures.py        # 多子图裁剪（recipe 驱动，调用 splitpicture）+ 前后对比
 │   ├── match_figures.py         # 旧 figs 图 → 源内嵌图/裁剪框 匹配草表
 │   ├── check_recrop.py          # 裁剪 recipe 一致性检查
@@ -89,10 +85,12 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 ├── 高考物理真题制作规范.md        # 【核心】真题制作规范（结构/元数据/图片/答案/解析）
 ├── LaTeX_format_ReadMe.md        # LaTeX 文档格式基本要求（排版细则，全卷共用）
 ├── 材料处理与OCR规范.md          # PDF→Markdown 多引擎交叉验证与图片提取
+├── OCR识别转换流程说明.md        # 统一 OCR 流水线（OvisOCR3 + PaddleOCR-VL、断点续跑、版面源数据）
 ├── 进度记录.md                   # 各年份/地区制作进度明细（README 只留概要）
 ├── 异常记录.md                   # 异常记录总索引 + 跨年份通用说明
 ├── 异常记录/<年份>.md             # 每一年各卷异常（统一：制作说明 + 待补充/待人工核验/已解决 分区表）
 ├── Makefile                     # 根目录批量编译脚本
+├── ocr_pipeline.json            # OCR 流水线配置（base_roots=Docx，images_script=pdf_extract_images）
 └── README.md
 ```
 
@@ -109,9 +107,11 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
    —— HTML/公式经 `tools/html2latex.py` 转为 LaTeX，图片按“题号+子图字母”复制到
    `试卷/<年>/<地区>/figs/`，生成 `<地区>.tex` 初稿。
 3. **转 Markdown 交叉验证**（公式/表格/图片质量把关）：
-   `tools/ocr_pipeline.sh Docx/<年>/<年_地区>.pdf 材料处理/<年>/<地区>`
-   —— 用 **OvisOCR2（底本）+ PaddleOCR-VL（验证）+ pdftotext（旁证）** 生成 `merged.md`，
-   并从原 PDF **无损提取内嵌图**到 `pdfimages/`。
+   `make material PDF=Docx/<年>/<年_地区>.pdf OUT=材料处理/<年>/<地区>`
+   （等价：`python3 -m tools.ocr_pipeline run -c ocr_pipeline.json -i … -o … --auto-serve`）
+   —— 用 **OvisOCR3（底本）+ PaddleOCR-VL（验证）+ pdftotext（旁证）** 生成 `merged.md`，
+   并从原 PDF **无损提取内嵌图**到 `pdfimages/`；批量用
+   `make material-batch ARGS="--auto-serve"`（断点续跑，筛选改用 `--only 2026/湖北`）。
    （材料统一放在根目录 `材料处理/<年>/<地区>/`，**不放进具体的 LaTeX 文档目录**。）
    （若该年地区**缺 PDF**，改用 `Docx` 中的 `.docx`：pandoc 转 Markdown 作为图解/解析参考。）
 4. **逐题校对与补全**：以 JSON 为主、`merged.md` 与原 PDF 为准，逐题核对题干 / 数据 / 单位 /
@@ -168,7 +168,8 @@ make pr-check PR=1   # 接取并对 PR 改动卷先 make all 再 check
 | `CONTRIBUTING.md` | 面向人类协作者的贡献指南（制作摘要、提交前自查、禁提交项、TikZ 重绘登记） |
 | `高考物理真题制作规范.md` | 【核心】文档结构、元数据字段与顺序、图片命令与引用标签、答案与解析、异常记录 |
 | `LaTeX_format_ReadMe.md` | LaTeX 文档格式基本要求（排版细则：两版开关、答案命令、图片与编号、公式单位、段落分行等） |
-| `材料处理与OCR规范.md` | PDF→Markdown 双引擎交叉验证、无损提取图片、底稿漂移检查 |
+| `材料处理与OCR规范.md` | PDF→Markdown 双引擎交叉验证、逐页版面源数据、无损提取图片、底稿漂移检查 |
+| `OCR识别转换流程说明.md` | 统一 OCR 流水线（OvisOCR3 + PaddleOCR-VL、逐页源数据、断点续跑、Paddle 自动分块） |
 | `docs/新增年份SOP.md` | 新增年份 / 制作一份卷的可勾选清单 |
 | `docs/编译方法.md` | 批量/单卷编译命令、两版开关、版面微调 |
 | `docs/代码审查指南.md` | 接收协作者 PR：`make fetch-pr`/`pr-check`、审查流程、项目专属清单（维护者） |

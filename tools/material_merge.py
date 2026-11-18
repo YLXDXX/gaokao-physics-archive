@@ -4,7 +4,7 @@
 生成材料处理目录的 ``merged.md``（三路交叉验证后的主数据源）。
 
 规则（与 `材料处理与OCR规范.md` 一致）：
-    * 正文以 **OvisOCR2**（`ovis/output.md`）为底本；
+    * 正文以 **OvisOCR3**（`ovis/output.md`）为底本；
     * 用 **PaddleOCR-VL**（`paddle/output.md`）与 **pdftotext**（`pdftotext.txt`）逐项印证；
     * 文末附**自动提取的差异记录**（数字 / 公式），供回原 PDF 核对。
 
@@ -65,7 +65,7 @@ def read_source_hash(merged_path: Path) -> Optional[str]:
 
 
 def clean_body(body: str) -> str:
-    """清理 OvisOCR2 常见噪声：独立的纯大写拼音行、过多空行。"""
+    """清理 OvisOCR3 常见噪声：独立的纯大写拼音行、过多空行。"""
     out = []
     for line in body.splitlines():
         if re.fullmatch(r"[A-Z]{3,}", line.strip()):
@@ -92,7 +92,7 @@ def build_appendix(ovis: str, paddle: str, pdftxt: str) -> str:
     lines = [
         "## 附：交叉验证差异记录（自动提取，供回原图核对）",
         "",
-        f"- OvisOCR2 数字集合 {len(o_n)} 个；PaddleOCR-VL 数字集合 {len(p_n)} 个；"
+        f"- OvisOCR3 数字集合 {len(o_n)} 个；PaddleOCR-VL 数字集合 {len(p_n)} 个；"
         f"pdftotext 数字集合 {len(t_n)} 个。",
         "",
         "### 1. 数字 / 单位差异",
@@ -135,14 +135,14 @@ def build_merged(directory: Path) -> Optional[str]:
     header = (
         "---\n"
         f'title: {title}\n'
-        "engines: OvisOCR2 (ovis/output.md) + PaddleOCR-VL-1.6 (paddle/output.md)\n"
+        "engines: OvisOCR3 (ovis/output.md) + PaddleOCR-VL-1.6 (paddle/output.md)\n"
         "side_reference: pdftotext -layout (pdftotext.txt)\n"
         f"source_sha256: {source_hash(ovis_path, paddle_path)}\n"
         f"validated_at: {now}\n"
-        "status: 以 OvisOCR2 为底本，已对照 PaddleOCR-VL 与 pdftotext 交叉验证\n"
+        "status: 以 OvisOCR3 为底本，已对照 PaddleOCR-VL 与 pdftotext 交叉验证\n"
         "---\n\n"
         "# 主数据源（merged.md）\n\n"
-        "> 本文件为该材料的主数据源：正文以 OvisOCR2 输出为底本，\n"
+        "> 本文件为该材料的主数据源：正文以 OvisOCR3 输出为底本，\n"
         "> 已与 PaddleOCR-VL 输出、pdftotext 文本逐项交叉验证；\n"
         "> 文末“交叉验证差异记录”列出三路来源不一致的数字/公式，供回原 PDF 核对。\n\n"
         "> **配图取用**：以 `<处理目录>/pdfimages/`（原 PDF 内嵌图**无损提取**，见 `make extract-images`）为准——\n"

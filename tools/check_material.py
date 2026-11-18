@@ -4,7 +4,7 @@
 针对 ``材料处理/<年>/<地区>/`` 下的每个
 **处理目录**，检查其四要素是否齐全、非空：
 
-    1. ovis/output.md    —— OvisOCR2 底本
+    1. ovis/output.md    —— OvisOCR3 底本
     2. paddle/output.md  —— PaddleOCR-VL 验证
     3. pdftotext.txt     —— 文字版旁证
     4. merged.md         —— 三路交叉验证主数据源
@@ -12,6 +12,8 @@
 并进一步校验：
 
     * ovis/output.md、paddle/output.md 中引用的 ``images/`` 图片确实存在；
+    * 新版 ``ovis/manifest.json`` / ``paddle/manifest.json`` 存在时，逐页
+      ``raw/structured/layout/pages`` 源数据必须齐全（旧格式只提示升级）；
     * merged.md 头部若记录了底稿哈希 ``source_sha256``，则与当前
       ovis/paddle 底稿比对，不一致即为**漂移**（底稿已变、merged.md 未重建）。
 
@@ -39,6 +41,10 @@ from typing import Iterable, List, Set
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from material_merge import source_hash  # noqa: E402
+try:  # 直接运行脚本时 tools/ 在 sys.path；作为包导入时项目根在 sys.path
+    from ocr_pipeline.utils import read_json  # noqa: E402
+except ImportError:  # pragma: no cover
+    from tools.ocr_pipeline.utils import read_json  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_ROOTS = ["材料处理"]
@@ -48,8 +54,21 @@ HASH_RE = re.compile(r"^source_sha256:\s*([0-9a-fA-F]{64})\s*$", re.M)
 # output.md 中的图片引用：<img src="images/x.jpg"> 或 ![alt](images/x.jpg)
 IMG_RE = re.compile(r"""(?:src\s*=\s*["']|!\[[^\]]*\]\()\s*(images/[^"')]+)""")
 
+# 新版 OvisOCR3 / Paddle 逐页源数据（有 manifest 时必须齐全）
+OVIS_PAGE_ARTIFACTS = [
+    "ovis/raw/page_{page:04d}.json",
+    "ovis/structured/page_{page:04d}.json",
+    "ovis/layout/page_{page:04d}.json",
+    "ovis/pages/page_{page:04d}.md",
+]
+PADDLE_PAGE_ARTIFACTS = [
+    "paddle/raw/page_{page:04d}.json",
+    "paddle/structured/page_{page:04d}.json",
+    "paddle/pages/page_{page:04d}.md",
+]
+
 ELEMENTS = [
-    ("ovis/output.md", "OvisOCR2 底本"),
+    ("ovis/output.md", "OvisOCR3 底本"),
     ("paddle/output.md", "PaddleOCR-VL 验证"),
     ("pdftotext.txt", "文字旁证"),
     ("merged.md", "主数据源"),
@@ -88,6 +107,45 @@ def check_images(doc: str, base: Path, problems: List[str], warnings: List[str])
         problems.append(f"{doc} 引用图片缺失：{r}")
 
 
+def _check_manifest_pages(
+    d: Path,
+    manifest_rel: str,
+    engine: str,
+    page_artifacts: List[str],
+    problems: List[str],
+    warnings: List[str],
+) -> None:
+    manifest_path = d / manifest_rel
+    if not manifest_path.is_file():
+        # 没有 manifest 视为旧流程产物，给出升级提示而不直接判错
+        if (d / manifest_rel.replace("manifest.json", "output.md")).is_file():
+            warnings.append(
+                f"{engine} 产物为旧格式（缺 {manifest_rel}），建议用 "
+                f"`python3 -m tools.ocr_pipeline run/batch` 重新生成：{d}"
+            )
+        return
+    manifest = read_json(manifest_path)
+    if not isinstance(manifest, dict):
+        problems.append(f"{manifest_rel} 不是合法 JSON：{d}")
+        return
+    try:
+        pages = int(manifest.get("pages") or 0)
+    except (TypeError, ValueError):
+        pages = 0
+    if pages <= 0:
+        problems.append(f"{manifest_rel} 缺少有效 pages：{d}")
+        return
+    if manifest.get("engine") not in (engine,):
+        problems.append(f"{manifest_rel} 引擎标记异常：{manifest.get('engine')!r}：{d}")
+    if manifest.get("status") != "complete":
+        problems.append(f"{manifest_rel} 状态未完成：{manifest.get('status')!r}：{d}")
+    for page in range(1, pages + 1):
+        for pattern in page_artifacts:
+            rel = pattern.format(page=page)
+            if not (d / rel).is_file():
+                problems.append(f"{engine} 缺少逐页源数据 {rel}：{d}")
+
+
 def check_dir(d: Path, problems: List[str], warnings: List[str],
               vector_dirs: List[Path] | None = None):
     # 1) 四要素存在且非空
@@ -98,13 +156,23 @@ def check_dir(d: Path, problems: List[str], warnings: List[str],
         elif p.stat().st_size == 0:
             problems.append(f"空文件 {label}（{rel}）：{d}")
 
-    # 2) 图片引用完整性
+    # 2) 新版逐页源数据（有 manifest 时强制；旧格式只提示）
+    _check_manifest_pages(
+        d, "ovis/manifest.json", "OvisOCR3", OVIS_PAGE_ARTIFACTS, problems, warnings
+    )
+    _check_manifest_pages(
+        d, "paddle/manifest.json", "PaddleOCR-VL", PADDLE_PAGE_ARTIFACTS, problems, warnings
+    )
+    if not (d / "source.json").is_file():
+        warnings.append(f"缺少 source.json（旧格式；新流程会写入）：{d}")
+
+    # 3) 图片引用完整性
     if (d / "ovis" / "output.md").is_file():
         check_images("ovis/output.md", d / "ovis" / "output.md", problems, warnings)
     if (d / "paddle" / "output.md").is_file():
         check_images("paddle/output.md", d / "paddle" / "output.md", problems, warnings)
 
-    # 3) 底稿漂移（merged.md 记录 source_sha256 时）
+    # 4) 底稿漂移（merged.md 记录 source_sha256 时）
     merged = d / "merged.md"
     ovis_p, paddle_p = d / "ovis" / "output.md", d / "paddle" / "output.md"
     if merged.is_file() and ovis_p.is_file() and paddle_p.is_file():
@@ -114,7 +182,7 @@ def check_dir(d: Path, problems: List[str], warnings: List[str],
             if cur.lower() != m.group(1).lower():
                 problems.append(f"底稿漂移（底稿已变、merged.md 未重建）：{d}")
 
-    # 4) 原 PDF 内嵌图是否已提取（供配图/裁剪），并核对 manifest 所列文件齐全
+    # 5) 原 PDF 内嵌图是否已提取（供配图/裁剪），并核对 manifest 所列文件齐全
     pdfimg = d / "pdfimages"
     manifest = pdfimg / "manifest.json"
     if ovis_p.is_file() and not pdfimg.is_dir():
