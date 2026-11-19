@@ -7,7 +7,8 @@ PIDS=""
 
 # 优先按监听端口查找进程
 if command -v lsof >/dev/null 2>&1; then
-    PIDS=$(lsof -ti tcp:"$PORT" 2>/dev/null)
+    # 只匹配监听进程，避免把持有客户端连接的批处理进程一并 kill
+    PIDS=$(lsof -ti tcp:"$PORT" -sTCP:LISTEN 2>/dev/null)
 fi
 if [ -z "$PIDS" ] && command -v fuser >/dev/null 2>&1; then
     PIDS=$(fuser "$PORT"/tcp 2>/dev/null)
