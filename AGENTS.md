@@ -27,6 +27,8 @@
   `异常记录.md`：总索引 + 跨年份说明。
 - `docs/`：从 README 移出的编译方法与运行环境。
 - `tools/`：转换、材料、检查、索引脚本；`tools/bin/`：并行编译包装（见 `tools/README.md`）。
+- **OCR / 切图 / 尺寸 / TikZ 对比由独立 OCRPipeLine 提供**（`ocrpipe`，默认 `~/.local/bin/ocrpipe`）；
+  本仓库不保留 OCR 流水线与切图程序，只保留使用说明软链接 `OCR识别转换流程说明.md`。
 
 ## 制作一份卷的固定顺序
 

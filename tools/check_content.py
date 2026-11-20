@@ -71,7 +71,7 @@ def collect_tex(paths: list[Path]) -> list[Path]:
     for p in paths:
         if p.is_dir():
             for f in sorted(p.rglob("*.tex")):
-                if "TikZ" in f.parts:  # 独立 TikZ 图片文档另由 check_tikz.py 校验
+                if "TikZ" in f.parts:  # 独立 TikZ 图片文档另由 ocrpipe check-tikz 校验
                     continue
                 files.append(f)
         elif p.suffix == ".tex":
