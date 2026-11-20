@@ -236,7 +236,7 @@ LaTeX 文档的**基本格式要求**，是后续大量真题转换与人工校�
     重绘**——确需重绘者由人工查验并手绘（见第 29 条）。
 
 26. **图片来源**：**文字版 PDF 一律用 `pdf_extract_images.py`（`pdfimages -all`）无损提取的
-    内嵌图**；**单图直接取用**；**多子图**（甲乙丙丁、A/B/C/D）用 `recrop_figures.py`
+    内嵌图**；**单图直接取用**；**多子图**（甲乙丙丁、A/B/C/D）用 `ocrpipe recrop`
     逐张裁剪回填 `figs/`（调用 `splitpicture`），**裁剪一张核对一张**，不做批量自动裁剪；
     **纯矢量页**（`pdfimages -list` 为 0）用 `pdftoppm -r 600` 渲染后再裁。详见
     `材料处理与OCR规范.md` 第五节。

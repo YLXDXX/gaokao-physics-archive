@@ -53,9 +53,9 @@
 
 | 脚本 | 用途 |
 | :--- | :--- |
-| `recrop_figures.py` | 按 recipe（`.recrop.json`）用 splitpicture 裁剪内嵌图 → 回填 `figs/`；并生成 `crop_compare/` 前后对比、`crop_preview/` 只读叠加预览 |
-| `match_figures.py` | 旧 `figs/*` → 源内嵌图/裁剪框 匹配草表（分诊，仅候选） |
-| `check_recrop.py` | 校验 `.recrop.json` 的 source/rect/target 与 `figs/` 结构/尺寸/文件头一致 |
+| `ocrpipe recrop` | 按 recipe（`.recrop.json`）用 splitpicture 裁剪内嵌图 → 回填 `figs/`；并生成 `crop_compare/` 前后对比、`crop_preview/` 只读叠加预览 |
+| `ocrpipe match` | 旧 `figs/*` → 源内嵌图/裁剪框 匹配草表（分诊，仅候选） |
+| `ocrpipe check-recrop` | 校验 `.recrop.json` 的 source/rect/target 与 `figs/` 结构/尺寸/文件头一致 |
 
 常用：`scan`（分诊）→ `split`/`labels`（预览框）→ 写 recipe → `preview`（叠加核对）
 → `apply`（裁剪回填）→ 打开 `crop_compare/` 逐张核对。
@@ -107,7 +107,7 @@
 **根目录** `make check` 在各卷之上再执行：
 
 11. `check_tikz.py`（TikZ 原图登记 / 未接入的“孤儿源” / 引用却缺 `.tex` 源）；
-12. `check_recrop.py`（裁剪 recipe；并提示孤儿 figs）；
+12. `ocrpipe check-recrop`（裁剪 recipe；并提示孤儿 figs）；
 13. 外部 `ocrpipe check`（材料完整性：四要素 / 图片引用 / 逐页源数据 / 底稿漂移）；
 14. `check_glyphs.py`（全库编译日志缺字兜底）；
 15. `check_review.py`（全库成品跨项复查兜底）；
@@ -123,9 +123,8 @@
 make tools-test
 # 等价于：
 python3 -m unittest tools.textfix.test_textfix \
-    tools.test_check_content tools.test_check_recrop tools.test_check_tikz \
-    tools.test_tikz_compare tools.test_match_figures \
-    tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex \
+    tools.test_check_content tools.test_check_tikz \
+    tools.test_tikz_compare tools.test_gen_index tools.test_json_to_tex \
     tools.test_html2latex tools.test_check_meta tools.test_check_answers \
     tools.test_check_units tools.test_check_formula_numbers \
     tools.test_review_to_ledger tools.test_tex_to_json

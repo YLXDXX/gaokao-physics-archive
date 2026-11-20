@@ -50,9 +50,7 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 │   ├── test_*.py                # 工具单元测试（make tools-test）
 │   ├── tex_links.py             # 为各卷目录建立公共文件相对软链接（make 时自动执行）
 │   ├── bin/inkscape             # Inkscape 串行化包装（并行编译用；各卷 Makefile 已加入 PATH）
-│   ├── recrop_figures.py        # 多子图裁剪（recipe 驱动，调用 splitpicture）+ 前后对比
-│   ├── match_figures.py         # 旧 figs 图 → 源内嵌图/裁剪框 匹配草表
-│   ├── check_recrop.py          # 裁剪 recipe 一致性检查
+│   ├── （切图：`ocrpipe recrop/match/check-recrop`，见 OCR识别转换流程说明.md）
 │   ├── tikz_compare.py          # 重绘 TikZ 与原图的「重绘前后」对比图
 │   ├── check_tikz.py            # TikZ/tikz_sources.json 原图登记一致性检查
 │   ├── gen_index.py             # 索引/进度生成与共享库（make index）

@@ -123,16 +123,16 @@ pandoc -f docx -t markdown --extract-media=材料处理/2026/湖北/docx_media \
    （可直接用 `ocrpipe images --root 材料处理 --render` 自动渲染落盘）；
 4. 无 PDF 时，可用 Docx 内嵌媒体（`unzip` 解出 `word/media/`）。
 
-### 2. 复合图拆分（`tools/recrop_figures.py`，依赖 splitpicture）
+### 2. 复合图拆分（`ocrpipe recrop`，依赖 splitpicture）
 
 JSON 常把**多个子图合在一张图**里（如 2026 云南第 6、11、12、13 题）。要求
 **裁剪一个核对一个，不做批量自动裁剪**。位图用 `splitpicture`（本项目不自研裁剪程序）：
 
 ```bash
-python3 tools/recrop_figures.py scan  材料处理/2026/云南/pdfimages       # 分诊：列出多子图候选
-python3 tools/recrop_figures.py split 材料处理/…/pdfimages/p6_0.jpg -o preview.png
-python3 tools/recrop_figures.py preview 试卷/2026/云南/.recrop.json      # 只读叠加（绿=实裁框、黄=擦除框）
-python3 tools/recrop_figures.py apply   试卷/2026/云南/.recrop.json      # 裁剪回填 figs/ + crop_compare/
+ocrpipe recrop scan  材料处理/2026/云南/pdfimages       # 分诊：列出多子图候选
+ocrpipe recrop split 材料处理/…/pdfimages/p6_0.jpg -o preview.png
+ocrpipe recrop preview 试卷/2026/云南/.recrop.json      # 只读叠加（绿=实裁框、黄=擦除框）
+ocrpipe recrop apply   试卷/2026/云南/.recrop.json      # 裁剪回填 figs/ + crop_compare/
 ```
 
 - `splitpicture` 需在 `PATH`，或用 `SPLITPICTURE=/path/to/splitpicture` 指定；
@@ -140,7 +140,7 @@ python3 tools/recrop_figures.py apply   试卷/2026/云南/.recrop.json      # �
 - recipe（`试卷/<年>/<地区>/.recrop.json`）登记 `source` → `crops[rect,target]`；
   标签与图内文字同高时用 `erase`/`erase_labels` 先擦后裁。
 - **必须打开 `crop_compare/*.png` 逐张核对**（左＝裁剪输入、右＝回填子图）；纯去白边不生成。
-- `make check` 的 `check_recrop.py` 校验 recipe 与 `figs/` 结构/尺寸/文件头一致。
+- `make check` 的 `ocrpipe check-recrop` 校验 recipe 与 `figs/` 结构/尺寸/文件头一致。
 - **SVG 复合图**：在 Inkscape 中人工拆分导出子图（本项目暂不做自动矢量拆分）。
 - 拆分后按 `figs/<题号><子图字母>.<ext>` 命名回填；子图**不得含**自带编号标签
   （`甲/乙/丙`、`A/B/C/D`），编号由 `ChoiceQuestion` 自动生成。

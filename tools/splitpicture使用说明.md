@@ -6,8 +6,8 @@
 > 去标签，回填各卷 `figs/`（见 `材料处理与OCR规范.md` 第五节、
 > `高考物理真题制作规范.md` 第五节）。
 >
-> **日常制卷优先走本项目封装** `tools/recrop_figures.py`（recipe 驱动 + `crop_compare/`
-> 对比图 + `check_recrop.py` 校验）；本文同时给出**直接调用 CLI / GUI** 的用法，
+> **日常制卷优先走本项目封装** `tools/ocrpipe recrop`（recipe 驱动 + `crop_compare/`
+> 对比图 + `ocrpipe check-recrop` 校验）；本文同时给出**直接调用 CLI / GUI** 的用法，
 > 用于分诊、复核与疑难图人工处理。
 
 ---
@@ -24,10 +24,10 @@ splitpicture --capabilities   # JSON：version / ocr / opencv / features
 features 含 `panels`、`options`、`erase-labels`、`labels-file`、`rects-file`、
 `json-items`、`tight`、`rects-base` 等。
 
-- **≥ 0.4 的原因**：`recrop_figures.py preview` 依赖 `detect --preview` 的外部框叠加；
+- **≥ 0.4 的原因**：`ocrpipe recrop preview` 依赖 `detect --preview` 的外部框叠加；
   `apply` 依赖 `split --json` 的 `items`（rect → output → skipped 的无歧义映射）。
-- 无图形环境（脚本/CI）时设置 `QT_QPA_PLATFORM=offscreen`；`recrop_figures.py`
-  与 `match_figures.py` 已自动设置。
+- 无图形环境（脚本/CI）时设置 `QT_QPA_PLATFORM=offscreen`；`ocrpipe recrop`
+  与 `ocrpipe match.py` 已自动设置。
 - 环境变量 `SPLITPICTURE` 可覆盖可执行文件路径（两个封装脚本均读取）。
 - OCR 依赖 `tesseract` + `chi_sim`/`eng`；未装时自动退化为纯几何，仍可用于
   `--panels/--options`（其标签判定以几何为主）。
@@ -103,36 +103,36 @@ splitpicture split  -i p7_18_clean.png --panels -d out -p fig
 
 ---
 
-## 四、本项目封装：`tools/recrop_figures.py`（推荐流程）
+## 四、本项目封装：`tools/ocrpipe recrop`（推荐流程）
 
 把“从内嵌图裁子图 → 回填 `figs/` → 生成裁剪前后对比图”固化为 **recipe 驱动**的
 可复现流程，所有 splitpicture 调用都由它完成。
 
 ```bash
 # 1) 分诊：批量生成候选框预览，列出多子图（≥2）与标签数
-python3 tools/recrop_figures.py scan 材料处理/2026/广东/pdfimages
+ocrpipe recrop scan 材料处理/2026/广东/pdfimages
 #    → 写出 材料处理/.../pdfimages/review/<名>/{rects.json,labels.json,preview.png}
 #    追加 --recipe-out out.json 可为多子图候选生成 .recrop.json 草稿（target 为占位名，
 #    需人工改成 figs/<题号><子图字母>.png 并逐张核对后 apply）：
-python3 tools/recrop_figures.py scan 材料处理/.../pdfimages --recipe-out /tmp/draft.json
+ocrpipe recrop scan 材料处理/.../pdfimages --recipe-out /tmp/draft.json
 
 # 2) 预览单张候选框（人工核对 rect）
-python3 tools/recrop_figures.py split 材料处理/2026/广东/pdfimages/p7_11.jpg -o preview.png
+ocrpipe recrop split 材料处理/2026/广东/pdfimages/p7_11.jpg -o preview.png
 
 # 2b) 查看/导出某图的图形框与标签框（辅助写 recipe）
-python3 tools/recrop_figures.py labels 材料处理/.../p7_11.jpg --mode panels -o labels.json --preview prev.png
+ocrpipe recrop labels 材料处理/.../p7_11.jpg --mode panels -o labels.json --preview prev.png
 
 # 3) 写 recipe：登记 source 与 crops(rect→target)，可选 erase / erase_labels / trim
 #    文件：试卷/<年>/<地区>/.recrop.json
 
 # 4) 只读叠加预览：绿=实裁框、黄=擦除框（apply 前核对）
-python3 tools/recrop_figures.py preview 试卷/2026/四川/.recrop.json
+ocrpipe recrop preview 试卷/2026/四川/.recrop.json
 
 # 5) 裁剪回填 figs/ 并生成 crop_compare/<文档>_裁剪前后.png
-python3 tools/recrop_figures.py apply 试卷/2026/四川/.recrop.json
+ocrpipe recrop apply 试卷/2026/四川/.recrop.json
 
 # 6) 校验 recipe 与 figs/ 结构/尺寸/文件头一致
-python3 tools/check_recrop.py
+ocrpipe check-recrop
 ```
 
 recipe 格式（路径相对项目根）：
@@ -164,7 +164,7 @@ recipe 格式（路径相对项目根）：
 - **必须逐张打开 `crop_compare/<文档>_裁剪前后.png`**（左=原图，红框=擦除区；右=回填子图）。
 
 > 用 recipe 的好处：可复查（`preview` 绿/黄框）、可回喂（编辑 `rects/labels` 再 `apply`）、
-> 可校验（`check_recrop`）。**新卷应尽量用 recipe**，避免“手工 PIL 直接裁”留下不可复现的图。
+> 可校验（`ocrpipe check-recrop`）。**新卷应尽量用 recipe**，避免“手工 PIL 直接裁”留下不可复现的图。
 
 ---
 
@@ -236,10 +236,10 @@ splitpicture -i page.png              # 空白画布，右键加载图片
 
 ## 七、质量核对清单（每次裁剪都过一遍）
 
-- [ ] 先用 `--preview` 看**红框=图形、蓝框=标签**是否合理（`recrop_figures.py preview` 另叠绿/黄框）。
+- [ ] 先用 `--preview` 看**红框=图形、蓝框=标签**是否合理（`ocrpipe recrop preview` 另叠绿/黄框）。
 - [ ] `apply` 后用 `crop_compare/<文档>_裁剪前后.png` **逐行**核对：无多裁、少裁、残留标签/图题。
 - [ ] 子图**不得自带** `甲/乙/丙`、`A/B/C/D` 编号（编号由 `ChoiceQuestion` 自动生成）。
-- [ ] `make check` 含 `check_recrop.py`，保证 recipe 与 `figs/` 结构一致。
+- [ ] `make check` 含 `ocrpipe check-recrop`，保证 recipe 与 `figs/` 结构一致。
 - [ ] 只用原图，**严禁用 TikZ 重绘**（`材料处理与OCR规范.md` 第五节 4）。
 
 ---

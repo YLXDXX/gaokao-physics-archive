@@ -19,7 +19,7 @@
 #    make extract-images   从源 PDF 无损提取内嵌图到 材料处理/…/pdfimages/
 #    make check-material   材料四要素/图片引用/逐页源数据/底稿漂移检查
 #    make ocr-plan|ocr-status|ocr-batch  OCR 流水线（外部 OCRPipeLine；ARGS 透传）
-#    make tools-test   运行 tools 单元测试（textfix / check_recrop / check_tikz / match_figures / recrop_figures）
+#    make tools-test   运行 tools 单元测试（textfix / check_tikz / 内容与索引）
 #    make links        为全部试卷目录创建指向根公共文件的软链接
 #    make fetch-pr PR=1 [REMOTE=gitee]  接取远程 PR 到本地分支 pr/1（审查用）
 #    make pr-check PR=1 [REMOTE=gitee]  接取后只对 PR 改动的试卷目录跑 check
@@ -83,7 +83,7 @@ check:
 	@echo "===== 重绘 TikZ 原图登记一致性检查 ====="
 	@python3 tools/check_tikz.py
 	@echo "===== 多子图裁剪 recipe 一致性检查 ====="
-	@python3 tools/check_recrop.py
+	@$(OCRPIPE) check-recrop 试卷
 	@echo "===== 材料处理产物完整性检查 ====="
 	@$(OCRPIPE) check --root 材料处理
 	@echo "===== 编译日志缺字检查 ====="
@@ -154,7 +154,7 @@ pr-check:
 # 抽样构建 + 全量自查（CI 入口；大规模时用 YEAR=… 限定）
 ci:
 	@echo "===== 工具单元测试 + 文档校验 ====="
-	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_tikz_compare tools.test_match_figures tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
+	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_check_tikz tools.test_tikz_compare tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
     tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json
 	@python3 tools/check_docs.py
 	@echo "===== 抽样编译（首份试卷） ====="
@@ -167,12 +167,12 @@ check-tikz:
 	@python3 tools/check_tikz.py
 
 check-recrop:
-	@python3 tools/check_recrop.py
+	@$(OCRPIPE) check-recrop 试卷
 
 # 工具单元测试（共性问题修正 / 批量映射 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 / 裁剪回填）
 tools-test:
 	@echo "===== tools 单元测试 ====="
-	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_check_recrop tools.test_check_tikz tools.test_tikz_compare tools.test_match_figures tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
+	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_check_tikz tools.test_tikz_compare tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
     tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json
 
 # 材料处理管线（外部独立程序 OCRPipeLine；需 Conda 环境 / PaddleOCR-VL 服务）
