@@ -235,7 +235,7 @@ LaTeX 文档的**基本格式要求**，是后续大量真题转换与人工校�
     不用不准确的 TikZ 简图代替。**原题中的图一律不能漏掉**。**严禁在转换中引入 TikZ
     重绘**——确需重绘者由人工查验并手绘（见第 29 条）。
 
-26. **图片来源**：**文字版 PDF 一律用 `pdf_extract_images.py`（`pdfimages -all`）无损提取的
+26. **图片来源**：**文字版 PDF 一律用 `make extract-images`（`ocrpipe images`，`pdfimages -all`）无损提取的
     内嵌图**；**单图直接取用**；**多子图**（甲乙丙丁、A/B/C/D）用 `ocrpipe recrop`
     逐张裁剪回填 `figs/`（调用 `splitpicture`），**裁剪一张核对一张**，不做批量自动裁剪；
     **纯矢量页**（`pdfimages -list` 为 0）用 `pdftoppm -r 600` 渲染后再裁。详见

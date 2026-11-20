@@ -19,7 +19,7 @@
 #    make extract-images   从源 PDF 无损提取内嵌图到 材料处理/…/pdfimages/
 #    make check-material   材料四要素/图片引用/逐页源数据/底稿漂移检查
 #    make ocr-plan|ocr-status|ocr-batch  OCR 流水线（外部 OCRPipeLine；ARGS 透传）
-#    make tools-test   运行 tools 单元测试（textfix / check_tikz / 内容与索引）
+#    make tools-test   运行 tools 单元测试（textfix / 元数据 / 内容 / 索引）
 #    make links        为全部试卷目录创建指向根公共文件的软链接
 #    make fetch-pr PR=1 [REMOTE=gitee]  接取远程 PR 到本地分支 pr/1（审查用）
 #    make pr-check PR=1 [REMOTE=gitee]  接取后只对 PR 改动的试卷目录跑 check
@@ -81,11 +81,12 @@ tikz-compare:
 check:
 	$(call RUN_DIRS,$(PAPERS),check)
 	@echo "===== 重绘 TikZ 原图登记一致性检查 ====="
-	@ocrpipe check-tikz 试卷
+	@$(OCRPIPE) check-tikz 试卷
 	@echo "===== 多子图裁剪 recipe 一致性检查 ====="
 	@$(OCRPIPE) check-recrop 试卷
 	@echo "===== 材料处理产物完整性检查 ====="
-	@$(OCRPIPE) check --root 材料处理
+	@if [ -d 材料处理 ]; then $(OCRPIPE) check --root 材料处理; \
+	  else echo "  （跳过：未找到 材料处理/，为本地忽略目录）"; fi
 	@echo "===== 编译日志缺字检查 ====="
 	@python3 tools/check_glyphs.py
 	@echo "===== 成品跨项复查 ====="
@@ -164,7 +165,7 @@ ci:
 	@$(MAKE) --no-print-directory check
 
 check-tikz:
-	@ocrpipe check-tikz 试卷
+	@$(OCRPIPE) check-tikz 试卷
 
 check-recrop:
 	@$(OCRPIPE) check-recrop 试卷

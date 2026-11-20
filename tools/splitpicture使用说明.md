@@ -6,7 +6,7 @@
 > 去标签，回填各卷 `figs/`（见 `材料处理与OCR规范.md` 第五节、
 > `高考物理真题制作规范.md` 第五节）。
 >
-> **日常制卷优先走本项目封装** `tools/ocrpipe recrop`（recipe 驱动 + `crop_compare/`
+> **日常制卷优先走本项目封装** `ocrpipe recrop`（recipe 驱动 + `crop_compare/`
 > 对比图 + `ocrpipe check-recrop` 校验）；本文同时给出**直接调用 CLI / GUI** 的用法，
 > 用于分诊、复核与疑难图人工处理。
 
@@ -103,7 +103,7 @@ splitpicture split  -i p7_18_clean.png --panels -d out -p fig
 
 ---
 
-## 四、本项目封装：`tools/ocrpipe recrop`（推荐流程）
+## 四、本项目封装：`ocrpipe recrop`（推荐流程）
 
 把“从内嵌图裁子图 → 回填 `figs/` → 生成裁剪前后对比图”固化为 **recipe 驱动**的
 可复现流程，所有 splitpicture 调用都由它完成。
