@@ -32,20 +32,20 @@
 
 ---
 
-## 二、三路转换（`python3 -m tools.ocr_pipeline`）
+## 二、三路转换（`ocrpipe`）
 
 ```bash
 # 单卷（等价根目录 Makefile 入口）
 make material PDF=Docx/2026/2026_湖北.pdf OUT=材料处理/2026/湖北
 
 # 或直接用统一流水线（Paddle 自动启停、逐页断点续跑）
-/home/shui/.conda/envs/ovis_ocr/bin/python -m tools.ocr_pipeline run \
+ocrpipe run \
     -c ocr_pipeline.json -i Docx/2026/2026_湖北.pdf \
     -o 材料处理/2026/湖北 --auto-serve
 ```
 
 > **批量 / 全库**：`make material-batch ARGS="--auto-serve"`（等价
-> `python3 -m tools.ocr_pipeline batch -c ocr_pipeline.json --root 材料处理`）。
+> `ocrpipe batch -c ocr_pipeline.json --root 材料处理`）。
 > 分阶段、断点续跑、Paddle 自动分块与自动启停；筛选改用 `--only 2026/湖北`
 > （旧的 `--year/--region` 已移除）。中断后重复同一命令即可续跑。
 
@@ -56,7 +56,7 @@ make material PDF=Docx/2026/2026_湖北.pdf OUT=材料处理/2026/湖北
 pdftotext -layout "<源PDF>" "<处理目录>/pdftotext.txt"
 
 # ── images：无损提取内嵌图（文字版 PDF） ──
-python3 tools/pdf_extract_images.py --pdf "<源PDF>" --out "<处理目录>/pdfimages" --quiet
+ocrpipe images --pdf "<源PDF>" --out "<处理目录>/pdfimages" --quiet
 
 # ── paddle：PaddleOCR-VL（服务化；--auto-serve 自动启动/关闭） ──
 #    逐页保存 paddle/raw/page_N.json（prunedResult）与 structured/pages
@@ -65,17 +65,17 @@ python3 tools/pdf_extract_images.py --pdf "<源PDF>" --out "<处理目录>/pdfim
 #    逐页保存 ovis/raw|structured|layout|pages 与 Markdown
 
 # ── merge：以 Ovis 为底本 + 三路差异记录 ──
-python3 tools/material_merge.py "<处理目录>" --force
+ocrpipe merge "<处理目录>" --force
 
 # ── check：四要素 + 逐页源数据 + 图片引用 + 底稿漂移 ──
-python3 tools/check_material.py "<处理目录>"
+ocrpipe check "<处理目录>"
 ```
 
 - OvisOCR3：沿用 Anaconda `ovis_ocr` 环境，模型 `/home/shui/AI/ATH-MaaS/OvisOCR3`；
   可用 `OVIS_MODEL` 覆盖。PyMuPDF/Pillow/requests/vllm 依赖原环境已具备。
 - PaddleOCR-VL：Anaconda `BaiduPaddle`，服务默认 `127.0.0.1:8203`。
 - 两个引擎共用 GPU，**不要同时运行**；流水线已强制规范阶段顺序。
-- `tools/check_material.py` 校验四要素（`ovis/output.md`、`paddle/output.md`、
+- `ocrpipe check` 校验四要素（`ovis/output.md`、`paddle/output.md`、
   `pdftotext.txt`、`merged.md`）齐全非空、图片引用有效、底稿未漂移，
   并在 `ovis/manifest.json` / `paddle/manifest.json` 存在时强制逐页
   `raw/structured/layout/pages` 源数据齐全（旧格式只提示升级）。
@@ -117,10 +117,10 @@ pandoc -f docx -t markdown --extract-media=材料处理/2026/湖北/docx_media \
 ### 1. 来源优先级
 
 1. **JSON 中的图片数据**（`JSON/.../tiku_images/…`）——首选，直接复制到 `figs/`；
-2. **JSON 缺图** → 从对应 `.pdf` 用 `pdf_extract_images.py`（`pdfimages -all`）无损提取；
+2. **JSON 缺图** → 从对应 `.pdf` 用 `ocrpipe images`（`pdfimages -all`）无损提取；
    Paddle 的 `paddle/structured` 与 OvisOCR3 的 `ovis/structured` 可用于按 bbox 复核/补裁；
 3. 纯矢量页（`pdfimages -list` 为 0 张）→ `pdftoppm -r 600 -png <PDF> <前缀>` 整页渲染后再裁
-   （可直接用 `python3 tools/pdf_extract_images.py --root 材料处理 --render` 自动渲染落盘）；
+   （可直接用 `ocrpipe images --root 材料处理 --render` 自动渲染落盘）；
 4. 无 PDF 时，可用 Docx 内嵌媒体（`unzip` 解出 `word/media/`）。
 
 ### 2. 复合图拆分（`tools/recrop_figures.py`，依赖 splitpicture）

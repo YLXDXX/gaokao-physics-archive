@@ -50,17 +50,11 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 │   ├── test_*.py                # 工具单元测试（make tools-test）
 │   ├── tex_links.py             # 为各卷目录建立公共文件相对软链接（make 时自动执行）
 │   ├── bin/inkscape             # Inkscape 串行化包装（并行编译用；各卷 Makefile 已加入 PATH）
-│   ├── ocr_pipeline/            # 统一 OCR 流水线（OvisOCR3 + PaddleOCR-VL；python3 -m tools.ocr_pipeline）
-│   ├── material_merge.py        # 三路交叉验证生成 merged.md
-│   ├── pdf_extract_images.py    # 从原 PDF 无损提取内嵌图（pdfimages 封装）
-│   ├── check_material.py        # 材料四要素 / 图片引用 / 逐页源数据 / 底稿漂移检查
 │   ├── recrop_figures.py        # 多子图裁剪（recipe 驱动，调用 splitpicture）+ 前后对比
 │   ├── match_figures.py         # 旧 figs 图 → 源内嵌图/裁剪框 匹配草表
 │   ├── check_recrop.py          # 裁剪 recipe 一致性检查
 │   ├── tikz_compare.py          # 重绘 TikZ 与原图的「重绘前后」对比图
 │   ├── check_tikz.py            # TikZ/tikz_sources.json 原图登记一致性检查
-│   ├── paddlex_serve_start.sh   # 启动 PaddleOCR-VL 服务
-│   ├── paddlex_serve_stop.sh    # 关闭 PaddleOCR-VL 服务
 │   ├── gen_index.py             # 索引/进度生成与共享库（make index）
 │   ├── check_docs.py            # 进度/年份索引/异常记录一致性校验（make check-docs）
 │   ├── check_docs_text.py       # 文档体检（过时 cd 用法 / 失效相对链接）
@@ -85,12 +79,12 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 ├── 高考物理真题制作规范.md        # 【核心】真题制作规范（结构/元数据/图片/答案/解析）
 ├── LaTeX_format_ReadMe.md        # LaTeX 文档格式基本要求（排版细则，全卷共用）
 ├── 材料处理与OCR规范.md          # PDF→Markdown 多引擎交叉验证与图片提取
-├── OCR识别转换流程说明.md        # 统一 OCR 流水线（OvisOCR3 + PaddleOCR-VL、断点续跑、版面源数据）
+├── OCR识别转换流程说明.md        # 软链接 → OCRPipeLine/docs/USAGE.md（外部程序使用说明）
 ├── 进度记录.md                   # 各年份/地区制作进度明细（README 只留概要）
 ├── 异常记录.md                   # 异常记录总索引 + 跨年份通用说明
 ├── 异常记录/<年份>.md             # 每一年各卷异常（统一：制作说明 + 待补充/待人工核验/已解决 分区表）
 ├── Makefile                     # 根目录批量编译脚本
-├── ocr_pipeline.json            # OCR 流水线配置（base_roots=Docx，images_script=pdf_extract_images）
+├── ocr_pipeline.json            # OCRPipeLine 项目配置（base_roots=Docx）
 └── README.md
 ```
 
@@ -108,7 +102,7 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
    `试卷/<年>/<地区>/figs/`，生成 `<地区>.tex` 初稿。
 3. **转 Markdown 交叉验证**（公式/表格/图片质量把关）：
    `make material PDF=Docx/<年>/<年_地区>.pdf OUT=材料处理/<年>/<地区>`
-   （等价：`python3 -m tools.ocr_pipeline run -c ocr_pipeline.json -i … -o … --auto-serve`）
+   （等价：`ocrpipe run -c ocr_pipeline.json -i … -o … --auto-serve`）
    —— 用 **OvisOCR3（底本）+ PaddleOCR-VL（验证）+ pdftotext（旁证）** 生成 `merged.md`，
    并从原 PDF **无损提取内嵌图**到 `pdfimages/`；批量用
    `make material-batch ARGS="--auto-serve"`（断点续跑，筛选改用 `--only 2026/湖北`）。
@@ -169,7 +163,7 @@ make pr-check PR=1   # 接取并对 PR 改动卷先 make all 再 check
 | `高考物理真题制作规范.md` | 【核心】文档结构、元数据字段与顺序、图片命令与引用标签、答案与解析、异常记录 |
 | `LaTeX_format_ReadMe.md` | LaTeX 文档格式基本要求（排版细则：两版开关、答案命令、图片与编号、公式单位、段落分行等） |
 | `材料处理与OCR规范.md` | PDF→Markdown 双引擎交叉验证、逐页版面源数据、无损提取图片、底稿漂移检查 |
-| `OCR识别转换流程说明.md` | 统一 OCR 流水线（OvisOCR3 + PaddleOCR-VL、逐页源数据、断点续跑、Paddle 自动分块） |
+| `OCR识别转换流程说明.md` | 外部 OCRPipeLine 使用说明（软链接）：安装、OvisOCR3 + PaddleOCR-VL、逐页源数据、断点续跑、Paddle 自动分块 |
 | `docs/新增年份SOP.md` | 新增年份 / 制作一份卷的可勾选清单 |
 | `docs/编译方法.md` | 批量/单卷编译命令、两版开关、版面微调 |
 | `docs/代码审查指南.md` | 接收协作者 PR：`make fetch-pr`/`pr-check`、审查流程、项目专属清单（维护者） |
@@ -203,7 +197,8 @@ make pr-check PR=1   # 接取并对 PR 改动卷先 make all 再 check
 TeX / 中文字体自动回退 / poppler / splitpicture / OCR / Python 依赖等详见
 **[`docs/运行环境.md`](docs/运行环境.md)**。要点：本地 TeX Live 2025（`xelatex` + `latexmk`，
 `svg` 经 Inkscape，编译开启 `-shell-escape`）；中文字体在有/无 Windows 字体的系统均可编译；
-材料处理脚本需 Conda 环境与 PaddleOCR-VL 服务。
+OCR/材料转换由独立 **OCRPipeLine** 提供（`ocrpipe`，默认安装到 `~/.local/bin`），
+需 Conda 环境与 PaddleOCR-VL 服务；安装与用法见 `OCR识别转换流程说明.md`。
 
 ## 七、一点说明
 

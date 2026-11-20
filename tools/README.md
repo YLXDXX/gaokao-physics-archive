@@ -36,11 +36,11 @@
 
 | 脚本 | 用途 | 典型用法 |
 | :--- | :--- | :--- |
-| `ocr_pipeline/`（`python3 -m tools.ocr_pipeline`） | **统一 OCR 流水线**：OvisOCR3 + PaddleOCR-VL，`text→images→paddle→ovis→merge→check`；逐页 `raw/structured/layout/pages` 源数据、批量、断点续跑、Paddle 自动分片/自动启停 | `make material PDF=… OUT=…`；`make ocr-batch ARGS="--auto-serve"` |
-| `paddlex_serve_start.sh` / `paddlex_serve_stop.sh` | 启动 / 关闭 PaddleOCR-VL 服务（默认端口 8203；`--auto-serve` 自动调用） | `./tools/paddlex_serve_start.sh` |
-| `material_merge.py` | 以 Ovis 为底本合并三路，生成/校验 `merged.md`（含底稿缺失/漂移守卫） | `python3 tools/material_merge.py --root 材料处理` |
-| `pdf_extract_images.py` | `pdfimages -all` **无损提取**原 PDF 内嵌图到 `pdfimages/` + `manifest.json`；纯矢量页可加 `--render` 用 `pdftoppm` 整页渲染 | `python3 tools/pdf_extract_images.py --root 材料处理 --render` |
-| `check_material.py` | 材料**四要素**（ovis/paddle/pdftotext/merged）完整性、图片引用有效、底稿漂移、新版 manifest 逐页源数据、manifest 文件齐全、纯矢量页清单 | `python3 tools/check_material.py` |
+| 外部 `ocrpipe`（OCRPipeLine） | **统一 OCR 流水线**：OvisOCR3 + PaddleOCR-VL，`text→images→paddle→ovis→merge→check`；逐页 `raw/structured/layout/pages` 源数据、批量、断点续跑、Paddle 自动分片/自动启停 | `make material PDF=… OUT=…`；`make ocr-batch ARGS="--auto-serve"` |
+| `ocrpipe serve start` / `ocrpipe serve stop` | 启动 / 关闭 PaddleOCR-VL 服务（默认端口 8203；`--auto-serve` 自动调用） | `ocrpipe serve start` |
+| `ocrpipe merge` | 以 Ovis 为底本合并三路，生成/校验 `merged.md` | `ocrpipe merge --root 材料处理` |
+| `ocrpipe images` | `pdfimages -all` 无损提取原 PDF 内嵌图；纯矢量页可加 `--render` | `ocrpipe images --root 材料处理 --render` |
+| `ocrpipe check` | 四要素/图片引用/逐页源数据/底稿漂移 | `ocrpipe check --root 材料处理` |
 
 环境（可用环境变量覆盖，见脚本头）：
 
@@ -108,7 +108,7 @@
 
 11. `check_tikz.py`（TikZ 原图登记 / 未接入的“孤儿源” / 引用却缺 `.tex` 源）；
 12. `check_recrop.py`（裁剪 recipe；并提示孤儿 figs）；
-13. `check_material.py`（材料完整性：四要素 / 图片引用 / manifest 文件齐全 / 纯矢量页清单）；
+13. 外部 `ocrpipe check`（材料完整性：四要素 / 图片引用 / 逐页源数据 / 底稿漂移）；
 14. `check_glyphs.py`（全库编译日志缺字兜底）；
 15. `check_review.py`（全库成品跨项复查兜底）；
 16. `check_docs.py`（进度 / 年份索引 / 异常记录 文档一致性，`make check-docs`）；
@@ -122,9 +122,9 @@
 ```bash
 make tools-test
 # 等价于：
-python3 -m unittest tools.textfix.test_textfix tools.test_ocr_pipeline \
+python3 -m unittest tools.textfix.test_textfix \
     tools.test_check_content tools.test_check_recrop tools.test_check_tikz \
-    tools.test_tikz_compare tools.test_match_figures tools.test_pdf_extract_images \
+    tools.test_tikz_compare tools.test_match_figures \
     tools.test_recrop_figures tools.test_gen_index tools.test_json_to_tex \
     tools.test_html2latex tools.test_check_meta tools.test_check_answers \
     tools.test_check_units tools.test_check_formula_numbers \

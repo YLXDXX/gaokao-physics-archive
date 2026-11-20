@@ -43,7 +43,7 @@
 
 - 本会话的文件工具**不访问仓库以外的文件**（系统配置、其它项目、`~/.texlive` 等）。
 - 项目级 `opencode.json` 把 `external_directory` 设为「默认拒绝、仅允许 `/tmp/opencode/**`」：
-  仓库外路径除 `/tmp/opencode/` 外会被**直接拒绝**（不再弹窗）。确需访问其它外部路径时，
+  仓库外路径除 `/tmp/opencode/` 与 `/home/shui/Desktop/My/program/OCRPipeLine/**`（OCR 使用说明软链接目标）外会被**直接拒绝**（不再弹窗）。确需访问其它外部路径时，
   先向用户说明理由，由用户临时调整该本地配置。
 - 注意：`opencode.json` 为**本地配置、已在 `.gitignore` 忽略、不入库**，本文件只在存在该
   本地配置时才被 `instructions` 自动加载；新克隆环境中**以根目录 `AGENTS.md` 的「工具使用
