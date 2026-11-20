@@ -68,8 +68,8 @@
 
 | 脚本 | 用途 |
 | :--- | :--- |
-| `tikz_compare.py` | 生成「左＝原图 / 右＝重绘 TikZ」对比图到 `tikz_compare/`，供人工逐张核对；**默认**也为**未接入正文/未登记**的 `TikZ/*.tex`（“只上传 TikZ 文件夹”）出图（原图按 `TikZ/originals/<名>` → `figs/<名>` **同名**自动推断，`.svg` 自动渲染）；`--no-orphans` 可只处理已接入的 |
-| `check_tikz.py` | 校验 `TikZ/tikz_sources.json` 的登记与 `TikZ/*.pdf` 引用一致；并提示**已上传但未被引用、也未登记**的 `TikZ/*.tex`（不推荐做法；若同名 `figs/` 原图缺失会额外告警） |
+| `ocrpipe tikz-compare` | 生成「左＝原图 / 右＝重绘 TikZ」对比图到 `tikz_compare/`，供人工逐张核对；**默认**也为**未接入正文/未登记**的 `TikZ/*.tex`（“只上传 TikZ 文件夹”）出图（原图按 `TikZ/originals/<名>` → `figs/<名>` **同名**自动推断，`.svg` 自动渲染）；`--no-orphans` 可只处理已接入的 |
+| `ocrpipe check-tikz` | 校验 `TikZ/tikz_sources.json` 的登记与 `TikZ/*.pdf` 引用一致；并提示**已上传但未被引用、也未登记**的 `TikZ/*.tex`（不推荐做法；若同名 `figs/` 原图缺失会额外告警） |
 
 登记文件 `试卷/<年>/<地区>/TikZ/tikz_sources.json` 格式：
 
@@ -106,7 +106,7 @@
 
 **根目录** `make check` 在各卷之上再执行：
 
-11. `check_tikz.py`（TikZ 原图登记 / 未接入的“孤儿源” / 引用却缺 `.tex` 源）；
+11. `ocrpipe check-tikz`（TikZ 原图登记 / 未接入的“孤儿源” / 引用却缺 `.tex` 源）；
 12. `ocrpipe check-recrop`（裁剪 recipe；并提示孤儿 figs）；
 13. 外部 `ocrpipe check`（材料完整性：四要素 / 图片引用 / 逐页源数据 / 底稿漂移）；
 14. `check_glyphs.py`（全库编译日志缺字兜底）；
@@ -123,8 +123,7 @@
 make tools-test
 # 等价于：
 python3 -m unittest tools.textfix.test_textfix \
-    tools.test_check_content tools.test_check_tikz \
-    tools.test_tikz_compare tools.test_gen_index tools.test_json_to_tex \
+    tools.test_check_content tools.test_gen_index tools.test_json_to_tex \
     tools.test_html2latex tools.test_check_meta tools.test_check_answers \
     tools.test_check_units tools.test_check_formula_numbers \
     tools.test_review_to_ledger tools.test_tex_to_json

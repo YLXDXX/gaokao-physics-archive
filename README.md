@@ -51,8 +51,7 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 │   ├── tex_links.py             # 为各卷目录建立公共文件相对软链接（make 时自动执行）
 │   ├── bin/inkscape             # Inkscape 串行化包装（并行编译用；各卷 Makefile 已加入 PATH）
 │   ├── （切图：`ocrpipe recrop/match/check-recrop`，见 OCR识别转换流程说明.md）
-│   ├── tikz_compare.py          # 重绘 TikZ 与原图的「重绘前后」对比图
-│   ├── check_tikz.py            # TikZ/tikz_sources.json 原图登记一致性检查
+│   ├── （TikZ 对比/登记：`ocrpipe tikz-compare/check-tikz`，见 OCR识别转换流程说明.md）
 │   ├── gen_index.py             # 索引/进度生成与共享库（make index）
 │   ├── check_docs.py            # 进度/年份索引/异常记录一致性校验（make check-docs）
 │   ├── check_docs_text.py       # 文档体检（过时 cd 用法 / 失效相对链接）

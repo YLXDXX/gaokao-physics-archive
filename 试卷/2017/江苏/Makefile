@@ -106,10 +106,10 @@ check:
 		python3 "$(ROOT)/tools/check_units.py" "$$d.tex" || exit 1; \
 	done
 
-# 生成「重绘 TikZ 与原图」对比图（tikz_compare/，供人工核对；见 tools/tikz_compare.py）
+# 生成「重绘 TikZ 与原图」对比图（tikz_compare/，供人工核对；见 ocrpipe tikz-compare）
 #   先在 TikZ/tikz_sources.json 登记每张 TikZ 对应的原图
 tikz-compare:
-	@python3 "$(ROOT)/tools/tikz_compare.py" .
+	@OCRPIPE_PROJECT_ROOT=$(ROOT) ocrpipe tikz-compare .
 
 links:
 	@python3 "$(ROOT)/tools/tex_links.py" .
