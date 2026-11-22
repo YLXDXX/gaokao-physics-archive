@@ -17,16 +17,23 @@
    无 PDF 时登记到 `异常记录.md` 的“源文档缺失清单”，仅依 JSON 制作。
 3. **逐题校对**：以 `merged.md` / JSON / 原 PDF 为准，核对题干、数据、单位、上下标、公式、选项与答案、
    图片（子图拆分与摆放）、详解；公式编号①②③与评分标准若原卷有则**忠实保留**。
-3b. **图片尺寸专项**（如本轮做尺寸重排）：先 `make figsize-audit`，再按 `图片尺寸处理规范.md`
+3b. **图片尺寸专项**（如本轮做尺寸重排）：先 `make figsize-status`，**done 的卷直接跳过**；
+    再 `make figsize-audit`；JPG 卷先
+    `ocrpipe figsize migrate 试卷/<年>/<地区> --write --delete-jpg`，再按 `图片尺寸处理规范.md`
     建立 `figures.map.json` → `figsize-plan` → `figsize-apply --write` → `figsize-check`；
-    扫描件只作尺寸参考，不替换 JSON 清晰图。
-4. **规范化排版**：单顶层 `enumerate`；13 项元数据（PDF 补充题加 `% pdf-only: true`）；图片一律 ChoiceQuestion 命令；单位一律 PhyUnit；
+    扫描件只作尺寸参考，不替换 JSON 清晰图。复合图先在 `ocrpipe figsize draft` 用 `--merge`
+    合并候选，或在 `figures.map.json` 中写 `"merge": [2, 3]`，或人工定
+    `final_width_cm/final_height_cm`；`d > 15%` 必须补 `reference`，
+    manifest 不得留 `None×None`。双栏扫描页 3.1.1 已能自动检测并默认 1:1；极端版式
+    再用 `--columns 1|2` 或 `ocrpipe figsize extract … --scale-mode 1` 覆盖。
+4. **图格式**：矢量图优先迁成 PDF（SVG 能迁则迁，不能迁才保留）；保留 SVG 时在 manifest 记录物理尺寸，并在 `.tex` 插图命令写 `w=`/`h=`。同名 SVG+位图先核对内容，复合 SVG 按面板拆分后也优先转 PDF。
+5. **规范化排版**：单顶层 `enumerate`；13 项元数据（PDF 补充题加 `% pdf-only: true`）；图片一律 ChoiceQuestion 命令；单位一律 PhyUnit；
    非选择题必须有 `\jdanswer`（多小问）或 `\tkanswer`（填空）；计算题答案 `enumerate` 与小问一一对应、
    实验题答案可手动编号对应；每题一条基本 `\memoanswer{}`。
    （如有**人工手绘 TikZ**：命名与 `figs/<名>` 同名、在 `TikZ/tikz_sources.json` 登记原图、
    正文接入 `\onepicture{TikZ/<名>.pdf}`，见 `高考物理真题制作规范.md` §5.4。）
-5. **编译**：在仓库根执行 `make -C 试卷/<年>/<地区> student && make -C 试卷/<年>/<地区> teacher`（两版均须成功）。
-6. **自查**：`make -C 试卷/<年>/<地区> check`（结构/元数据、元数据↔JSON、答案对应、单位宏、内容、共性问题、版面、缺字、跨项复查）。
+6. **编译**：在仓库根执行 `make -C 试卷/<年>/<地区> student && make -C 试卷/<年>/<地区> teacher`（两版均须成功）。
+7. **自查**：`make -C 试卷/<年>/<地区> check`（结构/元数据、元数据↔JSON、答案对应、单位宏、内容、共性问题、版面、缺字、跨项复查）。
 7. **登记**：更新 `进度记录.md` 对应行；在 `异常记录/<年>.md` 登记缺题/缺图/缺详解/公式疑误等
    （统一结构：`## 制作说明` + 状态分区表，`已解决` 置末）；
    `make index`；`make check-docs`。

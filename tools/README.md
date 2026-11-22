@@ -95,13 +95,34 @@
 
 | 脚本 | 用途 | 典型用法 |
 | :--- | :--- | :--- |
-| `figsize_audit.py` | 全库/分卷审计图片尺寸现状（只读）：源 PDF、材料、SVG/JPG、recipe、`figures.manifest.json`、当前尺寸键覆盖情况 | `python3 tools/figsize_audit.py`；`make figsize-audit ARGS="--json /tmp/opencode/figsize-audit.json"` |
-| `figsize_plan.py` | 按人工 `figures.map.json` + 候选 manifest 生成 `figures.manifest.json`，应用 5%/15% 纵横比规则与 17cm 上限；`reference=width/height` 可人工指定基准 | `python3 tools/figsize_plan.py 试卷/2000/天津 --write` |
+| `figsize_audit.py` | 全库/分卷审计图片尺寸现状（只读）：源 PDF、材料、SVG/JPG、recipe、`figures.manifest.json`、当前尺寸键覆盖情况；跳过 `figs/.ocr_before/` 等隐藏目录；标记 `dual_format`（同名 SVG+位图）与 `unreferenced`（未被 tex 引用） | `python3 tools/figsize_audit.py`；`make figsize-audit ARGS="--json /tmp/opencode/figsize-audit.json"` |
+| `figsize_plan.py` | 按人工 `figures.map.json` + 候选 manifest 生成 `figures.manifest.json`，应用 5%/15% 纵横比规则与 17cm 上限；`reference=width/height` 可人工指定基准；`merge: [1,2]` 可合并同页候选；无候选时可用 `final_width_cm/final_height_cm` 直接定尺寸；缺少最终尺寸时告警 | `python3 tools/figsize_plan.py 试卷/2000/天津 --write` |
 | `figsize_apply.py` | 只按 manifest 回填 `.tex` 尺寸键，不改未登记图片；默认预览；`--write` 同时给登记 PNG 写 `pHYs` | `python3 tools/figsize_apply.py 试卷/2000/天津 --write` |
-| `figsize_check.py` | 校验 manifest ↔ `.tex` 尺寸键是否一致 | `python3 tools/figsize_check.py 试卷/2000/天津` |
-| 外部 `ocrpipe figsize` | PDF 真实物理尺寸：`probe/layout/draft/extract/sync/report/apply/check`；扫描件只作测量参考 | 见 [`../OCR识别转换流程说明.md`](../OCR识别转换流程说明.md) |
+| `figsize_check.py` | 校验 manifest ↔ `.tex` 尺寸键，并校验 PNG `pHYs`、PDF `MediaBox` 与 SVG 纵横比；`--strict-assets` 拒绝 SVG | `python3 tools/figsize_check.py 试卷/2000/天津` |
+| `figsize_status.py` | 列出图片尺寸 done / todo；done = manifest 存在且 check 全绿，全面铺开时跳过 | `python3 tools/figsize_status.py --only-todo`；`make figsize-status` |
+| 外部 `ocrpipe figsize` | 3.1.1：`probe/layout/draft/extract/measure/migrate/apply/check/status/svg-to-pdf`；PNG/PDF/SVG 混合资产，manifest 安全模式 | 见 [`../OCR识别转换流程说明.md`](../OCR识别转换流程说明.md) |
+| 外部 `ocrpipe figsize migrate` | JPG → PNG（只转一次，更新 `.tex` 引用；`--delete-jpg` 删除旧 JPG） | `ocrpipe figsize migrate 试卷/2024/北京 --write --delete-jpg` |
 
 > `figures.map.json`、`figures.manifest.json` 均为本地工作文件，已在 `.gitignore` 忽略。
+
+**已知坑（2026-11-22 第二轮试点）**
+
+- `figsize_apply.py` / `figsize_check.py` 已修复“原命令没有尺寸选项”时漏解析、漏补方括号的问题；
+  对应回归测试在 `test_figsize_tools.py`。
+- `figsize_check.py` 现在同时校验 PNG `pHYs`、PDF `MediaBox` 与 SVG 纵横比；`--strict-assets` 可要求 SVG 必须先迁 PDF；若提示缺 pHYs，
+  先跑 `figsize_apply.py --write`。`figsize_audit.py` 已跳过隐藏备份目录，并标记
+  `dual_format` / `unreferenced`，处理前先核对是否可改用 SVG。
+- OCRPipeLine 3.1.1 起外部 `figsize apply/check/status/measure` 已支持 manifest 安全模式；
+  本仓库 Makefile 仍用本地包装，便于统一 5%/15% 阈值与离线运行；交叉验证用
+  `make figsize-check-ext UNIT=…` / `figsize-apply-ext UNIT=…` / `figsize-status-ext`。
+- OCRPipeLine 3.1.1 已修复多页 PDF `extract` 错页（`pages[]` 被展平）；如仍复现，
+  用 `--debug-pages` 打印页码/rect/输出路径，并提供 `--keep-temp` 的中间文件。
+- 复合图与候选拆分不一致时，用 `ocrpipe figsize draft --merge` 或 `final_width_cm/final_height_cm`
+  人工定尺寸；`d > 15%` 的条目必须补 `reference`，否则 manifest 会出现 `None×None` 且不会被回填。
+- **双栏扫描页**（如 2003 全国理综旧课程）：OCRPipeLine 3.1.1 已能自动检测双栏并默认 1:1；
+  极端版式仍可用 `--columns 1|2` 或 `--scale-mode 1` 覆盖。
+- `figsize_audit` / `figsize_plan --keep-current` 均跳过 `figs/.ocr_before/` 等隐藏备份目录；
+  统计“实际引用图数”时仍以 TeX 引用为准。
 
 ## 六、检查项汇总
 

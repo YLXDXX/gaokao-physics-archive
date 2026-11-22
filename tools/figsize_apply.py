@@ -179,7 +179,8 @@ def process_unit(unit: Path, write: bool) -> int:
             if regex is CH_RE and "ispicture=true" not in raw_opts.replace(" ", ""):
                 continue
             args: List[Tuple[str, int, int]] = []
-            i = oe + 1
+            # 无选项时 options() 返回 oe==os 指向第一个 "{"，不能再 +1，否则会跳过参数。
+            i = oe + 1 if raw_opts else oe
             while i < len(text):
                 while i < len(text) and text[i].isspace():
                     i += 1
@@ -190,7 +191,8 @@ def process_unit(unit: Path, write: bool) -> int:
                 i = end
             new = update_command(text, os, oe, raw_opts, args, n, manifest)
             if new is not None and new != raw_opts:
-                edits.append((os, oe, new))
+                # 原命令无选项时 update_command 返回的只是选项内容，需要补上方括号。
+                edits.append((os, oe, new if raw_opts else f"[{new}]"))
     if not edits:
         if write:
             write_png_phys(unit, manifest, write)

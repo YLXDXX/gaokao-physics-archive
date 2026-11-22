@@ -21,7 +21,12 @@
 #    make figsize-audit    图片尺寸处理前审计（只读；ARGS 可传目录/--json/--probe-pdf）
 #    make figsize-plan     按 figures.map.json + 候选 manifest 生成 figures.manifest.json
 #    make figsize-apply    按 figures.manifest.json 回填 .tex 尺寸（默认预览，--write 落盘）
-#    make figsize-check    校验 manifest ↔ .tex 尺寸键
+#    make figsize-check    校验 manifest ↔ .tex 尺寸键 + PNG pHYs / PDF / SVG 纵横比
+#                          ARGS="… --strict-assets" 要求 SVG 必须先迁 PDF
+#    make figsize-status   列出图片尺寸 done / todo（全面铺开时先跑，done 的跳过）
+#    make figsize-check-ext UNIT=试卷/…  用 OCRPipeLine 3.1.1 交叉校验（5%/15%，--strict）
+#    make figsize-apply-ext UNIT=试卷/… 用 OCRPipeLine 3.1.1 预演安全回填（ARGS=--write 落盘）
+#    make figsize-status-ext [ARGS="试卷 --only-todo"] 用 OCRPipeLine 3.1.1 列 done/todo
 #    make ocr-plan|ocr-status|ocr-batch  OCR 流水线（外部 OCRPipeLine；ARGS 透传）
 #    make tools-test   运行 tools 单元测试（textfix / 元数据 / 内容 / 索引）
 #    make links        为全部试卷目录创建指向根公共文件的软链接
@@ -62,7 +67,8 @@ define RUN_DIRS
 endef
 
 .PHONY: all student teacher tikz tikz-compare check check-tikz check-recrop links \
-        clean distclean material material-batch material-merge extract-images check-material figsize-audit figsize-plan figsize-apply figsize-check tools-test \
+        clean distclean material material-batch material-merge extract-images check-material figsize-audit figsize-plan figsize-apply figsize-check figsize-status \
+        figsize-check-ext figsize-apply-ext figsize-status-ext tools-test \
         ocr-plan ocr-status ocr-batch \
         index progress check-docs check-changed ci fetch-pr pr-check
 
@@ -212,6 +218,22 @@ figsize-apply:
 
 figsize-check:
 	@python3 tools/figsize_check.py $(ARGS)
+
+figsize-status:
+	@python3 tools/figsize_status.py $(ARGS)
+
+figsize-check-ext:
+	@test -n "$(UNIT)" || { echo "用法：make figsize-check-ext UNIT=试卷/2024/江西"; exit 2; }
+	@$(OCRPIPE) figsize check $(UNIT) --manifest $(UNIT)/figures.manifest.json \
+	  --auto-tolerance 0.05 --manual-tolerance 0.15 --strict --json
+
+figsize-apply-ext:
+	@test -n "$(UNIT)" || { echo "用法：make figsize-apply-ext UNIT=试卷/2024/江西 [ARGS=--write]"; exit 2; }
+	@$(OCRPIPE) figsize apply $(UNIT) --manifest $(UNIT)/figures.manifest.json \
+	  --no-unregistered --backup $(ARGS)
+
+figsize-status-ext:
+	@$(OCRPIPE) figsize status $(if $(ARGS),$(ARGS),试卷)
 
 # ---------------------------------------------------------------------------
 # OCR 流水线（外部独立程序 OCRPipeLine；OvisOCR3 + PaddleOCR-VL）

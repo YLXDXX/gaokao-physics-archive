@@ -202,8 +202,12 @@ def audit_unit(unit: Path, *, probe_pdf: bool = False) -> Dict:
         pdf_kind = _probe_pdf(pdf)
 
     figs_dir = unit / "figs"
-    files = [p for p in (figs_dir.rglob("*") if figs_dir.is_dir() else [])
-             if p.is_file() and p.suffix.lower() in IMG_EXTS]
+    files = [
+        p for p in (figs_dir.rglob("*") if figs_dir.is_dir() else [])
+        if p.is_file() and p.suffix.lower() in IMG_EXTS
+        # 跳过 .ocr_before 等隐藏备份目录，避免把历史副本计入当前图片。
+        and not any(part.startswith(".") for part in p.relative_to(figs_dir).parts)
+    ]
     by_ext = Counter(p.suffix.lower().lstrip(".") for p in files)
     text = tex.read_text(encoding="utf-8", errors="ignore") if tex.is_file() else ""
     refs = _collect_refs(text)
@@ -271,6 +275,17 @@ def audit_unit(unit: Path, *, probe_pdf: bool = False) -> Dict:
         flags.append("has_svg")
     if by_ext.get("jpg") or by_ext.get("jpeg"):
         flags.append("has_jpg")
+    stems: Dict[str, Set[str]] = defaultdict(set)
+    for p in files:
+        stems[p.relative_to(figs_dir).with_suffix("").as_posix()].add(
+            p.suffix.lower().lstrip("."))
+    dual_format = sorted(
+        stem for stem, exts in stems.items()
+        if "svg" in exts and exts & {"png", "jpg", "jpeg"})
+    if dual_format:
+        flags.append("dual_format")
+    if referenced < len(files):
+        flags.append("unreferenced")
     if missing_images:
         flags.append("missing_size")
     if pdf_kind in ("scan", "scan-like"):
@@ -294,6 +309,7 @@ def audit_unit(unit: Path, *, probe_pdf: bool = False) -> Dict:
         "by_ext": dict(sorted(by_ext.items())),
         "referenced": referenced,
         "unreferenced": len(files) - referenced,
+        "dual_format_files": dual_format,
         "picture_commands": commands,
         "commands_without_size": commands_without_size,
         "missing_size_images": missing_images,

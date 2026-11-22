@@ -16,6 +16,8 @@ class TestFigsizeAudit(unittest.TestCase):
             for name in ["01.png", "02.svg", "03a.png", "03b.png",
                          "04a.svg", "04b.svg", "04c.svg", "04d.svg", "unused.png"]:
                 (unit / "figs" / name).write_bytes(b"x")
+            (unit / "figs" / ".ocr_before").mkdir()
+            (unit / "figs" / ".ocr_before" / "old.png").write_bytes(b"x")
             tex = unit / "测试.tex"
             tex.write_text(
                 "\\onepicture[w=6cm]{figs/01.png}\n"
@@ -48,12 +50,33 @@ class TestFigsizeAudit(unittest.TestCase):
             self.assertTrue(row["pdf"])
             self.assertIn("no_recrop", row["flags"])
             self.assertIn("has_svg", row["flags"])
+            self.assertIn("unreferenced", row["flags"])
 
             with mock.patch.object(fa, "ROOT", root):
                 summary = fa.summarize([row])
             self.assertEqual(summary["units"], 1)
             self.assertEqual(summary["images"], 9)
             self.assertEqual(summary["flags"]["no_figures_manifest"], 1)
+
+    def test_dual_format_flag(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            unit = root / "试卷" / "2000" / "测试"
+            (unit / "figs").mkdir(parents=True)
+            (unit / "figs" / "05.png").write_bytes(b"x")
+            (unit / "figs" / "05.svg").write_bytes(b"x")
+            (unit / "测试.tex").write_text(
+                "\\onepicture{figs/05.svg}\n", encoding="utf-8")
+            (root / "OriginPDF" / "2000").mkdir(parents=True)
+            (root / "OriginPDF" / "2000" / "2000_测试.pdf").write_bytes(b"%PDF")
+            (root / "材料处理" / "2000" / "测试" / "pdfimages").mkdir(parents=True)
+            (root / "材料处理" / "2000" / "测试" / "pdfimages" / "manifest.json").write_text(
+                json.dumps({"source_pdf": "OriginPDF/2000/2000_测试.pdf"}),
+                encoding="utf-8")
+            with mock.patch.object(fa, "ROOT", root):
+                row = fa.audit_unit(unit)
+            self.assertIn("dual_format", row["flags"])
+            self.assertEqual(row["dual_format_files"], ["05"])
 
     def test_fig_key(self):
         self.assertEqual(fa._fig_key("figs/03a.svg"), "figs/03a")

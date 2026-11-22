@@ -12,7 +12,7 @@ map 示例::
     {
       "entries": [
         {"target": "试卷/2000/天津/figs/05.png", "candidate": 1},
-        {"target": "试卷/2022/上海/figs/02a.png", "candidate": 1}
+        {"target": "试卷/2020/北京/figs/16d.png", "merge": [23, 24, 25, 26]}
       ]
     }
 
@@ -89,14 +89,63 @@ def asset_aspect(path: Path) -> Optional[float]:
         tag = m.group(0)
         mw = re.search(r'\bwidth\s*=\s*"([^"]+)"', tag)
         mh = re.search(r'\bheight\s*=\s*"([^"]+)"', tag)
-        if not mw or not mh:
-            return None
+
         def num(raw: str) -> Optional[float]:
             mm = re.match(r"\s*([0-9.]+)", raw)
             return float(mm.group(1)) if mm else None
-        w, h = num(mw.group(1)), num(mh.group(1))
-        return w / h if w and h else None
+
+        if mw and mh:
+            w, h = num(mw.group(1)), num(mh.group(1))
+            if w and h:
+                return w / h
+        # 无 width/height 时退回 viewBox="minx miny w h"。
+        mv = re.search(r'\bviewBox\s*=\s*"([^"]+)"', tag)
+        if mv:
+            parts = re.split(r"[\s,]+", mv.group(1).strip())
+            if len(parts) == 4:
+                try:
+                    w, h = float(parts[2]), float(parts[3])
+                    return w / h if w and h else None
+                except ValueError:
+                    return None
+        return None
     return None
+
+
+def merge_candidates(candidates: List[Dict], indices: List[int]) -> Dict:
+    """把同一页的多个候选按 union bbox 合并成一个“候选”。"""
+    picked = [candidates[i - 1] for i in indices]
+    pages = {f.get("page") for f in picked}
+    if len(pages) != 1:
+        raise ValueError(f"合并候选跨页：pages={sorted(pages)}")
+    base = picked[0]
+    r = base.get("rect_norm")
+    if not r:
+        raise ValueError("合并候选缺少 rect_norm")
+    x0, y0, x1, y1 = map(float, r)
+    bw, bh = candidate_sizes(base)
+    if x1 <= x0 or y1 <= y0:
+        raise ValueError("合并候选 rect_norm 非法")
+    sx, sy = bw / (x1 - x0), bh / (y1 - y0)
+    xs: List[float] = []
+    ys: List[float] = []
+    for f in picked:
+        fr = f.get("rect_norm")
+        if not fr:
+            raise ValueError("合并候选中存在缺少 rect_norm 的项")
+        xs += [float(fr[0]), float(fr[2])]
+        ys += [float(fr[1]), float(fr[3])]
+    minx, maxx = min(xs), max(xs)
+    miny, maxy = min(ys), max(ys)
+    return {
+        "page": base.get("page"),
+        "rect_norm": [minx, miny, maxx, maxy],
+        "kind": "merged",
+        "source": "merged",
+        "caption": "+".join(str(f.get("caption") or "") for f in picked),
+        "width_cm": round((maxx - minx) * sx, 3),
+        "height_cm": round((maxy - miny) * sy, 3),
+    }
 
 
 def candidate_sizes(candidate: Dict) -> Tuple[float, float]:
@@ -287,15 +336,38 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         entries: List[Dict] = []
         for key, spec in mapping.items():
             target = ROOT / key
-            try:
-                idx = int(spec["candidate"])
-            except (KeyError, ValueError, TypeError):
-                print(f"[警告] {key}: 缺少 candidate 索引", file=sys.stderr)
-                continue
-            if not (1 <= idx <= len(cands)):
-                print(f"[警告] {key}: candidate {idx} 越界（共 {len(cands)}）", file=sys.stderr)
-                continue
-            entries.append(build_entry(unit, target, spec, cands[idx - 1], cand_manifest))
+            cand: Optional[Dict] = None
+            if spec.get("merge"):
+                try:
+                    indices = [int(x) for x in spec["merge"]]
+                except (TypeError, ValueError):
+                    print(f"[警告] {key}: merge 必须是候选序号数组", file=sys.stderr)
+                    continue
+                if not indices or any(not (1 <= i <= len(cands)) for i in indices):
+                    print(f"[警告] {key}: merge 候选越界（共 {len(cands)}）", file=sys.stderr)
+                    continue
+                try:
+                    cand = merge_candidates(cands, indices)
+                except ValueError as exc:
+                    print(f"[警告] {key}: {exc}", file=sys.stderr)
+                    continue
+            elif (spec.get("final_width_cm") and spec.get("final_height_cm")):
+                # 没有候选（如 PDF 未识别出的复合图）但已人工给定最终尺寸。
+                cand = {"page": 0, "kind": "manual",
+                        "width_cm": float(spec["final_width_cm"]),
+                        "height_cm": float(spec["final_height_cm"]),
+                        "rect_norm": []}
+            else:
+                try:
+                    idx = int(spec["candidate"])
+                except (KeyError, ValueError, TypeError):
+                    print(f"[警告] {key}: 缺少 candidate 索引", file=sys.stderr)
+                    continue
+                if not (1 <= idx <= len(cands)):
+                    print(f"[警告] {key}: candidate {idx} 越界（共 {len(cands)}）", file=sys.stderr)
+                    continue
+                cand = cands[idx - 1]
+            entries.append(build_entry(unit, target, spec, cand, cand_manifest))
         if args.keep_current:
             mapped = {ROOT / k for k in mapping}
             cur = current_sizes(unit)
@@ -336,11 +408,21 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         auto = sum(1 for e in entries if e.get("status") == "auto")
         review = sum(1 for e in entries if e.get("status") == "review")
         manual = sum(1 for e in entries if e.get("status") == "manual")
+        missing_final = [
+            e for e in entries
+            if not ((e.get("final") or {}).get("width_cm")
+                    and (e.get("final") or {}).get("height_cm"))
+        ]
         print(f"=== {unit.as_posix()}：{len(entries)} 条（auto {auto} / review {review} / manual {manual}）")
         for e in entries:
             f = e.get("final") or {}
             print(f"  {e.get('status','?'):7} {e['target'].split('/')[-1]:16} "
                   f"→ {f.get('width_cm')}×{f.get('height_cm')}cm")
+        if missing_final:
+            names = "、".join(e["target"].split("/")[-1] for e in missing_final)
+            print(f"[警告] {len(missing_final)} 条缺少最终尺寸（{names}）；"
+                  f"请在 map 中补 reference 或 final_width_cm/final_height_cm。",
+                  file=sys.stderr)
         if args.write:
             out = unit / "figures.manifest.json"
             out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
