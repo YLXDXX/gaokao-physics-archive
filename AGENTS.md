@@ -36,7 +36,7 @@
 ```bash
 python3 tools/json_to_tex.py JSON/<年>/<年_地区>.json        # 1 初稿 + 图片
 # 2 对照 材料处理/<年>/<地区>/merged.md、原 PDF 逐题校对重写
-# 2.5 图片尺寸专项（可选）：make figsize-audit；见 图片尺寸处理规范.md
+# 2.5 图片尺寸专项（可选）：make figsize-audit / figsize-plan / figsize-apply / figsize-check；见 图片尺寸处理规范.md
 make -C 试卷/<年>/<地区> student && make -C 试卷/<年>/<地区> teacher   # 3 两版编译
 make -C 试卷/<年>/<地区> check                                # 4 自查（须 0 错误）
 ```

@@ -24,7 +24,6 @@
 | `check_docs_text.py` | **文档体检**：扫描根 / `docs/` / `tools/` 的 Markdown，检查过时 `cd` 用法与失效相对链接 | `python3 tools/check_docs_text.py` |
 | `check_docs.py` | **文档一致性校验**：`进度记录.md` ↔ `试卷/` 双向一致、状态取值、题数相符、年份索引与 `异常记录/<年>.md` 表头/状态规范及**统一结构**（制作说明 + 状态分区顺序，已解决置末） | `python3 tools/check_docs.py`（`make check-docs`，已接入 `make check`） |
 | `status.py` | **各年份进度概要**：套数、题数、进度表“已完成”计数 | `python3 tools/status.py`（`make progress`） |
-| `figsize_audit.py` | **图片尺寸处理前审计**（只读）：源 PDF、材料、SVG/JPG、recipe、`figures.manifest.json`、当前尺寸键覆盖情况 | `python3 tools/figsize_audit.py`（`make figsize-audit`） |
 
 > **并行编译包装**：`bin/inkscape` 用 `flock` 串行化 Inkscape 调用，规避 `make -jN` 并发时
 > `Gio::DBus::Error` 崩溃；各卷 Makefile 已把 `tools/bin` 加入 `PATH`，无需手动调用
@@ -97,9 +96,12 @@
 | 脚本 | 用途 | 典型用法 |
 | :--- | :--- | :--- |
 | `figsize_audit.py` | 全库/分卷审计图片尺寸现状（只读）：源 PDF、材料、SVG/JPG、recipe、`figures.manifest.json`、当前尺寸键覆盖情况 | `python3 tools/figsize_audit.py`；`make figsize-audit ARGS="--json /tmp/opencode/figsize-audit.json"` |
+| `figsize_plan.py` | 按人工 `figures.map.json` + 候选 manifest 生成 `figures.manifest.json`，应用 5%/15% 纵横比规则与 17cm 上限；`reference=width/height` 可人工指定基准 | `python3 tools/figsize_plan.py 试卷/2000/天津 --write` |
+| `figsize_apply.py` | 只按 manifest 回填 `.tex` 尺寸键，不改未登记图片；默认预览；`--write` 同时给登记 PNG 写 `pHYs` | `python3 tools/figsize_apply.py 试卷/2000/天津 --write` |
+| `figsize_check.py` | 校验 manifest ↔ `.tex` 尺寸键是否一致 | `python3 tools/figsize_check.py 试卷/2000/天津` |
 | 外部 `ocrpipe figsize` | PDF 真实物理尺寸：`probe/layout/draft/extract/sync/report/apply/check`；扫描件只作测量参考 | 见 [`../OCR识别转换流程说明.md`](../OCR识别转换流程说明.md) |
 
-> `figsize_plan.py` / `figsize_apply.py` / `figsize_check.py` 为下一阶段脚本（见规范文档）。
+> `figures.map.json`、`figures.manifest.json` 均为本地工作文件，已在 `.gitignore` 忽略。
 
 ## 六、检查项汇总
 

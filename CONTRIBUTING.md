@@ -20,7 +20,7 @@
 ## 三、本地数据（重要）
 
 `JSON/`、`OriginPDF/`、`材料处理/` 是**原始数据 / OCR 产物，已在 `.gitignore` 忽略、只留本地**；
-`试卷/**/figures.manifest.json`、`试卷/**/figsizes.json` 为本地图片尺寸工作文件，同样不入库。
+`试卷/**/figures.map.json`、`试卷/**/figures.manifest.json`、`试卷/**/figsizes.json` 为本地图片尺寸工作文件，同样不入库。
 若你没有这些数据：可以只依 JSON 初稿 + 规范制作，但 `check_meta.py`（元数据↔JSON）、
 `make check-material` 等依赖本地数据的检查会**跳过或提示**，属正常；完整比对由维护者在有数据的机器上复跑。
 

@@ -93,7 +93,7 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 > 外部克隆若无同级项目，请自行放置对应版本的宏包/说明文件。
 > `package/` 已移除（ChoiceQuestion v0.12 已内置原 exam-zh-choices）。
 >
-> `JSON/`、`OriginPDF/`、`材料处理/`、`svg-inkscape/`、图片尺寸工作文件（`figures.manifest.json`、`figsizes.json`）与各卷**编译产物**（`*_学生版.pdf`/`*_教师版.pdf`、
+> `JSON/`、`OriginPDF/`、`材料处理/`、`svg-inkscape/`、图片尺寸工作文件（`figures.map.json`、`figures.manifest.json`、`figsizes.json`）与各卷**编译产物**（`*_学生版.pdf`/`*_教师版.pdf`、
 > `TikZ/*.pdf` 等）已在 `.gitignore` 中忽略，只保留在本地；**`试卷/**/figs/*.pdf` 是源图，已入库**。
 > 入库的是**可复现的源文件**（`.tex`、`.sty`、`.cls`、`figs/`、`Makefile`、文档）。
 
@@ -131,7 +131,8 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 > （如 2026 湖北第 4 题），放入该卷 `TikZ/`。
 
 > **图片尺寸专项**（批量/复核）：先 `make figsize-audit`，再按 `图片尺寸处理规范.md`
-> 建立映射、测量并回填；扫描 PDF 只作尺寸参考，不替换 JSON 清晰图。
+> 建立 `figures.map.json`，依次 `figsize-plan` → `figsize-apply --write` → `figsize-check`；
+> 扫描 PDF 只作尺寸参考，不替换 JSON 清晰图。
 
 ---
 
