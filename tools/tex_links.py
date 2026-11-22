@@ -4,7 +4,7 @@
 在**试卷/<年份>/<地区>/ 的 TeX 工作目录**中，创建指向项目根目录公共文件的
 **相对软链接**。这样：
 
-- 公共样式（`gaokaozhenti.cls`、`PhyUnit.sty`、`ChoiceQuestion.sty`、`package/`）
+- 公共样式（`gaokaozhenti.cls`、`PhyUnit.sty`、`ChoiceQuestion.sty`）
   只在根目录维护一份；
 - 用 TeXStudio 等编辑器打开某卷的 `.tex` 时，无需手动复制公共文件、也无需设置
   `TEXINPUTS`，即可直接编译；
@@ -32,7 +32,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 # 试卷工作目录所需的公共文件（相对项目根）
-COMMON = ["gaokaozhenti.cls", "PhyUnit.sty", "ChoiceQuestion.sty", "package"]
+COMMON = ["gaokaozhenti.cls", "PhyUnit.sty", "ChoiceQuestion.sty"]
 # TikZ/ 子目录中的独立图片文档所需的公共文件
 TIKZ = ["PhyUnit.sty"]
 

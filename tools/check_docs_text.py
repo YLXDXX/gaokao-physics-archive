@@ -55,6 +55,9 @@ def iter_md(roots: List[Path]) -> List[Path]:
 def check_doc(path: Path) -> List[str]:
     errs: List[str] = []
     text = path.read_text(encoding="utf-8", errors="ignore")
+    # 软链接（如 OCR识别转换流程说明.md → 外部 OCRPipeLine/docs/USAGE.md）的
+    # 相对链接应以**链接目标所在目录**为基准解析，否则会误报失效。
+    base_dir = path.resolve().parent if path.is_symlink() else path.parent
     for i, line in enumerate(text.splitlines(), 1):
         m = CD_RE.search(line)
         if m and not any(w in line for w in NEG_WORDS):
@@ -65,7 +68,7 @@ def check_doc(path: Path) -> List[str]:
         for link in LINK_RE.findall(line):
             if link.startswith(("http://", "https://", "mailto:")):
                 continue
-            target = (path.parent / link).resolve()
+            target = (base_dir / link).resolve()
             if not target.exists():
                 errs.append(f"{path.relative_to(ROOT)}:{i} 失效的相对链接：{link}")
     return errs

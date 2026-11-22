@@ -14,7 +14,7 @@
 #    make clean      清理辅助文件
 #    make distclean  清理辅助文件与 PDF 成品
 #
-#  公共文件（gaokaozhenti.cls / PhyUnit.sty / ChoiceQuestion.sty / package/）
+#  公共文件（gaokaozhenti.cls / PhyUnit.sty / ChoiceQuestion.sty）
 #  位于项目根目录，通过 TEXINPUTS 引入，并在本目录建立指向根目录的相对软链接
 #  （make links），无需复制到本目录。
 #

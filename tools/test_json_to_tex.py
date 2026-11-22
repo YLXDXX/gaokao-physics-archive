@@ -103,6 +103,18 @@ class TestJsonToTex(unittest.TestCase):
             self.assertIn("\\fourchoices[answer=D]", tex)
             self.assertIn("{丁}", tex)
 
+    def test_packed_options_without_space(self):
+        """新数据常把四项压在同段且 `A．` 后无空格，应完整拆出四选项。"""
+        with tempfile.TemporaryDirectory() as d:
+            body = ("<p>题（  ）</p><p>A．甲&nbsp;&nbsp; B．乙&nbsp;&nbsp; "
+                    "C．丙&nbsp;&nbsp; D．丁</p>")
+            tex = _gen(Path(d), [_choice(answer="<p>D</p>", body=body)])
+            self.assertIn("\\fourchoices[answer=D]", tex)
+            for s in ("{甲}", "{乙}", "{丙}", "{丁}"):
+                self.assertIn(s, tex)
+            self.assertNotIn("B．", tex.split("\\fourchoices", 1)[1])
+
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -34,7 +34,9 @@
 
 - `workdir` 固定为仓库根，禁止 `cd` 与 `..`；
 - 临时/渲染文件只写 `/tmp/opencode/`；
-- 只改自己负责的目录；不改共享文件（`tools/`、`*.sty`、`*.cls`、文档、`opencode.json`）；
+- 只改自己负责的目录；不改共享文件（`tools/`、`*.sty`、`*.cls`、文档、`opencode.json`）。
+  `PhyUnit.sty`/`ChoiceQuestion.sty` 及手册是指向同级外部项目的软链接，**不要**在子任务中改它们；
+  确需修改单位宏/排版命令时应由主会话在对应外部项目内完成并同步手册；
 - 收尾仍要跑对应卷的 `make -C 试卷/<年>/<地区> check`。
 
 子代理默认加载根 `AGENTS.md`；当存在本地 `opencode.json` 时，本文件也会被一并加载。
@@ -49,3 +51,6 @@
   本地配置时才被 `instructions` 自动加载；新克隆环境中**以根目录 `AGENTS.md` 的「工具使用
   与权限」摘要为准**（亦可自行复制一份 `opencode.json`）。
 - 修改 `opencode.json` 后需**退出并重启 opencode** 才会生效（配置不热重载）。
+- 根目录 `ChoiceQuestion.sty`、`ChoiceQuestion-manual.md`、`PhyUnit.sty`、`PhyUnit-manual.md`
+  是指向 `../ChoiceQuestion/`、`../PhyUnit/` 的相对软链接；读取可正常进行，修改等同于修改
+  外部项目，须经用户明确要求，并同步对方手册/README 与提交。

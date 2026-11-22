@@ -80,6 +80,7 @@ make -C 试卷/<年>/<地区> check                            # 4 自查（须 
 ## 九、只改自己负责的部分
 
 - 尽量只改 `试卷/<年>/<地区>/`（及对应 `进度记录.md`、`异常记录/<年>.md` 行）；
-- **避免**改动共享文件（`tools/`、`gaokaozhenti.cls`、`PhyUnit.sty`、`ChoiceQuestion.sty`、文档）
-  以免冲突；确需改动请先在 Issue / PR 中说明。
+- **避免**改动共享文件（`tools/`、`gaokaozhenti.cls`、文档）以免冲突；确需改动请先在 Issue / PR 中说明。
+- `PhyUnit.sty`、`ChoiceQuestion.sty` 及其手册是维护者本地指向同级项目的**软链接**：
+  单位宏/排版命令的修改应在对应 `PhyUnit` / `ChoiceQuestion` 项目内完成，并同步其手册/README。
 - `试卷/<年>/README.md` 由 `make index` 自动生成，**不要手工编辑**。

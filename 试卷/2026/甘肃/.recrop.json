@@ -1,7 +1,7 @@
 {
   "entries": [
     {
-      "source": "材料处理/2026/甘肃/pdfimages/p4_26.jpg",
+      "source": "材料处理/2026/甘肃/pdfimages/p4_2.jpg",
       "crops": [
         {"rect": [0, 0, 555, 372], "target": "试卷/2026/甘肃/figs/09a.png"},
         {"rect": [555, 0, 547, 372], "target": "试卷/2026/甘肃/figs/09b.png"}
@@ -10,7 +10,7 @@
       "trim": {"padding": 8}
     },
     {
-      "source": "材料处理/2026/甘肃/pdfimages/p7_76.jpg",
+      "source": "材料处理/2026/甘肃/pdfimages/p7_4.jpg",
       "crops": [
         {"rect": [0, 0, 400, 485], "target": "试卷/2026/甘肃/figs/12a.png"},
         {"rect": [400, 0, 800, 485], "target": "试卷/2026/甘肃/figs/12b.png"}
@@ -19,7 +19,7 @@
       "trim": {"padding": 8}
     },
     {
-      "source": "材料处理/2026/甘肃/pdfimages/p8_83.jpg",
+      "source": "材料处理/2026/甘肃/pdfimages/p8_5.jpg",
       "crops": [
         {"rect": [0, 0, 480, 425], "target": "试卷/2026/甘肃/figs/13a.png"},
         {"rect": [480, 0, 548, 425], "target": "试卷/2026/甘肃/figs/13b.png"}

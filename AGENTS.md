@@ -58,6 +58,15 @@ make -C 试卷/<年>/<地区> check                                # 4 自查（
 - 公式用 `\frac`（禁 `\dfrac`）；核素/化学式用 `\ce{}`；数字间半角冒号；`$x-t$` 不为 `$x$-$t$`。
 - 不手工编号（列表/图片自动编号）；版面微调用 `\gknewpage` 等，不用原生 `\newpage/\vfill/\hfil`。
 
+## 共享宏包（外部项目软链接）
+
+- 根目录 `ChoiceQuestion.sty`、`ChoiceQuestion-manual.md`、`PhyUnit.sty`、`PhyUnit-manual.md`
+  是维护者本地指向同级项目 `../ChoiceQuestion/`、`../PhyUnit/` 的**相对软链接**；
+  本仓库不再保存副本，`package/` 已移除（ChoiceQuestion v0.12 已内置原 exam-zh-choices）。
+- 修改宏包/单位宏等同于修改对应外部项目：应修改 `../ChoiceQuestion/` 或 `../PhyUnit/`
+  中的源文件，并同步更新其手册/README、重新编译测试；需要时在那些项目单独提交。
+- 只改本仓库内容时，不要删除或替换这些软链接；外部克隆若无同级项目，需自行放置对应版本。
+
 ## 收尾
 
 ```bash

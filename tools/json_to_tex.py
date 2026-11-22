@@ -97,8 +97,10 @@ def split_paragraphs(body: str) -> list[str]:
 def split_options(text: str) -> list[tuple[str, str]]:
     """把含 ``（A）…（B）…`` 或 ``A．…B．…`` 的段落切分为 [(字母, 内容), …]。"""
     # 在选项标志前切分：全角括号 （A） 或 字母 + 顿号/句点 A．A、A.
+    # 新抓取数据的选项常写作 `A．① ... B．②`（标志后无空格、同段并列），
+    # 因此不要求标志后紧跟空格；仅要求标志前不是字母/数字，避免误切普通文本。
     parts = re.split(
-        r"(?=(?:(?<![A-Za-z0-9])[A-I][．.、][ \t]|（[A-I]）))", text
+        r"(?=(?:(?<![A-Za-z0-9])[A-I][．.、](?![A-Za-z0-9])|（[A-I]）))", text
     )
     opts = []
     for p in parts:

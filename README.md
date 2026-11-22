@@ -65,10 +65,10 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 │   ├── 运行环境.md               # TeX / 字体 / poppler / splitpicture / OCR / Python
 │   └── AGENTS.md                # 工具使用与权限约定（经本地 opencode.json 加载）
 ├── gaokaozhenti.cls             # 公共文档类（ctexbook + 公共宏包 + 列表样式）
-├── ChoiceQuestion.sty           # 选择题 / 多图 / 答案与解析命令（项目共用）
-├── PhyUnit.sty                  # 物理单位宏包
-├── package/exam-zh-choices.sty  # 选项排版依赖
-├── ChoiceQuestion-manual.md     # ChoiceQuestion.sty 使用说明
+├── ChoiceQuestion.sty           # 软链接 → ../ChoiceQuestion/ChoiceQuestion.sty
+├── PhyUnit.sty                  # 软链接 → ../PhyUnit/PhyUnit.sty
+├── ChoiceQuestion-manual.md     # 软链接 → ../ChoiceQuestion/ChoiceQuestion-manual.md
+├── PhyUnit-manual.md            # 软链接 → ../PhyUnit/PhyUnit-manual.md
 ├── CONTRIBUTING.md              # 面向人类协作者的贡献指南（提交前自查、禁提交项）
 ├── .gitee/PULL_REQUEST_TEMPLATE.md  # Gitee PR 模板（自查清单）
 ├── .github/pull_request_template.md # GitHub 镜像版 PR 模板（同款清单）
@@ -85,6 +85,12 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 └── README.md
 ```
 
+> `ChoiceQuestion.sty`、`ChoiceQuestion-manual.md`、`PhyUnit.sty`、`PhyUnit-manual.md`
+> 在维护者本地是指向同级项目 `../ChoiceQuestion/`、`../PhyUnit/` 的相对软链接，便于统一修改；
+> 修改宏包/单位宏应在对应外部项目内完成并同步其手册/README，必要时在那些项目提交；
+> 外部克隆若无同级项目，请自行放置对应版本的宏包/说明文件。
+> `package/` 已移除（ChoiceQuestion v0.12 已内置原 exam-zh-choices）。
+>
 > `JSON/`、`Docx/`、`材料处理/`、`svg-inkscape/` 与各卷**编译产物**（`*_学生版.pdf`/`*_教师版.pdf`、
 > `TikZ/*.pdf` 等）已在 `.gitignore` 中忽略，只保留在本地；**`试卷/**/figs/*.pdf` 是源图，已入库**。
 > 入库的是**可复现的源文件**（`.tex`、`.sty`、`.cls`、`figs/`、`Makefile`、文档）。
@@ -145,7 +151,7 @@ make pr-check PR=1   # 接取并对 PR 改动卷先 make all 再 check
 > 若曾并行失败：latexmk 会把错误记入 `*.fdb_latexmk`，请先 `make distclean` 再重编。
 >
 > **软链接（TeXStudio）**：`make`（及各卷 `make student/teacher`）会**自动在每卷目录建立**
-> 指向根公共文件（`gaokaozhenti.cls`/`PhyUnit.sty`/`ChoiceQuestion.sty`/`package`）的相对软链接，
+> 指向根公共文件（`gaokaozhenti.cls`/`PhyUnit.sty`/`ChoiceQuestion.sty`）的相对软链接，
 > 因此可直接用 TeXStudio 打开某卷 `.tex` 编译，无需额外配置。
 
 
@@ -180,8 +186,8 @@ make pr-check PR=1   # 接取并对 PR 改动卷先 make all 再 check
 > **明细见 [`进度记录.md`](进度记录.md)**；此处只保留总体概要（由 `make index` 自动刷新）。
 
 <!-- PROGRESS:START -->
-- **已完成**：49 个年份、共 **410 套**卷、**6608 题**（1978 年 1 套、1979 年 1 套、1980 年 1 套、1981 年 1 套、1982 年 1 套、1983 年 1 套、1984 年 1 套、1985 年 2 套、1986 年 2 套、1987 年 1 套、1988 年 2 套、1989 年 2 套、1990 年 2 套、1991 年 3 套、1992 年 3 套、1993 年 2 套、1994 年 2 套、1995 年 2 套、1996 年 2 套、1997 年 2 套、1998 年 2 套、1999 年 3 套、2000 年 7 套、2001 年 8 套、2002 年 8 套、2003 年 8 套、2004 年 13 套、2005 年 11 套、2006 年 11 套、2007 年 14 套、2008 年 14 套、2009 年 17 套、2010 年 16 套、2011 年 14 套、2012 年 14 套、2013 年 15 套、2014 年 15 套、2015 年 14 套、2016 年 12 套、2017 年 10 套、2018 年 10 套、2019 年 9 套、2020 年 11 套、2021 年 17 套、2022 年 17 套、2023 年 18 套、2024 年 22 套、2025 年 25 套、2026 年 21 套）。
-- **材料就位**：`材料处理/` 已对 `Docx/` 下 402 份 PDF 完成三路转换与提图（详见 `异常记录.md`）；`JSON/`、`Docx/` 覆盖 1978—2026 各年份/地区。
+- **已完成**：49 个年份、共 **413 套**卷、**6651 题**（1978 年 1 套、1979 年 1 套、1980 年 1 套、1981 年 1 套、1982 年 1 套、1983 年 1 套、1984 年 1 套、1985 年 2 套、1986 年 2 套、1987 年 1 套、1988 年 2 套、1989 年 2 套、1990 年 2 套、1991 年 3 套、1992 年 3 套、1993 年 2 套、1994 年 2 套、1995 年 2 套、1996 年 2 套、1997 年 2 套、1998 年 2 套、1999 年 3 套、2000 年 7 套、2001 年 8 套、2002 年 8 套、2003 年 8 套、2004 年 13 套、2005 年 11 套、2006 年 11 套、2007 年 14 套、2008 年 14 套、2009 年 17 套、2010 年 16 套、2011 年 14 套、2012 年 14 套、2013 年 15 套、2014 年 15 套、2015 年 14 套、2016 年 12 套、2017 年 10 套、2018 年 10 套、2019 年 9 套、2020 年 11 套、2021 年 17 套、2022 年 17 套、2023 年 18 套、2024 年 22 套、2025 年 25 套、2026 年 24 套）。
+- **材料就位**：`材料处理/` 已对 `Docx/` 下 406 份 PDF 完成三路转换与提图（详见 `异常记录.md`）；`JSON/`、`Docx/` 覆盖 1978—2026 各年份/地区。
 - **待制作**：无（各年份/地区均已制卷；按批次持续复核、补全缺详解）。
 <!-- PROGRESS:END -->
 
