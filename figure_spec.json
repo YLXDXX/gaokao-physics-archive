@@ -1,0 +1,15 @@
+{
+  "latex_textwidth_mm": {
+    "default": 170.0,
+    "gaokaozhenti": 170.0
+  },
+  "sources": {
+    "OriginPDF": {
+      "scale_mode": "auto"
+    }
+  },
+  "default": {
+    "scale_mode": "auto",
+    "content_mm": null
+  }
+}

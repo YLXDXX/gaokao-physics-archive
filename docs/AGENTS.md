@@ -17,7 +17,7 @@
 
 - 一切中间/临时产物**只写 `/tmp/opencode/`**（已预授权的仓库外目录）。
 - **PDF 渲染页统一在此**，例如：
-  `pdftoppm -r 150 -png Docx/2008/2008_上海.pdf /tmp/opencode/上海`
+  `pdftoppm -r 150 -png OriginPDF/2008/2008_上海.pdf /tmp/opencode/上海`
 - 禁止写裸 `/tmp`、`~`、仓库的父目录或兄弟项目目录。
 - 需要长期保留的中间产物放仓库内、且已被 `.gitignore` 的目录。
 

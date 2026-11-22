@@ -1,5 +1,5 @@
 JSON/
-Docx/
+OriginPDF/
 svg-inkscape/
 main.pdf
 
@@ -25,6 +25,8 @@ __pycache__/
 /试卷/**/crop_compare/
 /试卷/**/crop_preview/
 /试卷/**/figs/.ocr_before/
+/试卷/**/figures.manifest.json
+/试卷/**/figsizes.json
 # 各卷公共文件软链接由 make links 生成（如需入库可删除以下规则）
 /试卷/*/*/gaokaozhenti.cls
 /试卷/*/*/PhyUnit.sty

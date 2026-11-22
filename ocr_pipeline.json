@@ -1,6 +1,6 @@
 {
   "pipeline": {
-    "base_roots": ["Docx"],
+    "base_roots": ["OriginPDF"],
     "stages": ["text", "images", "paddle", "ovis", "merge", "check"],
     "images": true
   }

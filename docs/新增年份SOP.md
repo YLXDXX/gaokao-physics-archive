@@ -13,11 +13,13 @@
    > 默认元数据 `%% number` **保留平台原题号**（显示序号由 `enumerate` 自动生成）。
    > 若确需重编号，用 `--renumber`：会写卷级 `%% sourceNumbers`，`check_meta.py` /
    > `check_review.py` 会按该映射回平台原题号比对。
-2. **材料处理**（有 PDF 时）：`make material PDF=Docx/<年>/<年_地区>.pdf OUT=材料处理/<年>/<地区>`；
+2. **材料处理**（有 PDF 时）：`make material PDF=OriginPDF/<年>/<年_地区>.pdf OUT=材料处理/<年>/<地区>`；
    无 PDF 时登记到 `异常记录.md` 的“源文档缺失清单”，仅依 JSON 制作。
 3. **逐题校对**：以 `merged.md` / JSON / 原 PDF 为准，核对题干、数据、单位、上下标、公式、选项与答案、
    图片（子图拆分与摆放）、详解；公式编号①②③与评分标准若原卷有则**忠实保留**。
-4. **规范化排版**：单顶层 `enumerate`；13 项元数据；图片一律 ChoiceQuestion 命令；单位一律 PhyUnit；
+3b. **图片尺寸专项**（如本轮做尺寸重排）：先 `make figsize-audit`，再按 `图片尺寸处理规范.md`
+    建立映射、测量、回填；扫描件只作尺寸参考，不替换 JSON 清晰图。
+4. **规范化排版**：单顶层 `enumerate`；13 项元数据（PDF 补充题加 `% pdf-only: true`）；图片一律 ChoiceQuestion 命令；单位一律 PhyUnit；
    非选择题必须有 `\jdanswer`（多小问）或 `\tkanswer`（填空）；计算题答案 `enumerate` 与小问一一对应、
    实验题答案可手动编号对应；每题一条基本 `\memoanswer{}`。
    （如有**人工手绘 TikZ**：命名与 `figs/<名>` 同名、在 `TikZ/tikz_sources.json` 登记原图、

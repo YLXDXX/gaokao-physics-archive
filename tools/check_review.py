@@ -34,6 +34,7 @@ PIC_RE = re.compile(r"\\(?:one|two|three|four|five|six|seven|eight|nine)picture|
                     r"\\(?:includegraphics|includesvg)|figs/[A-Za-z0-9_\-]")
 REF_FIG_RE = re.compile(r"图\s*(?:~?\\ref\{|\\ref\{)|如图所示|如图")
 CHOICE_TYPES = ("单选", "多选", "选择题")
+PDF_ONLY_RE = re.compile(r"^%\s*pdf-only\s*:\s*true\s*$", re.M)
 
 
 def collect_tex(paths: List[Path]) -> List[Path]:
@@ -119,6 +120,7 @@ def check_file(tex: Path) -> Tuple[List[str], List[str]]:
         if not m:
             continue
         n = int(m.group(1))
+        pdf_only = bool(PDF_ONLY_RE.search(block))
         tmatch = re.search(r"%%\s*type:\s*(.*)", block)
         is_choice = bool(tmatch and any(k in tmatch.group(1) for k in CHOICE_TYPES))
 
@@ -146,7 +148,7 @@ def check_file(tex: Path) -> Tuple[List[str], List[str]]:
             if len(set(present.values())) > 1:
                 errs.append(f"{tex.name}: 第 {n} 题选择题答案三处不一致：{present}")
             key = _akey(n)
-            if key in jans and present and not (jans[key] & set(present.values())):
+            if (not pdf_only) and key in jans and present and not (jans[key] & set(present.values())):
                 errs.append(f"{tex.name}: 第 {n} 题答案与 JSON 不符："
                             f"JSON={sorted(jans[key])}，tex={present}")
 

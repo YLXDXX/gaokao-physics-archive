@@ -1,6 +1,6 @@
 # 材料处理与 OCR 规范（PDF → Markdown 多引擎交叉验证）
 
-本规范适用于高考真题制作中**以 JSON 为主、PDF/Docx 为辅**的校对与补全环节：
+本规范适用于高考真题制作中**以 JSON 为主、PDF 为辅**的校对与补全环节：
 把每份原始 PDF 用**两个独立 OCR 引擎**（OvisOCR3、PaddleOCR-VL）各转一遍，
 文字版再辅以 `pdftotext`，逐项交叉验证得到唯一主数据源 `merged.md`；
 并从原 PDF **无损提取内嵌图**，为 JSON 缺图/复合图提供图片来源。
@@ -28,7 +28,7 @@
 
 > `材料处理/` 与各处 `svg-inkscape/`（Inkscape 生成物）均已在 `.gitignore` 中忽略，只保留本地。
 
-若该年/地区**只有 `.docx` 没有 PDF**，用 pandoc 转 Markdown 作为参考（见第四节）。
+若该年/地区**缺 PDF**，仅依 JSON 制作，并在 `异常记录/<年份>.md` 登记；补齐 PDF 后重做材料。
 
 ---
 
@@ -36,11 +36,11 @@
 
 ```bash
 # 单卷（等价根目录 Makefile 入口）
-make material PDF=Docx/2026/2026_湖北.pdf OUT=材料处理/2026/湖北
+make material PDF=OriginPDF/2026/2026_湖北.pdf OUT=材料处理/2026/湖北
 
 # 或直接用统一流水线（Paddle 自动启停、逐页断点续跑）
 ocrpipe run \
-    -c ocr_pipeline.json -i Docx/2026/2026_湖北.pdf \
+    -c ocr_pipeline.json -i OriginPDF/2026/2026_湖北.pdf \
     -o 材料处理/2026/湖北 --auto-serve
 ```
 
@@ -96,19 +96,16 @@ ocrpipe check "<处理目录>"
 `merged.md` 是该卷的唯一主数据源，制作时**只读 `merged.md`**（必要时回原 PDF）。
 JSON 与 `merged.md` 的差异属“语义校对”，**人工/agent 逐题核对**，不用脚本机械 diff。
 
+> 扫描件/低清 PDF 中的图只作**尺寸参考**；JSON 清晰图不被扫描图替换，详见 `图片尺寸处理规范.md`。
+
 ---
 
-## 四、Docx 参考（无 PDF 或需提取详解时）
+## 四、PDF 参考与详解
 
-`Docx/<年>/<年_地区>.docx` 含题干、答案与 `【详解】`。可用 pandoc 转为 Markdown 作参考：
-
-```bash
-pandoc -f docx -t markdown --extract-media=材料处理/2026/湖北/docx_media \
-    "Docx/2026/2026_湖北.docx" -o 材料处理/2026/湖北/docx参考.md
-```
-
-> 注意：Word 中的公式常为 OMML/嵌入对象，pandoc 可能输出为 `.wmf` 图片而非 LaTeX。
-> 因此**公式以 PDF 的 `merged.md` 为准**，Docx 主要提供**文字型详解**与结构参考。
+本仓库已统一只保留源 PDF（`OriginPDF/<年>/<年_地区>.pdf`），不再保存 `.docx`。
+题干、答案与 `【详解】` 一律以原 PDF 的 `merged.md` 为主数据源；
+PDF 无文字层或详解缺失时，按原 PDF 页面/图像人工核对，并在
+`异常记录/<年份>.md` 登记，不再依赖 Word 文档。
 
 ---
 
@@ -121,7 +118,7 @@ pandoc -f docx -t markdown --extract-media=材料处理/2026/湖北/docx_media \
    Paddle 的 `paddle/structured` 与 OvisOCR3 的 `ovis/structured` 可用于按 bbox 复核/补裁；
 3. 纯矢量页（`pdfimages -list` 为 0 张）→ `pdftoppm -r 600 -png <PDF> <前缀>` 整页渲染后再裁
    （可直接用 `ocrpipe images --root 材料处理 --render` 自动渲染落盘）；
-4. 无 PDF 时，可用 Docx 内嵌媒体（`unzip` 解出 `word/media/`）。
+4. 无 PDF 时不从其它格式补图；缺图按 `异常记录/<年份>.md` 登记，待补齐 PDF 后重做。
 
 ### 2. 复合图拆分（`ocrpipe recrop`，依赖 splitpicture）
 

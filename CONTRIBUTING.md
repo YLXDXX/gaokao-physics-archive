@@ -19,7 +19,8 @@
 
 ## 三、本地数据（重要）
 
-`JSON/`、`Docx/`、`材料处理/` 是**原始数据 / OCR 产物，已在 `.gitignore` 忽略、只留本地**。
+`JSON/`、`OriginPDF/`、`材料处理/` 是**原始数据 / OCR 产物，已在 `.gitignore` 忽略、只留本地**；
+`试卷/**/figures.manifest.json`、`试卷/**/figsizes.json` 为本地图片尺寸工作文件，同样不入库。
 若你没有这些数据：可以只依 JSON 初稿 + 规范制作，但 `check_meta.py`（元数据↔JSON）、
 `make check-material` 等依赖本地数据的检查会**跳过或提示**，属正常；完整比对由维护者在有数据的机器上复跑。
 
@@ -27,7 +28,7 @@
 
 ```bash
 python3 tools/json_to_tex.py JSON/<年>/<年_地区>.json     # 1 初稿 + 图片
-# 2 对照 材料处理/<年>/<地区>/merged.md、（如有）docx、原 PDF 逐题校对重写
+# 2 对照 材料处理/<年>/<地区>/merged.md、原 PDF 逐题校对重写
 make -C 试卷/<年>/<地区> student && make -C 试卷/<年>/<地区> teacher   # 3 两版编译
 make -C 试卷/<年>/<地区> check                            # 4 自查（须 0 错误）
 ```
@@ -44,7 +45,7 @@ make -C 试卷/<年>/<地区> check                            # 4 自查（须 
 
 ## 六、不要提交的东西
 
-- **原始数据 / OCR 产物**：`JSON/`、`Docx/`、`材料处理/`（已忽略，勿强加）；
+- **原始数据 / OCR 产物**：`JSON/`、`OriginPDF/`、`材料处理/`（已忽略，勿强加）；
 - **编译产物**：`*_学生版.pdf`、`*_教师版.pdf`、`TikZ/*.pdf`、`*.log`/`*.aux`/`*.fls`/`*.fdb_latexmk`、`svg-inkscape/`；
 - **例外**：`试卷/**/figs/*.pdf` 与 `figs/*.svg` 是个别题的**源图，必须入库**；`TikZ/originals/` 下的原图也应入库。
 

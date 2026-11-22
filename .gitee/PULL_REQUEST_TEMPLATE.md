@@ -13,7 +13,7 @@
 - [ ] `make -C 试卷/<年>/<地区> check` **0 错误**
 - [ ] 改了文档/进度/异常：`make check-docs` 通过
 - [ ] 改了 `tools/`：`make tools-test` 通过
-- [ ] 未提交 `JSON/`、`Docx/`、`材料处理/`、编译产物与日志
+- [ ] 未提交 `JSON/`、`OriginPDF/`、`材料处理/`、编译产物与日志
 - [ ] `figs/*.pdf`、`figs/*.svg`、`TikZ/originals/` 等**源图**已入库
 - [ ] `进度记录.md`、`异常记录/<年>.md` 已更新（如涉及）
 - [ ] 未手工编辑 `试卷/<年>/README.md`

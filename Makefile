@@ -18,6 +18,7 @@
 #    make material-merge   为 材料处理/ 下各卷生成/校验 merged.md
 #    make extract-images   从源 PDF 无损提取内嵌图到 材料处理/…/pdfimages/
 #    make check-material   材料四要素/图片引用/逐页源数据/底稿漂移检查
+#    make figsize-audit    图片尺寸处理前审计（只读；ARGS 可传目录/--json/--probe-pdf）
 #    make ocr-plan|ocr-status|ocr-batch  OCR 流水线（外部 OCRPipeLine；ARGS 透传）
 #    make tools-test   运行 tools 单元测试（textfix / 元数据 / 内容 / 索引）
 #    make links        为全部试卷目录创建指向根公共文件的软链接
@@ -58,7 +59,7 @@ define RUN_DIRS
 endef
 
 .PHONY: all student teacher tikz tikz-compare check check-tikz check-recrop links \
-        clean distclean material material-batch material-merge extract-images check-material tools-test \
+        clean distclean material material-batch material-merge extract-images check-material figsize-audit tools-test \
         ocr-plan ocr-status ocr-batch \
         index progress check-docs check-changed ci fetch-pr pr-check
 
@@ -156,7 +157,7 @@ pr-check:
 ci:
 	@echo "===== 工具单元测试 + 文档校验 ====="
 	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
-    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json
+    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json tools.test_figsize_audit
 	@python3 tools/check_docs.py
 	@echo "===== 抽样编译（首份试卷） ====="
 	@d=$$(ls -d 试卷/*/* 2>/dev/null | head -1); \
@@ -174,7 +175,7 @@ check-recrop:
 tools-test:
 	@echo "===== tools 单元测试 ====="
 	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
-    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json
+    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json tools.test_figsize_audit
 
 # 材料处理管线（外部独立程序 OCRPipeLine；需 Conda 环境 / PaddleOCR-VL 服务）
 material:
@@ -196,6 +197,9 @@ extract-images:
 
 check-material:
 	@$(OCRPIPE) check --root 材料处理
+
+figsize-audit:
+	@python3 tools/figsize_audit.py $(ARGS)
 
 # ---------------------------------------------------------------------------
 # OCR 流水线（外部独立程序 OCRPipeLine；OvisOCR3 + PaddleOCR-VL）

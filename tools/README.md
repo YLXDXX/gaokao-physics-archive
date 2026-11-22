@@ -10,7 +10,7 @@
 | `json_to_tex.py` | 由平台 JSON 生成某卷 LaTeX **初稿** + 图片素材（复制到 `试卷/…/figs/`；HTML/公式经 `html2latex.py` 转换）。支持：缺 memo 占位、非选择题自动 `\jdanswer`、同题多图 `\twopicture`、图片选项 `\fourchoices[ispicture=true]`、`--paper-type` 卷级标记；`--renumber` 重编号并写 `%% sourceNumbers`（`check_meta`/`check_review` 据此映射回原题号） | `python3 tools/json_to_tex.py JSON/2026/2026_湖北.json` |
 | `html2latex.py` | HTML（含 MathJax 公式）→ LaTeX 的 **DOM 转换器**（由 `json_to_tex.py` 调用；移植自 texgen，正确处理上下标、表格、公式片段合并与字符映射） | 见 `test_html2latex.py` |
 | `check_paper.py` | 试卷**规范自查**：文档骨架（含两版开关 `\gkver`）、13 项元数据顺序、图片命令、引用标签、图片存在、每题基本详解 | `python3 tools/check_paper.py 试卷/2025/湖北/湖北.tex` |
-| `check_meta.py` | **元数据 ↔ 平台 JSON 逐字段一致**（防转换漂移，含选择题 `%% answer`） | `python3 tools/check_meta.py 试卷/2000/上海/上海.tex` |
+| `check_meta.py` | **元数据 ↔ 平台 JSON 逐字段一致**（防转换漂移，含选择题 `%% answer`；`% pdf-only: true` 的 PDF 补充题跳过比对） | `python3 tools/check_meta.py 试卷/2000/上海/上海.tex` |
 | `check_formula_numbers.py` | **解析公式编号检查**：只识别公式编号（过滤 `①过程`、`图象为②`、小问标签），要求 ①–⑳ 从 ① 起连续、无悬空引用 | `python3 tools/check_formula_numbers.py 试卷/` |
 | `check_answers.py` | **非选择题答案对应**：必须有 `\jdanswer`/`\tkanswer`；计算题比对小问数与 `\jdanswer` 项数，实验题（typeId=4）免项数比对（答案可手动编号） | `python3 tools/check_answers.py 试卷/` |
 | `check_units.py` | **PhyUnit 宏检查**：`\Uxxx` 是否均已定义；`--suggest` 给出裸单位建议宏 | `python3 tools/check_units.py 试卷/` |
@@ -24,6 +24,7 @@
 | `check_docs_text.py` | **文档体检**：扫描根 / `docs/` / `tools/` 的 Markdown，检查过时 `cd` 用法与失效相对链接 | `python3 tools/check_docs_text.py` |
 | `check_docs.py` | **文档一致性校验**：`进度记录.md` ↔ `试卷/` 双向一致、状态取值、题数相符、年份索引与 `异常记录/<年>.md` 表头/状态规范及**统一结构**（制作说明 + 状态分区顺序，已解决置末） | `python3 tools/check_docs.py`（`make check-docs`，已接入 `make check`） |
 | `status.py` | **各年份进度概要**：套数、题数、进度表“已完成”计数 | `python3 tools/status.py`（`make progress`） |
+| `figsize_audit.py` | **图片尺寸处理前审计**（只读）：源 PDF、材料、SVG/JPG、recipe、`figures.manifest.json`、当前尺寸键覆盖情况 | `python3 tools/figsize_audit.py`（`make figsize-audit`） |
 
 > **并行编译包装**：`bin/inkscape` 用 `flock` 串行化 Inkscape 调用，规避 `make -jN` 并发时
 > `Gio::DBus::Error` 崩溃；各卷 Makefile 已把 `tools/bin` 加入 `PATH`，无需手动调用
@@ -89,7 +90,18 @@
   `TikZ/originals/<名>.png`（原为矢量图时用 `pdftoppm`/Inkscape 渲染为 PNG）再指向它。
 - 命名：`TikZ/<名>.tex` 建议与 `figs/<名>` **同名**；有登记且正文已接入时可用其它名，但不推荐。
 
-## 五、检查项汇总
+## 五、图片尺寸（重排）
+
+详见根目录 [`../图片尺寸处理规范.md`](../图片尺寸处理规范.md)。
+
+| 脚本 | 用途 | 典型用法 |
+| :--- | :--- | :--- |
+| `figsize_audit.py` | 全库/分卷审计图片尺寸现状（只读）：源 PDF、材料、SVG/JPG、recipe、`figures.manifest.json`、当前尺寸键覆盖情况 | `python3 tools/figsize_audit.py`；`make figsize-audit ARGS="--json /tmp/opencode/figsize-audit.json"` |
+| 外部 `ocrpipe figsize` | PDF 真实物理尺寸：`probe/layout/draft/extract/sync/report/apply/check`；扫描件只作测量参考 | 见 [`../OCR识别转换流程说明.md`](../OCR识别转换流程说明.md) |
+
+> `figsize_plan.py` / `figsize_apply.py` / `figsize_check.py` 为下一阶段脚本（见规范文档）。
+
+## 六、检查项汇总
 
 **每卷目录** `make check` 按下列顺序执行（与各卷 `Makefile` 的 `check` 目标一致）：
 
@@ -98,7 +110,7 @@
 3. `textfix/textfix.py --check`（共性问题：全角冒号、公式连字符、en/em 破折号、`\dfrac`）；
 4. `check_layout_cmds.py`（版面微调命令：禁止原生断页 / 撑开命令）；
 5. `check_glyphs.py`（编译日志缺字 `Missing character`，如 `\mathrm` 内汉字丢字）；
-6. `check_review.py`（成品跨项复查：解析引图必在、选择题三处答案一致、与 JSON 答案一致、`\ref` 已定义、重复标签、公式编号悬空、占位详解计数）；
+6. `check_review.py`（成品跨项复查：解析引图必在、选择题三处答案一致、与 JSON 答案一致、`\ref` 已定义、重复标签、公式编号悬空、占位详解计数；`% pdf-only: true` 的补充题跳过 JSON 答案比对）；
 7. `check_meta.py`（元数据逐字段与平台 JSON 一致）；
 8. `check_answers.py`（非选择题答案命令与小问对应）；
 9. `check_formula_numbers.py`（解析公式编号 ①②③… 连续、无悬空引用）；
@@ -117,7 +129,7 @@
 > `make check YEAR=2000` 只查该年；`make check-changed` 只查工作树**未提交**改动
 > （审查他人 PR 分支用 `make pr-check`）；`make ci` 抽样构建 + 全量自查。
 
-## 六、tools 单元测试
+## 七、tools 单元测试
 
 ```bash
 make tools-test

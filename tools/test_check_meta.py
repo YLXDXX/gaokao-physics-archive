@@ -118,6 +118,32 @@ class TestCheckMeta(unittest.TestCase):
         self.assertEqual(errs, [])
         self.assertTrue(warns)
 
+    def test_pdf_only_extra_item(self):
+        self._write()
+        extra = r"""\item
+%% number: 2
+%% paperName: 2000年测试第 2 题 4 分
+%% typeId: 1
+%% type: 单选题
+%% chapter: 力学
+%% point: 速度
+%% method: 无
+%% score: 4
+%% degree: 600
+%% duplicateId: 0
+% pdf-only: true
+%% body:
+题干（  ）
+%% answer: B
+%% memo:
+\memoanswer{解}
+"""
+        text = self.tex.read_text(encoding="utf-8").replace(r"\end{enumerate}", extra + r"\end{enumerate}")
+        self.tex.write_text(text, encoding="utf-8")
+        errs, warns = check_meta.check_file(self.tex)
+        self.assertEqual(errs, [])
+        self.assertTrue(any("PDF 补充题" in w for w in warns))
+
     def test_source_numbers_mapping(self):
         """--renumber：tex %% number=1..N，按 %% sourceNumbers 映射回 JSON 原题号。"""
         self.tex.write_text(RENUM_TEX, encoding="utf-8")

@@ -19,7 +19,7 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Set, Tuple
 
 ROOT = Path(__file__).resolve().parent.parent
 # 参与比对的元数据字段（顺序无关；body/answer/memo 为段首标记，单独处理）
@@ -87,6 +87,19 @@ def parse_source_numbers(text: str) -> Optional[List[int]]:
     return [int(x) for x in re.findall(r"\d+", m.group(1))]
 
 
+PDF_ONLY_RE = re.compile(r"^%\s*pdf-only\s*:\s*true\s*$", re.M)
+
+
+def parse_pdf_only(text: str) -> Set[int]:
+    """解析 `% pdf-only: true` 标记的题号（单 `%`，不进入 13 项元数据）。"""
+    out: Set[int] = set()
+    for block in re.split(r"(?=^%%\s*number\s*[:：])", text, flags=re.M):
+        m = re.match(r"%%\s*number\s*[:：]\s*(\d+)", block)
+        if m and PDF_ONLY_RE.search(block):
+            out.add(int(m.group(1)))
+    return out
+
+
 def _last_by_number(items_list: List[dict]) -> Tuple[Dict[int, dict], Dict[int, int]]:
     """返回 {题号: 最后一条} 与 {题号: 出现次数}。
 
@@ -132,6 +145,7 @@ def check_file(tex: Path) -> Tuple[List[str], List[str]]:
     items, counts = _last_by_number(data.get("items", []))
     text = tex.read_text(encoding="utf-8")
     metas = parse_meta(text)
+    pdf_only = parse_pdf_only(text)
     srcs = parse_source_numbers(text)
 
     if srcs is not None:
@@ -142,6 +156,9 @@ def check_file(tex: Path) -> Tuple[List[str], List[str]]:
                             f"（共 {len(srcs)} 个）")
                 continue
             src = srcs[n - 1]
+            if n in pdf_only:
+                warns.append(f"{tex.name}: 第 {n} 题（原题号 {src}）为 PDF 补充题，跳过 JSON 元数据比对")
+                continue
             it = items.get(src)
             if it is None:
                 errs.append(f"{tex.name}: 第 {n} 题（原题号 {src}）在 JSON 中无对应项")
@@ -154,6 +171,9 @@ def check_file(tex: Path) -> Tuple[List[str], List[str]]:
                          f"%% sourceNumbers 有 {len(srcs)} 个")
     else:
         for n, meta in metas.items():
+            if n in pdf_only:
+                warns.append(f"{tex.name}: 第 {n} 题为 PDF 补充题，跳过 JSON 元数据比对")
+                continue
             it = items.get(n)
             if it is None:
                 errs.append(f"{tex.name}: 第 {n} 题在 JSON 中无对应项")

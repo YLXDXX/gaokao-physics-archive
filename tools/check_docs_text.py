@@ -4,7 +4,7 @@
 对项目 Markdown 文档做轻量一致性检查，避免各文档相互漂移：
 
 1. **过时的 `cd` 用法**：规则要求统一在仓库根用 `make -C 试卷/…`，文档中不应再
-   出现“`cd 试卷/…` / `cd Docx/…`”之类示例；带“不要/禁止/不得/反例”等否定词的
+   出现“`cd 试卷/…` / `cd OriginPDF/…`”之类示例；带“不要/禁止/不得/反例”等否定词的
    说明行豁免（那正是在讲这条规则）；
 2. **失效相对链接**：形如 `](path/to/x.md)` 的本地链接，目标文件须存在
    （跳过 http(s) 链接与锚点）。
@@ -41,7 +41,7 @@ def iter_md(roots: List[Path]) -> List[Path]:
         if root.is_file() and root.suffix == ".md":
             out.append(root)
         elif root.is_dir():
-            # 仓库根只取顶层 *.md（避免递归进 材料处理/ JSON/ Docx/ 等数据目录）
+            # 仓库根只取顶层 *.md（避免递归进 材料处理/ JSON/ OriginPDF/ 等数据目录）
             pat = "*.md" if root == ROOT else "**/*.md"
             for p in root.glob(pat):
                 if any(part in SKIP_DIRS for part in p.parts):
@@ -62,7 +62,7 @@ def check_doc(path: Path) -> List[str]:
         m = CD_RE.search(line)
         if m and not any(w in line for w in NEG_WORDS):
             target = m.group(1)
-            if target.startswith(("试卷", "Docx", "JSON", "材料处理", "./试卷")):
+            if target.startswith(("试卷", "OriginPDF", "JSON", "材料处理", "./试卷")):
                 errs.append(f"{path.relative_to(ROOT)}:{i} 过时的 cd 用法："
                             f"「{m.group(0).strip()}」（请改用 make -C 试卷/…）")
         for link in LINK_RE.findall(line):
