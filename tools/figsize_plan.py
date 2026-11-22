@@ -109,6 +109,17 @@ def candidate_sizes(candidate: Dict) -> Tuple[float, float]:
     raise ValueError("候选缺少 width_cm/height_cm")
 
 
+def current_sizes(unit: Path) -> Dict[str, Tuple[str, str]]:
+    try:
+        from figsize_check import command_keys
+    except ImportError:
+        from tools.figsize_check import command_keys
+    tex = unit / f"{unit.name}.tex"
+    if not tex.is_file():
+        return {}
+    return command_keys(tex.read_text(encoding="utf-8", errors="ignore"))
+
+
 def load_map(unit: Path, map_path: Optional[Path]) -> Dict[str, Dict]:
     path = map_path or (unit / "figures.map.json")
     if not path.is_file():
@@ -224,11 +235,38 @@ def build_entry(unit: Path, target: Path, spec: Dict, cand: Dict,
     }
 
 
+def make_current_entry(unit: Path, target: Path, dim: str, val: str) -> Dict:
+    aspect = asset_aspect(target)
+    value = float(val.replace("cm", "").strip())
+    if dim == "w":
+        w, h = value, (value / aspect if aspect else None)
+    else:
+        h, w = value, (value * aspect if aspect else None)
+    return {
+        "target": rel(target),
+        "strategy": "manual",
+        "asset": {"kind": target.suffix.lower().lstrip("."), "aspect": aspect},
+        "source": {"kind": "current", "measure": "kept", "width_cm": w,
+                   "height_cm": h, "reference": "width" if dim == "w" else "height"},
+        "final": {"width_cm": round(w, 2) if w else None,
+                  "height_cm": round(h, 2) if h else None,
+                  "basis": "manual",
+                  "reference": "width" if dim == "w" else "height",
+                  "capped": False},
+        "width_cm": round(w, 2) if w else None,
+        "height_cm": round(h, 2) if h else None,
+        "status": "manual",
+        "notes": "保留当前尺寸（未匹配 PDF 候选）",
+    }
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     ap = argparse.ArgumentParser(description="生成图片尺寸 figures.manifest.json")
     ap.add_argument("units", nargs="+")
     ap.add_argument("--map", help="映射 JSON（默认 <unit>/figures.map.json）")
     ap.add_argument("--candidates", help="候选 manifest（默认材料处理/.../pdf_figures/figures.manifest.json）")
+    ap.add_argument("--keep-current", action="store_true",
+                    help="未在 map 中登记的图沿用当前 .tex 尺寸并写入 manifest")
     ap.add_argument("--write", action="store_true")
     args = ap.parse_args(argv)
 
@@ -258,6 +296,31 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 print(f"[警告] {key}: candidate {idx} 越界（共 {len(cands)}）", file=sys.stderr)
                 continue
             entries.append(build_entry(unit, target, spec, cands[idx - 1], cand_manifest))
+        if args.keep_current:
+            mapped = {ROOT / k for k in mapping}
+            cur = current_sizes(unit)
+            for p in sorted((unit / "figs").rglob("*")):
+                if not p.is_file() or p.suffix.lower() not in (".png", ".jpg", ".jpeg", ".svg", ".pdf"):
+                    continue
+                if any(part.startswith(".") for part in p.relative_to(unit / "figs").parts):
+                    continue
+                if p in mapped:
+                    continue
+                key = "figs/" + p.relative_to(unit / "figs").as_posix()
+                key = key.rsplit(".", 1)[0] if Path(key).suffix.lower() in (".png", ".jpg", ".jpeg", ".svg", ".pdf") else key
+                if key in cur:
+                    dim, val = cur[key]
+                    entries.append(make_current_entry(unit, p, dim, val))
+                else:
+                    entries.append({
+                        "target": rel(p), "strategy": "manual",
+                        "asset": {"kind": p.suffix.lower().lstrip("."), "aspect": asset_aspect(p)},
+                        "source": {"kind": "missing", "measure": "none"},
+                        "final": {"width_cm": None, "height_cm": None,
+                                  "basis": "manual", "reference": "width", "capped": False},
+                        "width_cm": None, "height_cm": None,
+                        "status": "missing_source", "notes": "未找到候选，也未找到当前尺寸",
+                    })
         payload = {
             "version": 1,
             "unit": rel(unit),
@@ -277,8 +340,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         for e in entries:
             f = e.get("final") or {}
             print(f"  {e.get('status','?'):7} {e['target'].split('/')[-1]:16} "
-                  f"cand#{mapping[e['target']].get('candidate')} → "
-                  f"{f.get('width_cm')}×{f.get('height_cm')}cm")
+                  f"→ {f.get('width_cm')}×{f.get('height_cm')}cm")
         if args.write:
             out = unit / "figures.manifest.json"
             out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",

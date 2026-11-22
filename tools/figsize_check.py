@@ -59,7 +59,8 @@ def command_keys(text: str) -> Dict[str, Tuple[str, str]]:
                     else:
                         suf = L[idx]
                         dims = [(f"w{suf}", "w"), (f"h{suf}", "h"),
-                                (f"width{suf}", "w"), (f"height{suf}", "h")]
+                                (f"width{suf}", "w"), (f"height{suf}", "h"),
+                                ("w", "w"), ("h", "h"), ("width", "w"), ("height", "h")]
                     for key, dim in dims:
                         if key in opts and opts[key]:
                             out[fig] = (dim, opts[key])
