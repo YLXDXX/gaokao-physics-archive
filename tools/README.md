@@ -104,7 +104,7 @@
 | `figsize_apply.py` | 只按 manifest 回填 `.tex` 尺寸键，不改未登记图片；默认预览；`--write` 同时给登记 PNG 写 `pHYs` | `python3 tools/figsize_apply.py 试卷/2000/天津 --write` |
 | `figsize_check.py` | 校验 manifest ↔ `.tex` 尺寸键，并校验 PNG `pHYs`、PDF `MediaBox` 与 SVG 纵横比；`--strict-assets` 拒绝 SVG | `python3 tools/figsize_check.py 试卷/2000/天津` |
 | `figsize_status.py` | 列出图片尺寸 done / todo；done = manifest 存在且 check 全绿，**或该卷无配图**（`figs/` 为空且正文无图片命令）；全面铺开时跳过 | `python3 tools/figsize_status.py --only-todo`；`make figsize-status` |
-| `figsize_review.py` | 批量复核清单（只读）：列出缺 manifest、`None` 尺寸、`d>5%`、异常尺寸（宽<0.4/高<0.2/>17cm）、超 17cm 缩放、未引用 figs；`--check` 可同时跑 `figsize_check` | `python3 tools/figsize_review.py 试卷/2000 试卷/2001 --only-issues`；`make figsize-review ARGS="试卷/2000 试卷/2001"` |
+| `figsize_review.py` | 批量复核清单（只读）：列出缺 manifest、`None` 尺寸、`d>5%`、异常尺寸（宽<0.3/高<0.2/>17cm）、超 17cm 缩放、未引用 figs；`--check` 可同时跑 `figsize_check` | `python3 tools/figsize_review.py 试卷/2000 试卷/2001 --only-issues`；`make figsize-review ARGS="试卷/2000 试卷/2001"` |
 | 外部 `ocrpipe figsize` | 3.1.1：`probe/layout/draft/extract/measure/migrate/apply/check/status/svg-to-pdf`；PNG/PDF/SVG 混合资产，manifest 安全模式 | 见 [`../OCR识别转换流程说明.md`](../OCR识别转换流程说明.md) |
 | 外部 `ocrpipe figsize migrate` | JPG → PNG（只转一次，更新 `.tex` 引用；`--delete-jpg` 删除旧 JPG） | `ocrpipe figsize migrate 试卷/2024/北京 --write --delete-jpg` |
 
@@ -159,13 +159,17 @@
   `材料处理/.../pdf_figures/figures.manifest.json` 已存在会直接复用。旧试点或误判双栏的候选
   可能整体放大 1.86 倍（如 2000 苏浙吉）。先看候选 `columns`/`scale_info`；确属误判时备份并
   删除旧候选 manifest，重跑 `layout/draft/extract` 并加 `--scale-mode 1` 或 `--columns`。
+- **新生成候选也可能 scale 误判**：2004 全国理综Ⅰ 新候选 `content_mm=105`（实际约 164mm），
+  整卷放大 1.617×。生成候选后先核对 `content_mm`/主栏宽，异常时用 `--scale-mode 1` 重生成。
 - **无配图卷**：`figs/` 为空且正文无图片命令的卷（如 2001 广东综合）无需 manifest；
   `figsize_status.py` 从 2026-11-23 起将其判为 done（reason=无配图）。
 - **`.recrop.json` source 扩展名过期**：重新提取 `pdfimages` 后常见 `.png` ↔ `.jpg` 变化，
   `check-recrop` 报“source 不存在或非图片”时，把 source 改为现存同名文件即可，不要删 recipe；
   2026-11-23 已修 2017/11月浙江、2017/4月浙江、2020/7月浙江、2021/6月浙江。
 - **批量验收用 `figsize_review.py`**：每批先 `--strict` 看 issue（缺 manifest / `None` / 异常尺寸），
-  再人工处理 `d>5%` 与未引用图；不要只依赖 `figsize_status`。
+  再人工处理 `d>5%` 与未引用图；不要只依赖 `figsize_status`。全库收尾再跑一次
+  `figsize_review 试卷 --strict`；异常尺寸阈值（宽 0.3/高 0.2cm）只是提示，
+  刻度条等细长图可能合法（如 2014 上海 `10.svg` 0.37×4.00cm），须人工确认。
 
 ## 六、检查项汇总
 

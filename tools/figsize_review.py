@@ -6,7 +6,7 @@
 - 缺失 manifest（有配图却未处理）；无配图卷单独标注；
 - `final.width_cm/height_cm` 为 `None`；
 - `source.deviation > --min-deviation`（默认 5%）；
-- 最终尺寸异常（宽 < 0.4cm、高 < 0.2cm 或任一边 > 17cm）；
+- 最终尺寸异常（宽 < 0.3cm、高 < 0.2cm 或任一边 > 17cm）；
 - 被 17cm 上限缩放（`final.capped`）；
 - 未被正文引用的 `figs/` 文件；
 - 可选 `--check` 同时运行 `figsize_check`。
@@ -36,7 +36,7 @@ from figsize_audit import (  # noqa: E402
 )
 from figsize_check import check_unit  # noqa: E402
 
-MIN_W_CM = 0.4
+MIN_W_CM = 0.3
 MIN_H_CM = 0.2
 MAX_CM = 17.0
 
