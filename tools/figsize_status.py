@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """tools/figsize_status.py —— 列出图片尺寸“已完成/待处理”的卷，避免重复处理。
 
-判定“已完成”的条件：存在 `figures.manifest.json` 且 `figsize_check` 无错误。
+判定“已完成”的条件：存在 `figures.manifest.json` 且 `figsize_check` 无错误；
+无配图卷（`figs/` 为空且正文无图片命令）也视为已完成。
 全面铺开时先跑本脚本，`done` 的卷直接跳过；只有 `todo` 的卷需要重新
 生成候选/映射/回填。
 
@@ -21,13 +22,25 @@ from pathlib import Path
 from typing import Dict, List, Optional, Sequence
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from figsize_audit import iter_units
+from figsize_audit import _collect_refs, audit_unit, iter_units
 from figsize_check import check_unit
 
 
 def status_unit(unit: Path, *, strict_assets: bool = False) -> Dict:
     manifest = unit / "figures.manifest.json"
     if not manifest.is_file():
+        # 无配图卷（figs/ 为空、正文无图片命令）无需 manifest，直接视为完成。
+        try:
+            info = audit_unit(unit)
+        except Exception:
+            info = {}
+        tex = unit / f"{unit.name}.tex"
+        if not tex.is_file():
+            cands = sorted(unit.glob("*.tex"))
+            tex = cands[0] if cands else None
+        refs = _collect_refs(tex.read_text(encoding="utf-8", errors="ignore")) if tex else set()
+        if info.get("images") == 0 and info.get("referenced") == 0 and not refs:
+            return {"unit": unit.as_posix(), "status": "done", "reason": "无配图"}
         return {"unit": unit.as_posix(), "status": "todo", "reason": "无 figures.manifest.json"}
     errs = check_unit(unit, strict_assets=strict_assets)
     if errs:

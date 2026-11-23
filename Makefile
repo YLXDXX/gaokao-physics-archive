@@ -24,6 +24,7 @@
 #    make figsize-check    校验 manifest ↔ .tex 尺寸键 + PNG pHYs / PDF / SVG 纵横比
 #                          ARGS="… --strict-assets" 要求 SVG 必须先迁 PDF
 #    make figsize-status   列出图片尺寸 done / todo（全面铺开时先跑，done 的跳过）
+#    make figsize-review   批量复核清单（None / d>5% / 异常尺寸 / 未引用；ARGS 传目录）
 #    make figsize-check-ext UNIT=试卷/…  用 OCRPipeLine 3.1.1 交叉校验（5%/15%，--strict）
 #    make figsize-apply-ext UNIT=试卷/… 用 OCRPipeLine 3.1.1 预演安全回填（ARGS=--write 落盘）
 #    make figsize-status-ext [ARGS="试卷 --only-todo"] 用 OCRPipeLine 3.1.1 列 done/todo
@@ -67,7 +68,7 @@ define RUN_DIRS
 endef
 
 .PHONY: all student teacher tikz tikz-compare check check-tikz check-recrop links \
-        clean distclean material material-batch material-merge extract-images check-material figsize-audit figsize-automap figsize-merge-fallback figsize-fix-refs figsize-unit figsize-plan figsize-apply figsize-check figsize-status \
+        clean distclean material material-batch material-merge extract-images check-material figsize-audit figsize-automap figsize-merge-fallback figsize-fix-refs figsize-unit figsize-plan figsize-apply figsize-check figsize-status figsize-review \
         figsize-check-ext figsize-apply-ext figsize-status-ext tools-test \
         ocr-plan ocr-status ocr-batch \
         index progress check-docs check-changed ci fetch-pr pr-check
@@ -234,6 +235,9 @@ figsize-check:
 
 figsize-status:
 	@python3 tools/figsize_status.py $(ARGS)
+
+figsize-review:
+	@python3 tools/figsize_review.py $(ARGS)
 
 figsize-check-ext:
 	@test -n "$(UNIT)" || { echo "用法：make figsize-check-ext UNIT=试卷/2024/江西"; exit 2; }

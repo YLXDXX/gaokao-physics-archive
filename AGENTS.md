@@ -40,6 +40,7 @@ python3 tools/json_to_tex.py JSON/<年>/<年_地区>.json        # 1 初稿 + �
 #     单卷可直接 tools/figsize_unit.sh 试卷/<年>/<地区>（或 make figsize-unit UNIT=…）；
 #     也可分步 figsize-automap（sim<0.35 抽查）/ figsize-merge-fallback（None×None 时）/
 #     figsize-fix-refs / figsize-plan / figsize-apply / figsize-check；见 图片尺寸处理规范.md
+#     批量收尾：make figsize-review ARGS="试卷/<年>"（--strict 查 None/异常尺寸/缺 manifest）
 make -C 试卷/<年>/<地区> student && make -C 试卷/<年>/<地区> teacher   # 3 两版编译
 make -C 试卷/<年>/<地区> check                                # 4 自查（须 0 错误）
 ```

@@ -11,16 +11,6 @@
       "trim": {"padding": 8, "threshold": 200}
     },
     {
-      "source": "材料处理/1989/全国/pdfimages/17751_2.png",
-      "crops": [
-        {"rect": [37, 38, 472, 467],    "target": "试卷/1989/全国/figs/11a.png"},
-        {"rect": [656, 38, 470, 467],   "target": "试卷/1989/全国/figs/11b.png"},
-        {"rect": [1276, 38, 472, 467],  "target": "试卷/1989/全国/figs/11c.png"},
-        {"rect": [1900, 38, 472, 467],  "target": "试卷/1989/全国/figs/11d.png"}
-      ],
-      "trim": {"padding": 8, "threshold": 200}
-    },
-    {
       "source": "材料处理/1989/全国/pdfimages/17752.png",
       "crops": [
         {"rect": [18, 8, 504, 617],    "target": "试卷/1989/全国/figs/12a.png"},

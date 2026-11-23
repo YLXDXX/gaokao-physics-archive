@@ -19,7 +19,7 @@
       "trim": {"padding": 6}
     },
     {
-      "source": "材料处理/2017/11月浙江/pdfimages/p4_11.png",
+      "source": "材料处理/2017/11月浙江/pdfimages/p4_11.jpg",
       "crops": [
         {"rect": [0, 0, 165, 392], "target": "试卷/2017/11月浙江/figs/17a.png"},
         {"rect": [200, 0, 170, 392], "target": "试卷/2017/11月浙江/figs/17b.png"},

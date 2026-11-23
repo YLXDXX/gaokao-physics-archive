@@ -103,7 +103,8 @@
 | `figsize_fix_refs.py` | 给实际为 PNG 的无扩展名引用补 `.png`（仅当同名 `.svg` 不存在），消除外部 `ocrpipe figsize check` 的“未找到尺寸键”误报；默认预览 | `python3 tools/figsize_fix_refs.py 试卷/2025/河南 --write`；`make figsize-fix-refs ARGS="试卷/2025/河南 --write"` |
 | `figsize_apply.py` | 只按 manifest 回填 `.tex` 尺寸键，不改未登记图片；默认预览；`--write` 同时给登记 PNG 写 `pHYs` | `python3 tools/figsize_apply.py 试卷/2000/天津 --write` |
 | `figsize_check.py` | 校验 manifest ↔ `.tex` 尺寸键，并校验 PNG `pHYs`、PDF `MediaBox` 与 SVG 纵横比；`--strict-assets` 拒绝 SVG | `python3 tools/figsize_check.py 试卷/2000/天津` |
-| `figsize_status.py` | 列出图片尺寸 done / todo；done = manifest 存在且 check 全绿，全面铺开时跳过 | `python3 tools/figsize_status.py --only-todo`；`make figsize-status` |
+| `figsize_status.py` | 列出图片尺寸 done / todo；done = manifest 存在且 check 全绿，**或该卷无配图**（`figs/` 为空且正文无图片命令）；全面铺开时跳过 | `python3 tools/figsize_status.py --only-todo`；`make figsize-status` |
+| `figsize_review.py` | 批量复核清单（只读）：列出缺 manifest、`None` 尺寸、`d>5%`、异常尺寸（宽<0.4/高<0.2/>17cm）、超 17cm 缩放、未引用 figs；`--check` 可同时跑 `figsize_check` | `python3 tools/figsize_review.py 试卷/2000 试卷/2001 --only-issues`；`make figsize-review ARGS="试卷/2000 试卷/2001"` |
 | 外部 `ocrpipe figsize` | 3.1.1：`probe/layout/draft/extract/measure/migrate/apply/check/status/svg-to-pdf`；PNG/PDF/SVG 混合资产，manifest 安全模式 | 见 [`../OCR识别转换流程说明.md`](../OCR识别转换流程说明.md) |
 | 外部 `ocrpipe figsize migrate` | JPG → PNG（只转一次，更新 `.tex` 引用；`--delete-jpg` 删除旧 JPG） | `ocrpipe figsize migrate 试卷/2024/北京 --write --delete-jpg` |
 
@@ -128,7 +129,7 @@
 - `figsize_audit` / `figsize_plan --keep-current` 均跳过 `figs/.ocr_before/` 等隐藏备份目录；
   统计“实际引用图数”时仍以 TeX 引用为准。
 
-**已知坑（2026-11-23 三年度批量）**
+**已知坑（2026-11-23 批量铺开：2026–2013、1978–2003）**
 
 - **映射必须一对一**：早期逐张取最优候选会把多个子图/选项图映射到同一个候选（尤其 A–D
   四选项），造成尺寸系统性偏差。`figsize_automap.py` 用匈牙利算法做全局一对一指派；
@@ -154,8 +155,17 @@
   再 `figsize_plan --keep-current`；仍无候选时手工给 `final_width_cm/final_height_cm`。
 - **未引用图会反复被加回**：`figsize_plan --keep-current` 会重新加入未引用 figs；
   用 `--skip-unreferenced`（或 plan 后手动过滤）避免 `figsize_check` 报缺尺寸键。
-- **全库 `make check` 的 `check-recrop` 已知遗留**：`试卷/1989/全国/.recrop.json` 的
-  4 个 target 指向未生成的 `11a–11d.png`，与图片尺寸专项无关。
+- **旧候选 manifest 可能带错误 scale**：`figsize_unit.sh` 若发现
+  `材料处理/.../pdf_figures/figures.manifest.json` 已存在会直接复用。旧试点或误判双栏的候选
+  可能整体放大 1.86 倍（如 2000 苏浙吉）。先看候选 `columns`/`scale_info`；确属误判时备份并
+  删除旧候选 manifest，重跑 `layout/draft/extract` 并加 `--scale-mode 1` 或 `--columns`。
+- **无配图卷**：`figs/` 为空且正文无图片命令的卷（如 2001 广东综合）无需 manifest；
+  `figsize_status.py` 从 2026-11-23 起将其判为 done（reason=无配图）。
+- **`.recrop.json` source 扩展名过期**：重新提取 `pdfimages` 后常见 `.png` ↔ `.jpg` 变化，
+  `check-recrop` 报“source 不存在或非图片”时，把 source 改为现存同名文件即可，不要删 recipe；
+  2026-11-23 已修 2017/11月浙江、2017/4月浙江、2020/7月浙江、2021/6月浙江。
+- **批量验收用 `figsize_review.py`**：每批先 `--strict` 看 issue（缺 manifest / `None` / 异常尺寸），
+  再人工处理 `d>5%` 与未引用图；不要只依赖 `figsize_status`。
 
 ## 六、检查项汇总
 

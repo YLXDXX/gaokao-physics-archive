@@ -8,7 +8,7 @@
       ]
     },
     {
-      "source": "材料处理/2017/4月浙江/pdfimages/p7_11.png",
+      "source": "材料处理/2017/4月浙江/pdfimages/p7_11.jpg",
       "crops": [
         {"rect": [0, 0, 138, 252], "target": "试卷/2017/4月浙江/figs/17c1.png"},
         {"rect": [187, 0, 140, 252], "target": "试卷/2017/4月浙江/figs/17c2.png"},
@@ -16,7 +16,7 @@
       ]
     },
     {
-      "source": "材料处理/2017/4月浙江/pdfimages/p11_19.png",
+      "source": "材料处理/2017/4月浙江/pdfimages/p11_19.jpg",
       "crops": [
         {"rect": [8, 8, 282, 220], "target": "试卷/2017/4月浙江/figs/21b1.png"},
         {"rect": [427, 8, 282, 220], "target": "试卷/2017/4月浙江/figs/21b2.png"},

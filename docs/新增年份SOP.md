@@ -34,6 +34,10 @@
     `python3 tools/figsize_fix_refs.py 试卷/<年>/<地区> --write`；
     未引用复合图/行内小图不要强行纳入 manifest。双栏扫描页 3.1.1 已能自动检测并默认 1:1；极端版式
     再用 `--columns 1|2` 或 `ocrpipe figsize extract … --scale-mode 1` 覆盖。
+    若该卷已有旧试点候选 manifest，先核对 `columns`/`scale_info`；双栏被误判时备份并删除
+    `材料处理/<年>/<地区>/pdf_figures/figures.manifest.json` 后重生成，不要直接复用。
+    批量收尾用 `make figsize-review ARGS="试卷/<年>"`（可加 `--strict`）核对 `None`/`d>5%`/异常尺寸/未引用图；
+    无配图卷（`figs/` 为空、正文无图片命令）无需 manifest，`figsize_status` 视为 done。
 4. **图格式**：矢量图优先迁成 PDF（SVG 能迁则迁，不能迁才保留）；保留 SVG 时在 manifest 记录物理尺寸，并在 `.tex` 插图命令写 `w=`/`h=`。同名 SVG+位图先核对内容，复合 SVG 按面板拆分后也优先转 PDF。
 5. **规范化排版**：单顶层 `enumerate`；13 项元数据（PDF 补充题加 `% pdf-only: true`）；图片一律 ChoiceQuestion 命令；单位一律 PhyUnit；
    非选择题必须有 `\jdanswer`（多小问）或 `\tkanswer`（填空）；计算题答案 `enumerate` 与小问一一对应、

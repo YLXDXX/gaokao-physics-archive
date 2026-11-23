@@ -7,7 +7,7 @@ from unittest import mock
 
 from PIL import Image
 
-from tools import figsize_apply, figsize_automap, figsize_check, figsize_fix_refs, figsize_merge_fallback, figsize_plan, figsize_status
+from tools import figsize_apply, figsize_automap, figsize_check, figsize_fix_refs, figsize_merge_fallback, figsize_plan, figsize_review, figsize_status
 
 
 class TestFigsizeTools(unittest.TestCase):
@@ -89,6 +89,9 @@ class TestFigsizeTools(unittest.TestCase):
             todo = root / "试卷" / "2000" / "待处理"
             (done / "figs").mkdir(parents=True)
             (todo / "figs").mkdir(parents=True)
+            Image.new("RGB", (100, 50), "white").save(todo / "figs" / "a.png")
+            (todo / "待处理.tex").write_text(
+                "\\onepicture[w=4cm]{figs/a.png}\n", encoding="utf-8")
             (done / "figures.manifest.json").write_text("{}", encoding="utf-8")
             with mock.patch.object(figsize_status, "check_unit", return_value=[]):
                 self.assertEqual(figsize_status.status_unit(done)["status"], "done")
@@ -278,6 +281,44 @@ class TestFigsizeTools(unittest.TestCase):
             with mock.patch.object(figsize_check, "ROOT", root):
                 errs = figsize_check.check_unit(unit)
             self.assertEqual(errs, [])
+
+    def test_status_no_image_unit_is_done(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            unit = root / "试卷" / "2000" / "测试"
+            (unit / "figs").mkdir(parents=True)
+            (unit / "测试.tex").write_text("无配图\\n", encoding="utf-8")
+
+            r = figsize_status.status_unit(unit)
+            self.assertEqual(r["status"], "done")
+            self.assertEqual(r["reason"], "无配图")
+
+            Image.new("RGB", (100, 50), "white").save(unit / "figs" / "a.png")
+            r = figsize_status.status_unit(unit)
+            self.assertEqual(r["status"], "todo")
+
+    def test_review_flags_none_and_deviation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            unit = root / "试卷" / "2000" / "测试"
+            (unit / "figs").mkdir(parents=True)
+            Image.new("RGB", (100, 50), "white").save(unit / "figs" / "a.png")
+            (unit / "测试.tex").write_text(
+                "\\onepicture[w=4cm]{figs/a.png}\\n", encoding="utf-8")
+            (unit / "figures.manifest.json").write_text(json.dumps({
+                "entries": [
+                    {"target": "试卷/2000/测试/figs/a.png", "status": "auto",
+                     "source": {"deviation": 0.10},
+                     "final": {"width_cm": 4.0, "height_cm": 2.0}},
+                    {"target": "试卷/2000/测试/figs/b.png", "status": "manual",
+                     "source": {}, "final": {"width_cm": None, "height_cm": None}},
+                ]
+            }), encoding="utf-8")
+
+            row = figsize_review.review_unit(unit)
+            self.assertTrue(any("None" in x for x in row["issues"]), row)
+            self.assertTrue(any("d=10.0%" in x for x in row["warnings"]), row)
+            self.assertEqual(row["entries"], 2)
 
 
 if __name__ == "__main__":
