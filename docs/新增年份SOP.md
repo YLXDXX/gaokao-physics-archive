@@ -21,8 +21,9 @@
     再 `make figsize-audit`；JPG 卷先
     `ocrpipe figsize migrate 试卷/<年>/<地区> --write --delete-jpg`，再按 `图片尺寸处理规范.md`
     建立 `figures.map.json` → `figsize-plan` → `figsize-apply --write` → `figsize-check`；
-    可先用 `python3 tools/figsize_automap.py 试卷/<年>/<地区> --report --write` 生成一对一
-    自动映射初稿，再对 `sim<0.35` 的条目出对照图人工抽查；
+    可直接用 `tools/figsize_unit.sh 试卷/<年>/<地区>`（或 `make figsize-unit UNIT=…`）
+    跑完整单卷编排；也可先 `python3 tools/figsize_automap.py … --report --write` 生成
+    一对一映射初稿，再对 `sim<0.35` 的条目出对照图人工抽查；
     扫描件只作尺寸参考，不替换 JSON 清晰图。复合图先在 `ocrpipe figsize draft` 用 `--merge`
     合并候选，或在 `figures.map.json` 中写 `"merge": [2, 3]`，或人工定
     `final_width_cm/final_height_cm`；`d > 15%` 必须补 `reference`，

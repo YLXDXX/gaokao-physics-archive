@@ -37,8 +37,9 @@
 python3 tools/json_to_tex.py JSON/<年>/<年_地区>.json        # 1 初稿 + 图片
 # 2 对照 材料处理/<年>/<地区>/merged.md、原 PDF 逐题校对重写
 # 2.5 图片尺寸专项（可选）：先 make figsize-status 跳过 done；再 figsize-audit /
-#     figsize-automap（一对一初稿，sim<0.35 人工抽查）/ figsize-merge-fallback（None×None
-#     时）/ figsize-fix-refs / figsize-plan / figsize-apply / figsize-check；见 图片尺寸处理规范.md
+#     单卷可直接 tools/figsize_unit.sh 试卷/<年>/<地区>（或 make figsize-unit UNIT=…）；
+#     也可分步 figsize-automap（sim<0.35 抽查）/ figsize-merge-fallback（None×None 时）/
+#     figsize-fix-refs / figsize-plan / figsize-apply / figsize-check；见 图片尺寸处理规范.md
 make -C 试卷/<年>/<地区> student && make -C 试卷/<年>/<地区> teacher   # 3 两版编译
 make -C 试卷/<年>/<地区> check                                # 4 自查（须 0 错误）
 ```

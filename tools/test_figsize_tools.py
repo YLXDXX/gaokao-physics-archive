@@ -205,6 +205,22 @@ class TestFigsizeTools(unittest.TestCase):
             self.assertIn("figs/a.png}", text)
             self.assertIn("\\includesvg{figs/b}", text)
 
+    def test_automap_legacy_candidate_manifest_without_candidate_field(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            img = Path(tmp) / "a.png"
+            Image.new("RGB", (20, 10), "white").save(img)
+            manifest = Path(tmp) / "figures.manifest.json"
+            manifest.write_text(json.dumps({
+                "figures": [{
+                    "page": 1, "kind": "vector",
+                    "width_cm": 4.0, "height_cm": 2.0,
+                    "png": str(img),
+                }]
+            }), encoding="utf-8")
+            cands = figsize_automap.load_candidates(manifest)
+            self.assertEqual(cands[0]["candidate"], 1)
+            self.assertEqual(cands[0]["aspect"], 2.0)
+
     def test_merge_fallback_helpers(self):
         import numpy as np
         r = figsize_merge_fallback.union_rect([[0.1, 0.2, 0.5, 0.6],

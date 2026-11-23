@@ -97,6 +97,7 @@
 | :--- | :--- | :--- |
 | `figsize_audit.py` | 全库/分卷审计图片尺寸现状（只读）：源 PDF、材料、SVG/JPG、recipe、`figures.manifest.json`、当前尺寸键覆盖情况；跳过 `figs/.ocr_before/` 等隐藏目录；标记 `dual_format`（同名 SVG+位图）与 `unreferenced`（未被 tex 引用） | `python3 tools/figsize_audit.py`；`make figsize-audit ARGS="--json /tmp/opencode/figsize-audit.json"` |
 | `figsize_automap.py` | 自动生成 `figures.map.json`：去白边图像相似度 + 完整纵横比组成代价矩阵，一对一匈牙利指派；只接受 `sim≥0.20` 且 `d≤15%` 的候选（可调），其余留给 `--keep-current`；`--report` 打印每张资产匹配情况，`sim<0.35` 建议人工抽查 | `python3 tools/figsize_automap.py 试卷/2026/北京 --report --write`；`make figsize-automap ARGS="试卷/2026/北京 --report --write"` |
+| `figsize_unit.sh` | 单卷编排：JPG→PNG、候选生成（无候选时）、automap、plan、merge fallback、fix-refs、apply/check、双版编译与 `make check`；默认跳过 done 卷，日志写 `/tmp/opencode/figsize_logs/` | `tools/figsize_unit.sh 试卷/2026/北京`；`make figsize-unit UNIT=试卷/2026/北京 ARGS='--force --skip-compile'` |
 | `figsize_merge_fallback.py` | 为 `missing_source` 复合图回退生成 merge：枚举同页 free candidates 的 1–4 组合，渲染 union bbox 与资产做相似度，选最佳组合写回 map；未引用图跳过 | `python3 tools/figsize_merge_fallback.py 试卷/2023/湖南 --report --write`；`make figsize-merge-fallback ARGS="…"` |
 | `figsize_plan.py` | 按人工 `figures.map.json` + 候选 manifest 生成 `figures.manifest.json`，应用 5%/15% 纵横比规则与 17cm 上限；`reference=width/height` 可人工指定基准；`merge: [1,2]` 可合并同页候选；无候选时可用 `final_width_cm/final_height_cm` 直接定尺寸；`--skip-unreferenced` 可跳过未引用 figs；缺少最终尺寸时告警 | `python3 tools/figsize_plan.py 试卷/2000/天津 --write` |
 | `figsize_fix_refs.py` | 给实际为 PNG 的无扩展名引用补 `.png`（仅当同名 `.svg` 不存在），消除外部 `ocrpipe figsize check` 的“未找到尺寸键”误报；默认预览 | `python3 tools/figsize_fix_refs.py 试卷/2025/河南 --write`；`make figsize-fix-refs ARGS="试卷/2025/河南 --write"` |
@@ -144,6 +145,10 @@
 - **未引用图 / 行内小图**：`figs/.ocr_before` 外仍可能有被拆分替代的复合图或
   `\\includesvg[height=1.1em]` 行内符号。它们不应强行纳入 manifest；可保留源文件、
   在异常记录登记后从 manifest 排除（`figsize_check` 会报“未找到尺寸键”）。
+- **旧候选 manifest 可能没有 `candidate` 字段**：`figsize_automap.py` / `figsize_merge_fallback.py`
+  已按 `figures[]` 的 1 基序号回退（试点卷常见）；不要再手工补 `candidate` 字段。
+- **`--force` 会重跑已完成卷**：automap 可能把试点的人工映射降级为 keep-current；除非明确要重做，
+  否则让 `figsize_unit.sh` 默认跳过 done 卷。
 - **`--keep-current` 不会给“有引用但完全无尺寸键”的图造尺寸**：若 automap 留空，
   plan 会得到 `None×None`。先跑 `figsize_merge_fallback.py`（复合图/整行选项），
   再 `figsize_plan --keep-current`；仍无候选时手工给 `final_width_cm/final_height_cm`。

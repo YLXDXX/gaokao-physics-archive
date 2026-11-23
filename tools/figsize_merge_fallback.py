@@ -97,7 +97,7 @@ def render_page(pdf: Path, page: int, dpi: int = 110) -> Image.Image:
 def choose_combo(unit: Path, name: str, cand_manifest: Dict,
                  cands: List[Dict], used: set, page_cache: Dict[int, Image.Image],
                  tmp: Path, max_combo: int = 4) -> Optional[Dict]:
-    cmap = {f["candidate"]: f for f in cand_manifest["figures"]}
+    cmap = {int(f.get("candidate", i)): f for i, f in enumerate(cand_manifest["figures"], 1)}
     asset = unit / "figs" / name
     avec, ar = feature(asset, tmp)
     by_page: Dict[int, List[Dict]] = {}

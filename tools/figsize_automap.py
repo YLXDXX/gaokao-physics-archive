@@ -168,12 +168,12 @@ def candidate_manifest(unit: Path) -> Path:
 def load_candidates(manifest: Path) -> List[Dict]:
     data = json.loads(manifest.read_text(encoding="utf-8"))
     out = []
-    for f in data.get("figures", []):
+    for idx, f in enumerate(data.get("figures", []), 1):
         path = f.get("png") or f.get("pdf")
         if not path:
             continue
         out.append({
-            "candidate": int(f["candidate"]),
+            "candidate": int(f.get("candidate", idx)),
             "page": f.get("page"),
             "path": ROOT / path if not Path(path).is_absolute() else Path(path),
             "width_cm": float(f["width_cm"]),

@@ -67,7 +67,7 @@ define RUN_DIRS
 endef
 
 .PHONY: all student teacher tikz tikz-compare check check-tikz check-recrop links \
-        clean distclean material material-batch material-merge extract-images check-material figsize-audit figsize-automap figsize-merge-fallback figsize-fix-refs figsize-plan figsize-apply figsize-check figsize-status \
+        clean distclean material material-batch material-merge extract-images check-material figsize-audit figsize-automap figsize-merge-fallback figsize-fix-refs figsize-unit figsize-plan figsize-apply figsize-check figsize-status \
         figsize-check-ext figsize-apply-ext figsize-status-ext tools-test \
         ocr-plan ocr-status ocr-batch \
         index progress check-docs check-changed ci fetch-pr pr-check
@@ -215,6 +215,10 @@ figsize-automap:
 
 figsize-merge-fallback:
 	@python3 tools/figsize_merge_fallback.py $(ARGS)
+
+figsize-unit:
+	@test -n "$(UNIT)" || { echo "用法：make figsize-unit UNIT=试卷/2026/北京 [ARGS='--force --skip-compile']"; exit 2; }
+	@tools/figsize_unit.sh $(UNIT) $(ARGS)
 
 figsize-fix-refs:
 	@python3 tools/figsize_fix_refs.py $(ARGS)
