@@ -83,7 +83,7 @@ def asset_aspect(path: Path) -> Optional[float]:
             doc.close()
     if suf == ".svg":
         head = path.read_text(encoding="utf-8", errors="ignore")[:4000]
-        m = re.search(r"<svg\b[^>]*>", head, re.S)
+        m = re.search(r"<(?:[\w.-]+:)?svg\b[^>]*>", head, re.S)
         if not m:
             return None
         tag = m.group(0)

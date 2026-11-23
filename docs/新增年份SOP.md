@@ -21,10 +21,14 @@
     再 `make figsize-audit`；JPG 卷先
     `ocrpipe figsize migrate 试卷/<年>/<地区> --write --delete-jpg`，再按 `图片尺寸处理规范.md`
     建立 `figures.map.json` → `figsize-plan` → `figsize-apply --write` → `figsize-check`；
+    可先用 `python3 tools/figsize_automap.py 试卷/<年>/<地区> --report --write` 生成一对一
+    自动映射初稿，再对 `sim<0.35` 的条目出对照图人工抽查；
     扫描件只作尺寸参考，不替换 JSON 清晰图。复合图先在 `ocrpipe figsize draft` 用 `--merge`
     合并候选，或在 `figures.map.json` 中写 `"merge": [2, 3]`，或人工定
     `final_width_cm/final_height_cm`；`d > 15%` 必须补 `reference`，
-    manifest 不得留 `None×None`。双栏扫描页 3.1.1 已能自动检测并默认 1:1；极端版式
+    manifest 不得留 `None×None`。回填前如引用省略 `.png` 扩展名，跑
+    `python3 tools/figsize_fix_refs.py 试卷/<年>/<地区> --write`；
+    未引用复合图/行内小图不要强行纳入 manifest。双栏扫描页 3.1.1 已能自动检测并默认 1:1；极端版式
     再用 `--columns 1|2` 或 `ocrpipe figsize extract … --scale-mode 1` 覆盖。
 4. **图格式**：矢量图优先迁成 PDF（SVG 能迁则迁，不能迁才保留）；保留 SVG 时在 manifest 记录物理尺寸，并在 `.tex` 插图命令写 `w=`/`h=`。同名 SVG+位图先核对内容，复合 SVG 按面板拆分后也优先转 PDF。
 5. **规范化排版**：单顶层 `enumerate`；13 项元数据（PDF 补充题加 `% pdf-only: true`）；图片一律 ChoiceQuestion 命令；单位一律 PhyUnit；

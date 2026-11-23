@@ -7,7 +7,7 @@ from unittest import mock
 
 from PIL import Image
 
-from tools import figsize_apply, figsize_check, figsize_plan, figsize_status
+from tools import figsize_apply, figsize_automap, figsize_check, figsize_fix_refs, figsize_plan, figsize_status
 
 
 class TestFigsizeTools(unittest.TestCase):
@@ -145,6 +145,52 @@ class TestFigsizeTools(unittest.TestCase):
             svg = Path(tmp) / "a.svg"
             svg.write_text('<svg viewBox="0 0 200 100"></svg>', encoding="utf-8")
             self.assertAlmostEqual(figsize_plan.asset_aspect(svg), 2.0)
+
+    def test_svg_aspect_namespaced_root(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            svg = Path(tmp) / "a.svg"
+            svg.write_text(
+                '<?xml version="1.0"?>\n'
+                '<ns0:svg xmlns:ns0="http://www.w3.org/2000/svg" '
+                'width="465" height="405" viewBox="0 0 465 405"></ns0:svg>',
+                encoding="utf-8")
+            self.assertAlmostEqual(figsize_plan.asset_aspect(svg), 465 / 405)
+            self.assertAlmostEqual(figsize_check.svg_aspect(svg), 465 / 405)
+
+    def test_hungarian_min(self):
+        a = [[1.0, 2.0], [4500.0, 5.0]]
+        res = figsize_automap.hungarian_min(a)
+        self.assertEqual(res, {0: 0, 1: 1})
+
+    def test_automap_assign_is_one_to_one(self):
+        def q(ai, cand, sim, dev):
+            return {"ai": ai, "c": {"candidate": cand}, "sim": sim, "dev": dev,
+                    "cost": sim - 1.5 * min(dev, 1.0)}
+        pairs = [
+            q(0, 1, 0.95, 0.01), q(0, 2, 0.50, 0.01),
+            q(1, 1, 0.90, 0.01), q(1, 2, 0.30, 0.30),
+        ]
+        out = figsize_automap.assign_pairs(pairs, 2, 2, min_sim=0.20, max_dev=0.15)
+        self.assertEqual(sorted(v["c"]["candidate"] for v in out.values()), [1, 2])
+        self.assertNotEqual(out[0]["c"]["candidate"], out[1]["c"]["candidate"])
+
+    def test_fix_refs_adds_png_extension_only(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            unit = root / "试卷" / "2000" / "测试"
+            (unit / "figs").mkdir(parents=True)
+            Image.new("RGB", (20, 10), "white").save(unit / "figs" / "a.png")
+            (unit / "figs" / "b.svg").write_text(
+                '<svg width="20" height="10"></svg>', encoding="utf-8")
+            tex = unit / "测试.tex"
+            tex.write_text(
+                "\\onepicture[h=1cm]{figs/a}\n"
+                "\\includesvg{figs/b}\n", encoding="utf-8")
+            with mock.patch.object(figsize_fix_refs, "ROOT", root):
+                figsize_fix_refs.main([str(unit), "--write"])
+            text = tex.read_text(encoding="utf-8")
+            self.assertIn("figs/a.png}", text)
+            self.assertIn("\\includesvg{figs/b}", text)
 
     def test_apply_adds_options_to_command_without_options(self):
         """无尺寸选项的图片命令必须补上带方括号的尺寸，而不是拼成 \\onepicturew=…。"""

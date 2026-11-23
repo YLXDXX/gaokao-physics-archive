@@ -96,7 +96,9 @@
 | 脚本 | 用途 | 典型用法 |
 | :--- | :--- | :--- |
 | `figsize_audit.py` | 全库/分卷审计图片尺寸现状（只读）：源 PDF、材料、SVG/JPG、recipe、`figures.manifest.json`、当前尺寸键覆盖情况；跳过 `figs/.ocr_before/` 等隐藏目录；标记 `dual_format`（同名 SVG+位图）与 `unreferenced`（未被 tex 引用） | `python3 tools/figsize_audit.py`；`make figsize-audit ARGS="--json /tmp/opencode/figsize-audit.json"` |
+| `figsize_automap.py` | 自动生成 `figures.map.json`：去白边图像相似度 + 完整纵横比组成代价矩阵，一对一匈牙利指派；只接受 `sim≥0.20` 且 `d≤15%` 的候选（可调），其余留给 `--keep-current`；`--report` 打印每张资产匹配情况，`sim<0.35` 建议人工抽查 | `python3 tools/figsize_automap.py 试卷/2026/北京 --report --write`；`make figsize-automap ARGS="试卷/2026/北京 --report --write"` |
 | `figsize_plan.py` | 按人工 `figures.map.json` + 候选 manifest 生成 `figures.manifest.json`，应用 5%/15% 纵横比规则与 17cm 上限；`reference=width/height` 可人工指定基准；`merge: [1,2]` 可合并同页候选；无候选时可用 `final_width_cm/final_height_cm` 直接定尺寸；缺少最终尺寸时告警 | `python3 tools/figsize_plan.py 试卷/2000/天津 --write` |
+| `figsize_fix_refs.py` | 给实际为 PNG 的无扩展名引用补 `.png`（仅当同名 `.svg` 不存在），消除外部 `ocrpipe figsize check` 的“未找到尺寸键”误报；默认预览 | `python3 tools/figsize_fix_refs.py 试卷/2025/河南 --write`；`make figsize-fix-refs ARGS="试卷/2025/河南 --write"` |
 | `figsize_apply.py` | 只按 manifest 回填 `.tex` 尺寸键，不改未登记图片；默认预览；`--write` 同时给登记 PNG 写 `pHYs` | `python3 tools/figsize_apply.py 试卷/2000/天津 --write` |
 | `figsize_check.py` | 校验 manifest ↔ `.tex` 尺寸键，并校验 PNG `pHYs`、PDF `MediaBox` 与 SVG 纵横比；`--strict-assets` 拒绝 SVG | `python3 tools/figsize_check.py 试卷/2000/天津` |
 | `figsize_status.py` | 列出图片尺寸 done / todo；done = manifest 存在且 check 全绿，全面铺开时跳过 | `python3 tools/figsize_status.py --only-todo`；`make figsize-status` |
@@ -123,6 +125,23 @@
   极端版式仍可用 `--columns 1|2` 或 `--scale-mode 1` 覆盖。
 - `figsize_audit` / `figsize_plan --keep-current` 均跳过 `figs/.ocr_before/` 等隐藏备份目录；
   统计“实际引用图数”时仍以 TeX 引用为准。
+
+**已知坑（2026-11-23 三年度批量）**
+
+- **映射必须一对一**：早期逐张取最优候选会把多个子图/选项图映射到同一个候选（尤其 A–D
+  四选项），造成尺寸系统性偏差。`figsize_automap.py` 用匈牙利算法做全局一对一指派；
+  若无候选，不要硬套，交给 `figsize_plan --keep-current`。
+- **相似度低不等于映射错，但必须抽查**：`sim<0.35` 的条目（矢量渲染差异、白边/标注不同）
+  应出「资产 vs 候选」对照图人工确认；`d>15%` 的条目按 `reference` 人工裁定。
+- **SVG 根标签可能是 `<ns0:svg …>`**：`figsize_plan.py` / `figsize_check.py` 已支持带命名
+  空间前缀的根标签（2026 江西选项 SVG），并有回归测试。
+- **无扩展名 PNG 引用**：`\\onepicture{figs/02_an}` 本地检查可通过，但外部 check 会误报；
+  用 `figsize_fix_refs.py` 补 `.png`（不要给 `\\includesvg{figs/05}` 补，脚本已排除同名 SVG）。
+- **未引用图 / 行内小图**：`figs/.ocr_before` 外仍可能有被拆分替代的复合图或
+  `\\includesvg[height=1.1em]` 行内符号。它们不应强行纳入 manifest；可保留源文件、
+  在异常记录登记后从 manifest 排除（`figsize_check` 会报“未找到尺寸键”）。
+- **全库 `make check` 的 `check-recrop` 已知遗留**：`试卷/1989/全国/.recrop.json` 的
+  4 个 target 指向未生成的 `11a–11d.png`，与图片尺寸专项无关。
 
 ## 六、检查项汇总
 
