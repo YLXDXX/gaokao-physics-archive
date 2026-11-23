@@ -61,21 +61,21 @@
     {
       "source": "材料处理/2021/山东/pdfimages/p7_19.jpg",
       "crops": [
-        {"rect": [0, 0, 529, 408], "target": "试卷/2021/山东/figs/11_an.jpg"}
+        {"rect": [0, 0, 529, 408], "target": "试卷/2021/山东/figs/11_an.png"}
       ],
       "trim": {"padding": 6, "threshold": 200}
     },
     {
       "source": "材料处理/2021/山东/pdfimages/p8_20.jpg",
       "crops": [
-        {"rect": [0, 0, 1649, 385], "target": "试卷/2021/山东/figs/12_an.jpg"}
+        {"rect": [0, 0, 1649, 385], "target": "试卷/2021/山东/figs/12_an.png"}
       ],
       "trim": {"padding": 6, "threshold": 200}
     },
     {
       "source": "材料处理/2021/山东/pdfimages/p15_29.jpg",
       "crops": [
-        {"rect": [0, 0, 465, 319], "target": "试卷/2021/山东/figs/17_an.jpg"}
+        {"rect": [0, 0, 465, 319], "target": "试卷/2021/山东/figs/17_an.png"}
       ],
       "trim": {"padding": 6, "threshold": 200}
     },

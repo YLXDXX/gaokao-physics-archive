@@ -7,7 +7,7 @@ from unittest import mock
 
 from PIL import Image
 
-from tools import figsize_apply, figsize_automap, figsize_check, figsize_fix_refs, figsize_plan, figsize_status
+from tools import figsize_apply, figsize_automap, figsize_check, figsize_fix_refs, figsize_merge_fallback, figsize_plan, figsize_status
 
 
 class TestFigsizeTools(unittest.TestCase):
@@ -146,6 +146,19 @@ class TestFigsizeTools(unittest.TestCase):
             svg.write_text('<svg viewBox="0 0 200 100"></svg>', encoding="utf-8")
             self.assertAlmostEqual(figsize_plan.asset_aspect(svg), 2.0)
 
+    def test_svg_aspect_clip_path_fallback(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            svg = Path(tmp) / "a.svg"
+            svg.write_text(
+                '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" '
+                '"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n'
+                '<svg xmlns="http://www.w3.org/2000/svg">'
+                '<defs><clipPath id="cc"><rect x="0" y="0" '
+                'width="524" height="423"/></clipPath></defs></svg>',
+                encoding="utf-8")
+            self.assertAlmostEqual(figsize_plan.asset_aspect(svg), 524 / 423)
+            self.assertAlmostEqual(figsize_check.svg_aspect(svg), 524 / 423)
+
     def test_svg_aspect_namespaced_root(self):
         with tempfile.TemporaryDirectory() as tmp:
             svg = Path(tmp) / "a.svg"
@@ -191,6 +204,38 @@ class TestFigsizeTools(unittest.TestCase):
             text = tex.read_text(encoding="utf-8")
             self.assertIn("figs/a.png}", text)
             self.assertIn("\\includesvg{figs/b}", text)
+
+    def test_merge_fallback_helpers(self):
+        import numpy as np
+        r = figsize_merge_fallback.union_rect([[0.1, 0.2, 0.5, 0.6],
+                                               [0.4, 0.1, 0.8, 0.4]])
+        self.assertEqual(r, [0.1, 0.1, 0.8, 0.6])
+        img = Image.linear_gradient("L").resize((40, 20))
+        v = figsize_merge_fallback.feature_image(img)
+        self.assertAlmostEqual(float(np.linalg.norm(v)), 1.0, places=5)
+
+    def test_plan_skip_unreferenced(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            unit = root / "试卷" / "2000" / "测试"
+            (unit / "figs").mkdir(parents=True)
+            Image.new("RGB", (100, 50), "white").save(unit / "figs" / "a.png")
+            Image.new("RGB", (100, 50), "white").save(unit / "figs" / "b.png")
+            (unit / "测试.tex").write_text(
+                "\\onepicture[w=4cm]{figs/a.png}\n", encoding="utf-8")
+            (unit / "figures.map.json").write_text('{"entries": []}',
+                                                   encoding="utf-8")
+            cand = unit / "cand.json"
+            cand.write_text('{"source_pdf": "x.pdf", "figures": []}',
+                            encoding="utf-8")
+            with mock.patch.object(figsize_plan, "ROOT", root):
+                rc = figsize_plan.main([str(unit), "--candidates", str(cand),
+                                        "--write", "--keep-current",
+                                        "--skip-unreferenced"])
+            self.assertEqual(rc, 0)
+            m = json.loads((unit / "figures.manifest.json").read_text(encoding="utf-8"))
+            names = [Path(e["target"]).name for e in m["entries"]]
+            self.assertEqual(names, ["a.png"])
 
     def test_apply_adds_options_to_command_without_options(self):
         """无尺寸选项的图片命令必须补上带方括号的尺寸，而不是拼成 \\onepicturew=…。"""

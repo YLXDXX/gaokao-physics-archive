@@ -31,7 +31,7 @@
     {
       "source": "材料处理/2020/天津/pdfimages/p1_3.jpg",
       "crops": [
-        {"rect": [0, 0, 300, 170], "target": "试卷/2020/天津/figs/02.jpg"}
+        {"rect": [0, 0, 300, 170], "target": "试卷/2020/天津/figs/02.png"}
       ],
       "trim": {"padding": 6, "threshold": 200}
     },
@@ -66,7 +66,7 @@
     {
       "source": "材料处理/2020/天津/pdfimages/p4_7.jpg",
       "crops": [
-        {"rect": [0, 0, 300, 195], "target": "试卷/2020/天津/figs/08.jpg"}
+        {"rect": [0, 0, 300, 195], "target": "试卷/2020/天津/figs/08.png"}
       ],
       "trim": {"padding": 6, "threshold": 200}
     },

@@ -108,6 +108,15 @@ def asset_aspect(path: Path) -> Optional[float]:
                     return w / h if w and h else None
                 except ValueError:
                     return None
+        # 无 width/height/viewBox 时退回 clipPath 的 rect（部分导出 SVG 仅有裁剪框）。
+        mclip = re.search(r"<(?:[\w.-]+:)?clipPath\b.*?</(?:[\w.-]+:)?clipPath>", head, re.S)
+        if mclip:
+            mrect = re.search(r"<(?:[\w.-]+:)?rect\b[^>]*>", mclip.group(0))
+            if mrect:
+                rw = re.search(r'\bwidth\s*=\s*"([0-9.]+)"', mrect.group(0))
+                rh = re.search(r'\bheight\s*=\s*"([0-9.]+)"', mrect.group(0))
+                if rw and rh and float(rh.group(1)):
+                    return float(rw.group(1)) / float(rh.group(1))
         return None
     return None
 
@@ -309,6 +318,18 @@ def make_current_entry(unit: Path, target: Path, dim: str, val: str) -> Dict:
     }
 
 
+def tex_refs(tex: Path) -> set:
+    """TeX 中所有 figs/ 引用的键（去扩展名），用于跳过未引用图。"""
+    if not tex.is_file():
+        return set()
+    text = tex.read_text(encoding="utf-8", errors="ignore")
+    out = set()
+    for m in re.finditer(r"figs/([A-Za-z0-9_./-]+)\}", text):
+        name = m.group(1)
+        out.add("figs/" + (str(Path(name).with_suffix("")) if Path(name).suffix else name))
+    return out
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     ap = argparse.ArgumentParser(description="生成图片尺寸 figures.manifest.json")
     ap.add_argument("units", nargs="+")
@@ -316,6 +337,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--candidates", help="候选 manifest（默认材料处理/.../pdf_figures/figures.manifest.json）")
     ap.add_argument("--keep-current", action="store_true",
                     help="未在 map 中登记的图沿用当前 .tex 尺寸并写入 manifest")
+    ap.add_argument("--skip-unreferenced", action="store_true",
+                    help="配合 --keep-current：跳过未被 .tex 引用的 figs 文件")
     ap.add_argument("--write", action="store_true")
     args = ap.parse_args(argv)
 
@@ -371,6 +394,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if args.keep_current:
             mapped = {ROOT / k for k in mapping}
             cur = current_sizes(unit)
+            refs = tex_refs(unit / f"{unit.name}.tex") if args.skip_unreferenced else None
             for p in sorted((unit / "figs").rglob("*")):
                 if not p.is_file() or p.suffix.lower() not in (".png", ".jpg", ".jpeg", ".svg", ".pdf"):
                     continue
@@ -380,6 +404,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     continue
                 key = "figs/" + p.relative_to(unit / "figs").as_posix()
                 key = key.rsplit(".", 1)[0] if Path(key).suffix.lower() in (".png", ".jpg", ".jpeg", ".svg", ".pdf") else key
+                if refs is not None and key not in refs:
+                    continue
                 if key in cur:
                     dim, val = cur[key]
                     entries.append(make_current_entry(unit, p, dim, val))

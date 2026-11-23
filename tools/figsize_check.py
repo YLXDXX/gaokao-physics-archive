@@ -127,6 +127,15 @@ def svg_aspect(path: Path) -> Optional[float]:
                 return w / h if w and h else None
             except ValueError:
                 return None
+    # 无 width/height/viewBox 时退回 clipPath 的 rect（部分导出 SVG 仅有裁剪框）。
+    mclip = re.search(r"<(?:[\w.-]+:)?clipPath\b.*?</(?:[\w.-]+:)?clipPath>", head, re.S)
+    if mclip:
+        mrect = re.search(r"<(?:[\w.-]+:)?rect\b[^>]*>", mclip.group(0))
+        if mrect:
+            rw = re.search(r'\bwidth\s*=\s*"([0-9.]+)"', mrect.group(0))
+            rh = re.search(r'\bheight\s*=\s*"([0-9.]+)"', mrect.group(0))
+            if rw and rh and float(rh.group(1)):
+                return float(rw.group(1)) / float(rh.group(1))
     return None
 
 

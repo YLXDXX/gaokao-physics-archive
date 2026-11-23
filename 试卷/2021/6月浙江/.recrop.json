@@ -27,7 +27,7 @@
       "trim": {"padding": 8}
     },
     {
-      "source": "材料处理/2021/6月浙江/pdfimages/p9_16.jpg",
+      "source": "材料处理/2021/6月浙江/pdfimages/p9_16.png",
       "crops": [
         {"rect": [0, 0, 278, 247], "target": "试卷/2021/6月浙江/figs/19a.png"},
         {"rect": [338, 12, 242, 188], "target": "试卷/2021/6月浙江/figs/19b.png"},
@@ -36,7 +36,7 @@
       "trim": {"padding": 8}
     },
     {
-      "source": "材料处理/2021/6月浙江/pdfimages/p12_20.jpg",
+      "source": "材料处理/2021/6月浙江/pdfimages/p12_20.png",
       "crops": [
         {"rect": [0, 0, 338, 268], "target": "试卷/2021/6月浙江/figs/22a.png"},
         {"rect": [347, 0, 335, 268], "target": "试卷/2021/6月浙江/figs/22b.png"}

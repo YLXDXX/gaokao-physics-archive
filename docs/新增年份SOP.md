@@ -26,7 +26,10 @@
     扫描件只作尺寸参考，不替换 JSON 清晰图。复合图先在 `ocrpipe figsize draft` 用 `--merge`
     合并候选，或在 `figures.map.json` 中写 `"merge": [2, 3]`，或人工定
     `final_width_cm/final_height_cm`；`d > 15%` 必须补 `reference`，
-    manifest 不得留 `None×None`。回填前如引用省略 `.png` 扩展名，跑
+    manifest 不得留 `None×None`。若 automap 后仍有 `None×None`（复合图/整行选项常见），
+    先跑 `python3 tools/figsize_merge_fallback.py 试卷/<年>/<地区> --report --write`
+    再重跑 plan；未引用图可用 `figsize-plan --skip-unreferenced` 跳过。
+    回填前如引用省略 `.png` 扩展名，跑
     `python3 tools/figsize_fix_refs.py 试卷/<年>/<地区> --write`；
     未引用复合图/行内小图不要强行纳入 manifest。双栏扫描页 3.1.1 已能自动检测并默认 1:1；极端版式
     再用 `--columns 1|2` 或 `ocrpipe figsize extract … --scale-mode 1` 覆盖。
