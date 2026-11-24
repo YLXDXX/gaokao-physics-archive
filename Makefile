@@ -29,6 +29,15 @@
 #    make figsize-apply-ext UNIT=试卷/… 用 OCRPipeLine 3.1.1 预演安全回填（ARGS=--write 落盘）
 #    make figsize-status-ext [ARGS="试卷 --only-todo"] 用 OCRPipeLine 3.1.1 列 done/todo
 #    make ocr-plan|ocr-status|ocr-batch  OCR 流水线（外部 OCRPipeLine；ARGS 透传）
+#    make proofread-plan  扫描 ProofreadPDF/ 与本仓库试卷，生成 mapping.json（并刷新表/状态）
+#    make proofread-rename[-apply|-revert]  源树内就地规范化重命名（默认预览）
+#    make proofread-table 生成 交叉校对/交叉校对表.md
+#    make proofread-check 校验 mapping/源文件/status（需本地 ProofreadPDF/）
+#    make proofread-show UNIT=2024/辽宁  查看某卷源文件对应与校对状态
+#    make proofread-ocr-plan|proofread-ocr-batch  他源 PDF OCR（默认只列计划；极耗时）
+#    make hq-plan          扫描 ProofreadPDF/HighQualityPic → hq_mapping.json + 表
+#    make hq-match UNIT=1978/全国   生成 HQ ↔ figs 匹配草表与对照图
+#    make hq-apply UNIT=1978/全国 ARGS=--write  按 figmap 的 apply 条目替换配图
 #    make tools-test   运行 tools 单元测试（textfix / 元数据 / 内容 / 索引）
 #    make links        为全部试卷目录创建指向根公共文件的软链接
 #    make fetch-pr PR=1 [REMOTE=gitee]  接取远程 PR 到本地分支 pr/1（审查用）
@@ -71,6 +80,9 @@ endef
         clean distclean material material-batch material-merge extract-images check-material figsize-audit figsize-automap figsize-merge-fallback figsize-fix-refs figsize-unit figsize-plan figsize-apply figsize-check figsize-status figsize-review \
         figsize-check-ext figsize-apply-ext figsize-status-ext tools-test \
         ocr-plan ocr-status ocr-batch \
+        proofread-plan proofread-rename proofread-rename-apply proofread-rename-revert proofread-table \
+        proofread-check proofread-show proofread-ocr-plan proofread-ocr-batch \
+        hq-plan hq-rename hq-rename-apply hq-rename-revert hq-match hq-apply hq-check \
         index progress check-docs check-changed ci fetch-pr pr-check
 
 all:
@@ -117,6 +129,8 @@ progress:
 check-docs:
 	@python3 tools/check_docs.py
 	@python3 tools/check_docs_text.py
+	@python3 tools/proofread.py table --check
+	@python3 tools/hqpics.py check
 
 # 仅自查 git 有改动的试卷目录（规模大时使用）
 check-changed:
@@ -167,7 +181,7 @@ pr-check:
 ci:
 	@echo "===== 工具单元测试 + 文档校验 ====="
 	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
-    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json tools.test_figsize_audit tools.test_figsize_tools
+    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json tools.test_figsize_audit tools.test_figsize_tools tools.test_proofread tools.test_hqpics
 	@python3 tools/check_docs.py
 	@echo "===== 抽样编译（首份试卷） ====="
 	@d=$$(ls -d 试卷/*/* 2>/dev/null | head -1); \
@@ -185,7 +199,7 @@ check-recrop:
 tools-test:
 	@echo "===== tools 单元测试 ====="
 	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
-    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json tools.test_figsize_audit tools.test_figsize_tools
+    tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json tools.test_figsize_audit tools.test_figsize_tools tools.test_proofread tools.test_hqpics
 
 # 材料处理管线（外部独立程序 OCRPipeLine；需 Conda 环境 / PaddleOCR-VL 服务）
 material:
@@ -269,6 +283,78 @@ ocr-status:
 
 ocr-batch:
 	@$(OCRPIPE) batch -c ocr_pipeline.json --root 材料处理 $(ARGS)
+
+# ---------------------------------------------------------------------------
+# 交叉校对基础设施（他源成品 PDF ↔ 本仓库试卷；详见 交叉校对/规范.md）
+#   ProofreadPDF/ 与 交叉校对/材料/ 均为本地忽略目录，不入库。
+# ---------------------------------------------------------------------------
+proofread-plan:
+	@python3 tools/proofread.py plan
+	@python3 tools/proofread.py table
+
+proofread-rename:
+	@python3 tools/proofread.py rename
+
+proofread-rename-apply:
+	@python3 tools/proofread.py rename --apply
+
+proofread-rename-revert:
+	@python3 tools/proofread.py rename --revert
+
+proofread-table:
+	@python3 tools/proofread.py table
+
+proofread-check:
+	@python3 tools/proofread.py check
+
+proofread-show:
+	@test -n "$(UNIT)" || { echo "用法：make proofread-show UNIT=2024/辽宁"; exit 2; }
+	@python3 tools/proofread.py show "$(UNIT)"
+
+# 他源 PDF 的 OCR 转换（默认只列计划；真正运行耗时很久，最后再启动）
+#   make proofread-ocr-plan
+#   make proofread-ocr-batch ARGS="--only 2024/2024_辽宁"
+proofread-ocr-plan:
+	@$(OCRPIPE) batch -c ocr_pipeline.json --source-root ProofreadPDF/1978-2024 \
+	  --output-root 交叉校对/材料/1978-2024 --dry-run $(ARGS)
+	@$(OCRPIPE) batch -c ocr_pipeline.json --source-root ProofreadPDF/1978-2026 \
+	  --output-root 交叉校对/材料/1978-2026 --dry-run $(ARGS)
+
+proofread-ocr-batch:
+	@$(OCRPIPE) batch -c ocr_pipeline.json --source-root ProofreadPDF/1978-2024 \
+	  --output-root 交叉校对/材料/1978-2024 --auto-serve $(ARGS)
+	@$(OCRPIPE) batch -c ocr_pipeline.json --source-root ProofreadPDF/1978-2026 \
+	  --output-root 交叉校对/材料/1978-2026 --auto-serve $(ARGS)
+
+# ---------------------------------------------------------------------------
+# HighQualityPic 高质量矢量配图（详见 交叉校对/规范.md 第十节）
+#   make hq-plan
+#   make hq-match UNIT=1978/全国
+#   make hq-apply UNIT=1978/全国            # 预览
+#   make hq-apply UNIT=1978/全国 ARGS=--write
+# ---------------------------------------------------------------------------
+hq-plan:
+	@python3 tools/hqpics.py plan
+
+hq-rename:
+	@python3 tools/hqpics.py rename
+
+hq-rename-apply:
+	@python3 tools/hqpics.py rename --apply
+
+hq-rename-revert:
+	@python3 tools/hqpics.py rename --revert
+
+hq-match:
+	@test -n "$(UNIT)" || { echo "用法：make hq-match UNIT=1978/全国"; exit 2; }
+	@python3 tools/hqpics.py match "$(UNIT)" $(ARGS)
+
+hq-apply:
+	@test -n "$(UNIT)" || { echo "用法：make hq-apply UNIT=1978/全国 [ARGS=--write]"; exit 2; }
+	@python3 tools/hqpics.py apply "$(UNIT)" $(ARGS)
+
+hq-check:
+	@python3 tools/hqpics.py check
 
 links:
 	@python3 tools/tex_links.py

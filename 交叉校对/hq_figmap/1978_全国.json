@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "year": 1978,
+  "region": "全国",
+  "generated": "2026-11-24",
+  "entries": [
+    {
+      "kind": "question",
+      "hq": "ProofreadPDF/HighQualityPic/1978/1978_全国/1978_全国_Fm5.pdf",
+      "hq_stem": "1978年全国卷物理_p0_Fm5",
+      "page": 0,
+      "fm": 5,
+      "hq_w_cm": 4.34,
+      "hq_h_cm": 2.43,
+      "target": "试卷/1978/全国/figs/06.png",
+      "target_stem": "06",
+      "score": 0.982,
+      "status": "applied",
+      "crop": null,
+      "note": ""
+    },
+    {
+      "kind": "question",
+      "hq": "ProofreadPDF/HighQualityPic/1978/1978_全国/1978_全国_Fm6.pdf",
+      "hq_stem": "1978年全国卷物理_p0_Fm6",
+      "page": 0,
+      "fm": 6,
+      "hq_w_cm": 4.09,
+      "hq_h_cm": 3.74,
+      "target": "试卷/1978/全国/figs/08.png",
+      "target_stem": "08",
+      "score": 0.998,
+      "status": "applied",
+      "crop": null,
+      "note": ""
+    },
+    {
+      "kind": "question",
+      "hq": "ProofreadPDF/HighQualityPic/1978/1978_全国/1978_全国_Fm7.pdf",
+      "hq_stem": "1978年全国卷物理_p0_Fm7",
+      "page": 0,
+      "fm": 7,
+      "hq_w_cm": 1.3,
+      "hq_h_cm": 5.29,
+      "target": "试卷/1978/全国/figs/09.png",
+      "target_stem": "09",
+      "score": 0.974,
+      "status": "applied",
+      "crop": null,
+      "note": ""
+    },
+    {
+      "kind": "question",
+      "hq": "ProofreadPDF/HighQualityPic/1978/1978_全国/1978_全国_Fm8.pdf",
+      "hq_stem": "1978年全国卷物理_p0_Fm8",
+      "page": 0,
+      "fm": 8,
+      "hq_w_cm": 4.8,
+      "hq_h_cm": 3.03,
+      "target": "试卷/1978/全国/figs/11.svg",
+      "target_stem": "11",
+      "score": 0.2,
+      "status": "applied",
+      "crop": null,
+      "note": ""
+    },
+    {
+      "kind": "answer",
+      "hq": "ProofreadPDF/HighQualityPic/1978/1978_全国_答案/1978_全国_答案_Fm2.pdf",
+      "hq_stem": "1978年全国卷物理答案_p0_Fm2",
+      "page": 0,
+      "fm": 2,
+      "hq_w_cm": 6.07,
+      "hq_h_cm": 2.33,
+      "target": "试卷/1978/全国/figs/07_an.png",
+      "target_stem": "07_an",
+      "score": 0.99,
+      "status": "applied",
+      "crop": null,
+      "note": ""
+    }
+  ]
+}

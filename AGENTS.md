@@ -23,6 +23,8 @@
 
 - `试卷/<年>/<地区>/`：`<地区>.tex`、`Makefile`、`figs/`、`TikZ/`；`试卷/<年>/README.md` 为年份索引（**自动生成**）。
 - `JSON/`、`OriginPDF/`、`材料处理/`：**本地、Git 忽略**（源数据与 OCR 产物）。
+- `ProofreadPDF/`：**本地、Git 忽略**的交叉校对他源成品 PDF（朱玉亮 1978–2024、刘芳 1978–2026）。
+- `交叉校对/`：交叉校对规范、映射、状态与总表（**入库**；`材料/` 本地忽略）。
 - `进度记录.md`：逐卷进度明细（人工维护表）；`异常记录/<年>.md`：按年异常（统一结构：
   `## 制作说明` + 状态分区表，待补充 → 待处理/处理中 → 待人工核验 → 已解决）；
   `异常记录.md`：总索引 + 跨年份说明。
@@ -48,6 +50,34 @@ make -C 试卷/<年>/<地区> check                                # 4 自查（
 > 统一在**仓库根**执行命令，用 `make -C 试卷/…` 进入卷目录；**不要** `cd`。
 > 新建卷目录时复制一份 `Makefile`（模板见任一已有卷）即可；`make`（含 `student`/`teacher`）
 > 会自动执行 `tools/tex_links.py` 在本卷建立指向根公共文件的相对软链接（供 TeXStudio 直接编译）。
+
+## 交叉校对（存量卷，借助他源成品 PDF）
+
+规范：`交叉校对/规范.md`；总表：`交叉校对/交叉校对表.md`（自动生成，勿手改）。
+素材优先级：**朱玉亮 > 刘芳 > 本仓库材料/JSON**。`ProofreadPDF/` 与 `交叉校对/材料/` 本地忽略。
+
+```bash
+make proofread-plan                 # 扫描源 PDF + 本仓库 → mapping.json（并刷新总表）
+make proofread-show UNIT=2024/辽宁   # 查看该卷源文件与当前状态
+make proofread-table                # 改完 status.json 后刷新总表
+make proofread-check                # 校验 mapping/源文件/status/总表
+# 仅首次：源文件规范化重命名（默认预览；回滚：make proofread-rename-revert）
+make proofread-rename && make proofread-rename-apply
+# 他源 OCR（极耗时；先看计划，最后再启动）
+make proofread-ocr-plan && make proofread-ocr-batch
+```
+
+- 校对进度只改 `交叉校对/status.json`（状态：`未开始/素材就绪/校对中/已完成/待人工核验/无源`）；
+  异常/冲突记入 `异常记录/<年>.md`（类别取现有枚举，问题中注明“交叉校对”）。
+- **交叉校对中能解决的异常尽量解决**（改到 `已解决`）；解决不了的仍留在异常记录（`待处理/待人工核验`）。
+- 映射不一致改 `交叉校对/overrides.json` 后重跑 `make proofread-plan`，不要手改 `mapping.json`。
+- HQ 矢量配图（`ProofreadPDF/HighQualityPic/`，规范第十节）：
+  `make hq-plan` → `make hq-match UNIT=<年>/<地区>` → 看 `交叉校对/hq_compare/` →
+  在 `交叉校对/hq_figmap/<年>_<地区>.json` 标 `status: "apply"`（必要时 `crop`）→
+  `make hq-apply UNIT=<年>/<地区> ARGS=--write` → 双版编译 + `make check` +
+  `python3 tools/figsize_check.py 试卷/<年>/<地区>`。旧图备份到 `figs/.ocr_before/`，
+  尺寸取 HQ PDF 物理尺寸，并同步 `figures.manifest.json`/`figures.map.json`。
+  不能替换的图片命令、复杂版面或 HQ 缺图，记入 `异常记录/<年>.md`。
 
 ## 硬性规则（会被 `make check` 检查）
 

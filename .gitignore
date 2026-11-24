@@ -1,5 +1,11 @@
 JSON/
 OriginPDF/
+# 交叉校对用他源成品 PDF（本地，不入库；映射/表格/规范在 交叉校对/ 入库）
+ProofreadPDF/
+# 交叉校对 OCR 材料与中间产物（本地）
+/交叉校对/材料/
+# HighQualityPic 匹配对照图（本地；figmap/日志入库）
+/交叉校对/hq_compare/
 svg-inkscape/
 main.pdf
 

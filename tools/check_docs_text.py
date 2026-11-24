@@ -9,8 +9,8 @@
 2. **失效相对链接**：形如 `](path/to/x.md)` 的本地链接，目标文件须存在
    （跳过 http(s) 链接与锚点）。
 
-只扫描根目录、`docs/`、`tools/`（含 `tools/textfix/` 等子目录）下的 `*.md`；
-不扫描由 `make index` 生成的 `试卷/**/README.md`。
+扫描根目录、`docs/`、`tools/`（含 `tools/textfix/` 等子目录）、`交叉校对/` 下的
+`*.md`；不扫描由 `make index` 生成的 `试卷/**/README.md`。
 
 用法::
 
@@ -29,7 +29,7 @@ from typing import List
 
 ROOT = Path(__file__).resolve().parent.parent
 SKIP_DIRS = {"__pycache__", "node_modules", ".git", "svg-inkscape"}
-DEFAULT_ROOTS = [ROOT, ROOT / "docs", ROOT / "tools"]
+DEFAULT_ROOTS = [ROOT, ROOT / "docs", ROOT / "tools", ROOT / "交叉校对"]
 CD_RE = re.compile(r"`?\bcd\s+([^\s`'\"]+)")
 NEG_WORDS = ("不要", "禁止", "不得", "反例", "错误", "✗", "❌")
 LINK_RE = re.compile(r"\]\(([^)\s]+\.md)(?:#[^)]*)?\)")

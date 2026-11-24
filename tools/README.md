@@ -21,13 +21,53 @@
 | `tex_links.py` | 为各卷目录创建指向根公共文件（`gaokaozhenti.cls`/`PhyUnit.sty`/`ChoiceQuestion.sty`）的相对软链接（各卷 Makefile 的 `make`/`student`/`teacher` 会**自动执行**，便于 TeXStudio 直接编译） | `python3 tools/tex_links.py` |
 | `gen_index.py` | **索引/进度生成与共享库**：扫描 `试卷/`，生成 `试卷/<年>/README.md`、刷新 README 进度概要、回填 `进度记录.md` 题数（`--check` 校验） | `python3 tools/gen_index.py --write`（`make index`） |
 | `review_to_ledger.py` | 由**复核结果 JSON** 生成/更新 `异常记录/<年>.md` 台账（按 `地区/题号/类别/问题` 去重、更新状态；按状态并入对应分区、状态变化时移动分区） | `python3 tools/review_to_ledger.py 复核结果.json --write` |
-| `check_docs_text.py` | **文档体检**：扫描根 / `docs/` / `tools/` 的 Markdown，检查过时 `cd` 用法与失效相对链接 | `python3 tools/check_docs_text.py` |
+| `check_docs_text.py` | **文档体检**：扫描根 / `docs/` / `tools/` / `交叉校对/` 的 Markdown，检查过时 `cd` 用法与失效相对链接 | `python3 tools/check_docs_text.py` |
 | `check_docs.py` | **文档一致性校验**：`进度记录.md` ↔ `试卷/` 双向一致、状态取值、题数相符、年份索引与 `异常记录/<年>.md` 表头/状态规范及**统一结构**（制作说明 + 状态分区顺序，已解决置末） | `python3 tools/check_docs.py`（`make check-docs`，已接入 `make check`） |
 | `status.py` | **各年份进度概要**：套数、题数、进度表“已完成”计数 | `python3 tools/status.py`（`make progress`） |
 
 > **并行编译包装**：`bin/inkscape` 用 `flock` 串行化 Inkscape 调用，规避 `make -jN` 并发时
 > `Gio::DBus::Error` 崩溃；各卷 Makefile 已把 `tools/bin` 加入 `PATH`，无需手动调用
 > （无 `flock` 的系统退化为直接调用，此时应串行编译）。
+
+## 一之二、交叉校对（他源成品 PDF）
+
+规范见 [`../交叉校对/规范.md`](../交叉校对/规范.md)；素材 `ProofreadPDF/` 与
+`交叉校对/材料/` 本地忽略，映射/状态/总表入库。
+
+| 脚本 | 用途 | 典型用法 |
+| :--- | :--- | :--- |
+| `proofread.py plan` | 扫描 `ProofreadPDF/` 与本仓库 `试卷/`，按 `交叉校对/overrides.json` 生成 `交叉校对/mapping.json`，并补齐 `status.json` 默认条目 | `make proofread-plan` |
+| `proofread.py rename` | 源树内就地规范化重命名（`<年>_<地区>.pdf` / `_答案.pdf`；默认预览，`--apply` 执行，`--revert` 回滚），原文件名写入 `rename_manifest.json`（可回滚、幂等） | `make proofread-rename-apply` / `proofread-rename-revert` |
+| `proofread.py table` | 由 `mapping.json` + `status.json` 生成 `交叉校对/交叉校对表.md`（按年份分组；含“无源可校”“源有而我无”清单） | `make proofread-table` |
+| `proofread.py check` | 校验 mapping↔试卷、源文件存在、status 取值/键、总表是否最新 | `make proofread-check` |
+| `proofread.py show` | 查看某卷对应朱/刘源文件、置信度、备注与校对状态 | `make proofread-show UNIT=2024/辽宁` |
+| `proofread.py tokens` | 打印源文件名解析出的年份/地区 token（调试别名） | `python3 tools/proofread.py tokens` |
+
+他源 OCR（复用外部 `ocrpipe`；输出到 `交叉校对/材料/<源>/<年>/…`）：
+
+```bash
+make proofread-ocr-plan     # 只 dry-run 列计划
+make proofread-ocr-batch    # 全量识别（极耗时，最后再启动；ARGS 可传 --only）
+```
+
+### HighQualityPic 高质量矢量配图
+
+规范见 [`../交叉校对/规范.md`](../交叉校对/规范.md) 第十节。素材 `ProofreadPDF/HighQualityPic/`
+（本地忽略）是朱源逐图矢量 PDF；文件夹/文件先规范化为 `<年>_<地区>[_答案]/…_FmN.pdf`。
+
+| 脚本 | 用途 | 典型用法 |
+| :--- | :--- | :--- |
+| `hqpics.py plan` | 扫描 HQ 文件夹 → `交叉校对/hq_mapping.json` + `HighQualityPic表.md` | `make hq-plan` |
+| `hqpics.py rename` | HQ 文件夹/文件规范化（`--apply` 执行，`--revert` 回滚），写 `hq_rename_manifest.json` | `make hq-rename-apply` |
+| `hqpics.py match` | 渲染 HQ 与现有 `figs/`，一对一匹配，写 `hq_figmap/<年>_<地区>.json` 与对照图（本地忽略） | `make hq-match UNIT=1978/全国` |
+| `hqpics.py apply` | 按 figmap 中 `status: "apply"` 替换图片：备份旧图、复制 HQ PDF、回填 `.tex` 尺寸、更新 manifest/map、记 `hq_apply_log.json` | `make hq-apply UNIT=1978/全国 ARGS=--write` |
+| `hqpics.py check` | 校验 mapping/表/figmap/重命名清单/apply 日志 | `make hq-check` |
+
+- 支持 `\onepicture` 与 `\twopicture`…`\ninepicture`、`\fourchoices[ispicture=true]`
+  的自动路径/尺寸更新；其他图片命令会跳过并提示人工处理。
+- 图内“图1/甲”等编号可用 figmap 的 `crop: [x0,y0,x1,y1]` 裁除；尺寸取裁剪后 PDF。
+- 低分匹配必须人工看 `交叉校对/hq_compare/` 对照图，不得直接全量 `--mark-apply`。
+- `apply` 成功后对应条目自动改为 `applied`；重新 `match` 需 `--force`，避免覆盖已替换结果。
 
 ## 二、材料处理（PDF → Markdown / 图片）
 

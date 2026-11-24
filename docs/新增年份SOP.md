@@ -69,6 +69,25 @@
 
 `make index` 会在年份索引中显示“标记”列。
 
+## E. 交叉校对（存量卷，借助他源成品 PDF）
+
+规范：[`../交叉校对/规范.md`](../交叉校对/规范.md)；总表：[`../交叉校对/交叉校对表.md`](../交叉校对/交叉校对表.md)。
+
+1. `make proofread-plan`（扫描 `ProofreadPDF/` → `交叉校对/mapping.json`，刷新总表）。
+2. `make proofread-show UNIT=<年>/<地区>` 确认朱/刘源文件与映射；映射错改
+   `交叉校对/overrides.json` 后重跑 `make proofread-plan`。
+3. 以 **朱玉亮 > 刘芳 > 本仓库材料** 为优先级逐题核对题干/选项/答案/公式/单位/配图，
+   修正 LaTeX 后双版编译 + `make -C 试卷/<年>/<地区> check`。
+   若该卷有 `ProofreadPDF/HighQualityPic/` 矢量配图：`make hq-match UNIT=<年>/<地区>` →
+   看 `交叉校对/hq_compare/` → 在 `hq_figmap/<年>_<地区>.json` 标 `status: "apply"`
+   （必要时 `crop`）→ `make hq-apply UNIT=<年>/<地区> ARGS=--write`，并按 HQ PDF 尺寸
+   同步 `.tex`/`figures.manifest.json`/`figures.map.json`（规范第十节）。
+4. 更新 `交叉校对/status.json`（`未开始/素材就绪/校对中/已完成/待人工核验/无源`）；
+   冲突/异常记入 `异常记录/<年>.md`（类别取现有枚举，注明“交叉校对”）；
+   **能解决的异常尽量改到“已解决”**，解决不了的保留原状态；更新 `进度记录.md`。
+5. `make proofread-table && make proofread-check`；必要时 `make index && make check-docs`。
+6. 他源 OCR 极耗时：先 `make proofread-ocr-plan` 看计划，最后再 `make proofread-ocr-batch`。
+
 ## D. 提交前
 
 - [ ] `make check` 全绿；`make tools-test` 通过；`make check-docs` 通过。

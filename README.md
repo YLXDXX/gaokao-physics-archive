@@ -33,6 +33,24 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 ├── OriginPDF/                   # 【本地·Git 忽略】平台 PDF 原始文档（<年>/<年_地区>.pdf）
 ├── 材料处理/<年份>/<地区>/       # 【本地·Git 忽略】材料处理目录（PDF→markdown、OCR、图片提取；
 │                                #   与 试卷/ 分离，含 source.json、ovis/、paddle/、pdftotext.txt、merged.md、pdfimages/ 等）
+├── ProofreadPDF/                # 【本地·Git 忽略】交叉校对用他源成品 PDF
+│   ├── 1978-2024/<年>/          #   朱玉亮：试卷 <年>_<地区>.pdf + 答案 <年>_<地区>_答案.pdf（矢量）
+│   ├── 1978-2026/<年>/          #   刘芳：教师版合订 <年>_<地区>.pdf
+│   └── HighQualityPic/<年>/     #   朱源逐图矢量 PDF（<年>_<地区>[_答案]/…_FmN.pdf）
+├── 交叉校对/                     # 交叉校对规范、映射、状态与总表（入库）
+│   ├── 规范.md / README.md      #   流程、裁定优先级、状态与冲突记录、HQ 配图流程
+│   ├── mapping.json             #   源文件 ↔ 本仓库卷（tools/proofread.py 生成）
+│   ├── overrides.json           #   人工别名/例外
+│   ├── status.json              #   逐卷校对状态（人工维护）
+│   ├── rename_manifest.json     #   原文件名 → 规范化名（可回滚）
+│   ├── 交叉校对表.md             #   总表（自动生成）
+│   ├── hq_mapping.json          #   HighQualityPic ↔ 本仓库卷（tools/hqpics.py 生成）
+│   ├── HighQualityPic表.md       #   HQ 配图可用性总表（自动生成）
+│   ├── hq_figmap/               #   逐卷 HQ↔figs 匹配草表（人工确认 apply）
+│   ├── hq_apply_log.json        #   HQ 配图替换记录
+│   ├── hq_rename_manifest.json  #   HQ 原名称 → 规范化名（可回滚）
+│   ├── hq_compare/              # 【本地·Git 忽略】HQ 匹配对照图
+│   └── 材料/                    # 【本地·Git 忽略】他源 OCR 产物
 ├── tools/                       # 脚本
 │   ├── json_to_tex.py           # JSON → LaTeX 初稿 + 图片素材（制作第一步）
 │   ├── html2latex.py            # HTML/公式 → LaTeX 的 DOM 转换器（json_to_tex 调用）
@@ -93,7 +111,7 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 > 外部克隆若无同级项目，请自行放置对应版本的宏包/说明文件。
 > `package/` 已移除（ChoiceQuestion v0.12 已内置原 exam-zh-choices）。
 >
-> `JSON/`、`OriginPDF/`、`材料处理/`、`svg-inkscape/`、图片尺寸工作文件（`figures.map.json`、`figures.manifest.json`、`figsizes.json`）与各卷**编译产物**（`*_学生版.pdf`/`*_教师版.pdf`、
+> `JSON/`、`OriginPDF/`、`材料处理/`、`ProofreadPDF/`、`交叉校对/材料/`、`svg-inkscape/`、图片尺寸工作文件（`figures.map.json`、`figures.manifest.json`、`figsizes.json`）与各卷**编译产物**（`*_学生版.pdf`/`*_教师版.pdf`、
 > `TikZ/*.pdf` 等）已在 `.gitignore` 中忽略，只保留在本地；**`试卷/**/figs/*.pdf` 是源图，已入库**。
 > 入库的是**可复现的源文件**（`.tex`、`.sty`、`.cls`、`figs/`、`Makefile`、文档）。
 
@@ -126,6 +144,13 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
    学生版 `answer_shown=false`（答案留空、详解不显示），
    教师版 `answer_shown=true`（含答案与详解）。
 
+> **存量卷交叉校对**（借助他源成品 PDF）：规范见 [`交叉校对/规范.md`](交叉校对/规范.md)，
+> 总表见 [`交叉校对/交叉校对表.md`](交叉校对/交叉校对表.md)、
+> HQ 配图见 [`交叉校对/HighQualityPic表.md`](交叉校对/HighQualityPic表.md)。常用
+> `make proofread-plan`（扫描→映射→刷新总表）、`make proofread-show UNIT=2024/辽宁`、
+> `make proofread-check`；校对进度改 `交叉校对/status.json` 后执行 `make proofread-table`。
+> 他源 OCR 极耗时：`make proofread-ocr-plan` 先看计划，最后再 `make proofread-ocr-batch`。
+
 > **严禁在转换过程中引入 TikZ 重绘**：一律直接使用 JSON 中的图片数据；JSON 缺图时，
 > 从对应 `.pdf` **无损提取**。确需 TikZ 重绘的图由人工查验并手绘
 > （如 2026 湖北第 4 题），放入该卷 `TikZ/`。
@@ -147,6 +172,13 @@ make JOBS=8       # 并行 8 线程
 make check        # 规范自查 + 内容 + 共性问题 + 缺字 + 成品复查 + 文档索引校验
 make index        # 刷新 试卷/<年>/README.md 与 README 进度概要
 make progress     # 打印各年份进度概要
+make proofread-plan       # 交叉校对：扫描他源 → mapping.json → 刷新总表
+make proofread-check      # 交叉校对：校验映射/源文件/状态/总表
+make proofread-show UNIT=2024/辽宁   # 查看某卷对应源文件与校对状态
+make proofread-ocr-plan   # 他源 OCR 计划（不加载模型；识别见 proofread-ocr-batch）
+make hq-plan              # HighQualityPic 扫描 → hq_mapping.json + 表
+make hq-match UNIT=1978/全国   # HQ ↔ figs 匹配草表 + 对照图
+make hq-apply UNIT=1978/全国 ARGS=--write   # 按 figmap 替换 HQ 矢量配图
 make fetch-pr PR=1   # 接取 Gitee PR 到本地分支 pr/1（审查用，见 docs/代码审查指南.md）
 make pr-check PR=1   # 接取并对 PR 改动卷先 make all 再 check
 ```
@@ -173,6 +205,9 @@ make pr-check PR=1   # 接取并对 PR 改动卷先 make all 再 check
 | `LaTeX_format_ReadMe.md` | LaTeX 文档格式基本要求（排版细则：两版开关、答案命令、图片与编号、公式单位、段落分行等） |
 | `材料处理与OCR规范.md` | PDF→Markdown 双引擎交叉验证、逐页版面源数据、无损提取图片、底稿漂移检查 |
 | `图片尺寸处理规范.md` | 按源 PDF 物理尺寸重排图片：replace/measure/manual 三策略、扫描件仅作参考、manifest 与验收 |
+| `交叉校对/规范.md` | 借助朱玉亮 / 刘芳成品 PDF 交叉校对：素材优先级、命名与映射、状态与总表、逐卷流程、冲突记录、他源 OCR |
+| `交叉校对/交叉校对表.md` | 各卷交叉校对状态总表（自动生成）；含“无源可校”与“源有而我无”清单 |
+| `交叉校对/HighQualityPic表.md` | HighQualityPic 高质量矢量配图可用性总表（自动生成）；替换流程见规范第十节 |
 | `OCR识别转换流程说明.md` | 外部 OCRPipeLine 使用说明（软链接）：安装、OvisOCR3 + PaddleOCR-VL、逐页源数据、断点续跑、Paddle 自动分块 |
 | `docs/新增年份SOP.md` | 新增年份 / 制作一份卷的可勾选清单 |
 | `docs/编译方法.md` | 批量/单卷编译命令、两版开关、版面微调 |
