@@ -30,6 +30,16 @@ class TestRefSpacing(unittest.TestCase):
         self.assertEqual(len(issues), 3)
         self.assertTrue(all(not is_hard for _, _, is_hard in issues))
 
+    def test_compound_word_with_figure_is_not_manual_ref(self):
+        for text in ("受力图 2 分", "电路图 1 个", "示意图 3 幅", "图象 2 条"):
+            self.assertEqual(cr.collect_ref_style_issues(text), [], text)
+
+    def test_reference_prefixes_still_detected(self):
+        for text in ("如图 2 所示", "见图 3", "题图甲", "题图 4"):
+            issues = cr.collect_ref_style_issues(text)
+            self.assertTrue(issues, text)
+            self.assertTrue(all(not is_hard for _, _, is_hard in issues))
+
     def test_ref_before_manual_like_text_not_matched(self):
         issues = cr.collect_ref_style_issues("图~\\ref{2026云南08a} 中。")
         self.assertEqual(issues, [])

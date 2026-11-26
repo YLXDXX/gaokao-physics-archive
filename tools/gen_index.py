@@ -97,7 +97,8 @@ def scan_papers(root: Path = ROOT) -> dict[str, dict[str, dict]]:
                 "dir": str(rdir.relative_to(root)),
                 "tex": str(tex.relative_to(root)) if tex else None,
                 "questions": len(re.findall(r"^%%\s*number\s*[:：]", txt, re.M)),
-                "figs": len(list(figs_dir.glob("*"))) if figs_dir.is_dir() else 0,
+                "figs": sum(1 for p in figs_dir.iterdir() if p.is_file() and not p.name.startswith("."))
+                        if figs_dir.is_dir() else 0,
                 "tikz": bool(list(tikz_dir.glob("*.tex"))) if tikz_dir.is_dir() else False,
                 "recrop": (rdir / ".recrop.json").exists(),
                 "student": (rdir / f"{rdir.name}_学生版.pdf").exists(),

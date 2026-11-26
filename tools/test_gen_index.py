@@ -38,9 +38,12 @@ class TestGenIndex(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
             _make_repo(root)
+            (root / "试卷" / "2020" / "测试" / "figs" / ".ocr_before").mkdir()
+            (root / "试卷" / "2020" / "测试" / "figs" / ".ocr_before" / "old.png").write_text("x")
             papers = gen_index.scan_papers(root)
             self.assertIn("2020", papers)
             self.assertEqual(papers["2020"]["测试"]["questions"], 3)
+            self.assertEqual(papers["2020"]["测试"]["figs"], 1)
 
     def test_check_ok(self):
         with tempfile.TemporaryDirectory() as d:

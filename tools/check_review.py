@@ -47,6 +47,9 @@ PDF_ONLY_RE = re.compile(r"^%\s*pdf-only\s*:\s*true\s*$", re.M)
 REF_CMD_RE = re.compile(r"\\(ref|eqref|pageref)\{([^}]*)\}")
 MANUAL_FIG_RE = re.compile(r"图\s*(?:[甲乙丙丁]|[A-Da-d](?![A-Za-z])|\d+|[一二三四五六七八九十]+)")
 CJK_RE = re.compile(r"[\u4e00-\u9fff]")
+# “图”前若是这些字，通常仍是图号引用（如图 1、见图 2、题图甲）；其余汉字多为
+# “受力图 2 分”“电路图 1”这类词组，不应误判为手写图号。
+MANUAL_FIG_PREFIX_OK = set("如见在由与和及本此该左右上下前后第题")
 
 
 def _strip_comment(line: str) -> str:
@@ -88,6 +91,9 @@ def collect_ref_style_issues(text: str) -> List[Tuple[int, str, bool]]:
                     True,
                 ))
         for m in MANUAL_FIG_RE.finditer(line):
+            before = line[m.start() - 1] if m.start() > 0 else ""
+            if CJK_RE.match(before) and before not in MANUAL_FIG_PREFIX_OK:
+                continue
             issues.append((
                 i,
                 f"手写图号“{m.group(0)}”，应改用 \\ref{{标签}} 自动生成序号",

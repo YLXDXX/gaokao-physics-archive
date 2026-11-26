@@ -36,6 +36,22 @@ class TestNaming(unittest.TestCase):
         self.assertEqual(h._fig_kind("plan"), "question")
 
 
+class TestApplyGuard(unittest.TestCase):
+    def test_same_stem_allows_new_pdf(self):
+        self.assertFalse(h._has_unrewritten_refs(r"\onepicture{figs/09.pdf}", "09", "09"))
+
+    def test_same_stem_blocks_other_extension(self):
+        text = r"\onepicture{figs/09.pdf}\twopicture{figs/09.png}{figs/10.png}"
+        self.assertTrue(h._has_unrewritten_refs(text, "09", "09"))
+
+    def test_different_stem_blocks_old_pdf(self):
+        self.assertTrue(h._has_unrewritten_refs(r"\onepicture{figs/09.pdf}", "09", "09a"))
+
+    def test_does_not_match_sibling_stem(self):
+        self.assertFalse(h._has_unrewritten_refs(r"\onepicture{figs/09a.pdf}", "09", "09"))
+        self.assertFalse(h._has_unrewritten_refs(r"\onepicture{figs/09_an.pdf}", "09", "09"))
+
+
 class TestRewrite(unittest.TestCase):
     def test_take_braced(self):
         s = r"\x{a{b}c}{d}"
@@ -81,6 +97,12 @@ class TestRewrite(unittest.TestCase):
         out, n = h._rewrite_figure_refs(s, "06", "06", 1, 2)
         self.assertEqual(n, 1)
         self.assertIn("figs/06.pdf", out)
+
+    def test_replace_inner_keeps_sibling_stem(self):
+        self.assertEqual(h._replace_inner(r"figs/19_an.png", "19", "19"),
+                         r"figs/19_an.png")
+        self.assertEqual(h._replace_inner(r"figs/19.png", "19", "19"),
+                         r"figs/19.pdf")
 
     def test_strip_size_opts(self):
         self.assertEqual(h._strip_size_opts("align=right, w=3cm, h=2cm, num=1"),

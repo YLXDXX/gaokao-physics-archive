@@ -89,7 +89,11 @@
    - **单位**：一律 PhyUnit；缺宏在外部 `../PhyUnit/` 项目按规范新增并同步手册/文档。
    - **完整性**：题数、小问、答案对应、题目/答案/解析图、公式编号逐项核对。
    开始前可先跑 `make proofread-precheck UNIT=<年>/<地区>` 摸清源/状态/未闭合异常与规范问题；
-   完成后用 `make proofread-precheck UNIT=<年>/<地区> ARGS=--strict-refs` 作引用间距门禁。
+   并跑 `python3 tools/figsize_review.py 试卷/<年>/<地区> --only-issues`，对 `d>5%`/`manual`
+   条目逐张与源 PDF 对照（尤其检查裁切是否完整）；完成后用
+   `make proofread-precheck UNIT=<年>/<地区> ARGS=--strict-refs` 作引用间距门禁。
+   **无源卷**（状态 `无源`）也须用本仓库 `材料处理/`、`OriginPDF/`、JSON 按同一标准自检，
+   尤其逐张核对图片裁切完整性；状态仍记 `无源`，在 note 写“已无源自检”，不得写成已交叉校对。
    若该卷有 `ProofreadPDF/HighQualityPic/` 矢量配图：`make hq-match UNIT=<年>/<地区>` →
    看 `交叉校对/hq_compare/` → 在 `hq_figmap/<年>_<地区>.json` 标 `status: "apply"`
    （必要时 `crop`）→ `make hq-apply UNIT=<年>/<地区> ARGS=--write`，并按 HQ PDF 尺寸

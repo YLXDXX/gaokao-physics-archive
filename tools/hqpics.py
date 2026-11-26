@@ -730,7 +730,7 @@ def _take_braced(s: str, i: int) -> tuple[str | None, int]:
 def _replace_inner(inner: str, old_stem: str, new_stem: str) -> str:
     if "\\includesvg" in inner:
         return f"figs/{new_stem}.pdf"
-    return re.sub(rf"figs/{re.escape(old_stem)}(?:\.[A-Za-z0-9]+)?",
+    return re.sub(rf"figs/{re.escape(old_stem)}(?![0-9A-Za-z_])(?:\.[A-Za-z0-9]+)?",
                   f"figs/{new_stem}.pdf", inner)
 
 
@@ -784,7 +784,7 @@ def _rewrite_multi(text: str, cmd: str, nargs: int, old_stem: str,
             continue
         changed = False
         for idx, arg in enumerate(args):
-            if re.search(rf"figs/{re.escape(old_stem)}(?![0-9A-Za-z])", arg):
+            if re.search(rf"figs/{re.escape(old_stem)}(?![0-9A-Za-z_])", arg):
                 args[idx] = _replace_inner(arg, old_stem, new_stem)
                 opts = _set_per_image_size(opts, chr(ord('A') + idx), w, h)
                 changed = True
@@ -818,7 +818,7 @@ def _rewrite_onepicture(text: str, old_stem: str, new_stem: str, w: float, h: fl
         nonlocal count
         opts = m.group(1) or ""
         inner = m.group(2)
-        if not re.search(rf"figs/{re.escape(old_stem)}(?![0-9A-Za-z])", inner):
+        if not re.search(rf"figs/{re.escape(old_stem)}(?![0-9A-Za-z_])", inner):
             return m.group(0)
         new_inner = _replace_inner(inner, old_stem, new_stem)
         kept = _strip_size_opts(opts)
@@ -895,6 +895,19 @@ def _update_manifest(unit_dir: Path, old_stem: str, new_stem: str, hq_path: Path
         _save(mf, data)
 
 
+def _has_unrewritten_refs(text: str, old_stem: str, new_stem: str) -> bool:
+    """rewrite 后是否仍残留对旧图的未支持引用。
+
+    同 stem 替换时，新文本中的 ``figs/<stem>.pdf`` 正是本次要写入的图，不能误判为
+    残留引用；其它扩展名 / 无扩展名的旧引用仍须拦截。
+    """
+    stem = re.escape(old_stem)
+    pattern = rf"figs/{stem}(?![0-9A-Za-z_])"
+    if old_stem == new_stem:
+        pattern = rf"figs/{stem}(?!\.pdf)(?![0-9A-Za-z_])"
+    return bool(re.search(pattern, text))
+
+
 def cmd_apply(args) -> int:
     year, region = _parse_unit(args.unit)
     unit_dir = PAPERS / str(year) / region
@@ -943,7 +956,7 @@ def cmd_apply(args) -> int:
             skipped.append((e["hq"], "未找到可自动更新的图片引用（需人工处理）"))
             continue
         # 同一张图若还有其它未支持的引用（多图/图片选项等），整条跳过，避免留下失效路径
-        if re.search(rf"figs/{re.escape(old_stem)}(?![0-9A-Za-z])", new_text):
+        if _has_unrewritten_refs(new_text, old_stem, new_stem):
             skipped.append((e["hq"], "仍有未支持的图片引用（多图/图片选项等），需人工处理"))
             continue
         if args.write:

@@ -76,6 +76,11 @@ make proofread-ocr-plan && make proofread-ocr-batch
   题目/答案/解析图齐全。详见 `交叉校对/规范.md` 第五节 3.1。
 - 确认平台 JSON 有误时可修改 `JSON/<年>/<年_地区>.json`，但须同步 `.tex`、在异常记录写明依据，
   并重跑 `check_meta.py`/`make check`。
+- **无源卷也须自检**：无天利/朱/刘源的卷，用本仓库 `材料处理/`、`OriginPDF/`、JSON 按同一标准
+  逐题检查（含图片裁切完整性）；状态仍记 `无源`，在 `status.json` note 写“已无源自检”。
+- 自检/交叉校对时跑 `python3 tools/figsize_review.py 试卷/<年>/<地区> --only-issues`，对
+  `d>5%`/`manual` 条目逐张对照源 PDF；JSON `body` 与 `.tex` 不一致时按 `.tex`/原 PDF 同步
+  （只改正文、不动元数据；`check_meta.py` 不查 body）。
 - 映射不一致改 `交叉校对/overrides.json` 后重跑 `make proofread-plan`，不要手改 `mapping.json`。
 - HQ 矢量配图（`ProofreadPDF/HighQualityPic/`，朱玉亮 1978–2024 + 天利 2025–2026，规范第十节）：
   `make hq-plan` → `make hq-match UNIT=<年>/<地区>` → 看 `交叉校对/hq_compare/` →

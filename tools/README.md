@@ -19,7 +19,7 @@
 | `check_layout_cmds.py` | **版面微调命令检查**：禁止原生 `\newpage`/`\clearpage`/`\vfill`/`\vfil`/`\hfil`，应改用仅学生版生效的 `\gknewpage` 等（见 `LaTeX_format_ReadMe.md` 第 34 条） | `python3 tools/check_layout_cmds.py 试卷/` |
 | `textfix/` | **共性问题正则修正模块**（数字间全角冒号、行内公式连字符、`\dfrac`→`\frac`），默认只检查、`--write` 写回 | `python3 tools/textfix/textfix.py --check 试卷/` |
 | `tex_links.py` | 为各卷目录创建指向根公共文件（`gaokaozhenti.cls`/`PhyUnit.sty`/`ChoiceQuestion.sty`）的相对软链接（各卷 Makefile 的 `make`/`student`/`teacher` 会**自动执行**，便于 TeXStudio 直接编译） | `python3 tools/tex_links.py` |
-| `gen_index.py` | **索引/进度生成与共享库**：扫描 `试卷/`，生成 `试卷/<年>/README.md`、刷新 README 进度概要、回填 `进度记录.md` 题数（`--check` 校验） | `python3 tools/gen_index.py --write`（`make index`） |
+| `gen_index.py` | **索引/进度生成与共享库**：扫描 `试卷/`，生成 `试卷/<年>/README.md`、刷新 README 进度概要、回填 `进度记录.md` 题数（`--check` 校验）；图片数只统计 `figs/` 下非隐藏文件，不计 `.ocr_before/` 等备份 | `python3 tools/gen_index.py --write`（`make index`） |
 | `review_to_ledger.py` | 由**复核结果 JSON** 生成/更新 `异常记录/<年>.md` 台账（按 `地区/题号/类别/问题` 去重、更新状态；按状态并入对应分区、状态变化时移动分区） | `python3 tools/review_to_ledger.py 复核结果.json --write` |
 | `check_docs_text.py` | **文档体检**：扫描根 / `docs/` / `tools/` / `交叉校对/` 的 Markdown，检查过时 `cd` 用法与失效相对链接 | `python3 tools/check_docs_text.py` |
 | `check_docs.py` | **文档一致性校验**：`进度记录.md` ↔ `试卷/` 双向一致、状态取值、题数相符、年份索引与 `异常记录/<年>.md` 表头/状态规范及**统一结构**（制作说明 + 状态分区顺序，已解决置末） | `python3 tools/check_docs.py`（`make check-docs`，已接入 `make check`） |
@@ -74,6 +74,8 @@ make proofread-ocr-batch    # 全量识别（极耗时，最后再启动；ARGS 
 - 图内“图1/甲”等编号可用 figmap 的 `crop: [x0,y0,x1,y1]` 裁除；尺寸取裁剪后 PDF。
 - 低分匹配必须人工看 `交叉校对/hq_compare/` 对照图，不得直接全量 `--mark-apply`。
 - `apply` 成功后对应条目自动改为 `applied`；重新 `match` 需 `--force`，避免覆盖已替换结果。
+- `apply` 支持同 stem（`07.png→07.pdf`）与 `_an` 兄弟图（如 `07_an.png`）；若仍提示“未支持的
+  图片引用”，先确认是否真的有 `\twopicture`/`\fourchoices[ispicture=true]` 等未改写引用。
 
 ## 二、材料处理（PDF → Markdown / 图片）
 
