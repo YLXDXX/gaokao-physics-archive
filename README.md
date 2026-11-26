@@ -62,7 +62,7 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 │   ├── check_answers.py         # 非选择题答案与小问对应
 │   ├── check_formula_numbers.py # 解析公式编号 ①②③… 连续/悬空检查
 │   ├── check_units.py           # PhyUnit 单位宏检查
-│   ├── check_review.py          # 成品跨项复查（答案三处一致/解析引图/引用标签）
+│   ├── check_review.py          # 成品跨项复查（答案三处一致/解析引图/引用标签；--ref-audit 查 \ref 间距）
 │   ├── check_glyphs.py          # 编译日志缺字检查
 │   ├── check_layout_cmds.py     # 版面微调命令（禁用原生命令）检查
 │   ├── tex_to_json.py           # 成品 .tex → 档案 JSON（反向抽取）
@@ -150,8 +150,11 @@ LaTeX 文档，并为每道题保留**元数据**与**详解**，为后续高质
 > 规范见 [`交叉校对/规范.md`](交叉校对/规范.md)，
 > 总表见 [`交叉校对/交叉校对表.md`](交叉校对/交叉校对表.md)、
 > HQ 配图见 [`交叉校对/HighQualityPic表.md`](交叉校对/HighQualityPic表.md)。常用
-> `make proofread-plan`（扫描→映射→刷新总表）、`make proofread-show UNIT=2024/辽宁`、
+> `make proofread-plan`（扫描→映射→刷新总表）、`make proofread-show UNIT=2024/辽宁`
+> （含未闭合异常）、`make proofread-precheck UNIT=2024/辽宁`（引用风格 + 全卷 check）、
 > `make proofread-check`；校对进度改 `交叉校对/status.json` 后执行 `make proofread-table`。
+> 逐题要求：图片选项/子图逐张拆分、图内去图题/标号、正文用 `\ref` 自动引用且前后留空格、
+> `\frac` 禁 `\dfrac`、单位一律 PhyUnit；能解决的异常尽量改 `已解决`，必要时修正源 JSON 并登记。
 > 他源 OCR 极耗时：`make proofread-ocr-plan` 先看计划，最后再 `make proofread-ocr-batch`。
 
 > **严禁在转换过程中引入 TikZ 重绘**：一律直接使用 JSON 中的图片数据；JSON 缺图时，
@@ -177,7 +180,8 @@ make index        # 刷新 试卷/<年>/README.md 与 README 进度概要
 make progress     # 打印各年份进度概要
 make proofread-plan       # 交叉校对：扫描他源 → mapping.json → 刷新总表
 make proofread-check      # 交叉校对：校验映射/源文件/状态/总表
-make proofread-show UNIT=2024/辽宁   # 查看某卷对应源文件与校对状态
+make proofread-show UNIT=2024/辽宁   # 查看某卷源文件、状态与未闭合异常
+make proofread-precheck UNIT=2024/辽宁  # 交叉校对预检（引用风格 + 全卷 check）
 make proofread-ocr-plan   # 他源 OCR 计划（不加载模型；识别见 proofread-ocr-batch）
 make hq-plan              # HighQualityPic 扫描 → hq_mapping.json + 表
 make hq-match UNIT=1978/全国   # HQ ↔ figs 匹配草表 + 对照图
@@ -208,7 +212,7 @@ make pr-check PR=1   # 接取并对 PR 改动卷先 make all 再 check
 | `LaTeX_format_ReadMe.md` | LaTeX 文档格式基本要求（排版细则：两版开关、答案命令、图片与编号、公式单位、段落分行等） |
 | `材料处理与OCR规范.md` | PDF→Markdown 双引擎交叉验证、逐页版面源数据、无损提取图片、底稿漂移检查 |
 | `图片尺寸处理规范.md` | 按源 PDF 物理尺寸重排图片：replace/measure/manual 三策略、扫描件仅作参考、manifest 与验收 |
-| `交叉校对/规范.md` | 借助天利 / 朱玉亮 / 刘芳成品 PDF 交叉校对：素材优先级、命名与映射、状态与总表、逐卷流程、冲突记录、他源 OCR |
+| `交叉校对/规范.md` | 借助天利 / 朱玉亮 / 刘芳成品 PDF 交叉校对：素材优先级、命名与映射、状态与总表、逐卷流程（图片拆分/`\ref` 引用/公式/单位/异常闭环）、冲突记录、他源 OCR |
 | `交叉校对/交叉校对表.md` | 各卷交叉校对状态总表（自动生成）；含“无源可校”与“源有而我无”清单 |
 | `交叉校对/HighQualityPic表.md` | HighQualityPic 高质量矢量配图可用性总表（自动生成）；替换流程见规范第十节 |
 | `OCR识别转换流程说明.md` | 外部 OCRPipeLine 使用说明（软链接）：安装、OvisOCR3 + PaddleOCR-VL、逐页源数据、断点续跑、Paddle 自动分块 |

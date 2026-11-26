@@ -33,7 +33,8 @@
 #    make proofread-rename[-apply|-revert]  源树内就地规范化重命名（默认预览）
 #    make proofread-table 生成 交叉校对/交叉校对表.md
 #    make proofread-check 校验 mapping/源文件/status（需本地 ProofreadPDF/）
-#    make proofread-show UNIT=2024/辽宁  查看某卷源文件对应与校对状态
+#    make proofread-show UNIT=2024/辽宁  查看某卷源文件、校对状态与未闭合异常
+#    make proofread-precheck UNIT=2024/辽宁  交叉校对预检（引用风格 + 全卷 check）
 #    make proofread-ocr-plan|proofread-ocr-batch  他源 PDF OCR（默认只列计划；极耗时）
 #    make hq-plan          扫描 ProofreadPDF/HighQualityPic → hq_mapping.json + 表
 #    make hq-match UNIT=1978/全国   生成 HQ ↔ figs 匹配草表与对照图
@@ -81,7 +82,7 @@ endef
         figsize-check-ext figsize-apply-ext figsize-status-ext tools-test \
         ocr-plan ocr-status ocr-batch \
         proofread-plan proofread-rename proofread-rename-apply proofread-rename-revert proofread-table \
-        proofread-check proofread-show proofread-ocr-plan proofread-ocr-batch \
+        proofread-check proofread-show proofread-precheck proofread-ocr-plan proofread-ocr-batch \
         hq-plan hq-rename hq-rename-apply hq-rename-revert hq-match hq-apply hq-check \
         index progress check-docs check-changed ci fetch-pr pr-check
 
@@ -180,7 +181,7 @@ pr-check:
 # 抽样构建 + 全量自查（CI 入口；大规模时用 YEAR=… 限定）
 ci:
 	@echo "===== 工具单元测试 + 文档校验 ====="
-	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
+	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_check_review tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
     tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json tools.test_figsize_audit tools.test_figsize_tools tools.test_proofread tools.test_hqpics
 	@python3 tools/check_docs.py
 	@echo "===== 抽样编译（首份试卷） ====="
@@ -198,7 +199,7 @@ check-recrop:
 # 工具单元测试（共性问题修正 / 批量映射 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 / 裁剪回填）
 tools-test:
 	@echo "===== tools 单元测试 ====="
-	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
+	@python3 -m unittest tools.textfix.test_textfix tools.test_check_content tools.test_check_review tools.test_gen_index tools.test_json_to_tex tools.test_html2latex tools.test_check_formula_numbers tools.test_review_to_ledger \
     tools.test_check_meta tools.test_check_answers tools.test_check_units tools.test_tex_to_json tools.test_figsize_audit tools.test_figsize_tools tools.test_proofread tools.test_hqpics
 
 # 材料处理管线（外部独立程序 OCRPipeLine；需 Conda 环境 / PaddleOCR-VL 服务）
@@ -310,6 +311,14 @@ proofread-check:
 proofread-show:
 	@test -n "$(UNIT)" || { echo "用法：make proofread-show UNIT=2024/辽宁"; exit 2; }
 	@python3 tools/proofread.py show "$(UNIT)"
+
+# 交叉校对预检：先看源/状态/未闭合异常，再查引用风格与全卷规范。
+# 默认引用风格只提示；完成前用 ARGS=--strict-refs 作为门禁。
+proofread-precheck:
+	@test -n "$(UNIT)" || { echo "用法：make proofread-precheck UNIT=2024/辽宁 [ARGS=--strict-refs]"; exit 2; }
+	@python3 tools/proofread.py show "$(UNIT)"
+	@python3 tools/check_review.py --ref-audit $(ARGS) "试卷/$(UNIT)/$(notdir $(UNIT)).tex"
+	@$(MAKE) --no-print-directory -C "试卷/$(UNIT)" check
 
 # 他源 PDF 的 OCR 转换（默认只列计划；真正运行耗时很久，最后再启动）
 #   make proofread-ocr-plan

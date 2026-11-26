@@ -28,8 +28,13 @@ make proofread-rename
 make proofread-rename-apply
 # 如需回滚：make proofread-rename-revert
 
-# 查看某卷对应哪份源、当前状态
+# 查看某卷对应哪份源、当前状态、未闭合异常
 make proofread-show UNIT=2024/辽宁
+
+# 逐卷预检：源/状态/异常 + 引用风格（\ref 间距、手写图号）+ 全卷 check
+make proofread-precheck UNIT=2024/辽宁
+# 完成前严格门禁（\ref 间距问题升级为错误）
+make proofread-precheck UNIT=2024/辽宁 ARGS=--strict-refs
 
 # 校验映射/源文件/状态/总表一致
 make proofread-check
@@ -46,6 +51,18 @@ make hq-match UNIT=1978/全国          # 生成逐图匹配草表 + 对照图
 make hq-apply UNIT=1978/全国 ARGS=--write   # 成功后自动标 applied
 make hq-check
 ```
+
+## 校对要点（与 `规范.md` 第五节配套）
+
+- **图片**：ABCD 选项、图甲乙丙丁、图 abcd 逐张拆成独立文件；图内不留图题/题注/标号，
+  标题与编号由正文/宏生成；正文一律用 `\ref` 自动引用，禁止手写“图甲/图1”；`\ref` 前后留空格
+  （或 `~`）。尺寸明显不合适的按 `图片尺寸处理规范.md` 修正并登记。
+- **公式**：行内、行间统一 `\frac`，不用 `\dfrac`；答案、提示、解析中公式编号连续、无悬空。
+- **单位**：一律 `PhyUnit`；缺宏在外部 `../PhyUnit/` 项目新增并按规范写注释、同步手册/文档。
+- **异常**：先处理 `异常记录/<年>.md` 中该卷未闭合条目；能解决改 `已解决`，不能解决写明原因。
+- **源 JSON**：确认平台 JSON 有误时可修改，但必须同步 `.tex`、记录依据，并重跑
+  `check_meta.py`/`make check`。
+- **完整性**：题数、小问、答案对应、题目/答案/解析图、公式编号都要逐项核对。
 
 ## 更新校对进度
 

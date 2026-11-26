@@ -17,7 +17,7 @@
     python3 tools/proofread.py rename [--apply|--revert]  # 源树内规范化重命名 / 回滚
     python3 tools/proofread.py table [--check]    # 生成 交叉校对/交叉校对表.md
     python3 tools/proofread.py check              # 校验 mapping/源文件/仓库卷/status
-    python3 tools/proofread.py show 2024/辽宁      # 查看某卷源文件对应与校对状态
+    python3 tools/proofread.py show 2024/辽宁      # 查看源文件、状态、源 JSON 与未闭合异常
     python3 tools/proofread.py tokens             # 打印解析出的年份/地区 token（调试）
 
 约束：所有路径相对仓库根；临时产物只写 `/tmp/opencode/`（本脚本不写临时文件）。
@@ -41,6 +41,7 @@ RENAME_MANIFEST = PROOF_DIR / "rename_manifest.json"
 TABLE = PROOF_DIR / "交叉校对表.md"
 PAPERS = ROOT / "试卷"
 SOURCE_ROOT = ROOT / "ProofreadPDF"
+ANOMALY_DIR = ROOT / "异常记录"
 
 SOURCES = {
     "tian": {
@@ -857,6 +858,70 @@ def cmd_check(args) -> int:
 
 
 # ---------------------------------------------------------------------------
+# 异常记录（交叉校对前先看该卷未闭合条目）
+# ---------------------------------------------------------------------------
+ANOMALY_STATUS = ("待补充", "待处理", "处理中", "待人工核验")
+
+
+def _split_md_row(line: str) -> list[str]:
+    s = line.strip()
+    if s.startswith("|"):
+        s = s[1:]
+    if s.endswith("|"):
+        s = s[:-1]
+    return [c.strip().replace("\\|", "|") for c in re.split(r"(?<!\\)\|", s)]
+
+
+def parse_anomaly_text(text: str, region: str) -> tuple[list[dict], int]:
+    """从某年异常记录 Markdown 中提取该地区未闭合条目与已解决计数。
+
+    返回 ``(未闭合条目列表, 已解决条数)``；条目字段含
+    ``status/number/category/problem/suggestion``。
+    """
+    items: list[dict] = []
+    resolved = 0
+    section = ""
+    for lineno, line in enumerate(text.splitlines(), 1):
+        if line.startswith("## "):
+            section = line[3:].strip()
+            continue
+        if not line.lstrip().startswith("|"):
+            continue
+        cells = _split_md_row(line)
+        if len(cells) < 6 or cells[0] in ("地区", "---"):
+            continue
+        if re.fullmatch(r":?-{2,}:?", cells[0]):
+            continue
+        r, number, category, problem, suggestion, status = cells[:6]
+        if r != region:
+            continue
+        status = status or section
+        if status == "已解决":
+            resolved += 1
+            continue
+        if status not in ANOMALY_STATUS and section == "已解决":
+            status = "已解决"
+            resolved += 1
+            continue
+        items.append({
+            "line": lineno,
+            "number": number,
+            "category": category,
+            "problem": problem,
+            "suggestion": suggestion,
+            "status": status,
+        })
+    return items, resolved
+
+
+def parse_anomalies(year: int, region: str) -> tuple[list[dict], int]:
+    path = ANOMALY_DIR / f"{year}.md"
+    if not path.is_file():
+        return [], 0
+    return parse_anomaly_text(path.read_text(encoding="utf-8"), region)
+
+
+# ---------------------------------------------------------------------------
 # 调试：打印 token
 # ---------------------------------------------------------------------------
 def cmd_show(args) -> int:
@@ -885,6 +950,8 @@ def cmd_show(args) -> int:
           f"（{st.get('date', '')}）")
     if st.get("note"):
         print(f"进度备注：{st['note']}")
+    json_path = ROOT / "JSON" / str(year) / f"{year}_{region}.json"
+    print(f"源 JSON：{_rel(json_path) if json_path.is_file() else '缺失（' + _rel(json_path) + '）'}")
     if not row["by_source"]:
         print("他源：无（无法交叉校对）")
     for source, e in row["by_source"].items():
@@ -900,6 +967,21 @@ def cmd_show(args) -> int:
             orig = ren.get(norm)
             orig_txt = f"；原始名 {root}/{orig}" if orig and orig != norm else ""
             print(f"- {kind}: {path}（{exists}{orig_txt}）")
+
+    items, resolved = parse_anomalies(year, region)
+    print(f"\n## 异常记录（异常记录/{year}.md）")
+    if not items and not resolved:
+        print("无该卷记录。")
+    else:
+        if resolved:
+            print(f"已解决：{resolved} 条")
+        if items:
+            print(f"未闭合：{len(items)} 条（交叉校对前逐条处理，能解决则改“已解决”）")
+            for a in items:
+                print(f"- [{a['status']}] 第 {a['number']} 题 / {a['category']}："
+                      f"{a['problem']}")
+        else:
+            print("未闭合：0 条。")
     return 0
 
 

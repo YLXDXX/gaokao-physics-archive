@@ -12,11 +12,20 @@
    `JSON/<年>/<年_<地区>.json`，逐题比对选择题答案（JSON 不存在时给提示）。
 4. 题干/答案引用的 `\\ref` 标签须在本文档定义（图片命令 label 或 `\\label{}`）。
 
+可选（交叉校对用，默认关闭）：
+
+5. `--ref-audit`：检查 `\\ref`/`\\eqref`/`\\pageref` 与前后文之间是否有空格（或 `~`），
+   并提示手写“图甲/图1/图A”等未用 `\\ref` 的图号；
+6. `--strict-refs`：在 `--ref-audit` 基础上，把 `\ref` 缺少空格升级为错误（用于完成前门禁）；
+   手写图号仍为提示，须人工逐条改正。
+
 用法::
 
     python3 tools/check_review.py                 # 默认扫描 试卷/*/*/*.tex
     python3 tools/check_review.py 试卷/2026/湖南
     python3 tools/check_review.py --quiet
+    python3 tools/check_review.py --ref-audit 试卷/2024/辽宁/辽宁.tex
+    python3 tools/check_review.py --strict-refs 试卷/2024/辽宁/辽宁.tex
 
 退出码：0 通过；1 存在问题。
 """
@@ -35,6 +44,56 @@ PIC_RE = re.compile(r"\\(?:one|two|three|four|five|six|seven|eight|nine)picture|
 REF_FIG_RE = re.compile(r"图\s*(?:~?\\ref\{|\\ref\{)|如图所示|如图")
 CHOICE_TYPES = ("单选", "多选", "选择题")
 PDF_ONLY_RE = re.compile(r"^%\s*pdf-only\s*:\s*true\s*$", re.M)
+REF_CMD_RE = re.compile(r"\\(ref|eqref|pageref)\{([^}]*)\}")
+MANUAL_FIG_RE = re.compile(r"图\s*(?:[甲乙丙丁]|[A-Da-d](?![A-Za-z])|\d+|[一二三四五六七八九十]+)")
+CJK_RE = re.compile(r"[\u4e00-\u9fff]")
+
+
+def _strip_comment(line: str) -> str:
+    return re.sub(r"(?<!\\)%.*$", "", line)
+
+
+def _needs_separator(ch: str) -> bool:
+    """`ch` 是否为需要与 `\\ref` 分隔的“实字”（汉字 / 字母 / 数字 / 下划线）。"""
+    return bool(ch) and (bool(CJK_RE.match(ch)) or ch.isalnum() or ch == "_")
+
+
+def collect_ref_style_issues(text: str) -> List[Tuple[int, str, bool]]:
+    """返回引用风格问题 ``[(行号, 说明, 是否升级为错误)]``。
+
+    - `\\ref`/`\\eqref`/`\\pageref` 前后紧贴汉字、字母、数字：`是否升级为错误=True`
+      （要求留一个空格或 `~`，如 `如图 \\ref{...} 所示`）；
+    - 手写“图甲/图1/图A”等图号而未用 `\\ref`：`是否升级为错误=False`
+      （作为提示，供交叉校对逐处改正）。
+    """
+    issues: List[Tuple[int, str, bool]] = []
+    for i, raw in enumerate(text.splitlines(), 1):
+        line = _strip_comment(raw)
+        for m in REF_CMD_RE.finditer(line):
+            cmd, label = m.group(1), m.group(2)
+            before = line[m.start() - 1] if m.start() > 0 else ""
+            after = line[m.end()] if m.end() < len(line) else ""
+            if _needs_separator(before):
+                issues.append((
+                    i,
+                    f"\\{cmd}{{{label}}} 前缺少空格"
+                    f"（应写成“图 \\{cmd}{{...}}”或“图~\\{cmd}{{...}}”）",
+                    True,
+                ))
+            if _needs_separator(after):
+                issues.append((
+                    i,
+                    f"\\{cmd}{{{label}}} 后缺少空格"
+                    f"（应写成“\\{cmd}{{...}} 所示”或“\\{cmd}{{...}}~中”）",
+                    True,
+                ))
+        for m in MANUAL_FIG_RE.finditer(line):
+            issues.append((
+                i,
+                f"手写图号“{m.group(0)}”，应改用 \\ref{{标签}} 自动生成序号",
+                False,
+            ))
+    return issues
 
 
 def collect_tex(paths: List[Path]) -> List[Path]:
@@ -100,7 +159,8 @@ def json_answers(tex: Path) -> Dict[int, set]:
     return out
 
 
-def check_file(tex: Path) -> Tuple[List[str], List[str]]:
+def check_file(tex: Path, ref_audit: bool = False,
+               strict_refs: bool = False) -> Tuple[List[str], List[str]]:
     errs: List[str] = []
     warns: List[str] = []
     text = tex.read_text(encoding="utf-8")
@@ -176,6 +236,15 @@ def check_file(tex: Path) -> Tuple[List[str], List[str]]:
     if ph:
         warns.append(f"{tex.name}: 有 {ph} 道题使用占位详解（缺详解，待补充）")
 
+    # 8) 引用风格（交叉校对 --ref-audit；--strict-refs 把间距问题升级为错误）
+    if ref_audit or strict_refs:
+        for lineno, msg, hard in collect_ref_style_issues(text):
+            line = f"{tex.name}:{lineno} {msg}"
+            if hard and strict_refs:
+                errs.append(line)
+            else:
+                warns.append(line)
+
     return errs, warns
 
 
@@ -183,6 +252,10 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="试卷成品跨项复查")
     ap.add_argument("paths", nargs="*", type=Path, help=".tex 文件或目录；缺省 试卷/")
     ap.add_argument("--quiet", action="store_true", help="仅输出问题与汇总")
+    ap.add_argument("--ref-audit", action="store_true",
+                    help="检查 \\ref 前后间距与手写图号（交叉校对用，默认关闭）")
+    ap.add_argument("--strict-refs", action="store_true",
+                    help="引用风格门禁：把缺少空格升级为错误（隐含 --ref-audit）")
     args = ap.parse_args(argv)
 
     files = collect_tex(args.paths) if args.paths else collect_tex([ROOT / "试卷"])
@@ -192,7 +265,8 @@ def main(argv=None) -> int:
 
     total_err = total_warn = 0
     for f in files:
-        errs, warns = check_file(f)
+        errs, warns = check_file(f, ref_audit=args.ref_audit,
+                                 strict_refs=args.strict_refs)
         total_err += len(errs)
         total_warn += len(warns)
         for w in warns:

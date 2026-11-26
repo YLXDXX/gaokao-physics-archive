@@ -82,14 +82,23 @@
 2. `make proofread-show UNIT=<年>/<地区>` 确认天利/朱/刘源文件与映射；映射错改
    `交叉校对/overrides.json` 后重跑 `make proofread-plan`。
 3. 以 **天利（2025–2026）> 朱玉亮 > 刘芳 > 本仓库材料** 为优先级逐题核对题干/选项/答案/公式/单位/配图，
-   修正 LaTeX 后双版编译 + `make -C 试卷/<年>/<地区> check`。
+   修正 LaTeX 后双版编译 + `make -C 试卷/<年>/<地区> check`。逐项执行 `规范.md` 第五节：
+   - **图片**：ABCD 选项、图甲乙丙丁、图 abcd 逐张独立；图内去图题/标号；正文用 `\ref`
+     自动引用、前后留空格，禁止手写“图甲/图1”；尺寸异常按 `图片尺寸处理规范.md` 修正/登记。
+   - **公式**：行内、行间统一 `\frac`，禁 `\dfrac`；答案、提示、解析公式编号连续、无悬空。
+   - **单位**：一律 PhyUnit；缺宏在外部 `../PhyUnit/` 项目按规范新增并同步手册/文档。
+   - **完整性**：题数、小问、答案对应、题目/答案/解析图、公式编号逐项核对。
+   开始前可先跑 `make proofread-precheck UNIT=<年>/<地区>` 摸清源/状态/未闭合异常与规范问题；
+   完成后用 `make proofread-precheck UNIT=<年>/<地区> ARGS=--strict-refs` 作引用间距门禁。
    若该卷有 `ProofreadPDF/HighQualityPic/` 矢量配图：`make hq-match UNIT=<年>/<地区>` →
    看 `交叉校对/hq_compare/` → 在 `hq_figmap/<年>_<地区>.json` 标 `status: "apply"`
    （必要时 `crop`）→ `make hq-apply UNIT=<年>/<地区> ARGS=--write`，并按 HQ PDF 尺寸
    同步 `.tex`/`figures.manifest.json`/`figures.map.json`（规范第十节）。
 4. 更新 `交叉校对/status.json`（`未开始/素材就绪/校对中/已完成/待人工核验/无源`）；
-   冲突/异常记入 `异常记录/<年>.md`（类别取现有枚举，注明“交叉校对”）；
-   **能解决的异常尽量改到“已解决”**，解决不了的保留原状态；更新 `进度记录.md`。
+   先处理 `异常记录/<年>.md` 中该卷未闭合条目（**能解决的尽量改到“已解决”**，解决不了的
+   保留原状态并写明交叉校对结论）；新冲突/异常记入 `异常记录/<年>.md`（类别取现有枚举，
+   注明“交叉校对”）。若确认源 JSON 有误，可修改 `JSON/<年>/<年_地区>.json`，但须同步 `.tex`、
+   记录依据并重跑 `check_meta.py`/`make check`。更新 `进度记录.md`。
 5. `make proofread-table && make proofread-check`；必要时 `make index && make check-docs`。
 6. 他源 OCR 极耗时：先 `make proofread-ocr-plan` 看计划，最后再 `make proofread-ocr-batch`。
 

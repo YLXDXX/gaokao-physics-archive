@@ -59,6 +59,27 @@ class TestMatchToken(unittest.TestCase):
         self.assertTrue(note)
 
 
+class TestAnomalyParsing(unittest.TestCase):
+    def test_open_and_resolved_for_region(self):
+        text = """## 待人工核验
+| 地区 | 题号 | 类别 | 问题 | 处理建议 | 状态 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 辽宁 | 5 | 缺图 | 第 5 题缺图 | 补图 | 待人工核验 |
+| 北京 | 1 | 文字 | 其它卷 | 忽略 | 待处理 |
+
+## 已解决
+| 地区 | 题号 | 类别 | 问题 | 处理建议 | 状态 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 辽宁 | 3 | 公式 | 分式误写 | 已改 \\frac | 已解决 |
+| 辽宁 | 4 | 单位 | 裸单位 | 已用 PhyUnit | 已解决 |
+"""
+        items, resolved = p.parse_anomaly_text(text, "辽宁")
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["number"], "5")
+        self.assertEqual(items[0]["status"], "待人工核验")
+        self.assertEqual(resolved, 2)
+
+
 class TestNamingAndTable(unittest.TestCase):
     def test_normalized_name(self):
         self.assertEqual(p._normalized_name(2024, "辽宁", False), "2024_辽宁.pdf")

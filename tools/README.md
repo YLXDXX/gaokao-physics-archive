@@ -40,8 +40,9 @@
 | `proofread.py rename` | 源树内就地规范化重命名（`<年>_<地区>.pdf` / `_答案.pdf`；默认预览，`--apply` 执行，`--revert` 回滚），原文件名写入 `rename_manifest.json`（可回滚、幂等） | `make proofread-rename-apply` / `proofread-rename-revert` |
 | `proofread.py table` | 由 `mapping.json` + `status.json` 生成 `交叉校对/交叉校对表.md`（按年份分组；含“无源可校”“源有而我无”清单） | `make proofread-table` |
 | `proofread.py check` | 校验 mapping↔试卷、源文件存在、status 取值/键、总表是否最新 | `make proofread-check` |
-| `proofread.py show` | 查看某卷对应天利/朱/刘源文件、置信度、备注与校对状态 | `make proofread-show UNIT=2024/辽宁` |
+| `proofread.py show` | 查看某卷对应天利/朱/刘源文件、置信度、备注、校对状态、源 JSON 路径，以及 `异常记录/<年>.md` 中该卷未闭合/已解决条目 | `make proofread-show UNIT=2024/辽宁` |
 | `proofread.py tokens` | 打印源文件名解析出的年份/地区 token（调试别名） | `python3 tools/proofread.py tokens` |
+| `make proofread-precheck` | 交叉校对预检：`proofread-show` + `check_review.py --ref-audit`（`\ref` 间距、手写图号）+ 全卷 `make check`；`ARGS=--strict-refs` 作完成前门禁 | `make proofread-precheck UNIT=2024/辽宁` |
 
 `交叉校对/overrides.json` 的 `ignore` 支持全局 token 或按年 `"年/token"`，用于排除同套异名重复源；
 `hq_ignore` 同理用于排除重复的 HighQualityPic 文件夹（仅影响 HQ 映射）。修改后跑 `make proofread-plan` / `make hq-plan`。
@@ -225,7 +226,7 @@ make proofread-ocr-batch    # 全量识别（极耗时，最后再启动；ARGS 
 3. `textfix/textfix.py --check`（共性问题：全角冒号、公式连字符、en/em 破折号、`\dfrac`）；
 4. `check_layout_cmds.py`（版面微调命令：禁止原生断页 / 撑开命令）；
 5. `check_glyphs.py`（编译日志缺字 `Missing character`，如 `\mathrm` 内汉字丢字）；
-6. `check_review.py`（成品跨项复查：解析引图必在、选择题三处答案一致、与 JSON 答案一致、`\ref` 已定义、重复标签、公式编号悬空、占位详解计数；`% pdf-only: true` 的补充题跳过 JSON 答案比对）；
+6. `check_review.py`（成品跨项复查：解析引图必在、选择题三处答案一致、与 JSON 答案一致、`\ref` 已定义、重复标签、公式编号悬空、占位详解计数；`% pdf-only: true` 的补充题跳过 JSON 答案比对。可选 `--ref-audit` 检查 `\ref` 前后空格与手写“图甲/图1”，`--strict-refs` 把间距问题升级为错误；`make proofread-precheck` 已接入）；
 7. `check_meta.py`（元数据逐字段与平台 JSON 一致）；
 8. `check_answers.py`（非选择题答案命令与小问对应）；
 9. `check_formula_numbers.py`（解析公式编号 ①②③… 连续、无悬空引用）；
@@ -250,12 +251,13 @@ make proofread-ocr-batch    # 全量识别（极耗时，最后再启动；ARGS 
 make tools-test
 # 等价于：
 python3 -m unittest tools.textfix.test_textfix \
-    tools.test_check_content tools.test_gen_index tools.test_json_to_tex \
-    tools.test_html2latex tools.test_check_meta tools.test_check_answers \
-    tools.test_check_units tools.test_check_formula_numbers \
-    tools.test_review_to_ledger tools.test_tex_to_json
+    tools.test_check_content tools.test_check_review tools.test_gen_index \
+    tools.test_json_to_tex tools.test_html2latex tools.test_check_meta \
+    tools.test_check_answers tools.test_check_units \
+    tools.test_check_formula_numbers tools.test_review_to_ledger tools.test_tex_to_json
 ```
 
-覆盖正则规则（含裸单位）/ 批量映射 / 裁剪 recipe / TikZ 登记 / 图片匹配 / 无损提图 /
-裁剪回填 / 元数据·JSON 一致性 / 非选择题答案对应 / 单位宏 / 反向抽取 / 索引生成 /
-HTML→LaTeX 转换（公式片段合并、上下标、表格、图片命名）等纯函数与端到端逻辑。
+覆盖正则规则（含裸单位）/ 引用风格（`\ref` 间距、手写图号）/ 批量映射 / 裁剪 recipe /
+TikZ 登记 / 图片匹配 / 无损提图 / 裁剪回填 / 元数据·JSON 一致性 / 非选择题答案对应 /
+单位宏 / 反向抽取 / 索引生成 / HTML→LaTeX 转换（公式片段合并、上下标、表格、图片命名）
+等纯函数与端到端逻辑。

@@ -58,7 +58,8 @@ make -C 试卷/<年>/<地区> check                                # 4 自查（
 
 ```bash
 make proofread-plan                 # 扫描源 PDF + 本仓库 → mapping.json（并刷新总表）
-make proofread-show UNIT=2024/辽宁   # 查看该卷源文件与当前状态
+make proofread-show UNIT=2024/辽宁   # 查看该卷源文件、状态与未闭合异常
+make proofread-precheck UNIT=2024/辽宁  # 预检：引用风格 + 全卷 check（ARGS=--strict-refs 门禁）
 make proofread-table                # 改完 status.json 后刷新总表
 make proofread-check                # 校验 mapping/源文件/status/总表
 # 仅首次：源文件规范化重命名（默认预览；回滚：make proofread-rename-revert）
@@ -70,6 +71,11 @@ make proofread-ocr-plan && make proofread-ocr-batch
 - 校对进度只改 `交叉校对/status.json`（状态：`未开始/素材就绪/校对中/已完成/待人工核验/无源`）；
   异常/冲突记入 `异常记录/<年>.md`（类别取现有枚举，问题中注明“交叉校对”）。
 - **交叉校对中能解决的异常尽量解决**（改到 `已解决`）；解决不了的仍留在异常记录（`待处理/待人工核验`）。
+- 逐题核对须覆盖：图片选项/子图**逐张拆分**、图内去图题/标号、正文用 `\ref` 自动引用且前后留空格；
+  行内/行间统一 `\frac`；单位一律 PhyUnit（缺宏在外部项目新增）；答案与公式编号一一对应；
+  题目/答案/解析图齐全。详见 `交叉校对/规范.md` 第五节 3.1。
+- 确认平台 JSON 有误时可修改 `JSON/<年>/<年_地区>.json`，但须同步 `.tex`、在异常记录写明依据，
+  并重跑 `check_meta.py`/`make check`。
 - 映射不一致改 `交叉校对/overrides.json` 后重跑 `make proofread-plan`，不要手改 `mapping.json`。
 - HQ 矢量配图（`ProofreadPDF/HighQualityPic/`，朱玉亮 1978–2024 + 天利 2025–2026，规范第十节）：
   `make hq-plan` → `make hq-match UNIT=<年>/<地区>` → 看 `交叉校对/hq_compare/` →
@@ -90,8 +96,10 @@ make proofread-ocr-plan && make proofread-ocr-batch
   实验题答案可在 `\jdanswer` 内手动编号对应（`check_answers.py`）。
 - 每题一条基本 `\memoanswer{}`；缺原卷详解时写 `\memoanswer{本题原卷及材料中未提供详解，待补充。}` 并登记异常。
 - 图片只用 ChoiceQuestion 命令（`\onepicture`/`\twopicture`/`\fourchoices[ispicture=true]`），路径 `figs/`，
-  尺寸用绝对 cm；**严禁 TikZ 重绘**（确需人工手绘并登记）。
-- 单位一律 `PhyUnit` 宏（`check_units.py` 校验未定义宏；`check_content.py` 查裸单位）。
+  尺寸用绝对 cm；**严禁 TikZ 重绘**（确需人工手绘并登记）。图片选项/子图逐张独立，图内不留
+  图题/标号；正文引用一律 `\ref`，禁止手写“图甲/图1”，`\ref` 前后留空格（`check_review.py --ref-audit`）。
+- 单位一律 `PhyUnit` 宏（`check_units.py` 校验未定义宏；`check_content.py` 查裸单位）；缺宏在
+  外部 `../PhyUnit/` 项目按规范新增并同步手册/文档。
 - 公式用 `\frac`（禁 `\dfrac`）；核素/化学式用 `\ce{}`；数字间半角冒号；`$x-t$` 不为 `$x$-$t$`。
 - 不手工编号（列表/图片自动编号）；版面微调用 `\gknewpage` 等，不用原生 `\newpage/\vfill/\hfil`。
 
