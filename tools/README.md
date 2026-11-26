@@ -40,7 +40,7 @@
 | `proofread.py rename` | 源树内就地规范化重命名（`<年>_<地区>.pdf` / `_答案.pdf`；默认预览，`--apply` 执行，`--revert` 回滚），原文件名写入 `rename_manifest.json`（可回滚、幂等） | `make proofread-rename-apply` / `proofread-rename-revert` |
 | `proofread.py table` | 由 `mapping.json` + `status.json` 生成 `交叉校对/交叉校对表.md`（按年份分组；含“无源可校”“源有而我无”清单） | `make proofread-table` |
 | `proofread.py check` | 校验 mapping↔试卷、源文件存在、status 取值/键、总表是否最新 | `make proofread-check` |
-| `proofread.py show` | 查看某卷对应朱/刘源文件、置信度、备注与校对状态 | `make proofread-show UNIT=2024/辽宁` |
+| `proofread.py show` | 查看某卷对应天利/朱/刘源文件、置信度、备注与校对状态 | `make proofread-show UNIT=2024/辽宁` |
 | `proofread.py tokens` | 打印源文件名解析出的年份/地区 token（调试别名） | `python3 tools/proofread.py tokens` |
 
 他源 OCR（复用外部 `ocrpipe`；输出到 `交叉校对/材料/<源>/<年>/…`）：

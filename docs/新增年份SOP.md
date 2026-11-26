@@ -74,9 +74,9 @@
 规范：[`../交叉校对/规范.md`](../交叉校对/规范.md)；总表：[`../交叉校对/交叉校对表.md`](../交叉校对/交叉校对表.md)。
 
 1. `make proofread-plan`（扫描 `ProofreadPDF/` → `交叉校对/mapping.json`，刷新总表）。
-2. `make proofread-show UNIT=<年>/<地区>` 确认朱/刘源文件与映射；映射错改
+2. `make proofread-show UNIT=<年>/<地区>` 确认天利/朱/刘源文件与映射；映射错改
    `交叉校对/overrides.json` 后重跑 `make proofread-plan`。
-3. 以 **朱玉亮 > 刘芳 > 本仓库材料** 为优先级逐题核对题干/选项/答案/公式/单位/配图，
+3. 以 **天利（2025–2026）> 朱玉亮 > 刘芳 > 本仓库材料** 为优先级逐题核对题干/选项/答案/公式/单位/配图，
    修正 LaTeX 后双版编译 + `make -C 试卷/<年>/<地区> check`。
    若该卷有 `ProofreadPDF/HighQualityPic/` 矢量配图：`make hq-match UNIT=<年>/<地区>` →
    看 `交叉校对/hq_compare/` → 在 `hq_figmap/<年>_<地区>.json` 标 `status: "apply"`

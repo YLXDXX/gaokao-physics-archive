@@ -172,3 +172,13 @@ ocrpipe recrop apply   试卷/2026/云南/.recrop.json      # 裁剪回填 figs/
 
 材料处理与校对中发现的问题（缺图、缺详解、公式疑误、题文矛盾、复合图未拆、
 回忆版、理综卷含非物理题、OCR 冲突无法裁定等），一律记入 `异常记录/<年份>.md`。
+
+- **超长填空横线导致的 Ovis 退化**：含连续长横线的页面（如核反应式填空）可能让
+  OvisOCR3 重复生成海量 `\_`，表现为 `finish_reason=length`、`ovis/manifest.json`
+  状态 `partial`、`ocrpipe check` 失败。处理顺序：
+  1. 对该卷按较低 DPI（如 `--dpi 200`）重渲染并 `--force-stage ovis` 重跑
+     ovis→merge→check（实测可消除循环）；
+  2. 仍失败时，用临时配置同时提高 `ovis.max_tokens` 与 `model.max_model_len`
+     再试（模型文本上限 262144）；
+  3. **不得手改** OCR 产物；修复后核对 `merged.md` 与页序，并记入
+     `异常记录/<年份>.md`（类别 `其它`，写明原始 PDF 与所用 DPI）。

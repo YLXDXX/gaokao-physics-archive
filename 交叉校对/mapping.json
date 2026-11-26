@@ -1,7 +1,13 @@
 {
   "version": 1,
-  "generated": "2026-11-24",
+  "generated": "2026-11-25",
   "sources": {
+    "tian": {
+      "root": "ProofreadPDF/2025-2026",
+      "label": "天利38套",
+      "range": "2025–2026",
+      "layout": "split"
+    },
     "zhu": {
       "root": "ProofreadPDF/1978-2024",
       "label": "朱玉亮",
@@ -12637,6 +12643,22 @@
       "region": "1月浙江",
       "repo": "试卷/2025/1月浙江",
       "by_source": {
+        "tian": {
+          "token": "1月浙江",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_浙江_1月.pdf",
+          "files": [
+            "2025/2025_1月浙江.pdf",
+            "2025/2025_1月浙江_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_1月浙江.pdf",
+            "answer": "2025/2025_1月浙江_答案.pdf"
+          },
+          "target_name": "1月浙江"
+        },
         "liu": {
           "token": "1月浙江",
           "kind": "教师版合订",
@@ -12660,6 +12682,22 @@
       "region": "6月浙江",
       "repo": "试卷/2025/6月浙江",
       "by_source": {
+        "tian": {
+          "token": "6月浙江",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_浙江_6月.pdf",
+          "files": [
+            "2025/2025_6月浙江.pdf",
+            "2025/2025_6月浙江_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_6月浙江.pdf",
+            "answer": "2025/2025_6月浙江_答案.pdf"
+          },
+          "target_name": "6月浙江"
+        },
         "liu": {
           "token": "6月浙江",
           "kind": "教师版合订",
@@ -12683,6 +12721,22 @@
       "region": "上海",
       "repo": "试卷/2025/上海",
       "by_source": {
+        "tian": {
+          "token": "上海",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_上海.pdf",
+          "files": [
+            "2025/2025_上海.pdf",
+            "2025/2025_上海_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_上海.pdf",
+            "answer": "2025/2025_上海_答案.pdf"
+          },
+          "target_name": "上海"
+        },
         "liu": {
           "token": "上海",
           "kind": "教师版合订",
@@ -12706,6 +12760,22 @@
       "region": "云南",
       "repo": "试卷/2025/云南",
       "by_source": {
+        "tian": {
+          "token": "云南",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_云南.pdf",
+          "files": [
+            "2025/2025_云南.pdf",
+            "2025/2025_云南_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_云南.pdf",
+            "answer": "2025/2025_云南_答案.pdf"
+          },
+          "target_name": "云南"
+        },
         "liu": {
           "token": "云南",
           "kind": "教师版合订",
@@ -12729,6 +12799,22 @@
       "region": "全国理综",
       "repo": "试卷/2025/全国理综",
       "by_source": {
+        "tian": {
+          "token": "全国",
+          "kind": "试卷+答案",
+          "confidence": "alias",
+          "note": "",
+          "original": "2025/2025_全国.pdf",
+          "files": [
+            "2025/2025_全国理综.pdf",
+            "2025/2025_全国理综_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_全国理综.pdf",
+            "answer": "2025/2025_全国理综_答案.pdf"
+          },
+          "target_name": "全国理综"
+        },
         "liu": {
           "token": "全国",
           "kind": "教师版合订",
@@ -12752,6 +12838,22 @@
       "region": "北京",
       "repo": "试卷/2025/北京",
       "by_source": {
+        "tian": {
+          "token": "北京",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_北京.pdf",
+          "files": [
+            "2025/2025_北京.pdf",
+            "2025/2025_北京_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_北京.pdf",
+            "answer": "2025/2025_北京_答案.pdf"
+          },
+          "target_name": "北京"
+        },
         "liu": {
           "token": "北京",
           "kind": "教师版合订",
@@ -12775,6 +12877,22 @@
       "region": "四川",
       "repo": "试卷/2025/四川",
       "by_source": {
+        "tian": {
+          "token": "四川",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_四川.pdf",
+          "files": [
+            "2025/2025_四川.pdf",
+            "2025/2025_四川_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_四川.pdf",
+            "answer": "2025/2025_四川_答案.pdf"
+          },
+          "target_name": "四川"
+        },
         "liu": {
           "token": "四川",
           "kind": "教师版合订",
@@ -12798,6 +12916,22 @@
       "region": "天津",
       "repo": "试卷/2025/天津",
       "by_source": {
+        "tian": {
+          "token": "天津",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_天津.pdf",
+          "files": [
+            "2025/2025_天津.pdf",
+            "2025/2025_天津_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_天津.pdf",
+            "answer": "2025/2025_天津_答案.pdf"
+          },
+          "target_name": "天津"
+        },
         "liu": {
           "token": "天津",
           "kind": "教师版合订",
@@ -12821,6 +12955,22 @@
       "region": "安徽",
       "repo": "试卷/2025/安徽",
       "by_source": {
+        "tian": {
+          "token": "安徽",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_安徽.pdf",
+          "files": [
+            "2025/2025_安徽.pdf",
+            "2025/2025_安徽_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_安徽.pdf",
+            "answer": "2025/2025_安徽_答案.pdf"
+          },
+          "target_name": "安徽"
+        },
         "liu": {
           "token": "安徽",
           "kind": "教师版合订",
@@ -12844,6 +12994,22 @@
       "region": "山东",
       "repo": "试卷/2025/山东",
       "by_source": {
+        "tian": {
+          "token": "山东",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_山东.pdf",
+          "files": [
+            "2025/2025_山东.pdf",
+            "2025/2025_山东_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_山东.pdf",
+            "answer": "2025/2025_山东_答案.pdf"
+          },
+          "target_name": "山东"
+        },
         "liu": {
           "token": "山东",
           "kind": "教师版合订",
@@ -12867,6 +13033,22 @@
       "region": "广东",
       "repo": "试卷/2025/广东",
       "by_source": {
+        "tian": {
+          "token": "广东",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_广东.pdf",
+          "files": [
+            "2025/2025_广东.pdf",
+            "2025/2025_广东_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_广东.pdf",
+            "answer": "2025/2025_广东_答案.pdf"
+          },
+          "target_name": "广东"
+        },
         "liu": {
           "token": "广东",
           "kind": "教师版合订",
@@ -12890,6 +13072,22 @@
       "region": "广西",
       "repo": "试卷/2025/广西",
       "by_source": {
+        "tian": {
+          "token": "广西",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_广西.pdf",
+          "files": [
+            "2025/2025_广西.pdf",
+            "2025/2025_广西_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_广西.pdf",
+            "answer": "2025/2025_广西_答案.pdf"
+          },
+          "target_name": "广西"
+        },
         "liu": {
           "token": "广西",
           "kind": "教师版合订",
@@ -12913,6 +13111,22 @@
       "region": "江苏",
       "repo": "试卷/2025/江苏",
       "by_source": {
+        "tian": {
+          "token": "江苏",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_江苏.pdf",
+          "files": [
+            "2025/2025_江苏.pdf",
+            "2025/2025_江苏_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_江苏.pdf",
+            "answer": "2025/2025_江苏_答案.pdf"
+          },
+          "target_name": "江苏"
+        },
         "liu": {
           "token": "江苏",
           "kind": "教师版合订",
@@ -12936,6 +13150,22 @@
       "region": "江西",
       "repo": "试卷/2025/江西",
       "by_source": {
+        "tian": {
+          "token": "江西",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_江西.pdf",
+          "files": [
+            "2025/2025_江西.pdf",
+            "2025/2025_江西_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_江西.pdf",
+            "answer": "2025/2025_江西_答案.pdf"
+          },
+          "target_name": "江西"
+        },
         "liu": {
           "token": "江西",
           "kind": "教师版合订",
@@ -12959,6 +13189,22 @@
       "region": "河北",
       "repo": "试卷/2025/河北",
       "by_source": {
+        "tian": {
+          "token": "河北",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_河北.pdf",
+          "files": [
+            "2025/2025_河北.pdf",
+            "2025/2025_河北_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_河北.pdf",
+            "answer": "2025/2025_河北_答案.pdf"
+          },
+          "target_name": "河北"
+        },
         "liu": {
           "token": "河北",
           "kind": "教师版合订",
@@ -12982,6 +13228,22 @@
       "region": "河南",
       "repo": "试卷/2025/河南",
       "by_source": {
+        "tian": {
+          "token": "河南",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_河南.pdf",
+          "files": [
+            "2025/2025_河南.pdf",
+            "2025/2025_河南_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_河南.pdf",
+            "answer": "2025/2025_河南_答案.pdf"
+          },
+          "target_name": "河南"
+        },
         "liu": {
           "token": "河南",
           "kind": "教师版合订",
@@ -13005,6 +13267,22 @@
       "region": "海南",
       "repo": "试卷/2025/海南",
       "by_source": {
+        "tian": {
+          "token": "海南",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_海南.pdf",
+          "files": [
+            "2025/2025_海南.pdf",
+            "2025/2025_海南_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_海南.pdf",
+            "answer": "2025/2025_海南_答案.pdf"
+          },
+          "target_name": "海南"
+        },
         "liu": {
           "token": "海南",
           "kind": "教师版合订",
@@ -13028,6 +13306,22 @@
       "region": "湖北",
       "repo": "试卷/2025/湖北",
       "by_source": {
+        "tian": {
+          "token": "湖北",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_湖北.pdf",
+          "files": [
+            "2025/2025_湖北.pdf",
+            "2025/2025_湖北_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_湖北.pdf",
+            "answer": "2025/2025_湖北_答案.pdf"
+          },
+          "target_name": "湖北"
+        },
         "liu": {
           "token": "湖北",
           "kind": "教师版合订",
@@ -13051,6 +13345,22 @@
       "region": "湖南",
       "repo": "试卷/2025/湖南",
       "by_source": {
+        "tian": {
+          "token": "湖南",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_湖南.pdf",
+          "files": [
+            "2025/2025_湖南.pdf",
+            "2025/2025_湖南_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_湖南.pdf",
+            "answer": "2025/2025_湖南_答案.pdf"
+          },
+          "target_name": "湖南"
+        },
         "liu": {
           "token": "湖南",
           "kind": "教师版合订",
@@ -13074,6 +13384,22 @@
       "region": "甘肃",
       "repo": "试卷/2025/甘肃",
       "by_source": {
+        "tian": {
+          "token": "甘肃",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_甘肃.pdf",
+          "files": [
+            "2025/2025_甘肃.pdf",
+            "2025/2025_甘肃_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_甘肃.pdf",
+            "answer": "2025/2025_甘肃_答案.pdf"
+          },
+          "target_name": "甘肃"
+        },
         "liu": {
           "token": "甘肃",
           "kind": "教师版合订",
@@ -13097,6 +13423,22 @@
       "region": "福建",
       "repo": "试卷/2025/福建",
       "by_source": {
+        "tian": {
+          "token": "福建",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_福建.pdf",
+          "files": [
+            "2025/2025_福建.pdf",
+            "2025/2025_福建_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_福建.pdf",
+            "answer": "2025/2025_福建_答案.pdf"
+          },
+          "target_name": "福建"
+        },
         "liu": {
           "token": "福建",
           "kind": "教师版合订",
@@ -13143,6 +13485,22 @@
       "region": "重庆",
       "repo": "试卷/2025/重庆",
       "by_source": {
+        "tian": {
+          "token": "重庆",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2025/2025_重庆.pdf",
+          "files": [
+            "2025/2025_重庆.pdf",
+            "2025/2025_重庆_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_重庆.pdf",
+            "answer": "2025/2025_重庆_答案.pdf"
+          },
+          "target_name": "重庆"
+        },
         "liu": {
           "token": "重庆",
           "kind": "教师版合订",
@@ -13166,6 +13524,22 @@
       "region": "陕晋宁青",
       "repo": "试卷/2025/陕晋宁青",
       "by_source": {
+        "tian": {
+          "token": "陕晋青宁",
+          "kind": "试卷+答案",
+          "confidence": "alias",
+          "note": "",
+          "original": "2025/2025_陕晋青宁.pdf",
+          "files": [
+            "2025/2025_陕晋宁青.pdf",
+            "2025/2025_陕晋宁青_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_陕晋宁青.pdf",
+            "answer": "2025/2025_陕晋宁青_答案.pdf"
+          },
+          "target_name": "陕晋宁青"
+        },
         "liu": {
           "token": "山陕青宁",
           "kind": "教师版合订",
@@ -13189,6 +13563,22 @@
       "region": "黑吉辽内",
       "repo": "试卷/2025/黑吉辽内",
       "by_source": {
+        "tian": {
+          "token": "辽吉黑蒙",
+          "kind": "试卷+答案",
+          "confidence": "alias",
+          "note": "",
+          "original": "2025/2025_辽吉黑蒙.pdf",
+          "files": [
+            "2025/2025_黑吉辽内.pdf",
+            "2025/2025_黑吉辽内_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2025/2025_黑吉辽内.pdf",
+            "answer": "2025/2025_黑吉辽内_答案.pdf"
+          },
+          "target_name": "黑吉辽内"
+        },
         "liu": {
           "token": "黑吉辽",
           "kind": "教师版合订",
@@ -13212,6 +13602,22 @@
       "region": "1月浙江",
       "repo": "试卷/2026/1月浙江",
       "by_source": {
+        "tian": {
+          "token": "1月浙江",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_浙江_1月.pdf",
+          "files": [
+            "2026/2026_1月浙江.pdf",
+            "2026/2026_1月浙江_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_1月浙江.pdf",
+            "answer": "2026/2026_1月浙江_答案.pdf"
+          },
+          "target_name": "1月浙江"
+        },
         "liu": {
           "token": "1月浙江",
           "kind": "教师版合订",
@@ -13235,6 +13641,22 @@
       "region": "6月浙江",
       "repo": "试卷/2026/6月浙江",
       "by_source": {
+        "tian": {
+          "token": "6月浙江",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_浙江_6月.pdf",
+          "files": [
+            "2026/2026_6月浙江.pdf",
+            "2026/2026_6月浙江_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_6月浙江.pdf",
+            "answer": "2026/2026_6月浙江_答案.pdf"
+          },
+          "target_name": "6月浙江"
+        },
         "liu": {
           "token": "6月浙江",
           "kind": "教师版合订",
@@ -13258,6 +13680,22 @@
       "region": "上海",
       "repo": "试卷/2026/上海",
       "by_source": {
+        "tian": {
+          "token": "上海",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_上海.pdf",
+          "files": [
+            "2026/2026_上海.pdf",
+            "2026/2026_上海_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_上海.pdf",
+            "answer": "2026/2026_上海_答案.pdf"
+          },
+          "target_name": "上海"
+        },
         "liu": {
           "token": "上海",
           "kind": "教师版合订",
@@ -13281,6 +13719,22 @@
       "region": "云南",
       "repo": "试卷/2026/云南",
       "by_source": {
+        "tian": {
+          "token": "云南",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_云南.pdf",
+          "files": [
+            "2026/2026_云南.pdf",
+            "2026/2026_云南_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_云南.pdf",
+            "answer": "2026/2026_云南_答案.pdf"
+          },
+          "target_name": "云南"
+        },
         "liu": {
           "token": "云南",
           "kind": "教师版合订",
@@ -13304,6 +13758,22 @@
       "region": "全国理综",
       "repo": "试卷/2026/全国理综",
       "by_source": {
+        "tian": {
+          "token": "全国",
+          "kind": "试卷+答案",
+          "confidence": "alias",
+          "note": "",
+          "original": "2026/2026_全国.pdf",
+          "files": [
+            "2026/2026_全国理综.pdf",
+            "2026/2026_全国理综_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_全国理综.pdf",
+            "answer": "2026/2026_全国理综_答案.pdf"
+          },
+          "target_name": "全国理综"
+        },
         "liu": {
           "token": "全国",
           "kind": "教师版合订",
@@ -13327,6 +13797,22 @@
       "region": "北京",
       "repo": "试卷/2026/北京",
       "by_source": {
+        "tian": {
+          "token": "北京",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_北京.pdf",
+          "files": [
+            "2026/2026_北京.pdf",
+            "2026/2026_北京_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_北京.pdf",
+            "answer": "2026/2026_北京_答案.pdf"
+          },
+          "target_name": "北京"
+        },
         "liu": {
           "token": "北京",
           "kind": "教师版合订",
@@ -13350,6 +13836,22 @@
       "region": "四川",
       "repo": "试卷/2026/四川",
       "by_source": {
+        "tian": {
+          "token": "四川",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_四川.pdf",
+          "files": [
+            "2026/2026_四川.pdf",
+            "2026/2026_四川_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_四川.pdf",
+            "answer": "2026/2026_四川_答案.pdf"
+          },
+          "target_name": "四川"
+        },
         "liu": {
           "token": "四川",
           "kind": "教师版合订",
@@ -13396,6 +13898,22 @@
       "region": "山东",
       "repo": "试卷/2026/山东",
       "by_source": {
+        "tian": {
+          "token": "山东",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_山东.pdf",
+          "files": [
+            "2026/2026_山东.pdf",
+            "2026/2026_山东_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_山东.pdf",
+            "answer": "2026/2026_山东_答案.pdf"
+          },
+          "target_name": "山东"
+        },
         "liu": {
           "token": "山东",
           "kind": "教师版合订",
@@ -13419,6 +13937,22 @@
       "region": "广东",
       "repo": "试卷/2026/广东",
       "by_source": {
+        "tian": {
+          "token": "广东",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_广东.pdf",
+          "files": [
+            "2026/2026_广东.pdf",
+            "2026/2026_广东_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_广东.pdf",
+            "answer": "2026/2026_广东_答案.pdf"
+          },
+          "target_name": "广东"
+        },
         "liu": {
           "token": "广东",
           "kind": "教师版合订",
@@ -13442,6 +13976,22 @@
       "region": "广西",
       "repo": "试卷/2026/广西",
       "by_source": {
+        "tian": {
+          "token": "广西",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_广西.pdf",
+          "files": [
+            "2026/2026_广西.pdf",
+            "2026/2026_广西_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_广西.pdf",
+            "answer": "2026/2026_广西_答案.pdf"
+          },
+          "target_name": "广西"
+        },
         "liu": {
           "token": "广西",
           "kind": "教师版合订",
@@ -13465,6 +14015,22 @@
       "region": "江苏",
       "repo": "试卷/2026/江苏",
       "by_source": {
+        "tian": {
+          "token": "江苏",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_江苏.pdf",
+          "files": [
+            "2026/2026_江苏.pdf",
+            "2026/2026_江苏_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_江苏.pdf",
+            "answer": "2026/2026_江苏_答案.pdf"
+          },
+          "target_name": "江苏"
+        },
         "liu": {
           "token": "江苏",
           "kind": "教师版合订",
@@ -13488,6 +14054,22 @@
       "region": "江西",
       "repo": "试卷/2026/江西",
       "by_source": {
+        "tian": {
+          "token": "江西",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_江西.pdf",
+          "files": [
+            "2026/2026_江西.pdf",
+            "2026/2026_江西_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_江西.pdf",
+            "answer": "2026/2026_江西_答案.pdf"
+          },
+          "target_name": "江西"
+        },
         "liu": {
           "token": "江西",
           "kind": "教师版合订",
@@ -13511,6 +14093,22 @@
       "region": "河北",
       "repo": "试卷/2026/河北",
       "by_source": {
+        "tian": {
+          "token": "河北",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_河北.pdf",
+          "files": [
+            "2026/2026_河北.pdf",
+            "2026/2026_河北_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_河北.pdf",
+            "answer": "2026/2026_河北_答案.pdf"
+          },
+          "target_name": "河北"
+        },
         "liu": {
           "token": "河北",
           "kind": "教师版合订",
@@ -13534,6 +14132,22 @@
       "region": "河南",
       "repo": "试卷/2026/河南",
       "by_source": {
+        "tian": {
+          "token": "河南",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_河南.pdf",
+          "files": [
+            "2026/2026_河南.pdf",
+            "2026/2026_河南_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_河南.pdf",
+            "answer": "2026/2026_河南_答案.pdf"
+          },
+          "target_name": "河南"
+        },
         "liu": {
           "token": "河南",
           "kind": "教师版合订",
@@ -13557,6 +14171,22 @@
       "region": "海南",
       "repo": "试卷/2026/海南",
       "by_source": {
+        "tian": {
+          "token": "海南",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_海南.pdf",
+          "files": [
+            "2026/2026_海南.pdf",
+            "2026/2026_海南_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_海南.pdf",
+            "answer": "2026/2026_海南_答案.pdf"
+          },
+          "target_name": "海南"
+        },
         "liu": {
           "token": "海南",
           "kind": "教师版合订",
@@ -13580,6 +14210,22 @@
       "region": "湖北",
       "repo": "试卷/2026/湖北",
       "by_source": {
+        "tian": {
+          "token": "湖北",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_湖北.pdf",
+          "files": [
+            "2026/2026_湖北.pdf",
+            "2026/2026_湖北_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_湖北.pdf",
+            "answer": "2026/2026_湖北_答案.pdf"
+          },
+          "target_name": "湖北"
+        },
         "liu": {
           "token": "湖北",
           "kind": "教师版合订",
@@ -13603,6 +14249,22 @@
       "region": "湖南",
       "repo": "试卷/2026/湖南",
       "by_source": {
+        "tian": {
+          "token": "湖南",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_湖南.pdf",
+          "files": [
+            "2026/2026_湖南.pdf",
+            "2026/2026_湖南_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_湖南.pdf",
+            "answer": "2026/2026_湖南_答案.pdf"
+          },
+          "target_name": "湖南"
+        },
         "liu": {
           "token": "湖南",
           "kind": "教师版合订",
@@ -13626,6 +14288,22 @@
       "region": "甘肃",
       "repo": "试卷/2026/甘肃",
       "by_source": {
+        "tian": {
+          "token": "甘肃",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_甘肃.pdf",
+          "files": [
+            "2026/2026_甘肃.pdf",
+            "2026/2026_甘肃_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_甘肃.pdf",
+            "answer": "2026/2026_甘肃_答案.pdf"
+          },
+          "target_name": "甘肃"
+        },
         "liu": {
           "token": "甘肃",
           "kind": "教师版合订",
@@ -13649,6 +14327,22 @@
       "region": "福建",
       "repo": "试卷/2026/福建",
       "by_source": {
+        "tian": {
+          "token": "福建",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_福建.pdf",
+          "files": [
+            "2026/2026_福建.pdf",
+            "2026/2026_福建_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_福建.pdf",
+            "answer": "2026/2026_福建_答案.pdf"
+          },
+          "target_name": "福建"
+        },
         "liu": {
           "token": "福建",
           "kind": "教师版合订",
@@ -13672,6 +14366,22 @@
       "region": "贵州",
       "repo": "试卷/2026/贵州",
       "by_source": {
+        "tian": {
+          "token": "贵州",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_贵州.pdf",
+          "files": [
+            "2026/2026_贵州.pdf",
+            "2026/2026_贵州_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_贵州.pdf",
+            "answer": "2026/2026_贵州_答案.pdf"
+          },
+          "target_name": "贵州"
+        },
         "liu": {
           "token": "贵州",
           "kind": "教师版合订",
@@ -13695,6 +14405,22 @@
       "region": "重庆",
       "repo": "试卷/2026/重庆",
       "by_source": {
+        "tian": {
+          "token": "重庆",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_重庆.pdf",
+          "files": [
+            "2026/2026_重庆.pdf",
+            "2026/2026_重庆_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_重庆.pdf",
+            "answer": "2026/2026_重庆_答案.pdf"
+          },
+          "target_name": "重庆"
+        },
         "liu": {
           "token": "重庆",
           "kind": "教师版合订",
@@ -13718,6 +14444,22 @@
       "region": "陕晋青宁",
       "repo": "试卷/2026/陕晋青宁",
       "by_source": {
+        "tian": {
+          "token": "陕晋青宁",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2026/2026_陕晋青宁.pdf",
+          "files": [
+            "2026/2026_陕晋青宁.pdf",
+            "2026/2026_陕晋青宁_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_陕晋青宁.pdf",
+            "answer": "2026/2026_陕晋青宁_答案.pdf"
+          },
+          "target_name": "陕晋青宁"
+        },
         "liu": {
           "token": "陕晋宁青",
           "kind": "教师版合订",
@@ -13741,6 +14483,22 @@
       "region": "黑吉辽",
       "repo": "试卷/2026/黑吉辽",
       "by_source": {
+        "tian": {
+          "token": "辽吉黑蒙",
+          "kind": "试卷+答案",
+          "confidence": "alias",
+          "note": "",
+          "original": "2026/2026_辽吉黑蒙.pdf",
+          "files": [
+            "2026/2026_黑吉辽.pdf",
+            "2026/2026_黑吉辽_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2026/2026_黑吉辽.pdf",
+            "answer": "2026/2026_黑吉辽_答案.pdf"
+          },
+          "target_name": "黑吉辽"
+        },
         "liu": {
           "token": "黑吉辽蒙",
           "kind": "教师版合订",

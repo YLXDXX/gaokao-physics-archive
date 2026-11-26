@@ -73,6 +73,7 @@ class TestNamingAndTable(unittest.TestCase):
         self.assertEqual(p._available({}), "无")
         self.assertEqual(p._available({"zhu": {}}), "朱")
         self.assertEqual(p._available({"zhu": {}, "liu": {}}), "朱+刘")
+        self.assertEqual(p._available({"tian": {}, "zhu": {}, "liu": {}}), "天+朱+刘")
 
 
 if __name__ == "__main__":

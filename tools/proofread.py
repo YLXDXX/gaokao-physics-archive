@@ -5,10 +5,12 @@
 不改动任何 `试卷/` 下的 LaTeX 内容。
 
 数据源（均在本地、Git 忽略的 `ProofreadPDF/`，见 `.gitignore`）：
+- `tian`：天利 38 套，2025–2026，试卷与答案分离（`<年>_<地区>.pdf` +
+  `<年>_<地区>_答案.pdf`），出版物源，部分为矢量配图，准确率最高。
 - `zhu`：朱玉亮《1978 年至今 高考物理真题分类全汇编》，1978–2024，
   试卷与答案分离（`<年>_<地区>.pdf` + `<年>_<地区>_答案.pdf`），出版物矢量源。
 - `liu`：刘芳项目，1978–2026，教师版合订（`<年>_<地区>.pdf`），含简略答案、无详解。
-冲突裁定优先级：朱玉亮 > 刘芳 > 本仓库现有材料；详见 `交叉校对/规范.md`。
+冲突裁定优先级：天利 > 朱玉亮 > 刘芳 > 本仓库现有材料；详见 `交叉校对/规范.md`。
 
 命令：
     python3 tools/proofread.py plan               # 扫描 → 交叉校对/mapping.json
@@ -41,6 +43,12 @@ PAPERS = ROOT / "试卷"
 SOURCE_ROOT = ROOT / "ProofreadPDF"
 
 SOURCES = {
+    "tian": {
+        "root": "ProofreadPDF/2025-2026",
+        "label": "天利38套",
+        "range": "2025–2026",
+        "layout": "split",  # 试卷、答案分离
+    },
     "zhu": {
         "root": "ProofreadPDF/1978-2024",
         "label": "朱玉亮",
@@ -570,6 +578,8 @@ def _source_cell(entry: dict | None) -> str:
 
 def _available(by_source: dict) -> str:
     s = []
+    if "tian" in by_source:
+        s.append("天")
     if "zhu" in by_source:
         s.append("朱")
     if "liu" in by_source:
@@ -578,7 +588,7 @@ def _available(by_source: dict) -> str:
 
 
 def _collapse_label_notes(note: str) -> str:
-    """把“朱玉亮：X；刘芳：X”合并为“朱玉亮/刘芳：X”。"""
+    """把“天利38套：X；朱玉亮：X；刘芳：X”合并为“天利38套/朱玉亮/刘芳：X”。"""
     parts = note.split("；") if note else []
     labels = {v["label"] for v in SOURCES.values()}
     grouped: dict[str, list[str]] = {}
@@ -611,9 +621,10 @@ def _row_cells(r: dict, sets_status: dict) -> str:
     if not by and st.get("status") not in STATUS_VALUES:
         status_txt = "无源"
     return (
-        "| {year} | {region} | {zhu} | {liu} | {avail} | {status} | {date} | {note} |".format(
+        "| {year} | {region} | {tian} | {zhu} | {liu} | {avail} | {status} | {date} | {note} |".format(
             year=r["year"],
             region=r["region"],
+            tian=_source_cell(by.get("tian")),
             zhu=_source_cell(by.get("zhu")),
             liu=_source_cell(by.get("liu")),
             avail=_available(by),
@@ -652,7 +663,7 @@ def render_table(mapping: dict) -> str:
     lines.append(f"- 已完成交叉校对：{done} 套（逐卷状态见下表与 `status.json`）")
     uniq_source_only = len({(s["year"], s["token"]) for s in source_only})
     lines.append(f"- 他源有、本仓库无：{uniq_source_only} 套源卷（{len(source_only)} 条来源记录；见第三节）")
-    lines.append("- 源冲突裁定：朱玉亮（1978–2024，出版物矢量，优）＞ 刘芳（1978–2026，教师版）＞ 本仓库材料")
+    lines.append("- 源冲突裁定：天利38套（2025–2026，出版物，最优）＞ 朱玉亮（1978–2024，出版物矢量）＞ 刘芳（1978–2026，教师版）＞ 本仓库材料")
     lines.append("")
     lines.append("## 一、逐卷交叉校对表")
     lines.append("")
@@ -665,7 +676,7 @@ def render_table(mapping: dict) -> str:
         )
         lines.append(f"### {year} 年（{len(yrows)} 套，有源 {ysrc}，已完成 {ydone}）")
         lines.append("")
-        lines.append("| 年份 | 地区 | 朱玉亮源 | 刘芳源 | 可用源 | 校对状态 | 最后更新 | 备注 |")
+        lines.append("| 年份 | 地区 | 天利源 | 朱玉亮源 | 刘芳源 | 可用源 | 校对状态 | 最后更新 | 备注 |")
         lines.append("| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |")
         for r in yrows:
             lines.append(_row_cells(r, sets_status))
@@ -680,7 +691,7 @@ def render_table(mapping: dict) -> str:
         lines.append("| 年份 | 地区 | 说明 |")
         lines.append("| :--- | :--- | :--- |")
         for r in no_src:
-            lines.append(f"| {r['year']} | {r['region']} | 朱、刘两源均无对应试卷 |")
+            lines.append(f"| {r['year']} | {r['region']} | 天利、朱、刘三源均无对应试卷 |")
     lines.append("")
 
     lines.append("## 三、他源有、本仓库无对应卷")
@@ -719,7 +730,7 @@ def render_table(mapping: dict) -> str:
     lines.append("- `校对中`：正在逐题核对题目/答案/解析/公式/配图。")
     lines.append("- `已完成`：该卷已完成交叉校对并记录结论（异常见 `异常记录/<年>.md`）。")
     lines.append("- `待人工核验`：存在疑点或源映射不确定，需人工复核。")
-    lines.append("- `无源`：两份他源均无对应试卷，无法交叉校对。")
+    lines.append("- `无源`：三份他源均无对应试卷，无法交叉校对。")
     lines.append("")
     lines.append("> 更新方式：编辑 `交叉校对/status.json` 的 `sets.\"<年>/<地区>\"`，")
     lines.append("> 至少填写 `status`、`date`、`note`（结论/用了哪份源/发现的问题），再执行 `make proofread-table`。")

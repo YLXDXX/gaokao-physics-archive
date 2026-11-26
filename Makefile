@@ -315,12 +315,16 @@ proofread-show:
 #   make proofread-ocr-plan
 #   make proofread-ocr-batch ARGS="--only 2024/2024_辽宁"
 proofread-ocr-plan:
+	@$(OCRPIPE) batch -c ocr_pipeline.json --source-root ProofreadPDF/2025-2026 \
+	  --output-root 交叉校对/材料/2025-2026 --dry-run $(ARGS)
 	@$(OCRPIPE) batch -c ocr_pipeline.json --source-root ProofreadPDF/1978-2024 \
 	  --output-root 交叉校对/材料/1978-2024 --dry-run $(ARGS)
 	@$(OCRPIPE) batch -c ocr_pipeline.json --source-root ProofreadPDF/1978-2026 \
 	  --output-root 交叉校对/材料/1978-2026 --dry-run $(ARGS)
 
 proofread-ocr-batch:
+	@$(OCRPIPE) batch -c ocr_pipeline.json --source-root ProofreadPDF/2025-2026 \
+	  --output-root 交叉校对/材料/2025-2026 --auto-serve $(ARGS)
 	@$(OCRPIPE) batch -c ocr_pipeline.json --source-root ProofreadPDF/1978-2024 \
 	  --output-root 交叉校对/材料/1978-2024 --auto-serve $(ARGS)
 	@$(OCRPIPE) batch -c ocr_pipeline.json --source-root ProofreadPDF/1978-2026 \
