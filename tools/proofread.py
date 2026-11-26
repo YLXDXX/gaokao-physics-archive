@@ -323,8 +323,9 @@ def build_mapping() -> dict:
                 "files": group["files"],
                 "normalized": {},
             }
-            # 明确忽略的源文件
-            if token in set(overrides.get("ignore", [])):
+            # 明确忽略的源文件；支持全局 token 与按年 "年/token"
+            ignored = set(overrides.get("ignore", []))
+            if token in ignored or f"{year}/{token}" in ignored:
                 continue
 
             # 规范化命名：已确认（exact/alias/manual）用我们的地区名；

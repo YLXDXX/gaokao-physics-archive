@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated": "2026-11-25",
+  "generated": "2026-11-26",
   "sources": {
     "tian": {
       "root": "ProofreadPDF/2025-2026",
@@ -1787,10 +1787,24 @@
             "answer": "2003/2003_全国理综旧课程_答案.pdf"
           },
           "target_name": "全国理综旧课程"
+        },
+        "liu": {
+          "token": "全国旧课程",
+          "kind": "教师版合订",
+          "confidence": "alias",
+          "note": "2026-11-26 复核：刘源“全国旧课程卷”为旧课程理综物理部分，首题/题号与本仓库 2003/全国理综旧课程 一致（同套）",
+          "original": "2003/40号 2003年全国旧课程卷物理  教师版.pdf",
+          "files": [
+            "2003/2003_全国旧课程.pdf"
+          ],
+          "normalized": {
+            "paper": "2003/2003_全国理综旧课程.pdf"
+          },
+          "target_name": "全国理综旧课程"
         }
       },
       "confidence": "alias",
-      "note": ""
+      "note": "刘芳：2026-11-26 复核：刘源“全国旧课程卷”为旧课程理综物理部分，首题/题号与本仓库 2003/全国理综旧课程 一致（同套）"
     },
     {
       "year": 2003,
@@ -3637,6 +3651,45 @@
     },
     {
       "year": 2008,
+      "region": "四川延考",
+      "repo": "试卷/2008/四川延考",
+      "by_source": {
+        "zhu": {
+          "token": "四川延考",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2008/2008年四川延考卷物理.pdf",
+          "files": [
+            "2008/2008_四川延考.pdf",
+            "2008/2008_四川延考_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2008/2008_四川延考.pdf",
+            "answer": "2008/2008_四川延考_答案.pdf"
+          },
+          "target_name": "四川延考"
+        },
+        "liu": {
+          "token": "四川延考",
+          "kind": "教师版合订",
+          "confidence": "exact",
+          "note": "",
+          "original": "2008/86号2008年四川延考卷(教师版).pdf",
+          "files": [
+            "2008/2008_四川延考.pdf"
+          ],
+          "normalized": {
+            "paper": "2008/2008_四川延考.pdf"
+          },
+          "target_name": "四川延考"
+        }
+      },
+      "confidence": "exact",
+      "note": ""
+    },
+    {
+      "year": 2008,
       "region": "四川理综",
       "repo": "试卷/2008/四川理综",
       "by_source": {
@@ -4201,8 +4254,39 @@
       "year": 2009,
       "region": "宁夏理综",
       "repo": "试卷/2009/宁夏理综",
-      "by_source": {},
-      "confidence": "repo-only",
+      "by_source": {
+        "zhu": {
+          "token": "辽宁",
+          "kind": "试卷+答案",
+          "confidence": "alias",
+          "note": "",
+          "original": "2009/2009年辽宁卷物理.pdf",
+          "files": [
+            "2009/2009_辽宁.pdf",
+            "2009/2009_辽宁_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2009/2009_宁夏理综.pdf",
+            "answer": "2009/2009_宁夏理综_答案.pdf"
+          },
+          "target_name": "宁夏理综"
+        },
+        "liu": {
+          "token": "辽宁",
+          "kind": "教师版合订",
+          "confidence": "alias",
+          "note": "",
+          "original": "2009/110号2009年辽宁卷教师版.pdf",
+          "files": [
+            "2009/2009_辽宁.pdf"
+          ],
+          "normalized": {
+            "paper": "2009/2009_宁夏理综.pdf"
+          },
+          "target_name": "宁夏理综"
+        }
+      },
+      "confidence": "alias",
       "note": ""
     },
     {
@@ -7378,6 +7462,45 @@
         }
       },
       "confidence": "alias",
+      "note": ""
+    },
+    {
+      "year": 2015,
+      "region": "10月浙江",
+      "repo": "试卷/2015/10月浙江",
+      "by_source": {
+        "zhu": {
+          "token": "10月浙江",
+          "kind": "试卷+答案",
+          "confidence": "exact",
+          "note": "",
+          "original": "2015/2015年浙江10月卷物理.pdf",
+          "files": [
+            "2015/2015_10月浙江.pdf",
+            "2015/2015_10月浙江_答案.pdf"
+          ],
+          "normalized": {
+            "paper": "2015/2015_10月浙江.pdf",
+            "answer": "2015/2015_10月浙江_答案.pdf"
+          },
+          "target_name": "10月浙江"
+        },
+        "liu": {
+          "token": "10月浙江",
+          "kind": "教师版合订",
+          "confidence": "exact",
+          "note": "",
+          "original": "2015/192号2015年浙江10月卷物理（教师版）.pdf",
+          "files": [
+            "2015/2015_10月浙江.pdf"
+          ],
+          "normalized": {
+            "paper": "2015/2015_10月浙江.pdf"
+          },
+          "target_name": "10月浙江"
+        }
+      },
+      "confidence": "exact",
       "note": ""
     },
     {
@@ -14518,164 +14641,5 @@
       "note": ""
     }
   ],
-  "source_only": [
-    {
-      "year": 2002,
-      "source": "liu",
-      "token": "辽宁",
-      "original": "2002/34号2002年辽宁卷物理（教师版）.pdf",
-      "files": [
-        "2002/2002_辽宁.pdf"
-      ],
-      "normalized_map": {
-        "paper": "2002/2002_辽宁.pdf"
-      },
-      "normalized": "2002/2002_辽宁.pdf",
-      "kind": "教师版合订",
-      "note": "本仓库无对应 LaTeX 卷"
-    },
-    {
-      "year": 2002,
-      "source": "zhu",
-      "token": "辽宁",
-      "original": "2002/2002年辽宁卷物理.pdf",
-      "files": [
-        "2002/2002_辽宁.pdf",
-        "2002/2002_辽宁_答案.pdf"
-      ],
-      "normalized_map": {
-        "paper": "2002/2002_辽宁.pdf",
-        "answer": "2002/2002_辽宁_答案.pdf"
-      },
-      "normalized": "2002/2002_辽宁.pdf",
-      "kind": "试卷+答案",
-      "note": "本仓库无对应 LaTeX 卷"
-    },
-    {
-      "year": 2003,
-      "source": "liu",
-      "token": "全国旧课程",
-      "original": "2003/40号 2003年全国旧课程卷物理  教师版.pdf",
-      "files": [
-        "2003/2003_全国旧课程.pdf"
-      ],
-      "normalized_map": {
-        "paper": "2003/2003_全国旧课程.pdf"
-      },
-      "normalized": "2003/2003_全国旧课程.pdf",
-      "kind": "教师版合订",
-      "note": "2003 全国旧课程物理单科卷，本仓库未收（本仓库仅旧课程理综节选）"
-    },
-    {
-      "year": 2008,
-      "source": "liu",
-      "token": "四川延考",
-      "original": "2008/86号2008年四川延考卷(教师版).pdf",
-      "files": [
-        "2008/2008_四川延考.pdf"
-      ],
-      "normalized_map": {
-        "paper": "2008/2008_四川延考.pdf"
-      },
-      "normalized": "2008/2008_四川延考.pdf",
-      "kind": "教师版合订",
-      "note": "本仓库无对应 LaTeX 卷"
-    },
-    {
-      "year": 2008,
-      "source": "zhu",
-      "token": "四川延考",
-      "original": "2008/2008年四川延考卷物理.pdf",
-      "files": [
-        "2008/2008_四川延考.pdf",
-        "2008/2008_四川延考_答案.pdf"
-      ],
-      "normalized_map": {
-        "paper": "2008/2008_四川延考.pdf",
-        "answer": "2008/2008_四川延考_答案.pdf"
-      },
-      "normalized": "2008/2008_四川延考.pdf",
-      "kind": "试卷+答案",
-      "note": "本仓库无对应 LaTeX 卷"
-    },
-    {
-      "year": 2009,
-      "source": "liu",
-      "token": "辽宁",
-      "original": "2009/110号2009年辽宁卷教师版.pdf",
-      "files": [
-        "2009/2009_辽宁.pdf"
-      ],
-      "normalized_map": {
-        "paper": "2009/2009_辽宁.pdf"
-      },
-      "normalized": "2009/2009_辽宁.pdf",
-      "kind": "教师版合订",
-      "note": "本仓库无对应 LaTeX 卷"
-    },
-    {
-      "year": 2009,
-      "source": "zhu",
-      "token": "辽宁",
-      "original": "2009/2009年辽宁卷物理.pdf",
-      "files": [
-        "2009/2009_辽宁.pdf",
-        "2009/2009_辽宁_答案.pdf"
-      ],
-      "normalized_map": {
-        "paper": "2009/2009_辽宁.pdf",
-        "answer": "2009/2009_辽宁_答案.pdf"
-      },
-      "normalized": "2009/2009_辽宁.pdf",
-      "kind": "试卷+答案",
-      "note": "本仓库无对应 LaTeX 卷"
-    },
-    {
-      "year": 2015,
-      "source": "liu",
-      "token": "10月浙江",
-      "original": "2015/192号2015年浙江10月卷物理（教师版）.pdf",
-      "files": [
-        "2015/2015_10月浙江.pdf"
-      ],
-      "normalized_map": {
-        "paper": "2015/2015_10月浙江.pdf"
-      },
-      "normalized": "2015/2015_10月浙江.pdf",
-      "kind": "教师版合订",
-      "note": "本仓库无对应 LaTeX 卷"
-    },
-    {
-      "year": 2015,
-      "source": "zhu",
-      "token": "10月浙江",
-      "original": "2015/2015年浙江10月卷物理.pdf",
-      "files": [
-        "2015/2015_10月浙江.pdf",
-        "2015/2015_10月浙江_答案.pdf"
-      ],
-      "normalized_map": {
-        "paper": "2015/2015_10月浙江.pdf",
-        "answer": "2015/2015_10月浙江_答案.pdf"
-      },
-      "normalized": "2015/2015_10月浙江.pdf",
-      "kind": "试卷+答案",
-      "note": "本仓库无对应 LaTeX 卷"
-    },
-    {
-      "year": 2025,
-      "source": "liu",
-      "token": "西藏新疆",
-      "original": "2025/339号2025年西藏、新疆卷（教师版）二校.pdf",
-      "files": [
-        "2025/2025_西藏新疆.pdf"
-      ],
-      "normalized_map": {
-        "paper": "2025/2025_西藏新疆.pdf"
-      },
-      "normalized": "2025/2025_西藏新疆.pdf",
-      "kind": "教师版合订",
-      "note": "本仓库无对应 LaTeX 卷"
-    }
-  ]
+  "source_only": []
 }

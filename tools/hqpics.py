@@ -191,8 +191,11 @@ def build_mapping() -> dict:
             "note": "",
         }
     source_only = []
+    hq_ignore = set(overrides.get("hq_ignore", []))
     for item in scan_hq():
         year, token = item["year"], item["token"]
+        if token in hq_ignore or f"{year}/{token}" in hq_ignore:
+            continue
         region, conf, note = pr.match_token(token, year, regions.get(year, set()), overrides)
         norm = _norm_folder(year, region, token, item["answer"], conf)
         src_key, src_label = _hq_source(year)

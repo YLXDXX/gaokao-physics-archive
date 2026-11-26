@@ -43,6 +43,9 @@
 | `proofread.py show` | 查看某卷对应天利/朱/刘源文件、置信度、备注与校对状态 | `make proofread-show UNIT=2024/辽宁` |
 | `proofread.py tokens` | 打印源文件名解析出的年份/地区 token（调试别名） | `python3 tools/proofread.py tokens` |
 
+`交叉校对/overrides.json` 的 `ignore` 支持全局 token 或按年 `"年/token"`，用于排除同套异名重复源；
+`hq_ignore` 同理用于排除重复的 HighQualityPic 文件夹（仅影响 HQ 映射）。修改后跑 `make proofread-plan` / `make hq-plan`。
+
 他源 OCR（复用外部 `ocrpipe`；输出到 `交叉校对/材料/<源>/<年>/…`）：
 
 ```bash

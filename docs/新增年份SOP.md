@@ -13,6 +13,11 @@
    > 默认元数据 `%% number` **保留平台原题号**（显示序号由 `enumerate` 自动生成）。
    > 若确需重编号，用 `--renumber`：会写卷级 `%% sourceNumbers`，`check_meta.py` /
    > `check_review.py` 会按该映射回平台原题号比对。
+   >
+   > **缺卷例外**：无平台 JSON 的缺卷默认不建；仅经维护者明确授权时，可按
+   > `异常记录/2008.md`、`2015.md` 的方式以高优先级源 PDF + OCR 生成 JSON，
+   > 并在 JSON 顶层 `_sourceNote`、`异常记录/<年>.md`、`进度记录.md` 标注“非平台数据”，
+   > 完成答案/图片/双版编译/`make check` 验收。不得把该例外当作默认流程。
 2. **材料处理**（有 PDF 时）：`make material PDF=OriginPDF/<年>/<年_地区>.pdf OUT=材料处理/<年>/<地区>`；
    无 PDF 时登记到 `异常记录.md` 的“源文档缺失清单”，仅依 JSON 制作。
 3. **逐题校对**：以 `merged.md` / JSON / 原 PDF 为准，核对题干、数据、单位、上下标、公式、选项与答案、
