@@ -17,6 +17,16 @@ class TestNaming(unittest.TestCase):
                          "1978_全国_Fm5.pdf")
         self.assertEqual(h._norm_file("2010_四川理综", "2010年四川卷物理_p0_Fm11_2.pdf"),
                          "2010_四川理综_Fm11_2.pdf")
+        # 天利按页编号：保留页号，避免跨页重名
+        self.assertEqual(h._norm_file("2025_1月浙江", "2025_1月浙江_p02_f01.pdf"),
+                         "2025_1月浙江_p02_Fm01.pdf")
+        self.assertEqual(h._norm_file("2026_全国理综", "2026_全国理综_p10_f12.pdf"),
+                         "2026_全国理综_p10_Fm12.pdf")
+
+    def test_hq_source(self):
+        self.assertEqual(h._hq_source(2024), ("zhu", "朱玉亮"))
+        self.assertEqual(h._hq_source(2025), ("tian", "天利38套"))
+        self.assertEqual(h._hq_source(2026), ("tian", "天利38套"))
 
     def test_fig_kind(self):
         self.assertEqual(h._fig_kind("07_an"), "answer")

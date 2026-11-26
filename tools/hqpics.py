@@ -2,11 +2,17 @@
 """tools/hqpics.py —— 高质量矢量配图（ProofreadPDF/HighQualityPic）辅助工具
 
 `ProofreadPDF/HighQualityPic/<年>/<源卷文件夹>/<源卷>_p<页>_Fm<图号>.pdf`
-是按朱玉亮源试卷逐图导出的**矢量 PDF**（试题图与答案图分文件夹）。本脚本：
+是逐图导出的**矢量 PDF**（试题图与答案图分文件夹），来源包括：
+
+- 朱玉亮 1978–2024：`Fm<图号>` 为全卷唯一，规范名 `<年>_<地区>_FmN.pdf`；
+- 天利 2025–2026：`_p<页>_f<图号>` 按页编号，规范名保留页号
+  `<年>_<地区>_p<页>_Fm<图号>.pdf`（避免跨页重名）。
+
+本脚本：
 
 - `plan`：扫描 → 按本仓库地区名匹配 → `交叉校对/hq_mapping.json` + `HighQualityPic表.md`
 - `rename [--apply|--revert]`：文件夹/文件就地规范化（`<年>_<地区>` / `_答案`；
-  文件 `<年>_<地区>_FmN.pdf`），原名称写入 `hq_rename_manifest.json`
+  文件按上述来源规则），原名称写入 `hq_rename_manifest.json`
 - `match UNIT`：渲染 HQ 图与现有 `figs/`，一对一匹配，生成可编辑的
   `交叉校对/hq_figmap/<年>_<地区>.json` 与对照图（默认 `交叉校对/hq_compare/`，本地忽略）
 - `apply UNIT [--write]`：按 figmap 中 `status: "apply"` 的条目替换配图：
@@ -78,6 +84,13 @@ def pdf_size_cm(path: Path) -> tuple[float, float]:
         doc.close()
 
 
+def _hq_source(year: int) -> tuple[str, str]:
+    """HQ 矢量图来源：(source_key, label)。2025–2026 为天利，其余为朱玉亮。"""
+    if year >= 2025:
+        return "tian", pr.SOURCES["tian"]["label"]
+    return "zhu", pr.SOURCES["zhu"]["label"]
+
+
 def _norm_folder(year: int, region: str | None, token: str, answer: bool,
                  conf: str) -> str:
     name = region if (region and conf in ("exact", "alias", "manual")) else token
@@ -86,8 +99,15 @@ def _norm_folder(year: int, region: str | None, token: str, answer: bool,
 
 
 def _norm_file(folder: str, original: str) -> str:
-    m = re.search(r"Fm\d+(?:_\d+)*", original, re.I)
-    suffix = m.group(0) if m else re.sub(r"[^\w\u4e00-\u9fa5-]+", "_", Path(original).stem)
+    stem = Path(original).stem
+    # 天利 2025–2026：按页编号 _p<页>_f<图号>，规范名保留页号以避免跨页重名
+    m_page = re.search(r"_p(\d+)_[fF](\d+)$", stem)
+    if m_page:
+        suffix = f"p{int(m_page.group(1)):02d}_Fm{int(m_page.group(2)):02d}"
+        return f"{folder}_{suffix}.pdf"
+    # 朱玉亮 1978–2024：Fm<图号> 全卷唯一
+    m = re.search(r"Fm\d+(?:_\d+)*", stem, re.I)
+    suffix = m.group(0) if m else re.sub(r"[^\w\u4e00-\u9fa5-]+", "_", stem)
     return f"{folder}_{suffix}.pdf"
 
 
@@ -123,8 +143,12 @@ def scan_hq() -> list[dict]:
             for pdf in sorted(d.glob("*.pdf")):
                 cur_rel = f"{year}/{d.name}/{pdf.name}"
                 orig_rel = idx.get(cur_rel, cur_rel)
-                m_fm = re.search(r"Fm(\d+)", Path(orig_rel).stem, re.I)
-                m_p = re.search(r"_p(\d+)_", Path(orig_rel).stem)
+                stem = Path(orig_rel).stem
+                m_fm = re.search(r"Fm(\d+)", stem, re.I)
+                if not m_fm:
+                    # 天利按页编号：..._p<页>_f<图号>
+                    m_fm = re.search(r"_f(\d+)$", stem, re.I)
+                m_p = re.search(r"_p(\d+)_", stem)
                 w, h = pdf_size_cm(pdf)
                 files.append({
                     "name": pdf.name,
@@ -171,7 +195,9 @@ def build_mapping() -> dict:
         year, token = item["year"], item["token"]
         region, conf, note = pr.match_token(token, year, regions.get(year, set()), overrides)
         norm = _norm_folder(year, region, token, item["answer"], conf)
+        src_key, src_label = _hq_source(year)
         entry = {
+            "source": src_key,
             "folder": item["folder"],
             "current_folder": item["folder_hq"],
             "original_folder": item["original_folder"],
@@ -191,6 +217,7 @@ def build_mapping() -> dict:
         if region is None:
             source_only.append({
                 "year": year,
+                "source": src_key,
                 "token": token,
                 "answer": item["answer"],
                 "folder": item["folder"],
@@ -206,6 +233,7 @@ def build_mapping() -> dict:
         if row is None:
             source_only.append({
                 "year": year,
+                "source": src_key,
                 "token": token,
                 "answer": item["answer"],
                 "folder": item["folder"],
@@ -221,11 +249,11 @@ def build_mapping() -> dict:
         row["by_kind"][kind] = entry
         if conf in ("uncertain", "fuzzy"):
             row["confidence"] = conf
-            row["note"] = pr._join_notes(row["note"], f"{pr.SOURCES['zhu']['label']}：{note or 'HQ 映射待确认'}")
+            row["note"] = pr._join_notes(row["note"], f"{src_label}：{note or 'HQ 映射待确认'}")
         elif row["confidence"] == "repo-only":
             row["confidence"] = conf
         if entry.get("note"):
-            row["note"] = pr._join_notes(row["note"], f"{pr.SOURCES['zhu']['label']}：{entry['note']}")
+            row["note"] = pr._join_notes(row["note"], f"{src_label}：{entry['note']}")
 
     return {
         "version": 1,
@@ -258,6 +286,8 @@ def render_table(mapping: dict) -> str:
     lines = ["# HighQualityPic 高质量配图表", ""]
     lines.append("> 由 `python3 tools/hqpics.py plan` 自动生成，**勿手改**；")
     lines.append("> 素材 `ProofreadPDF/HighQualityPic/` 为本地 Git 忽略目录。")
+    lines.append("> HQ 来源：朱玉亮 1978–2024、天利 2025–2026；天利按页编号，"
+                 "规范名保留页号 `_p<页>_Fm<图号>`。")
     lines.append("")
     lines.append(f"- 生成日期：{mapping.get('generated', _today())}")
     lines.append(f"- 本仓库卷数：{total}；有 HQ 配图：{len(with_hq)}；无 HQ：{len(without_hq)}")

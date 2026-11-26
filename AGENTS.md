@@ -71,7 +71,7 @@ make proofread-ocr-plan && make proofread-ocr-batch
   异常/冲突记入 `异常记录/<年>.md`（类别取现有枚举，问题中注明“交叉校对”）。
 - **交叉校对中能解决的异常尽量解决**（改到 `已解决`）；解决不了的仍留在异常记录（`待处理/待人工核验`）。
 - 映射不一致改 `交叉校对/overrides.json` 后重跑 `make proofread-plan`，不要手改 `mapping.json`。
-- HQ 矢量配图（`ProofreadPDF/HighQualityPic/`，规范第十节）：
+- HQ 矢量配图（`ProofreadPDF/HighQualityPic/`，朱玉亮 1978–2024 + 天利 2025–2026，规范第十节）：
   `make hq-plan` → `make hq-match UNIT=<年>/<地区>` → 看 `交叉校对/hq_compare/` →
   在 `交叉校对/hq_figmap/<年>_<地区>.json` 标 `status: "apply"`（必要时 `crop`）→
   `make hq-apply UNIT=<年>/<地区> ARGS=--write` → 双版编译 + `make check` +
